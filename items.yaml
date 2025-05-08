@@ -1,0 +1,38 @@
+items:
+  ecmwf-data-flavour:
+    contacts: "Github issues"
+    description: "ECMWF Data Flavour"
+    description_long: "ECMWF Data Flavour: includes the basic ECMWF software stack, with MARS client and an environment with ecCodes, Metview, Earthkit and Aviso."
+    license: "Apache License 2.0"
+    license_url: "https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE"
+    logo_url: "http://placehold.it/200"
+    maintainer: "EWC Team"
+    name: "ECMWF Data Flavour"
+    repository_url: "https://github.com/ewcloud/ewc-flavours/tree/main"
+    support_level: "EWC"
+    tag_technology: 
+      - "Ansible Playbooks"
+    tag_category:
+      - "Compute"
+    version: "latest"
+    _main_file_path: "./ewc-ecmwf-flavours/data-flavour.yml"
+    _inputs:
+    _published: false
+  jupyterhub-flavour:
+    contacts: "Github issues"
+    description: "JupyterHub Flavour"
+    description_long: "JupyterHub Flavour: install and run jupyterhub on your instance, offering a convenient way to access it through the web."
+    license: "Apache License 2.0"
+    license_url: "https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE"
+    logo_url: "http://placehold.it/200"
+    maintainer: "EWC Team"
+    name: "JupyterHub Flavour"
+    source_url: "https://github.com/ewcloud/ewc-flavours/tree/main"
+    support_level: "EWC"
+    tag_technology: 
+      - "Ansible Playbooks"
+    tag_category:
+      - "Compute"
+    version: "latest"
+    _main_file_path: "./ewc-flavours/jupyterhub-flavour.yml"
+    _published: false
