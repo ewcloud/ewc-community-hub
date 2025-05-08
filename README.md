@@ -1,6 +1,8 @@
 # ewc-community-hub
 EWC Community Hub
 
+This repository hosts the structure of the items for the EWC Community Hub.
+
 # Item structure
 
 ## Mandatory metadata
