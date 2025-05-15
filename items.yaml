@@ -15,7 +15,7 @@ items:
     tag_category:
       - "Compute"
     version: "latest"
-    _main_file_path: "./ewc-ecmwf-flavours/data-flavour.yml"
+    _main_file_path: "./ewc-flavours/ecmwf-data-flavour.yml"
     _inputs:
     _published: false
   jupyterhub-flavour:
