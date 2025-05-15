@@ -10,7 +10,7 @@ Each item shall have the following mandatory parameter:
 
 ```yaml
 items:
-  ecmwf-data-flavour:
+  item-name:  # It must be unique!
     contacts: "CONTACTS (e.g. email, Github issues, etc.)."
     description: "SHORT DESCRIPTION OF THE ITEM."
     description_long: "LONG DESCRIPTION OF THE ITEM's purpose, features, and functionality."
