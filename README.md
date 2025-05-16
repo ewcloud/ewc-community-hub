@@ -6,7 +6,7 @@ This repository hosts the structure of the items for the EWC Community Hub.
 # Item structure
 
 ## Mandatory metadata
-Each item shall have the following mandatory parameter:
+Each item shall have the following mandatory parameters:
 
 ```yaml
 items:

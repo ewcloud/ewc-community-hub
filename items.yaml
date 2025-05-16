@@ -27,7 +27,7 @@ items:
     logo_url: "http://placehold.it/200"
     maintainer: "EWC Team"
     name: "JupyterHub Flavour"
-    source_url: "https://github.com/ewcloud/ewc-flavours/tree/main"
+    repository_url: "https://github.com/ewcloud/ewc-flavours/tree/main"
     support_level: "EWC"
     tag_technology: 
       - "Ansible Playbooks"
