@@ -16,7 +16,7 @@ unique-item-name:
   description: "LONG DESCRIPTION OF THE ITEM's purpose, features, and functionality."
   home: https://github.com/ewcloud/ewc-flavours  # (MANDATORY) URL TO THE PUBLIC REPOSITORY
   license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE # (MANDATORY) URL TO THE LICENSE (e.g. ).
-  icon: "http://placehold.it/200"  # (MANDATORY) URL TO /logos in this repository or another pointer
+  icon: "http://placehold.it/200"  # URL TO /logos in this repository or another pointer
   maintainers:  # (MANDATORY)
     - name: EWC Team
       email: support@ewcloud.int
