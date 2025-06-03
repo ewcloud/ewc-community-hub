@@ -25,9 +25,6 @@ unique-item-name:
   published: false  # (MANDATORY) if true item is published on the website, if false, created but only visible to admins
   sources:  # (MANDATORY)
     - https://github.com/ewcloud/ewc-flavours/blob/main/ecmwf-data-flavour.yml
-      inputs:
-        - input1
-        - input2 
   summary: "SHORT DESCRIPTION OF THE ITEM."  # (MANDATORY)
   version: "1.0.0" # (MANDATORY) Wrapping the version in quotes is highly recommended.
 ```
