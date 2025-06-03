@@ -5,51 +5,29 @@ This repository hosts the structure of the items for the EWC Community Hub.
 
 # Item structure
 
-## Mandatory metadata
-Each item shall have the following mandatory parameters:
-
 ```yaml
-items:
-  item-name:  # It must be unique!
-    contacts: "CONTACTS (e.g. email, Github issues, etc.)."
-    description: "SHORT DESCRIPTION OF THE ITEM."
-    description_long: "LONG DESCRIPTION OF THE ITEM's purpose, features, and functionality."
-    license: "NAME OF THE LICENSE (e.g. Apache License 2.0)."
-    license_url: "URL TO THE LICENSE (e.g. https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE)."
-    logo_url: "URL TO /logos in this repository or another pointer (e.g. http://placehold.it/200)."
-    maintainer: "ORGANIZATION OR PERSON (e.g. EWC Team)"
-    name: "NAME OF THE ITEM."
-    repository_url: "URL TO THE PUBCLI REPOSITORY (e.g. https://github.com/ewcloud/ewc-flavours/tree/main)."
-    support_level: "INDICATE the level of assistance and maintenance provided."
-    tag_technology: 
-      - "SEE BELOW FOR A COMPLETE LIST"
-    tag_category:
-      - "SEE BELOW FOR A COMPLETE LIST"
-    version: "SOFTWARE VERSION"
-```
-
-### Tags for filters and categories
-
-Tags provide different dimensions to browse and filter the content. Currently the following categories of filters are defined:
-
-- `TECHNOLOGY` -> 
-    - Ansible Playbooks
-    - Terraform modules
-    - Dataset
-
-- `CATEGORY` -> 
-    - Compute
-    - Storage
-    - Data Access
-
-## Admins metadata
-
-The following parameters are required by EWC admins for automations and tests:
-
-```yaml
-    _main_file_path:    # (OPTIONAL)PATH TO THE MAIN FILE (if any) e.g. ./ewc-ecmwf-flavours/data-flavour.yml)
-    _inputs:    # (OPTIONAL)(LIST OF VARIABLES INPUTS for the templates (if any))
-        - INPUT_1
-        - INPUT_2
-    _published: false   # (mandatory) false: item is created in the website but not published, true: item is create and published to the website
+unique-item-name:
+  annotations: # (MANDATORY)
+    licenseType: "Apache License 2.0"  # (MANDATORY)
+    category: "Ansible Playbook" # Flexible values that will multiply as the community start contributing
+    supportLevel: "EWC"  # Or Community. INDICATE the level of assistance and maintenance provided.
+    type: "Virtual Machines" # Takes on one of few possible values (i.e. Virtual Machines, Kubernetes Apps, Container Images, Notebooks, Saas & APIs, Datasets, Others)
+  displayName: "EWC Flavour"  # (MANDATORY)
+  description: "LONG DESCRIPTION OF THE ITEM's purpose, features, and functionality."
+  home: https://github.com/ewcloud/ewc-flavours  # (MANDATORY) URL TO THE PUBLIC REPOSITORY
+  license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE # (MANDATORY) URL TO THE LICENSE (e.g. ).
+  icon: "http://placehold.it/200"  # URL TO /logos in this repository or another pointer
+  maintainers:  # (MANDATORY)
+    - name: EWC Team
+      email: support@ewcloud.int
+      url: https://github.com/ewcloud/ewc-flavours/issues
+  name: unique-item-name  # (MANDATORY)
+  published: false  # (MANDATORY) if true item is published on the website, if false, created but only visible to admins
+  sources:  # (MANDATORY)
+    - https://github.com/ewcloud/ewc-flavours/blob/main/ecmwf-data-flavour.yml
+      inputs:
+        - input1
+        - input2 
+  summary: "SHORT DESCRIPTION OF THE ITEM."  # (MANDATORY)
+  version: "1.0.0" # (MANDATORY) Wrapping the version in quotes is highly recommended.
 ```
