@@ -9,9 +9,9 @@ This repository hosts the structure of the items for the EWC Community Hub.
 unique-item-name:
   annotations: # (MANDATORY)
     licenseType: "Apache License 2.0"  # (MANDATORY)
-    category: "Ansible Playbook" # Flexible values that will multiply as the community start contributing
+    category: "Ansible Playbook" # (MANDATORY) Flexible values that will multiply as the community start contributing
     supportLevel: "EWC"  # (MANDATORY) EWC Or Community. INDICATE the level of assistance and maintenance provided.
-    type: "Virtual Machines" # Takes on one of few possible values (i.e. Virtual Machines, Kubernetes Apps, Container Images, Notebooks, Saas & APIs, Datasets, Others)
+    type: "Virtual Machines" # (MANDATORY) Takes on one of few possible values (i.e. Virtual Machines, Kubernetes Apps, Container Images, Notebooks, Saas & APIs, Datasets, Others)
   displayName: "EWC Flavour"  # (MANDATORY)
   description: # (MANDATORY) LONG DESCRIPTION OF THE ITEM's purpose, features, and functionality."
   home: https://github.com/ewcloud/ewc-flavours  # (MANDATORY) URL TO THE PUBLIC REPOSITORY
