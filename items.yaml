@@ -75,4 +75,28 @@ spec:
       summary: JupyterHub flavour
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: false
-      inputSpecPath: ./inventory/hosts.yml 
+      inputSpecPath: ./inventory/hosts.yml
+    openstack-compute:
+      name: "openstack-compute"
+      version: "1.0.0"
+      description: |
+        This Terraform module creates and configures OpenStack compute instances with optional attached storage volumes and networking configurations.
+      home: https://github.com/ewcloud/openstack-compute
+      sources:
+        - https://github.com/ewcloud/openstack-compute/blob/main/main.tf
+      maintainers:
+        - name: EWC Team
+          email: support@ewcloud.int
+          url: https://github.com/ewcloud/ewc-flavours/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
+      annotations:
+        type: "Terraform Module"
+        category: "Compute"
+        supportLevel: "EWC"
+        licenseType: "Apache License 2.0"
+      displayName: Openstack Compute
+      summary: Manages a V2 VM instance resource within OpenStack.
+      license: https://github.com/ewcloud/openstack-compute/blob/main/LICENSE
+      published: false
+      inputSpecPath: ./variables.yml
+      outputSpecPath: ./outputs.yml
