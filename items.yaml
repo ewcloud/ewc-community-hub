@@ -98,5 +98,5 @@ spec:
       summary: Manages a V2 VM instance resource within OpenStack.
       license: https://github.com/ewcloud/openstack-compute/blob/main/LICENSE
       published: false
-      inputSpecPath: ./variables.yml
-      outputSpecPath: ./outputs.yml
+      inputSpecPath: ./variables.tf
+      outputSpecPath: ./outputs.tf
