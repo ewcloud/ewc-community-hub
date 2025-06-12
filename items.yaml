@@ -52,6 +52,7 @@ spec:
       summary: ECMWF's Data Flavour
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: false
+      inputSpecPath: ./inventory/hosts.yml
     jupyterhub-flavour:
       name: "jupyterhub-flavour"
       version: "1.0.0"
@@ -74,3 +75,4 @@ spec:
       summary: JupyterHub flavour
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: false
+      inputSpecPath: ./inventory/hosts.yml 
