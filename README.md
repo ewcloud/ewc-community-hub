@@ -1,7 +1,6 @@
-# ewc-community-hub
-EWC Community Hub
+# EWC Community Hub
 
-This repository hosts the structure of the items for the EWC Community Hub.
+This repository hosts the structure of the items for the Europea Weather Cloud Community Hub.
 
 # Item structure
 
@@ -25,6 +24,8 @@ unique-item-name:
   published: false  # (MANDATORY) if true item is published on the website, if false, created but only visible to admins
   sources:  # (MANDATORY)
     - https://github.com/ewcloud/ewc-flavours/blob/main/ecmwf-data-flavour.yml
+  inputSpecPath: ./inventory/hosts.yml  # (OPTIONAL) Relative path to inputs specification that the item accepts from the end user upon execution.
+  outputSpecPath: ./inventory/hosts.yml  # (OPTIONAL) Relative path to outputs specification that the item provides to the end user after execution.
   summary: "SHORT DESCRIPTION OF THE ITEM."  # (MANDATORY)
   version: "1.0.0" # (MANDATORY) Wrapping the version in quotes is highly recommended.
 ```
