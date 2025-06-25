@@ -26,14 +26,26 @@ spec:
           ```bash
           $ ansible-playbook -i inventory ecmwf-data-flavour.yml
           ```
+
+        You may use the following ansible variables to customise this playbook:
+        - `reboot_if_required`: Boolean to reboot the instance if required after an update. Default: true
+        - `ecmwf_toolbox_env_wipe`: Boolean to decide whether to wipe the environment if exists prior to a reinstallation. Default: no
+        - `ecmwf_toolbox_env_name`: Name of the environment containing the ECMWF toolbox. Default: ecmwf-toolbox
+        - `ecmwf_toolbox_create_ipykernel`: Boolean to create a system-wide kernel available. Default: yes
+        - `conda_prefix`: Prefix where conda is installed. Default: `/opt/conda`
+        - `conda_user`: User owning the conda installation. Default: `root`
+      
+        Example usage:
+      
+        ```bash
+        ansible-playbook -i inventory ecmwf-data-flavour.yml
+        ```
         
         Author
         ------------------
         ECMWF for the European Weather Cloud
         
-        <img src="https://climate.copernicus.eu/sites/default/files/inline-images/ECMWF.png"  width="120px" height="120px"> 
-        
-        ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
+        ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=40px  height=40px}
 
       home: https://github.com/ewcloud/ewc-flavours
       sources:
