@@ -48,7 +48,9 @@ spec:
         ------------------
         ECMWF for the European Weather Cloud
         
-        ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=40px  height=40px}
+        <img src="https://climate.copernicus.eu/sites/default/files/inline-images/ECMWF.png"  width="120px" height="120px"> 
+        
+        ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
 
       home: https://github.com/ewcloud/ewc-flavours
       sources:
