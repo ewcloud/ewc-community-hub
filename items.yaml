@@ -28,12 +28,15 @@ spec:
           ```
 
         You may use the following ansible variables to customise this playbook:
-        - `reboot_if_required`: Boolean to reboot the instance if required after an update. Default: true
-        - `ecmwf_toolbox_env_wipe`: Boolean to decide whether to wipe the environment if exists prior to a reinstallation. Default: no
-        - `ecmwf_toolbox_env_name`: Name of the environment containing the ECMWF toolbox. Default: ecmwf-toolbox
-        - `ecmwf_toolbox_create_ipykernel`: Boolean to create a system-wide kernel available. Default: yes
-        - `conda_prefix`: Prefix where conda is installed. Default: `/opt/conda`
-        - `conda_user`: User owning the conda installation. Default: `root`
+        
+        | Variable | Description | Type | Default | Required |
+        |------|-------------|------|---------|----------|
+        | reboot_if_required | Reboot the instance if required after an update. | `boolean`| `true` | no |
+        | ecmwf_toolbox_env_wipe | Decide whether to wipe the environment if exists prior to a reinstallation. | `boolean` | `no` | no |
+        | ecmwf_toolbox_env_wipe | Name of the environment containing the ECMWF toolbox. | `string` | `ecmwf-toolbox` | no |
+        | ecmwf_toolbox_create_ipykernel | Create a system-wide kernel available. | `boolean` | yes | no |
+        | conda_prefix | Prefix where conda is installed. | `string` | `/opt/conda` | no |
+        | conda_user | User owning the conda installation. | `string` | `root` | no |
       
         Example usage:
       
