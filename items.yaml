@@ -2,12 +2,186 @@ apiVersion: communityhub.europeanweather.cloud/v1alpha1
 kind: CommunityHubCatalog
 spec:
   items:
+    ai-models:
+      name: "ai-models"
+      version: "1.0.0"
+      description: |
+        Create a conda environment with the ai-models package and associated plugins to run a set of data-driven weather forecasting models such as panguweather or graphcast. 
+
+        Requirements
+        ------------
+        This ansible role depends on ewc-ansible-role-conda.
+
+        Role Variables
+        --------------
+        - `ai_models_env_wipe`: Boolean to decide whether to wipe the environment if exists prior to a reinstallation. Default: no
+        - `ai_models_env_name`: Name of the environment containing the software stack. Default: ml-basic
+        - `ai_models_env_path`: Path to the environment containing the software stack. Default: `{{ conda_prefix }}/envs/{{ ai_models_env_name }}`
+        - `ai_models_create_ipykernel`: Boolean to create a system-wide kernel available. Default: yes
+        - `conda_prefix`: Prefix where conda is installed. Default: `/opt/conda`
+        - `conda_user`: User owning the conda installation. Default: `root`
+
+        Example Playbook
+        ----------------
+
+            - hosts: all
+              roles:
+                -  ewc-ansible-role-ai-models
+
+        License
+        -------
+
+        Apache 2.0.
+
+        Author Information
+        ------------------
+
+        ECMWF for the European Weather Cloud
+        
+        <img src="https://climate.copernicus.eu/sites/default/files/inline-images/ECMWF.png"  width="120px" height="120px"> 
+        
+        ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
+
+      home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
+      sources:
+        - https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/ai-models.yml
+      maintainers:
+        - name: EWC Team
+          email: support@ewcloud.int
+          url: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
+      annotations:
+        type: "Ansible Playbook"
+        category: "Machine Learning & AI"
+        supportLevel: "EWC"
+        licenseType: "Apache License 2.0"
+      displayName: AI Models
+      summary: AI Models. It features the most popular data driven forecast models such as Pangu Weather, Fourcastnet or graphcast.
+      license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
+      published: false
+    ecmwf-aifs-single-mse:
+      name: "ecmwf-aifs-single-mse"
+      version: "1.0.0"
+      description: |
+        Create a conda environment with AIFS Single MSE and associated software stack.
+
+        Requirements
+        ------------
+
+        This ansible role depends on ewc-ansible-role-conda and needs to be applied on a GPU-powered instance.
+
+        Role Variables
+        --------------
+
+        - `aifs_single_mse_env_wipe`: Boolean to decide whether to wipe the environment if exists prior to a reinstallation. Default: no
+        - `aifs_single_mse_env_name`: Name of the environment containing the software stack. Default: aifs-single-mse
+        - `aifs_single_mse_env_path`: Installation path for the environment. Default: "{{ conda_prefix }}/envs/{{ aifs_single_mse_env_name }}"
+        - `aifs_single_mse_checkpoint`: URL to the model checkpoint. Default: https://huggingface.co/ecmwf/aifs-single-1.0/resolve/main/aifs-single-mse-1.0.ckpt
+        - `aifs_single_mse_create_ipykernel`: Create the jupyter kernel for this environment. Default: yes
+        - `conda_prefix`: Prefix where conda is installed. Default: `/opt/conda`
+        - `conda_user`: User owning the conda installation. Default: `root`
+
+        Example Playbook
+        ----------------
+
+            - hosts: all
+              roles:
+                -  ewc-ansible-role-aifs-single-mse
+
+        License
+        -------
+
+        Apache 2.0.
+
+        Author Information
+        ------------------
+
+        ECMWF for the European Weather Cloud
+        
+        <img src="https://climate.copernicus.eu/sites/default/files/inline-images/ECMWF.png"  width="120px" height="120px"> 
+        
+        ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
+
+      home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
+      sources:
+        - https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/aifs-single-mse.yml
+      maintainers:
+        - name: EWC Team
+          email: support@ewcloud.int
+          url: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
+      annotations:
+        type: "Ansible Playbook"
+        category: "Machine Learning & AI"
+        supportLevel: "EWC"
+        licenseType: "Apache License 2.0"
+      displayName: ECMWF AIFS Single MSE
+      summary: ECMWF AIFS Single MSE. It features the ECMWF AIFS Single data-driven model
+      license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
+      published: false
+    ecmwf-anemoi:
+      name: "ecmwf-anemoi"
+      version: "1.0.0"
+      description: |
+        Create a conda environment with the Anemoi framework for weather forecasting based on machine learning and associated software stack.
+        
+        Requirements
+        ------------
+
+        This ansible role depends on ewc-ansible-role-conda and needs to be applied on a GPU-powered instance if training or inference are used.
+
+        Role Variables
+        --------------
+
+        - `anemoi_env_wipe`: Boolean to decide whether to wipe the environment if exists prior to a reinstallation. Default: no
+        - `anemoi_env_name`: Name of the environment containing the software stack. Default: aifs-single-mse
+        - `anemoi_env_path`: Installation path for the environment. Default: "{{ conda_prefix }}/envs/{{ anemoi_env_name }}"
+        - `anemoi_create_ipykernel`: Create the jupyter kernel for this environment. Default: yes
+        - `conda_prefix`: Prefix where conda is installed. Default: `/opt/conda`
+        - `conda_user`: User owning the conda installation. Default: `root`
+
+        Example Playbook
+        ----------------
+
+            - hosts: all
+              roles:
+                -  ewc-ansible-role-anemoi
+
+        License
+        -------
+
+        Apache 2.0.
+
+        Author Information
+        ------------------
+
+        ECMWF for the European Weather Cloud
+        
+        <img src="https://climate.copernicus.eu/sites/default/files/inline-images/ECMWF.png"  width="120px" height="120px"> 
+        
+        ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
+
+      home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
+      sources:
+        - https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/anemoi.yml
+      maintainers:
+        - name: EWC Team
+          email: support@ewcloud.int
+          url: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
+      annotations:
+        type: "Ansible Playbook"
+        category: "Machine Learning & AI"
+        supportLevel: "EWC"
+        licenseType: "Apache License 2.0"
+      displayName: ECMWF Anemoi
+      summary: ECMWF Anemoi. It leverages the Anemoi framework to develop and run your AI-models or manage datasets.
+      license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
+      published: false
     ecmwf-data-flavour:
       name: "ecmwf-data-flavour"
       version: "1.0.0"
       description: |
-        ECWF Data Flavor
-        =======================================
         Includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
         
         Getting started
@@ -66,7 +240,59 @@ spec:
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
       displayName: ECMWF Data Flavour
-      summary: ECMWF's Data Flavour
+      summary: ECMWF's Data Flavour. Includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
+      license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
+      published: false
+    eumetcast-terrestrial:
+      name: "eumetcast-terrestrial"
+      version: "1.0.0"
+      description: |
+        Service for receiving and processing EUMETCast Terrestrial data streams via IP multicast within a private network.
+      home: https://github.com/ewcloud/ewc-flavours
+      sources:
+        - https://github.com/ewcloud/ewc-flavours/blob/main/eumetcast-terrestrial.yml
+      maintainers:
+        - name: EWC Team
+          email: support@ewcloud.int
+          url: https://github.com/ewcloud/ewc-flavours/issues
+        - name: EWC Support Team
+          email: testemail@ewcloud.int
+          url: https://github.com/ewcloud/ewc-flavours/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
+      annotations:
+        type: "Ansible Playbook"
+        category: "Networking,Data Reception"
+        supportLevel: "EWC"
+        licenseType: "Apache License 2.0"
+        others: "Earth Observation"
+      displayName: EUMETCast Terrestrial
+      summary: EUMETCast Terrestrial. Service for receiving and processing EUMETCast Terrestrial data streams via IP multicast within a private network.
+      license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
+      published: false
+    eumetsat-data-tailor:
+      name: "eumetsat-data-tailor"
+      version: "1.0.0"
+      description: |
+        On-demand data processing service for subsetting, reformatting, and customising Earth observation data products.
+      home: https://github.com/ewcloud/ewc-flavours
+      sources:
+        - https://github.com/ewcloud/ewc-flavours/blob/main/data-tailor.yml
+      maintainers:
+        - name: EWC Team
+          email: support@ewcloud.int
+          url: https://github.com/ewcloud/ewc-flavours/issues
+        - name: EWC Support Team
+          email: testemail@ewcloud.int
+          url: https://github.com/ewcloud/ewc-flavours/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
+      annotations:
+        type: "Ansible Playbook"
+        category: "Data Processing"
+        supportLevel: "EWC"
+        licenseType: "Apache License 2.0"
+        others: "Earth Observation"
+      displayName: EUMETSAT Data Tailor
+      summary: EUMETSAT Data Tailor. On-demand data processing service for subsetting, reformatting, and customising Earth observation data products.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: false
     ipa-server:
@@ -115,6 +341,63 @@ spec:
       displayName: JupyterHub Flavour
       summary: JupyterHub flavour. It installs and run jupyterhub on your instance, offering a convenient way to access it through the web.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
+      published: false
+    ml-basic:
+      name: "ml-basic"
+      version: "1.0.0"
+      description: |
+        Create a conda environment with the basic Machine Learning packages such as torch, xgboost, and scikit-learn. Check `files/env.yml` for all the details on the software included.
+
+        Requirements
+        ------------
+        This ansible role depends on ewc-ansible-role-conda
+
+        Role Variables
+        --------------
+        - `ml_basic_env_wipe`: Boolean to decide whether to wipe the environment if exists prior to a reinstallation. Default: no
+        - `ml_basic_env_name`: Name of the environment containing the software stack. Default: ml-basic
+        - `ml_basic_env_path`: Path to the environment containing the software stack. Default: `{{ conda_prefix }}/envs/{{ ml_basic_env_name }}`
+        - `ml_basic_create_ipykernel`: Boolean to create a system-wide kernel available. Default: yes
+        - `conda_prefix`: Prefix where conda is installed. Default: `/opt/conda`
+        - `conda_user`: User owning the conda installation. Default: `root`
+
+        Example Playbook
+        ----------------
+
+            - hosts: all
+              roles:
+                -  ewc-ansible-role-ml-basic
+
+        License
+        -------
+
+        Apache 2.0.
+
+        Author Information
+        ------------------
+
+        ECMWF for the European Weather Cloud
+        
+        <img src="https://climate.copernicus.eu/sites/default/files/inline-images/ECMWF.png"  width="120px" height="120px"> 
+        
+        ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
+
+      home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
+      sources:
+        - https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/ml-basic.yml
+      maintainers:
+        - name: EWC Team
+          email: support@ewcloud.int
+          url: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
+      annotations:
+        type: "Ansible Playbook"
+        category: "Machine Learning & AI"
+        supportLevel: "EWC"
+        licenseType: "Apache License 2.0"
+      displayName: ML Basic
+      summary: ML Basic. It features an environment with the main machine learning packages like scikit-learn or torch.
+      license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
       published: false
     openstack-compute:
       name: "openstack-compute"
