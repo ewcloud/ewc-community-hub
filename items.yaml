@@ -69,11 +69,36 @@ spec:
       summary: ECMWF's Data Flavour
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: false
+    ipa-server:
+      name: "ipa-server"
+      version: "1.0.0"
+      description: |
+        Centralized identity, authentication, and access management solution based on FreeIPA.
+      home: https://github.com/ewcloud/ewc-flavours
+      sources:
+        - https://github.com/ewcloud/ewc-flavours/blob/main/ipa-server.yml
+      maintainers:
+        - name: EWC Team
+          email: support@ewcloud.int
+          url: https://github.com/ewcloud/ewc-flavours/issues
+        - name: EWC Support Team
+          email: testemail@ewcloud.int
+          url: https://github.com/ewcloud/ewc-flavours/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
+      annotations:
+        type: "Ansible Playbook"
+        category: "Security,Identity & Access Management"
+        supportLevel: "EWC"
+        licenseType: "Apache License 2.0"
+      displayName: FreeIPA
+      summary: FreeIPA. Centralized identity, authentication, and access management solution based on FreeIPA.
+      license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
+      published: false
     jupyterhub-flavour:
       name: "jupyterhub-flavour"
       version: "1.0.0"
       description: |
-        Installs and run jupyterhub on your instance, offering a convenient way to access it through the web.
+        Installs and run  on your instance, offering a convenient way to access it through the web.
       home: https://github.com/ewcloud/ewc-flavours
       sources:
         - https://github.com/ewcloud/ewc-flavours/blob/d9948e334735e129a1c869cee865d5c42912a332/jupyterhub-flavour.yml
@@ -88,6 +113,78 @@ spec:
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
       displayName: JupyterHub Flavour
-      summary: JupyterHub flavour
+      summary: JupyterHub flavour. It installs and run jupyterhub on your instance, offering a convenient way to access it through the web.
+      license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
+      published: false
+    openstack-compute:
+      name: "openstack-compute"
+      version: "1.0.0"
+      description: |
+        Pre-configured instance for deploying and managing OpenStack compute resources using Terraform.
+      home: https://github.com/ewcloud/openstack-compute
+      sources:
+        - https://github.com/ewcloud/openstack-compute
+      maintainers:
+        - name: EWC Team
+          email: support@ewcloud.int
+          url: https://github.com/ewcloud/openstack-compute/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
+      annotations:
+        type: "Terraform Module"
+        category: "Compute"
+        supportLevel: "EWC"
+        licenseType: "Apache License 2.0"
+      displayName: Openstack Compute
+      summary: Openstack compute Terraform Module. Pre-configured instance for deploying and managing OpenStack compute resources using Terraform.
+      license: https://github.com/ewcloud/openstack-compute/blob/main/LICENSE
+      published: false
+    remote-desktop:
+      name: "remote-desktop"
+      version: "1.0.0"
+      description: |
+        Virtual desktop instance providing remote graphical access to applications and development environments.
+      home: https://github.com/ewcloud/ewc-flavours
+      sources:
+        - https://github.com/ewcloud/ewc-flavours/blob/main/remote-desktop.yml
+      maintainers:
+        - name: EWC Team
+          email: support@ewcloud.int
+          url: https://github.com/ewcloud/ewc-flavours/issues
+        - name: EWC Support Team
+          email: testemail@ewcloud.int
+          url: https://github.com/ewcloud/ewc-flavours/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
+      annotations:
+        type: "Ansible Playbook"
+        category: "Remote Access & Desktop"
+        supportLevel: "EWC"
+        licenseType: "Apache License 2.0"
+      displayName: Remote Desktop
+      summary: Remote Desktop. Virtual desktop instance providing remote graphical access to applications and development environments.
+      license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
+      published: false
+    ssh-bastion:
+      name: "ssh-bastion"
+      version: "1.0.0"
+      description: |
+        Create secure SSH Bastion host providing controlled, audited access to private network resources.
+      home: https://github.com/ewcloud/ewc-flavours
+      sources:
+        - https://github.com/ewcloud/ewc-flavours/blob/main/ssh-bastion.yml
+      maintainers:
+        - name: EWC Team
+          email: support@ewcloud.int
+          url: https://github.com/ewcloud/ewc-flavours/issues
+        - name: EWC Support Team
+          email: testemail@ewcloud.int
+          url: https://github.com/ewcloud/ewc-flavours/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
+      annotations:
+        type: "Ansible Playbook"
+        category: "Networking,Security,Access Management"
+        supportLevel: "EWC"
+        licenseType: "Apache License 2.0"
+      displayName: SSH Bastion
+      summary: SSH Bastion. Create secure SSH Bastion host providing controlled, audited access to private network resources.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: false
