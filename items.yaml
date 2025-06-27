@@ -263,7 +263,7 @@ spec:
         type: "Ansible Playbook"
         category: "Networking,Data Reception"
         supportLevel: "EWC"
-        licenseType: "Apache License 2.0"
+        licenseType: "MIT License"
         others: "Earth Observation"
       displayName: EUMETCast Terrestrial
       summary: EUMETCast Terrestrial. Service for receiving and processing EUMETCast Terrestrial data streams via IP multicast within a private network.
@@ -289,7 +289,7 @@ spec:
         type: "Ansible Playbook"
         category: "Data Processing"
         supportLevel: "EWC"
-        licenseType: "Apache License 2.0"
+        licenseType: "MIT License"
         others: "Earth Observation"
       displayName: EUMETSAT Data Tailor
       summary: EUMETSAT Data Tailor. On-demand data processing service for subsetting, reformatting, and customising Earth observation data products.
@@ -315,7 +315,7 @@ spec:
         type: "Ansible Playbook"
         category: "Security,Identity & Access Management"
         supportLevel: "EWC"
-        licenseType: "Apache License 2.0"
+        licenseType: "MIT License"
       displayName: FreeIPA
       summary: FreeIPA. Centralized identity, authentication, and access management solution based on FreeIPA.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
@@ -332,7 +332,7 @@ spec:
         - name: EWC Team
           email: support@ewcloud.int
           url: https://github.com/ewcloud/ewc-flavours/issues
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/jupyterprob.jpg
       annotations:
         type: "Ansible Playbook"
         category: "Compute,Data Visualization,Data Processing"
@@ -416,10 +416,37 @@ spec:
         type: "Terraform Module"
         category: "Compute"
         supportLevel: "EWC"
-        licenseType: "Apache License 2.0"
+        licenseType: "MIT License"
       displayName: Openstack Compute
       summary: Openstack compute Terraform Module. Pre-configured instance for deploying and managing OpenStack compute resources using Terraform.
       license: https://github.com/ewcloud/openstack-compute/blob/main/LICENSE
+      published: false
+    pytroll:
+      name: "pytroll"
+      version: "1.0.0"
+      description: |
+        Playbooks to install pytroll processing and wms in the EWC
+
+        To create a podman secret (eg password):
+        ```
+        systemd-ask-password -n | podman secret create pgpassword -
+        ```
+      home: https://github.com/nordsat/ewc-playbooks
+      sources:
+        - https://github.com/nordsat/ewc-playbooks/blob/main/satellite-data-processing-main.yaml
+      maintainers:
+        - name: NORDSAT
+          email: support@nordsat.int
+          url: https://github.com/nordsat/ewc-playbooks/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/pytrollLogo.png
+      annotations:
+        type: "Ansible Playbook"
+        category: "Compute"
+        supportLevel: "Community"
+        licenseType: "GNU General Public License v3.0"
+      displayName: Pytroll Processing
+      summary: Pytroll Processing. Playbooks to install pytroll processing and wms in the EWC.
+      license: https://github.com/nordsat/ewc-playbooks/blob/main/LICENSE
       published: false
     remote-desktop:
       name: "remote-desktop"
@@ -441,7 +468,7 @@ spec:
         type: "Ansible Playbook"
         category: "Remote Access & Desktop"
         supportLevel: "EWC"
-        licenseType: "Apache License 2.0"
+        licenseType: "MIT License"
       displayName: Remote Desktop
       summary: Remote Desktop. Virtual desktop instance providing remote graphical access to applications and development environments.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
@@ -466,7 +493,7 @@ spec:
         type: "Ansible Playbook"
         category: "Networking,Security,Access Management"
         supportLevel: "EWC"
-        licenseType: "Apache License 2.0"
+        licenseType: "MIT License"
       displayName: SSH Bastion
       summary: SSH Bastion. Create secure SSH Bastion host providing controlled, audited access to private network resources.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
