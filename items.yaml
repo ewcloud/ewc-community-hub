@@ -473,28 +473,97 @@ spec:
       summary: Remote Desktop. Virtual desktop instance providing remote graphical access to applications and development environments.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: false
-    ssh-bastion:
-      name: "ssh-bastion"
+    ewc-ansible-role-ssh-bastion:
+      name: "ewc-ansible-role-ssh-bastion"
       version: "1.0.0"
       description: |
-        Create secure SSH Bastion host providing controlled, audited access to private network resources.
-      home: https://github.com/ewcloud/ewc-flavours
+        This repository contains a configuration template 
+        (i.e. an [Ansible Role](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html)) 
+        to customize your environment in the
+        [European Weather Cloud (EWC)](https://europeanweather.cloud/).
+        The template is designed to:
+        * Configure pre-existing RockyLinux 8 or RockyLinux 9 virtual machines (with 
+        public IP address), as entrypoint for users who wish to reach private
+        EWC networks from the public internet via SSH.
+        
+        ## Usage
+        
+        The step-by-step described below assume your local file system follows the 
+        example structure below, with `ewc-ansible-role-ssh-bastion` being a clone of this
+        repository:
+        ```
+        .
+        ├── ewc-ansible-role-ssh-bastion
+        ├── inventory.yml
+        └── playbook.yml
+        ```
+        
+        ### 1. Specify the target host and SSH credentials
+        Create an inventory file to specify address/credentials that Ansible should use
+        to reach the virtual machine you wish to configure:
+        ```yaml
+        # inventory.yml
+        ---
+        ewcloud:
+          hosts:
+            ssh_bastion:
+              ansible_python_interpreter: /usr/bin/bython3
+              ansible_host: <add the IPV4 address of the target host>
+              ansible_ssh_private_key_file: <add the path to local SSH RSA private key file>
+              ansible_user: <add the username which owns the SSH RSA private key >
+        ```
+        ### 2. Customize the template
+        
+        Edit input values for the template [variables](./vars/main.yml) as needed (see
+        [Inputs](#inputs) section for details).
+        Then, proceed to create an Ansible Playbook file to load your customizations: 
+        
+        ```yaml
+        # playbook.yml
+        ---
+        - name: SSH Bastion Library Item Automation Script
+          hosts: ssh_bastion
+          become: true
+          become_user: root
+          become_method: ansible.builtin.sudo
+        
+          roles:
+            - ewc-ansible-role-ssh-bastion
+        ```
+        
+        ### 3. Apply the template
+        
+        
+        You can apply changes on the target host by running:
+        ```bash
+        ansible-playbook -i inventory.yml playbook.yml
+        ```
+        
+        ## Inputs
+        
+        | Name | Description | Type | Default | Required |
+        |------|-------------|------|---------|:--------:|
+        | localhost_ip_ranges | Localhost IP range (in CIDR format) to be whitelisted by Fail2ban | `string` | `"127.0.0.1/8"` | yes |
+        | private_ip_ranges | Private IP range or ranges (in CIDR format) to be whitelisted by Fail2ban | `string` | n/a | no |
+        | public_ip_ranges | Public IP range or ranges (in CIDR format) to be whitelisted by Fail2ban | `string` | n/a | no |
+
+      home: https://github.com/ewcloud/ewc-ansible-role-ssh-bastion
       sources:
-        - https://github.com/ewcloud/ewc-flavours/blob/main/ssh-bastion.yml
+        - https://github.com/ewcloud/ewc-ansible-role-ssh-bastion/blob/main
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
-          url: https://github.com/ewcloud/ewc-flavours/issues
+          url: https://github.com/ewcloud/ewc-ansible-role-ssh-bastion/issues
         - name: EWC Support Team
-          email: testemail@ewcloud.int
-          url: https://github.com/ewcloud/ewc-flavours/issues
+          email: support@europeanweather.cloud
+          url: http://support.europeanweather.cloud/
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
-        type: "Ansible Playbook"
+        type: "Ansible Role"
         category: "Networking,Security,Access Management"
         supportLevel: "EWC"
         licenseType: "MIT License"
-      displayName: SSH Bastion
-      summary: SSH Bastion. Create secure SSH Bastion host providing controlled, audited access to private network resources.
+      displayName: EWC Ansible Role SSH Bastion
+      summary: Create secure SSH Bastion host providing controlled, audited access to private network resources.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: false
