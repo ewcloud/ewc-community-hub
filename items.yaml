@@ -52,7 +52,7 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
         type: "Ansible Playbook"
-        category: "Machine Learning & AI"
+        category: "Machine Learning & AI, GPU-accelerated"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
       displayName: AI Models
@@ -112,7 +112,7 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
         type: "Ansible Playbook"
-        category: "Machine Learning & AI"
+        category: "Machine Learning & AI, GPU-accelerated"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
       displayName: ECMWF AIFS Single MSE
@@ -171,7 +171,7 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
         type: "Ansible Playbook"
-        category: "Machine Learning & AI"
+        category: "Machine Learning & AI, GPU-accelerated"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
       displayName: ECMWF Anemoi
@@ -392,7 +392,7 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
         type: "Ansible Playbook"
-        category: "Machine Learning & AI"
+        category: "Machine Learning & AI, GPU-accelerated"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
       displayName: ML Basic
