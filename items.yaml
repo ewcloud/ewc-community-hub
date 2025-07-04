@@ -51,7 +51,7 @@ spec:
           url: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/issues
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
-        type: "Ansible Playbook"
+        technology: "Ansible Playbook"
         category: "Machine Learning & AI, GPU-accelerated"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
@@ -111,7 +111,7 @@ spec:
           url: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/issues
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
-        type: "Ansible Playbook"
+        technology: "Ansible Playbook"
         category: "Machine Learning & AI, GPU-accelerated"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
@@ -170,7 +170,7 @@ spec:
           url: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/issues
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
-        type: "Ansible Playbook"
+        technology: "Ansible Playbook"
         category: "Machine Learning & AI, GPU-accelerated"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
@@ -235,7 +235,7 @@ spec:
           url: https://github.com/ewcloud/ewc-flavours/issues
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
-        type: "Ansible Playbook"
+        technology: "Ansible Playbook"
         category: "Compute,Data Access"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
@@ -260,7 +260,7 @@ spec:
           url: https://github.com/ewcloud/ewc-flavours/issues
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
-        type: "Ansible Playbook"
+        technology: "Ansible Playbook"
         category: "Networking,Data Reception"
         supportLevel: "EWC"
         licenseType: "MIT License"
@@ -286,7 +286,7 @@ spec:
           url: https://github.com/ewcloud/ewc-flavours/issues
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
-        type: "Ansible Playbook"
+        technology: "Ansible Playbook"
         category: "Data Processing"
         supportLevel: "EWC"
         licenseType: "MIT License"
@@ -312,7 +312,7 @@ spec:
           url: https://github.com/ewcloud/ewc-flavours/issues
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
-        type: "Ansible Playbook"
+        technology: "Ansible Playbook"
         category: "Security,Identity & Access Management"
         supportLevel: "EWC"
         licenseType: "MIT License"
@@ -334,7 +334,7 @@ spec:
           url: https://github.com/ewcloud/ewc-flavours/issues
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/jupyterprob.jpg
       annotations:
-        type: "Ansible Playbook"
+        technology: "Ansible Playbook"
         category: "Compute,Data Visualization,Data Processing"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
@@ -391,7 +391,7 @@ spec:
           url: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/issues
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
-        type: "Ansible Playbook"
+        technology: "Ansible Playbook"
         category: "Machine Learning & AI, GPU-accelerated"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
@@ -413,7 +413,7 @@ spec:
           url: https://github.com/ewcloud/openstack-compute/issues
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
-        type: "Terraform Module"
+        technology: "Terraform Module"
         category: "Compute"
         supportLevel: "EWC"
         licenseType: "MIT License"
@@ -440,7 +440,7 @@ spec:
           url: https://github.com/nordsat/ewc-playbooks/issues
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/pytrollLogo.png
       annotations:
-        type: "Ansible Playbook"
+        technology: "Ansible Playbook"
         category: "Compute"
         supportLevel: "Community"
         licenseType: "GNU General Public License v3.0"
@@ -465,7 +465,7 @@ spec:
           url: https://github.com/ewcloud/ewc-flavours/issues
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
-        type: "Ansible Playbook"
+        technology: "Ansible Playbook"
         category: "Remote Access & Desktop"
         supportLevel: "EWC"
         licenseType: "MIT License"
@@ -559,7 +559,7 @@ spec:
           url: http://support.europeanweather.cloud/
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
-        type: "Ansible Role"
+        technology: "Ansible Role"
         category: "Networking,Security,Access Management"
         supportLevel: "EWC"
         licenseType: "MIT License"
