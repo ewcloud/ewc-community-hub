@@ -52,11 +52,11 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
         technology: "Ansible Playbook"
-        category: "Machine Learning & AI"
+        category: "Machine Learning & AI, GPU-accelerated"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
       displayName: AI Models
-      summary: AI Models. It features the most popular data driven forecast models such as Pangu Weather, Fourcastnet or graphcast.
+      summary: It features the most popular data driven forecast models such as Pangu Weather, Fourcastnet or graphcast.
       license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
       published: false
     ecmwf-aifs-single-mse:
@@ -112,11 +112,11 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
         technology: "Ansible Playbook"
-        category: "Machine Learning & AI"
+        category: "Machine Learning & AI, GPU-accelerated"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
       displayName: ECMWF AIFS Single MSE
-      summary: ECMWF AIFS Single MSE. It features the ECMWF AIFS Single data-driven model
+      summary: It features the ECMWF AIFS Single data-driven model
       license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
       published: false
     ecmwf-anemoi:
@@ -171,11 +171,11 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
         technology: "Ansible Playbook"
-        category: "Machine Learning & AI"
+        category: "Machine Learning & AI, GPU-accelerated"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
       displayName: ECMWF Anemoi
-      summary: ECMWF Anemoi. It leverages the Anemoi framework to develop and run your AI-models or manage datasets.
+      summary: It leverages the Anemoi framework to develop and run your AI-models or manage datasets.
       license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
       published: false
     ecmwf-data-flavour:
@@ -240,7 +240,7 @@ spec:
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
       displayName: ECMWF Data Flavour
-      summary: ECMWF's Data Flavour. Includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
+      summary: It includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: false
     eumetcast-terrestrial:
@@ -266,7 +266,7 @@ spec:
         licenseType: "MIT License"
         others: "Earth Observation"
       displayName: EUMETCast Terrestrial
-      summary: EUMETCast Terrestrial. Service for receiving and processing EUMETCast Terrestrial data streams via IP multicast within a private network.
+      summary: Service for receiving and processing EUMETCast Terrestrial data streams via IP multicast within a private network.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: false
     eumetsat-data-tailor:
@@ -292,7 +292,7 @@ spec:
         licenseType: "MIT License"
         others: "Earth Observation"
       displayName: EUMETSAT Data Tailor
-      summary: EUMETSAT Data Tailor. On-demand data processing service for subsetting, reformatting, and customising Earth observation data products.
+      summary: On-demand data processing service for subsetting, reformatting, and customising Earth observation data products.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: false
     ipa-server:
@@ -317,7 +317,7 @@ spec:
         supportLevel: "EWC"
         licenseType: "MIT License"
       displayName: FreeIPA
-      summary: FreeIPA. Centralized identity, authentication, and access management solution based on FreeIPA.
+      summary: Centralized identity, authentication, and access management solution based on FreeIPA.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: false
     jupyterhub-flavour:
@@ -339,7 +339,7 @@ spec:
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
       displayName: JupyterHub Flavour
-      summary: JupyterHub flavour. It installs and run jupyterhub on your instance, offering a convenient way to access it through the web.
+      summary: It installs and run jupyterhub on your instance, offering a convenient way to access it through the web.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: false
     ml-basic:
@@ -392,11 +392,11 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
         technology: "Ansible Playbook"
-        category: "Machine Learning & AI"
+        category: "Machine Learning & AI, GPU-accelerated"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
       displayName: ML Basic
-      summary: ML Basic. It features an environment with the main machine learning packages like scikit-learn or torch.
+      summary: It features an environment with the main machine learning packages like scikit-learn or torch.
       license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
       published: false
     openstack-compute:
@@ -418,7 +418,7 @@ spec:
         supportLevel: "EWC"
         licenseType: "MIT License"
       displayName: Openstack Compute
-      summary: Openstack compute Terraform Module. Pre-configured instance for deploying and managing OpenStack compute resources using Terraform.
+      summary: Pre-configured instance for deploying and managing OpenStack compute resources using Terraform.
       license: https://github.com/ewcloud/openstack-compute/blob/main/LICENSE
       published: false
     pytroll:
@@ -445,7 +445,7 @@ spec:
         supportLevel: "Community"
         licenseType: "GNU General Public License v3.0"
       displayName: Pytroll Processing
-      summary: Pytroll Processing. Playbooks to install pytroll processing and wms in the EWC.
+      summary: Playbooks to install pytroll processing and wms in the EWC.
       license: https://github.com/nordsat/ewc-playbooks/blob/main/LICENSE
       published: false
     remote-desktop:
@@ -470,7 +470,7 @@ spec:
         supportLevel: "EWC"
         licenseType: "MIT License"
       displayName: Remote Desktop
-      summary: Remote Desktop. Virtual desktop instance providing remote graphical access to applications and development environments.
+      summary: Virtual desktop instance providing remote graphical access to applications and development environments.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: false
     ewc-ansible-role-ssh-bastion:
