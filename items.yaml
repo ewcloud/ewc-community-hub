@@ -4,7 +4,7 @@ spec:
   items:
     ai-models:
       name: "ai-models"
-      version: "1.0.0"
+      version: "0.9.0"
       description: |
         Create a conda environment with the ai-models package and associated plugins to run a set of data-driven weather forecasting models such as panguweather or graphcast. 
 
