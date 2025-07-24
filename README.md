@@ -17,8 +17,8 @@ unique-item-name:
   home: https://github.com/ewcloud/ewc-flavours  # (MANDATORY) URL TO THE PUBLIC REPOSITORY
   license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE # (MANDATORY) URL TO THE LICENSE (e.g. ).
   icon: "http://placehold.it/200"  # (MANDATORY) URL to /logos in this repository or another pointer. The icon should be a squared picture in general.
-  maintainers:  # (MANDATORY) can be multiple
-    - name: EWC Team
+  maintainers:  # (MANDATORY) can be multiple (and email or url is also # (MANDATORY), you can provide one of them)
+    - name: EWC Team # (MANDATORY)
       email: support@ewcloud.int
       url: https://github.com/ewcloud/ewc-flavours/issues
   name: unique-item-name  # (MANDATORY)
