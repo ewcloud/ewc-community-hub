@@ -426,22 +426,16 @@ spec:
       version: "1.0.0"
       description: |
         Playbooks to install pytroll processing and wms in the EWC
-
-        To create a podman secret (eg password):
-        ```
-        systemd-ask-password -n | podman secret create pgpassword -
-        ```
       home: https://github.com/nordsat/ewc-playbooks
       sources:
         - https://github.com/nordsat/ewc-playbooks/blob/main/satellite-data-processing-main.yaml
       maintainers:
         - name: NORDSAT
-          email: support@nordsat.int
           url: https://github.com/nordsat/ewc-playbooks/issues
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/pytrollLogo.png
       annotations:
         technology: "Ansible Playbook"
-        category: "Compute"
+        category: "Compute,Data Processing"
         supportLevel: "Community"
         licenseType: "GNU General Public License v3.0"
       displayName: Pytroll Processing
