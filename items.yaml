@@ -242,7 +242,7 @@ spec:
       displayName: ECMWF Data Flavour
       summary: It includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
-      published: false
+      published: true
     eumetcast-terrestrial:
       name: "eumetcast-terrestrial"
       version: "1.0.0"
@@ -268,7 +268,6 @@ spec:
       displayName: EUMETCast Terrestrial
       summary: Service for receiving and processing EUMETCast Terrestrial data streams via IP multicast within a private network.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
-      published: false
     eumetsat-data-tailor:
       name: "eumetsat-data-tailor"
       version: "1.0.0"
