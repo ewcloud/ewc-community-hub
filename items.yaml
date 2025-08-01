@@ -242,7 +242,7 @@ spec:
       displayName: ECMWF Data Flavour
       summary: It includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
-      published: false
+      published: true
     eumetcast-terrestrial:
       name: "eumetcast-terrestrial"
       version: "1.0.0"
@@ -268,7 +268,6 @@ spec:
       displayName: EUMETCast Terrestrial
       summary: Service for receiving and processing EUMETCast Terrestrial data streams via IP multicast within a private network.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
-      published: false
     eumetsat-data-tailor:
       name: "eumetsat-data-tailor"
       version: "1.0.0"
@@ -434,7 +433,7 @@ spec:
           url: https://github.com/nordsat/ewc-playbooks/issues
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/pytrollLogo.png
       annotations:
-        technology: "Ansible Playbook"
+        technology: "Ansible Playbook,Terraform Module"
         category: "Compute,Data Processing"
         supportLevel: "Community"
         licenseType: "GNU General Public License v3.0"
@@ -459,7 +458,7 @@ spec:
           url: https://github.com/ewcloud/ewc-flavours/issues
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
-        technology: "Ansible Playbook"
+        technology: "Ansible Playbook,Helm Charts"
         category: "Remote Access & Desktop"
         supportLevel: "EWC"
         licenseType: "MIT License"
