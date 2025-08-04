@@ -264,7 +264,7 @@ spec:
         category: "Networking,Data Reception"
         supportLevel: "EWC"
         licenseType: "MIT License"
-        others: "Earth Observation"
+        others: "Earth Observation,Eumetcast Terrestrial"
       displayName: EUMETCast Terrestrial
       summary: Service for receiving and processing EUMETCast Terrestrial data streams via IP multicast within a private network.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
@@ -289,7 +289,7 @@ spec:
         category: "Data Processing"
         supportLevel: "EWC"
         licenseType: "MIT License"
-        others: "Earth Observation"
+        others: "Earth Observation,Fire monitoring"
       displayName: EUMETSAT Data Tailor
       summary: On-demand data processing service for subsetting, reformatting, and customising Earth observation data products.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
