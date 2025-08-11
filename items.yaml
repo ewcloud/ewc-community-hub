@@ -49,7 +49,7 @@ spec:
         - name: EWC Team
           email: support@ewcloud.int
           url: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/issues
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook"
         category: "Machine Learning & AI, GPU-accelerated"
@@ -109,7 +109,7 @@ spec:
         - name: EWC Team
           email: support@ewcloud.int
           url: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/issues
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook"
         category: "Machine Learning & AI, GPU-accelerated"
@@ -168,7 +168,7 @@ spec:
         - name: EWC Team
           email: support@ewcloud.int
           url: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/issues
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook"
         category: "Machine Learning & AI, GPU-accelerated"
@@ -233,7 +233,72 @@ spec:
         - name: EWC Team
           email: support@ewcloud.int
           url: https://github.com/ewcloud/ewc-flavours/issues
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
+      annotations:
+        technology: "Ansible Playbook"
+        category: "Compute,Data Access"
+        supportLevel: "EWC"
+        licenseType: "Apache License 2.0"
+      displayName: ECMWF Data Flavour
+      summary: It includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
+      license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
+      published: true
+    ecmwf-data-flavour-2.0.0:
+      name: "ecmwf-data-flavour"
+      version: "2.0.0"
+      description: |
+        Includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
+        
+        Getting started
+        ---------------
+        
+        * Clone or download the code from the source repository.
+        * Install ansible and other dependencies. You may want to do it in its own virtual environment (`pip install -r requirements.txt`)
+        * Fetch the external requirements
+          ```bash
+          $ ansible-galaxy role install -r requirements.yml roles/
+          ```
+        
+        * Define your inventory in `inventory`
+        * Run the apropriate playbook 
+        
+          ```bash
+          $ ansible-playbook -i inventory ecmwf-data-flavour.yml
+          ```
+
+        You may use the following ansible variables to customise this playbook:
+        
+        | Variable | Description | Type | Default | Required |
+        |------|-------------|------|---------|----------|
+        | reboot_if_required | Reboot the instance if required after an update. | `boolean`| `true` | no |
+        | ecmwf_toolbox_env_wipe | Decide whether to wipe the environment if exists prior to a reinstallation. | `boolean` | `no` | no |
+        | ecmwf_toolbox_env_wipe | Name of the environment containing the ECMWF toolbox. | `string` | `ecmwf-toolbox` | no |
+        | ecmwf_toolbox_create_ipykernel | Create a system-wide kernel available. | `boolean` | yes | no |
+        | conda_prefix | Prefix where conda is installed. | `string` | `/opt/conda` | no |
+        | conda_user | User owning the conda installation. | `string` | `root` | no |
+      
+        Example usage:
+      
+        ```bash
+        ansible-playbook -i inventory ecmwf-data-flavour.yml
+        ```
+        
+        Author
+        ------------------
+        ECMWF for the European Weather Cloud
+        
+        <img src="https://climate.copernicus.eu/sites/default/files/inline-images/ECMWF.png"  width="120px" height="120px"> 
+        
+        ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
+
+      home: https://github.com/ewcloud/ewc-flavours
+      sources:
+        - https://github.com/ewcloud/ewc-flavours/blob/766090d57b3ad18d89f999e0601cb1fdf1e14eda/ecmwf-data-flavour.yml
+      maintainers:
+        - name: EWC Team
+          email: support@ewcloud.int
+          url: https://github.com/ewcloud/ewc-flavours/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook"
         category: "Compute,Data Access"
@@ -258,7 +323,7 @@ spec:
         - name: EWC Support Team
           email: testemail@ewcloud.int
           url: https://github.com/ewcloud/ewc-flavours/issues
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook"
         category: "Networking,Data Reception"
@@ -283,7 +348,7 @@ spec:
         - name: EWC Support Team
           email: testemail@ewcloud.int
           url: https://github.com/ewcloud/ewc-flavours/issues
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook"
         category: "Data Processing"
@@ -309,7 +374,7 @@ spec:
         - name: EWC Support Team
           email: testemail@ewcloud.int
           url: https://github.com/ewcloud/ewc-flavours/issues
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook"
         category: "Security,Identity & Access Management"
@@ -317,153 +382,6 @@ spec:
         licenseType: "MIT License"
       displayName: FreeIPA
       summary: Centralized identity, authentication, and access management solution based on FreeIPA.
-      license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
-      published: false
-    jupyterhub-flavour:
-      name: "jupyterhub-flavour"
-      version: "1.0.0"
-      description: |
-        Installs and run  on your instance, offering a convenient way to access it through the web.
-      home: https://github.com/ewcloud/ewc-flavours
-      sources:
-        - https://github.com/ewcloud/ewc-flavours/blob/d9948e334735e129a1c869cee865d5c42912a332/jupyterhub-flavour.yml
-      maintainers:
-        - name: EWC Team
-          email: support@ewcloud.int
-          url: https://github.com/ewcloud/ewc-flavours/issues
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/jupyterprob.jpg
-      annotations:
-        technology: "Ansible Playbook"
-        category: "Compute,Data Visualization,Data Processing"
-        supportLevel: "EWC"
-        licenseType: "Apache License 2.0"
-      displayName: JupyterHub Flavour
-      summary: It installs and run jupyterhub on your instance, offering a convenient way to access it through the web.
-      license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
-      published: false
-    ml-basic:
-      name: "ml-basic"
-      version: "1.0.0"
-      description: |
-        Create a conda environment with the basic Machine Learning packages such as torch, xgboost, and scikit-learn. Check `files/env.yml` for all the details on the software included.
-
-        Requirements
-        ------------
-        This ansible role depends on ewc-ansible-role-conda
-
-        Role Variables
-        --------------
-        - `ml_basic_env_wipe`: Boolean to decide whether to wipe the environment if exists prior to a reinstallation. Default: no
-        - `ml_basic_env_name`: Name of the environment containing the software stack. Default: ml-basic
-        - `ml_basic_env_path`: Path to the environment containing the software stack. Default: `{{ conda_prefix }}/envs/{{ ml_basic_env_name }}`
-        - `ml_basic_create_ipykernel`: Boolean to create a system-wide kernel available. Default: yes
-        - `conda_prefix`: Prefix where conda is installed. Default: `/opt/conda`
-        - `conda_user`: User owning the conda installation. Default: `root`
-
-        Example Playbook
-        ----------------
-
-            - hosts: all
-              roles:
-                -  ewc-ansible-role-ml-basic
-
-        License
-        -------
-
-        Apache 2.0.
-
-        Author Information
-        ------------------
-
-        ECMWF for the European Weather Cloud
-        
-        <img src="https://climate.copernicus.eu/sites/default/files/inline-images/ECMWF.png"  width="120px" height="120px"> 
-        
-        ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
-
-      home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
-      sources:
-        - https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/ml-basic.yml
-      maintainers:
-        - name: EWC Team
-          email: support@ewcloud.int
-          url: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/issues
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
-      annotations:
-        technology: "Ansible Playbook"
-        category: "Machine Learning & AI, GPU-accelerated"
-        supportLevel: "EWC"
-        licenseType: "Apache License 2.0"
-      displayName: ML Basic
-      summary: It features an environment with the main machine learning packages like scikit-learn or torch.
-      license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
-      published: false
-    openstack-compute:
-      name: "openstack-compute"
-      version: "1.0.0"
-      description: |
-        Pre-configured instance for deploying and managing OpenStack compute resources using Terraform.
-      home: https://github.com/ewcloud/openstack-compute
-      sources:
-        - https://github.com/ewcloud/openstack-compute
-      maintainers:
-        - name: EWC Team
-          email: support@ewcloud.int
-          url: https://github.com/ewcloud/openstack-compute/issues
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
-      annotations:
-        technology: "Terraform Module"
-        category: "Compute"
-        supportLevel: "EWC"
-        licenseType: "MIT License"
-      displayName: Openstack Compute
-      summary: Pre-configured instance for deploying and managing OpenStack compute resources using Terraform.
-      license: https://github.com/ewcloud/openstack-compute/blob/main/LICENSE
-      published: false
-    pytroll:
-      name: "pytroll"
-      version: "1.0.0"
-      description: |
-        Playbooks to install pytroll processing and wms in the EWC
-      home: https://github.com/nordsat/ewc-playbooks
-      sources:
-        - https://github.com/nordsat/ewc-playbooks/blob/main/satellite-data-processing-main.yaml
-      maintainers:
-        - name: NORDSAT
-          url: https://github.com/nordsat/ewc-playbooks/issues
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/pytrollLogo.png
-      annotations:
-        technology: "Ansible Playbook,Terraform Module"
-        category: "Compute,Data Processing"
-        supportLevel: "Community"
-        licenseType: "GNU General Public License v3.0"
-      displayName: Pytroll Processing
-      summary: Playbooks to install pytroll processing and wms in the EWC.
-      license: https://github.com/nordsat/ewc-playbooks/blob/main/LICENSE
-      published: false
-    remote-desktop:
-      name: "remote-desktop"
-      version: "1.0.0"
-      description: |
-        Virtual desktop instance providing remote graphical access to applications and development environments.
-      home: https://github.com/ewcloud/ewc-flavours
-      sources:
-        - https://github.com/ewcloud/ewc-flavours/blob/main/remote-desktop.yml
-      maintainers:
-        - name: EWC Team
-          email: support@ewcloud.int
-          url: https://github.com/ewcloud/ewc-flavours/issues
-        - name: EWC Support Team
-          email: testemail@ewcloud.int
-          url: https://github.com/ewcloud/ewc-flavours/issues
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
-      annotations:
-        technology: "Ansible Playbook,Helm Charts"
-        category: "Remote Access & Desktop"
-        supportLevel: "EWC"
-        licenseType: "MIT License"
-      displayName: Remote Desktop
-      summary: Virtual desktop instance providing remote graphical access to applications and development environments.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: false
     ewc-ansible-role-ssh-bastion:
@@ -550,7 +468,7 @@ spec:
         - name: EWC Support Team
           email: support@europeanweather.cloud
           url: http://support.europeanweather.cloud/
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Role"
         category: "Networking,Security,Access Management"
@@ -558,5 +476,253 @@ spec:
         licenseType: "MIT License"
       displayName: EWC Ansible Role SSH Bastion
       summary: Create secure SSH Bastion host providing controlled, audited access to private network resources.
+      license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
+      published: false
+    ipa-client-enroll:
+      name: "ipa-client-enroll"
+      version: "1.0.0"
+      description: |
+        IPA CLient Enroll.
+      home: https://github.com/ewcloud/ewc-flavours
+      sources:
+        - https://github.com/ewcloud/ewc-flavours/blob/main/ipa-client-enroll.yml
+      maintainers:
+        - name: EWC Team
+          email: support@ewcloud.int
+          url: https://github.com/ewcloud/ewc-flavours/issues
+        - name: EWC Support Team
+          email: testemail@ewcloud.int
+          url: https://github.com/ewcloud/ewc-flavours/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
+      annotations:
+        technology: "Ansible Playbook"
+        category: "User Management"
+        supportLevel: "EWC"
+        licenseType: "Apache License 2.0"
+      displayName: IPA Client Enroll
+      summary: IPA CLient Enroll.
+      license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
+      published: false
+      _inputs:
+        - name: password_allowed_ip_ranges
+          default: ["10.0.0.0/24","192.168.1.0/24"]
+          description: "IP ranges (in CIDR format) to be allowed for password access in SSHD configuration."
+          type: List[str]
+        - name: ipa_client_hostname
+          description: "IP ranges (in CIDR format) to be allowed for password access in SSHD configuration."
+          type: str
+        - name: ipa_domain
+          description: "The IPA domain name. Example: <memberstate>-<organization>-<projectname>.ewc"
+          type: str
+        - name: ipa_admin_password
+          description: "The IPA Directory Manager/Admin password (at least 8 characters long)"
+          type: str
+        - name: ipa_admin_username
+          description: "Username of administrator account to replace the default IPA admin"
+          type: str
+        - name: ipa_server_hostname
+          description: "IPA server host name. Example: ldap"
+          type: str
+      _default_security_groups:
+        - ipa
+      _default_image_name:
+        - ubuntu-24
+    ipa-client-disenroll:
+      name: "ipa-client-disenroll"
+      version: "1.0.0"
+      description: |
+        IPA CLient Disenroll.
+      home: https://github.com/ewcloud/ewc-flavours
+      sources:
+        - https://github.com/ewcloud/ewc-flavours/blob/main/ipa-client-disenroll.yml
+      inputs:
+        - name: ipa_domain
+        - name: ipa_client_hostname
+        - name: ipa_server_hostname
+        - name: ipa_admin_password
+        - name: ipa_admin_username
+      maintainers:
+        - name: EWC Team
+          email: support@ewcloud.int
+          url: https://github.com/ewcloud/ewc-flavours/issues
+        - name: EWC Support Team
+          email: testemail@ewcloud.int
+          url: https://github.com/ewcloud/ewc-flavours/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
+      annotations:
+        technology: "Ansible Playbook"
+        category: "User Management"
+        supportLevel: "EWC"
+        licenseType: "Apache License 2.0"
+      displayName: IPA CLient Disenroll
+      summary: IPA CLient Disenroll.
+      license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
+      published: false
+    jupyterhub-flavour:
+      name: "jupyterhub-flavour"
+      version: "1.0.0"
+      description: |
+        Installs and run  on your instance, offering a convenient way to access it through the web.
+      home: https://github.com/ewcloud/ewc-flavours
+      sources:
+        - https://github.com/ewcloud/ewc-flavours/blob/d9948e334735e129a1c869cee865d5c42912a332/jupyterhub-flavour.yml
+      maintainers:
+        - name: EWC Team
+          email: support@ewcloud.int
+          url: https://github.com/ewcloud/ewc-flavours/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/jupyterprob.jpg
+      annotations:
+        technology: "Ansible Playbook"
+        category: "Compute,Data Visualization,Data Processing"
+        supportLevel: "EWC"
+        licenseType: "Apache License 2.0"
+      displayName: JupyterHub Flavour
+      summary: It installs and run jupyterhub on your instance, offering a convenient way to access it through the web.
+      license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
+      published: false
+    ml-basic:
+      name: "ml-basic"
+      version: "1.0.0"
+      description: |
+        Create a conda environment with the basic Machine Learning packages such as torch, xgboost, and scikit-learn. Check `files/env.yml` for all the details on the software included.
+
+        Requirements
+        ------------
+        This ansible role depends on ewc-ansible-role-conda
+
+        Role Variables
+        --------------
+        - `ml_basic_env_wipe`: Boolean to decide whether to wipe the environment if exists prior to a reinstallation. Default: no
+        - `ml_basic_env_name`: Name of the environment containing the software stack. Default: ml-basic
+        - `ml_basic_env_path`: Path to the environment containing the software stack. Default: `{{ conda_prefix }}/envs/{{ ml_basic_env_name }}`
+        - `ml_basic_create_ipykernel`: Boolean to create a system-wide kernel available. Default: yes
+        - `conda_prefix`: Prefix where conda is installed. Default: `/opt/conda`
+        - `conda_user`: User owning the conda installation. Default: `root`
+
+        Example Playbook
+        ----------------
+
+            - hosts: all
+              roles:
+                -  ewc-ansible-role-ml-basic
+
+        License
+        -------
+
+        Apache 2.0.
+
+        Author Information
+        ------------------
+
+        ECMWF for the European Weather Cloud
+        
+        <img src="https://climate.copernicus.eu/sites/default/files/inline-images/ECMWF.png"  width="120px" height="120px"> 
+        
+        ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
+
+      home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
+      sources:
+        - https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/ml-basic.yml
+      maintainers:
+        - name: EWC Team
+          email: support@ewcloud.int
+          url: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
+      annotations:
+        technology: "Ansible Playbook"
+        category: "Machine Learning & AI, GPU-accelerated"
+        supportLevel: "EWC"
+        licenseType: "Apache License 2.0"
+      displayName: ML Basic
+      summary: It features an environment with the main machine learning packages like scikit-learn or torch.
+      license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
+      published: false
+    nwcsaf-datacube-xarray:
+      name: "nwcsaf-datacube-xarray"
+      version: "1.0.0"
+      description: |
+        Jupyter notebooks on using Icechunk, Virtualizar, and Kerchunk to enable Single-Point Access to Distributed Cloud Files through xarray.
+      home: https://gitlab.aemet.es/jllisov/vzarr
+      sources:
+        - https://gitlab.aemet.es/jllisov/vzarr
+      maintainers:
+        - name: NWCSAF
+          email: jllisov@aemet.es
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/NWCSAFLogo.png
+      annotations:
+        technology: "Jupyter Notebook"
+        category: "Training,Data Access"
+        supportLevel: "Community"
+        licenseType: "MIT"
+      displayName: NWCSAF Datacube Xarray
+      summary: Jupyter Notebooks for Unlocking Large Datasets on Cloud-Native Data Workflows.
+      license: https://gitlab.aemet.es/jllisov/vzarr/-/blob/main/LICENSE
+      published: true
+    openstack-compute:
+      name: "openstack-compute"
+      version: "1.0.0"
+      description: |
+        Pre-configured instance for deploying and managing OpenStack compute resources using Terraform.
+      home: https://github.com/ewcloud/openstack-compute
+      sources:
+        - https://github.com/ewcloud/openstack-compute
+      maintainers:
+        - name: EWC Team
+          email: support@ewcloud.int
+          url: https://github.com/ewcloud/openstack-compute/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
+      annotations:
+        technology: "Terraform Module"
+        category: "Compute"
+        supportLevel: "EWC"
+        licenseType: "MIT License"
+      displayName: Openstack Compute
+      summary: Pre-configured instance for deploying and managing OpenStack compute resources using Terraform.
+      license: https://github.com/ewcloud/openstack-compute/blob/main/LICENSE
+      published: false
+    pytroll:
+      name: "pytroll"
+      version: "1.0.0"
+      description: |
+        Playbooks to install pytroll processing and wms in the EWC
+      home: https://github.com/nordsat/ewc-playbooks
+      sources:
+        - https://github.com/nordsat/ewc-playbooks/blob/main/satellite-data-processing-main.yaml
+      maintainers:
+        - name: NORDSAT
+          url: https://github.com/nordsat/ewc-playbooks/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/pytrollLogo.png
+      annotations:
+        technology: "Ansible Playbook,Terraform Module"
+        category: "Compute,Data Processing"
+        supportLevel: "Community"
+        licenseType: "GNU General Public License v3.0"
+      displayName: Pytroll Processing
+      summary: Playbooks to install pytroll processing and wms in the EWC.
+      license: https://github.com/nordsat/ewc-playbooks/blob/main/LICENSE
+      published: false
+    remote-desktop:
+      name: "remote-desktop"
+      version: "1.0.0"
+      description: |
+        Virtual desktop instance providing remote graphical access to applications and development environments.
+      home: https://github.com/ewcloud/ewc-flavours
+      sources:
+        - https://github.com/ewcloud/ewc-flavours/blob/main/remote-desktop.yml
+      maintainers:
+        - name: EWC Team
+          email: support@ewcloud.int
+          url: https://github.com/ewcloud/ewc-flavours/issues
+        - name: EWC Support Team
+          email: testemail@ewcloud.int
+          url: https://github.com/ewcloud/ewc-flavours/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
+      annotations:
+        technology: "Ansible Playbook,Helm Charts"
+        category: "Remote Access & Desktop"
+        supportLevel: "EWC"
+        licenseType: "MIT License"
+      displayName: Remote Desktop
+      summary: Virtual desktop instance providing remote graphical access to applications and development environments.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: false
