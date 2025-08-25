@@ -1,0 +1,28 @@
+name: Metadata Validation
+
+on:
+  push:
+    branches: ["**"]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+
+      - name: Install Node dependencies
+        run: npm install -g ajv-cli
+
+      - name: Validate catalog metadata format
+        run: |
+          yq -o=json "items.yaml" > "items.json"
+
+      - name: Validate catalog metadata contents
+        run: |
+          ajv validate -s schemas/catalog/v1alpha1.json -d items.json --spec=draft2020
