@@ -49,6 +49,10 @@
               "type": "string",
               "pattern": ".+"
             },
+            "others": {
+              "type": "string",
+              "pattern": ".+"
+            },
             "supportLevel": {
               "type": "string"
             },
