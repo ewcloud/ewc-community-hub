@@ -443,7 +443,7 @@ spec:
           url: https://github.com/ewcloud/ewc-ansible-role-ssh-bastion/issues
         - name: EWC Support Team
           email: support@europeanweather.cloud
-          url: http://support.europeanweather.cloud/
+          url: https://support.europeanweather.cloud/
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Role"
