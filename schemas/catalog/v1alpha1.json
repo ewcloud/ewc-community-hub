@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/ewcloud/ewc-community-hub/schemas/catalog/v1.json",
+  "$id": "https://github.com/ewcloud/ewc-community-hub/schemas/catalog/v1alpha1.json",
   "type": "object",
   "properties": {
     "apiVersion": {
@@ -16,7 +16,7 @@
         "items": {
           "type": "object",
           "patternProperties": {
-            "^[a-zA-Z0-9_-]+$": {
+            "^[a-zA-Z0-9_-]+(\\d+\\.\\d+\\.\\d+)?$": {
               "$ref": "#/$defs/communityHubCatalogItem"
             }
           },
