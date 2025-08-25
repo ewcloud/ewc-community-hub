@@ -94,17 +94,6 @@
               "name": {
                 "type": "string"
               },
-              "default": {
-                "anyOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ],
-                "default": "null"
-              },
               "description": {
                 "type": "string"
               },
@@ -116,8 +105,7 @@
               "name",
               "description",
               "type"
-            ],
-            "additionalProperties": false
+            ]
           }
         },
         "outputs": {
