@@ -152,13 +152,20 @@
                 "default": "null"
               },
               "url": {
-                "type": "string",
-                "pattern": "^https://[\\w\\-\\./:#?=&%]+$"
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^https://[\\w\\-\\./:#?=&%]+$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": "null"
               }
             },
             "required": [
-              "name",
-              "url"
+              "name"
             ],
             "additionalProperties": false
           }
