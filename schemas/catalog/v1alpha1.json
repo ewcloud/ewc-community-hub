@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/ewcloud/ewc-community-hub/schemas/catalog/v1alpha1.json",
+   "$id": "https://https://github.com/ewcloud/ewc-community-hub/blob/main/schemas/catalog/v1alpha1.json",
   "type": "object",
   "properties": {
     "apiVersion": {
