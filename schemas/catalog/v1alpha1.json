@@ -1,0 +1,209 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+   "$id": "https://https://github.com/ewcloud/ewc-community-hub/blob/main/schemas/catalog/v1alpha1.json",
+  "type": "object",
+  "properties": {
+    "apiVersion": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string",
+      "const": "CommunityHubCatalog"
+    },
+    "spec": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "object",
+          "patternProperties": {
+            "^[a-zA-Z0-9_-]+(\\d+\\.\\d+\\.\\d+)?$": {
+              "$ref": "#/$defs/communityHubCatalogItem"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "items"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "apiVersion",
+    "kind",
+    "spec"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "communityHubCatalogItem": {
+      "type": "object",
+      "properties": {
+        "annotations": {
+          "type": "object",
+          "properties": {
+            "licenseType": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string",
+              "pattern": ".+"
+            },
+            "others": {
+              "type": "string",
+              "pattern": ".+"
+            },
+            "supportLevel": {
+              "type": "string"
+            },
+            "technology": {
+              "type": "string",
+              "pattern": ".+"
+            }
+          },
+          "required": [
+            "licenseType",
+            "category",
+            "supportLevel",
+            "technology"
+          ],
+          "additionalProperties": false
+        },
+        "displayName": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "home": {
+          "type": "string",
+          "pattern": "^https://[\\w\\-\\./:#?=&%]+$"
+        },
+        "license": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string",
+          "pattern": "^https://[\\w\\-\\./:#?=&%]+$"
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "description",
+              "type"
+            ]
+          }
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "description",
+              "type"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "maintainers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": "null"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^https://[\\w\\-\\./:#?=&%]+$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": "null"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "name": {
+          "type": "string"
+        },
+        "published": {
+          "type": "boolean"
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "summary": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+(\\.\\d+)?$"
+        }
+      },
+      "required": [
+        "annotations",
+        "displayName",
+        "description",
+        "home",
+        "license",
+        "icon",
+        "maintainers",
+        "name",
+        "published",
+        "sources",
+        "summary",
+        "version"
+      ]
+    }
+  }
+}
