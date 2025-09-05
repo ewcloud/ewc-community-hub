@@ -59,6 +59,7 @@ spec:
       summary: It features the most popular data driven forecast models such as Pangu Weather, Fourcastnet or graphcast.
       license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
       published: true
+
     ecmwf-aifs-single-mse:
       name: "ecmwf-aifs-single-mse"
       version: "1.0.0"
@@ -119,6 +120,7 @@ spec:
       summary: It features the ECMWF AIFS Single data-driven model
       license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
       published: true
+
     ecmwf-anemoi:
       name: "ecmwf-anemoi"
       version: "1.0.0"
@@ -178,6 +180,7 @@ spec:
       summary: It leverages the Anemoi framework to develop and run your AI-models or manage datasets.
       license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
       published: true
+
     ecmwf-data-flavour:
       name: "ecmwf-data-flavour"
       version: "1.0.0"
@@ -243,6 +246,7 @@ spec:
       summary: It includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: true
+
     ecmwf-data-flavour-2.0.0:
       name: "ecmwf-data-flavour"
       version: "2.0.0"
@@ -308,6 +312,7 @@ spec:
       summary: It includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: true
+
     eumetcast-terrestrial:
       name: "eumetcast-terrestrial"
       version: "1.0.0"
@@ -334,32 +339,163 @@ spec:
       summary: Service for receiving and processing EUMETCast Terrestrial data streams via IP multicast within a private network.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: true
-    eumetsat-data-tailor:
-      name: "eumetsat-data-tailor"
+
+    eumetsat-data-tailor-flavour:
+      name: "eumetsat-data-tailor-flavour"
       version: "1.0.0"
       description: |
-        On-demand data processing service for subsetting, reformatting, and customising Earth observation data products.
-      home: https://github.com/ewcloud/ewc-flavours
+        This Ansible Playbook configures an existing virtual machine running
+        within the [European Weather Cloud (EWC)](https://europeanweather.cloud/), to equip it with the Data Tailor Standalone and EUMETSAT Data Access Client (EUMDAC).
+
+        ## Functionality
+        > 💡 Unlike the Data Tailor Web Services (DTWS), which can be used with EUMDAC or via https://tailor.eumetsat.int, the standalone version is generally faster and does not have limitations such as maximum concurrent jobs or workspace size.
+
+        The Data Tailor is a product customization toolbox designed to:
+        * Enable users to tailor satellite data to their specific needs. 
+        * Offers the ability to subset and aggregate data products across space and time, filter layers, generate quick looks, reproject data onto new coordinate reference systems, and reformat data into widely used Geographic Information System (GIS) formats such as netCDF and GeoTIFF, as well as image formats like JPEG and PNG. 
+        * Customize data from various satellite collections, including METOP, MFG ,MSG, MTG (Meteosat Third Generation) and Sentinel-3. 
+
+        For more information on capabilities of the Data Tailor, please refer to [Data Tailor Standalone Guide on User Portal](https://user.eumetsat.int/resources/user-guides/data-tailor-standalone-guide) and for more information about the available products and customisations inside the Data Tailor, please go to [Products and Customisations Available in the Data Tailor](https://user.eumetsat.int/resources/user-guides/data-store-detailed-guide#ID-Products-and-customisation-available-in-the-Data-Tailor) page.
+
+        ## Prerequisites
+        >💡 Versions listed correspond to minimal prerequisites.
+
+        To successfully run this playbook, the following packages should be available in your work environment:
+
+        | Name | Version | License | Home URL |
+        |------|---------|----- |-----|
+        | git | 2.0 | GPLv2  | https://git-scm.com/downloads |
+        | python | 3.9   | PSF | https://www.python.org/downloads  |
+        | ansible | 2.15 |  GPLv3+ | https://pypi.org/project/ansible  |
+
+        ## Usage
+
+        ### 1. Download  Ansible dependencies
+        >💡 By default, Ansible Roles are installed under the `~/.ansible/roles` directory within your working environment.
+
+        Download the correct version of the Ansible dependencies, if you haven't done so already:
+
+        ```
+        ansible-galaxy role install -r requirements.yml
+        ```
+
+        ### 2. Specify the target host and SSH credentials
+        Create an inventory file to specify address/credentials that Ansible should use
+        to reach the virtual machine you wish to configure:
+
+        ```yaml
+        # inventory.yml
+        ---
+        ewcloud:
+          hosts:
+            data_tailor:
+              ansible_python_interpreter: /usr/bin/python3
+              ansible_host: <add the IPV4 address of the target host>
+              ansible_ssh_private_key_file: <add the path to local SSH private key file>
+              ansible_user: <add the default user according to your chosen VM image>
+              ansible_ssh_common_args: -o StrictHostKeyChecking=accept-new
+        ```
+
+        ### 3. Configure and apply the template
+
+        #### 3.1. Interactive Mode
+
+        By running the following command, you can trigger an interactive session that
+        prompts you for the necessary user inputs, and then applies changes to your
+        target EWC environment:
+
+        ```bash
+        ansible-playbook -i inventory.yml eumetsat-data-tailor-flavour.yml
+        ```
+
+        #### 3.2. Non-Interactive Mode
+
+        >💡 To learn more about defining variables at runtime, checkout the
+        [official Ansible documentation](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html).
+
+        You can also run in non-interactive mode by passing the
+        `--extra-vars` or `-e` flag, followed by a map of  key-value pairs; one for
+        each and every available input (see [inputs section](#inputs) below). For
+        example:
+
+        ```bash
+        ansible-playbook \
+          -i inventory.yml \
+          -e '{
+              "data_tailor_env_wipe": "no",
+              "data_tailor_env_name": "epct-desktop",
+              "conda_installer": "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh",
+              "conda_update_base": "false",
+              "conda_prefix": "/opt/conda",
+              "conda_user": "root"
+            }' \
+          eumetsat-data-tailor-flavour.yml
+        ```
+
+        ## Inputs
+
+        | Name | Description | Type | Default | Required |
+        |------|-------------|------|---------|:--------:|
+        | data_tailor_env_wipe | flag to delete existing conda environment where data tailor was previously installed. Only `yes` will be accepted to approve | `string` | `no` | yes |
+        | data_tailor_env_name | name of conda environment where data tailor will be installed | `string` | `epct-desktop` | yes |
+        | conda_installer  | URI of the installer to use | `string` | `https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh` | yes |
+        | conda_update_base | boolean to decide wether base environment needs updating | `bool` | `false` | yes |
+        | conda_prefix | prefix where conda will be installed | `string` | `/opt/conda` | yes |
+        | conda_user | user that will own the conda installation | `string` | `root` | yes |
+
+        ## Dependencies
+        > 💡 A VM plan with at least 16GB of RAM is recommended for successful setup and
+        stable operation.
+
+        | Name | Version | License | Home URL |
+        |------|---------|------|------|
+        | ewc-ansible-role-conda | 1.1 |  Apache-2.0 | https://github.com/ewcloud/ewc-ansible-role-conda |
+        | ewc-ansible-role-data-tailor | 1.0 |  MIT | https://github.com/ewcloud/ewc-ansible-role-data-tailor |
+
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning
       sources:
-        - https://github.com/ewcloud/ewc-flavours/blob/main/data-tailor.yml
+        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/eumetsat-data-tailor-flavour/eumetsat-data-tailor-flavour.yml
+      inputs:
+        - name: data_tailor_env_wipe
+          description: flag to delete existing conda environment where data tailor was previously installed. Only yes will be accepted to approve
+          type: str
+          default: no
+        - name: data_tailor_env_name
+          description: name of conda environment where data tailor will be installed
+          type: str
+          default: epct-desktop
+        - name: conda_installer
+          description: URI of the installer to use
+          type: str
+          default: https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
+        - name: conda_update_base
+          description: boolean to decide wether base environment needs updating
+          type: bool
+          default: false
+        - name: conda_prefix
+          description: prefix where conda will be installed
+          type: str
+          default: /opt/conda
+        - name: conda_user
+          description: user that will own the conda installation
+          type: str
+          default: root
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
-          url: https://github.com/ewcloud/ewc-flavours/issues
-        - name: EWC Support Team
-          email: testemail@ewcloud.int
-          url: https://github.com/ewcloud/ewc-flavours/issues
+          url: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/issues
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook"
-        category: "Data Processing"
-        supportLevel: "EWC"
+        category: "Data Processing,Deployable"
+        supportLevel: "EWC-supported"
         licenseType: "MIT License"
         others: "Earth Observation,Fire monitoring"
-      displayName: EUMETSAT Data Tailor
-      summary: On-demand data processing service for subsetting, reformatting, and customising Earth observation data products.
-      license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
-      published: false
+      displayName: EUMETSAT Data Tailor flavour
+      summary: Transforms an existing VM into a powerful satellite data customization hub, enabling users to efficiently subset, aggregate, reproject, and reformat data from METOP, MFG, MSG, MTG, and Sentinel-3 into GIS and image formats, offering faster processing and greater flexibility than web-based alternatives.
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/LICENSE
+      published: true
+
     ewc-ansible-role-ssh-bastion:
       name: "ewc-ansible-role-ssh-bastion"
       version: "1.0.0"
@@ -448,166 +584,386 @@ spec:
       annotations:
         technology: "Ansible Role"
         category: "Networking,Security,Access Management"
-        supportLevel: "EWC"
+        supportLevel: "EWC-supported"
         licenseType: "MIT License"
       displayName: EWC Ansible Role SSH Bastion
       summary: Create secure SSH Bastion host providing controlled, audited access to private network resources.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: false
-    ipa-client-enroll:
-      name: "ipa-client-enroll"
+    
+    ipa-client-enroll-flavour:
+      name: "ipa-client-enroll-flavour"
       version: "1.0.0"
       description: |
-        IPA CLient Enroll.
-      home: https://github.com/ewcloud/ewc-flavours
+        This Ansible Playbook configures an existing virtual machine in the
+        [European Weather Cloud (EWC)](https://europeanweather.cloud/) to operate as a
+        client of [IPA services](../ipa-server-flavour/).
+
+        IPA provides integrated identity management and DNS services, enabling
+        centralized user authentication, authorization, and resource discovery.
+
+        Suitable for tenant admins and tenant users alike, this template simplifies the
+        integration of VMs into a [FreeIPA](https://www.freeipa.org/page/Main_Page)-managed
+        fleet of instances within the EWC environment. Follow the [instructions below](#usage)
+        to enroll your instance.
+
+        ## Functionality
+        The template is designed to:
+        - Configure a pre-existing virtual machine running Rocky Linux 8/9 or Ubuntu to connect to a
+        IPA server on the same subnet.
+        - Enable DNS resolution for discovering private hosts and public addresses.
+        - Allow remote access to the VM using centrally managed LDAP users via password authentication.
+
+        ## Prerequisites
+        >💡 Versions listed correspond to minimal prerequisites.
+
+        To successfully run this playbook, the following packages should be available in your work environment:
+
+        | Name | Version | License | Home URL |
+        |------|---------|----- |-----|
+        | git | 2.0 | GPLv2  | https://git-scm.com/downloads |
+        | python | 3.9   | PSF | https://www.python.org/downloads  |
+        | ansible | 2.15 |  GPLv3+ | https://pypi.org/project/ansible  |
+
+        ## Usage
+
+        ### 1. Download  Ansible dependencies
+        >💡 By default, Ansible Roles are installed under the `~/.ansible/roles` directory within your working environment.
+
+        Download the correct version of the Ansible dependencies, if you haven't done so already:
+
+        ```
+        ansible-galaxy role install -r requirements.yml
+        ```
+
+        ### 2. Specify the target host and SSH credentials
+        >💡 To find out which is the default user for your chosen VM image,
+        checkout the [official EWC documentation](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+VM+images+and+default+users).
+
+        Create an inventory file to specify address/credentials that Ansible should use
+        to reach the virtual machine you wish to configure:
+
+        ```yaml
+        # inventory.yml
+        ---
+        ewcloud:
+          hosts:
+            ipa_client:
+              ansible_python_interpreter: /usr/bin/python3
+              ansible_host: <add the IPV4 address of the target host>
+              ansible_ssh_private_key_file: <add the path to local SSH private key file>
+              ansible_user: <add the default user according to your chosen VM image>
+              ansible_ssh_common_args: -o StrictHostKeyChecking=accept-new
+
+        ```
+
+        ### 3. Configure and apply the template
+
+        #### 3.1. Interactive Mode
+
+        By running the following command, you can trigger an interactive session that
+        prompts you for the necessary user inputs, and then applies changes to your
+        target EWC environment:
+
+        ```bash
+        ansible-playbook -i inventory.yml ipa-client-enroll-flavour.yml
+        ```
+
+        #### 3.2. Non-Interactive Mode
+
+        >💡 To learn more about defining variables at runtime, checkout the
+        [official Ansible documentation](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html).
+
+        You can also run in non-interactive mode by passing the
+        `--extra-vars` or `-e` flag, followed by a map of  key-value pairs; one for
+        each and every available input (see [inputs section](#inputs) below). For
+        example:
+
+        ```bash
+        ansible-playbook \
+          -i inventory.yml \
+          -e '{
+                "ipa_client_hostname": "ipa-client-1",
+                "ipa_domain": "eumetsat.sandbox.ewc",
+                "ipa_server_hostname": "ipa-server-1",
+                "ipa_admin_username": "ipaadmin",
+                "ipa_admin_password": "my-secret-password"
+            }' \
+          ipa-client-enroll-flavour.yml
+        ```
+
+        ## Inputs
+
+        | Name | Description | Type | Default | Required |
+        |------|-------------|------|---------|----------|
+        | ipa_client_hostname | hostname of the target vm where the IPA client will be installed. Example: `ipa-client-1` | `string`| n/a | yes |
+        | ipa_domain | domain name managed by the IPA server. Example: `eumetsat.sandbox.ewc` | `string` | n/a | yes |
+        | ipa_server_hostname | hostname of the IPA server. Example: `ipa-server-1` | `string`| n/a | yes |
+        | ipa_admin_username | username of the administrator account from the IPA server. Example: `ipaadmin` | `string` | n/a | yes |
+        | ipa_admin_password | password of the administrator account from the IPA server. Example: `my-secret-password` | `string` | n/a | yes |
+        | password_allowed_ip_ranges | IP addresses or IP ranges (in CIDR format) to be allowed for password access in SSHD configuration. When in doubt, add only IP addresses you know and trust. Example: `['10.0.0.0/24','192.168.1.0/24']` | `list(string)` | `['10.0.0.0/8','172.16.0.0/12','192.168.0.0/16']` | no |
+
+        ## Dependencies
+        > ⚠️ Only Ubuntu 22.04 and RockyLinux 8.10 VM images are currently supported.
+        This is due to constrains imposed by the required
+        ewc-ansible-role-ipa-client-enroll Ansible Role.
+
+        | Name | Version | License |Home URL |
+        |------|---------|------|-----|
+        | ewc-ansible-role-ipa-client-enroll | 1.0 | MIT | https://github.com/ewcloud/ewc-ansible-role-ipa-client-enroll |
+
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning
       sources:
-        - https://github.com/ewcloud/ewc-flavours/blob/main/ipa-client-enroll.yml
+        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ipa-client-enroll-flavour/ipa-client-enroll-flavour.yml
       inputs:
-        - name: password_allowed_ip_ranges
-          description: "IP ranges (in CIDR format) to be allowed for password access in SSHD configuration."
-          type: List[str]
         - name: ipa_client_hostname
-          description: "IP ranges (in CIDR format) to be allowed for password access in SSHD configuration."
+          description: "hostname of the target vm where the IPA client will be installed. Example: ipa-client-1"
           type: str
         - name: ipa_domain
-          description: "The IPA domain name. Example: <memberstate>-<organization>-<projectname>.ewc"
-          type: str
-        - name: ipa_admin_password
-          description: "The IPA Directory Manager/Admin password (at least 8 characters long)"
-          type: str
-        - name: ipa_admin_username
-          description: "Username of administrator account to replace the default IPA admin"
+          description: "domain name managed by the IPA server. Example: eumetsat.sandbox.ewc"
           type: str
         - name: ipa_server_hostname
-          description: "IPA server host name. Example: ldap"
+          description: "hostname of the IPA server. Example: ipa-server-1"
           type: str
+        - name: ipa_admin_username
+          description: "password of the administrator account from the IPA server. Example: my-secret-password"
+          type: str
+        - name: ipa_admin_password
+          description: "username of the administrator account from the IPA server. Example: ipaadmin"
+          type: str
+        - name: password_allowed_ip_ranges
+          description: "IP addresses or IP ranges (in CIDR format) to be allowed for password access in SSHD configuration. When in doubt, add only IP addresses you know and trust. Example: ['10.0.0.0/24','192.168.1.0/24']"
+          type: List[str]
+          default: ['10.0.0.0/8','172.16.0.0/12','192.168.0.0/16']
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
           url: https://github.com/ewcloud/ewc-flavours/issues
-        - name: EWC Support Team
-          email: testemail@ewcloud.int
-          url: https://github.com/ewcloud/ewc-flavours/issues
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
         technology: "Ansible Playbook"
-        category: "User Management"
-        supportLevel: "EWC"
-        licenseType: "Apache License 2.0"
+        category: "Security,Identity & Access Management,Deployable"
+        supportLevel: "EWC-supported"
+        licenseType: "MIT License"
       displayName: IPA Client Enroll
-      summary: IPA CLient Enroll.
-      license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
+      summary: Seamlessly integrates a running VM into a FreeIPA-managed fleet of instances, enabling centralized user authentication, DNS resolution, and secure remote access for simplified and scalable identity management.
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/LICENSE
       published: true
-    ipa-client-disenroll:
-      name: "ipa-client-disenroll"
+
+    ipa-client-disenroll-flavour:
+      name: "ipa-client-disenroll-flavour"
       version: "1.0.0"
       description: |
         IPA CLient Disenroll.
-      home: https://github.com/ewcloud/ewc-flavours
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning
       sources:
-        - https://github.com/ewcloud/ewc-flavours/blob/main/ipa-client-disenroll.yml
+        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ipa-client-disenroll-flavour/ipa-client-disenroll-flavour.yml
       inputs:
-        - name: ipa_client_hostname_override
-          description: "hostname of the target vm to be disenrolled from the IPA server. Example: <openstack instance name>"
+        - name: ipa_domain
+          description: "domain name managed by the IPA server. Example: eumetsat.sandbox.ewc"
           type: str
-        - name: ipa_domain_override
-          description: "Domain name managed by the IPA server. Example: <memberstate>-<organization>-<projectname>.ewc"
+        - name: ipa_client_hostname
+          description: "hostname of the target vm to be disenrolled from the IPA server. Example: ipa-client-1"
           type: str
-        - name: ipa_server_hostname_override
-          description: "The IPA Directory Manager/Admin password (at least 8 characters long)"
+        - name: ipa_server_hostname
+          description: "hostname of the IPA server. Example: ipa-server-1"
           type: str
-        - name: ipa_admin_username_override
-          description: "Username of administrator account to replace the default IPA admin"
+        - name: ipa_admin_username
+          description: "username of the administrator account from the IPA server. Example: ipaadmin"
           type: str
-        - name: ipa_server_hostname_override
-          description: "IPA server host name. Example: ldap"
+        - name: ipa_server_hostname
+          description: "password of the administrator account from the IPA server. Example: my-secret-password"
           type: str
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
-          url: https://github.com/ewcloud/ewc-flavours/issues
-        - name: EWC Support Team
-          email: testemail@ewcloud.int
-          url: https://github.com/ewcloud/ewc-flavours/issues
+          url: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/issues
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
         technology: "Ansible Playbook"
-        category: "User Management"
-        supportLevel: "EWC"
-        licenseType: "Apache License 2.0"
-      displayName: IPA CLient Disenroll
-      summary: IPA CLient Disenroll.
-      license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
-      published: false
-    ipa-server:
-      name: "ipa-server"
+        category: "Security,Identity & Access Management,Deployable"
+        supportLevel: "EWC-supported"
+        licenseType: "MIT License"
+      displayName: IPA Client Disenroll flavour
+      summary: Simplifies the secure removal of a running VM from a FreeIPA-managed fleet of instances, reducing administrative overhead and enhancing security by eliminating stale credentials and DNS records. 
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/LICENSE
+      published: true
+
+    ipa-server-flavour:
+      name: "ipa-server-flavouot"
       version: "1.0.0"
       description: |
-        Centralized identity, authentication, and access management solution based on FreeIPA.
-      home: https://github.com/ewcloud/ewc-flavours
+        This Ansible Playbook configures an existing virtual machine running
+        within the [European Weather Cloud (EWC)](https://europeanweather.cloud/)
+        to operate as a [FreeIPA](https://www.freeipa.org/page/Main_Page) server.
+
+        IPA (acronym for identity, policy and audit), provides integrated identity
+        management and DNS services, enabling centralized user authentication, authorization,
+        and resource discovery.
+
+        Ideal for tenant administrators, this template simplifies the setup
+        of a secure, open-source identity and DNS solution in the EWC environment. Follow the
+        [instructions below](#usage) to configure your server.
+
+        ## Functionality
+        The template is designed to:
+        * Validate that network/subnet configuration in the EWC tenancy
+        * Configure a pre-existing virtual machine running RockyLinux version 8 or 9,
+        and with a minimum recommended 4GB of RAM, such that it:
+          * Provides DNS resolutions for discovery of resources (i.e. other virtual
+          machines)
+          * Enables centralized user and credentials creation/edition/deletion/authentication
+          * Allows centralized authorization between users and resources
+        * Automatically update the underlying subnet DNS nameserver to point to the
+        newly configured IPA server
+
+        ## Prerequisites
+        >💡 Versions listed correspond to minimal prerequisites.
+
+        To successfully run this playbook, the following packages should be available in your work environment:
+
+        | Name | Version | License | Home URL |
+        |------|---------|----- |-----|
+        | git | 2.0 | GPLv2  | https://git-scm.com/downloads |
+        | python | 3.9   | PSF | https://www.python.org/downloads  |
+        | ansible | 2.15 |  GPLv3+ | https://pypi.org/project/ansible  |
+
+        ## Usage
+
+        ### 1. Download  Ansible dependencies
+        >💡 By default, Ansible Roles are installed under the `~/.ansible/roles` directory within your working environment.
+
+        Download the correct version of the Ansible dependencies, if you haven't done so already:
+
+        ```
+        ansible-galaxy role install -r requirements.yml
+        ```
+
+        ### 2. Specify the target host and SSH credentials
+        Create an inventory file to specify address/credentials that Ansible should use
+        to reach the virtual machine you wish to configure:
+
+        ```yaml
+        # inventory.yml
+        ---
+        ewcloud:
+          hosts:
+            ipa_server:
+              ansible_python_interpreter: /usr/bin/python3
+              ansible_host: <add the IPV4 address of the target host>
+              ansible_ssh_private_key_file: <add the path to local SSH private key file>
+              ansible_user: cloud-user
+              ansible_ssh_common_args: -o StrictHostKeyChecking=accept-new
+        ```
+
+        ### 3. Configure and apply the template
+
+        #### 3.1. Interactive Mode
+
+        By running the following command, you can trigger an interactive session that
+        prompts you for the necessary user inputs, and then applies changes to your
+        target EWC environment:
+
+        ```bash
+        ansible-playbook -i inventory.yml ipa-server-flavour.yml
+        ```
+
+        #### 3.2. Non-Interactive Mode
+
+        >💡 To learn more about defining variables at runtime, checkout the
+        [official Ansible documentation](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html).
+
+        You can also run in non-interactive mode by passing the
+        `--extra-vars` or `-e` flag, followed by a map of  key-value pairs; one for
+        each and every available input (see [inputs section](#inputs) below). For
+        example:
+
+        ```bash
+        ansible-playbook \
+          -i inventory.yml \
+          -e '{
+              "ipa_domain": "eumetsat.sandbox.ewc",
+              "ipa_server_hostname": "ipa-server-1",
+              "ipa_admin_username": "ipaadmin",
+              "ipa_admin_password": "my-secret-password",
+              "ipa_admin_givenname": "EWC",
+              "ipa_admin_surname": "IPAADMIN",
+              "os_network_name": "private",
+              "os_security_group_name": "ipa"
+            }' \
+          ipa-server-flavour.yml
+        ```
+
+        ## Inputs
+
+        | Name | Description | Type | Default | Required |
+        |------|-------------|------|---------|----------|
+        | ipa_domain | domain name to be managed by the IPA server. Example: `eumetsat.sandbox.ewc` | `string` | n/a | yes |
+        | ipa_server_hostname | hostname of the target vm where the IPA server will be installed. Example: `ipa-server-1` | `string`| n/a | yes |
+        | ipa_admin_username | username of administrator account to replace the default IPA admin. Example: `ipaadmin` | `string` | n/a | yes |
+        | ipa_admin_password | password of administrator account to replace the default IPA admin. Example: `my-secret-password` | `string` | n/a | yes |
+        | ipa_admin_givenname | given name of the administrator to replace the default IPA admin (not necessarily a real person's name). Example: `EWC` | `string` | n/a | yes |
+        | ipa_admin_surname | surname of the administrator to replace the default IPA admin (not necessarily a real person's name). Example: `IPAADMIN` | `string` | n/a | yes |
+        | os_network_name | OpenStack network to which the target virtual machine has access to. Example: `private` | `string` | n/a | yes |
+        | os_security_group_name | OpenStack security group containing all firewall rules required by the IPA server/client communication. Example: `ipa`  | `string` | n/a | yes |
+
+        ## Dependencies
+        > ⚠️ Only RockyLinux 9.5 and RockyLinux 8.10 VM images are currently supported.
+        This is due to constrains imposed by the required ewc-ansible-role-ipa-server
+        Ansible Role.
+
+        > 💡 A VM plan with at least 4GB of RAM is recommended for successful setup and
+        stable operation.
+
+        | Name | Version | License | Home URL |
+        |------|---------|------|------|
+        | ewc-ansible-role-ipa-server | 1.0 |  MIT | https://github.com/ewcloud/ewc-ansible-role-ipa-server |
+
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning
       sources:
-        - https://github.com/ewcloud/ewc-flavours/blob/main/ipa-server.yml
+        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ipa-server-flavour/ipa-server-flavour.yml
       inputs:
-        - name: ipa_domain_override
-          description: "Domain name to be managed by the IPA server. Example: <memberstate>-<organization>-<projectname>.ewc"
+        - name: ipa_domain
+          description: "domain name to be managed by the IPA server. Example: eumetsat.sandbox.ewc"
           type: str
-        - name: ipa_server_hostname_override
-          description: "Hostname of the target VM where the IPA server will be installed. Example: ipa-server-1"
+        - name: ipa_server_hostname
+          description: "hostname of the target vm where the IPA server will be installed. Example: ipa-server-1"
           type: str
-        - name: ipa_admin_username_override
-          description: "Username of administrator account to replace the default IPA admin"
+        - name: ipa_admin_username
+          description: "username of administrator account to replace the default IPA admin. Example: ipaadmin"
           type: str
-        - name: ipa_admin_password_override
-          description: "Password of administrator account to replace the default IPA admin"
+        - name: ipa_admin_password
+          description: "password of administrator account to replace the default IPA admin. Example: my-secret-password"
           type: str
-        - name: os_network_name_override
+        - name: ipa_admin_givenname
+          description: " 	given name of the administrator to replace the default IPA admin (not necessarily a real person's name). Example: EWC"
+          type: str
+        - name: ipa_admin_surname
+          description: "surname of the administrator to replace the default IPA admin (not necessarily a real person's name). Example: IPAADMIN"
+          type: str
+        - name: os_network_name
           description: "OpenStack network to which the target virtual machine has access. Example: private"
           type: str
-        - name: os_subnet_name_override
-          description: "OpenStack subnet in which the target virtual machine is running. Example: private subnet"
-          type: str
-        - name: os_subnet_cidr_override
-          description: "IP range (in CIDR format) that spans the OpenStack subnet in which the target virtual machine is running. Example: 10.0.0.0/24"
-          type: str
-        - name: os_security_group_name_override
-          default: "ldap"
+        - name: os_security_group_name
           description: "OpenStack security group containing all firewall rules required by the IPA server/client communication. Example: ipa"
-          type: str
-        - name: os_subnet_dns_nameserver_ip_default_override
-          default: "1.1.1.1"
-          description: "Default DNS nameserver IPv4 address registered on the OpenStack subnet where the IPA server will run. Example: 1.1.1.1"
-          type: str
-        - name: os_subnet_dns_nameserver_ip_fallback_override
-          default: "8.8.8.8"
-          description: "Fallback DNS nameserver IPv4 address registered on the OpenStack subnet where the IPA server will run. Example: 8.8.8.8"
-          type: str
-        - name: ipa_admin_givenname_override
-          default: "EWC"
-          description: "Given name of the administrator to replace the default IPA admin (does not need to be a physical person). Example: EWC"
-          type: str
-        - name: ipa_admin_surname_override
-          default: "IPAADMIN"
-          description: "Surname of the administrator to replace the default IPA admin (does not need to belong to a physical person). Example: IPAADMIN"
           type: str
       _defaultSecurityGroups:
         - ldap
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
-          url: https://github.com/ewcloud/ewc-flavours/issues
-        - name: EWC Support Team
-          email: testemail@ewcloud.int
-          url: https://github.com/ewcloud/ewc-flavours/issues
+          url: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/issues
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook"
-        category: "Security,Identity & Access Management"
-        supportLevel: "EWC"
+        category: "Security,Identity & Access Management,Deployable"
+        supportLevel: "EWC-supported"
         licenseType: "MIT License"
-      displayName: FreeIPA
-      summary: Centralized identity, authentication, and access management solution based on FreeIPA.
-      license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
-      published: false
+      displayName: IPA server flavour
+      summary: Turns an existing VM into a FreeIPA server, a central place for user authentication, authorization, and DNS-based resource discovery for secure and efficient identity management.
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/LICENSE
+      published: true
+
     jupyterhub-flavour:
       name: "jupyterhub-flavour"
       version: "1.0.0"
@@ -667,8 +1023,9 @@ spec:
         licenseType: "Apache License 2.0"
       displayName: JupyterHub Flavour
       summary: It installs and run jupyterhub on your instance, offering a convenient way to access it through the web.
-      license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/LICENSE
       published: false
+
     ml-basic:
       name: "ml-basic"
       version: "1.0.0"
@@ -726,6 +1083,7 @@ spec:
       summary: It features an environment with the main machine learning packages like scikit-learn or torch.
       license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
       published: false
+
     nwcsaf-datacube-xarray:
       name: "nwcsaf-datacube-xarray"
       version: "1.0.0"
@@ -747,6 +1105,7 @@ spec:
       summary: Jupyter Notebooks for Unlocking Large Datasets on Cloud-Native Data Workflows.
       license: https://gitlab.aemet.es/jllisov/vzarr/-/blob/main/LICENSE
       published: true
+
     openstack-compute:
       name: "openstack-compute"
       version: "1.0.0"
@@ -769,6 +1128,7 @@ spec:
       summary: Pre-configured instance for deploying and managing OpenStack compute resources using Terraform.
       license: https://github.com/ewcloud/openstack-compute/blob/main/LICENSE
       published: false
+
     pytroll:
       name: "pytroll"
       version: "1.0.0"
@@ -790,60 +1150,288 @@ spec:
       summary: Playbooks to install pytroll processing and wms in the EWC.
       license: https://github.com/nordsat/ewc-playbooks/blob/main/LICENSE
       published: false
-    remote-desktop:
-      name: "remote-desktop"
+
+    remote-desktop-flavour:
+      name: "remote-desktop-flavour"
       version: "1.0.0"
       description: |
-        Virtual desktop instance providing remote graphical access to applications and development environments.
-      home: https://github.com/ewcloud/ewc-flavours
+        This Ansible Playbook configures virtual machines within the
+        [European Weather Cloud (EWC)](https://europeanweather.cloud/) to
+        operate as a remote desktops, courtesy of [X2Go](https://wiki.x2go.org/doku.php).
+
+        X2Go enables secure, graphical access to a desktop environment over low
+        or high bandwidth connections, providing a seamless user experience for
+        remote work. This template equips your VM with utility software you
+        would expect to see in a typical and stable Linux distribution, ideal
+        efficient and intuitive desktop operation.
+
+        Special for tenant users needing remote graphical access in their EWC
+        environment, this template simplifies the setup of basic cloud development
+        solution. Follow the [instructions below](#usage) to get started.
+
+        ## Functionality
+        The template is designed to:
+        - Configure a pre-existing Rocky Linux virtual machine (minimum 4GB RAM recommended) with
+        the [MATE desktop environment](https://mate-desktop.org/).
+        - Install and set up X2Go for secure remote desktop access over varying network conditions.
+        - Enable end-users to interact with the VM through a graphical interface using the X2Go client
+        application.
+
+        ## Prerequisites
+        >💡 Versions listed correspond to minimal prerequisites.
+
+        To successfully run this playbook, the following packages should be available in your work environment:
+
+        | Name | Version | License | Home URL |
+        |------|---------|----- |-----|
+        | git | 2.0 | GPLv2  | https://git-scm.com/downloads |
+        | python | 3.9   | PSF | https://www.python.org/downloads  |
+        | ansible | 2.15 |  GPLv3+ | https://pypi.org/project/ansible  |
+
+        ## Usage
+
+        ### 1. Download  Ansible dependencies
+        >💡 By default, Ansible Roles are installed under the `~/.ansible/roles` directory within your working environment.
+
+        Download the correct version of the Ansible dependencies, if you haven't done so already:
+
+        ```
+        ansible-galaxy role install -r requirements.yml
+        ```
+
+        ### 2. Specify the target host and SSH credentials
+        Create an inventory file to specify address/credentials that Ansible should use
+        to reach the virtual machine you wish to configure:
+
+        ```yaml
+        # inventory.yml
+        ---
+        ewcloud:
+          hosts:
+            remote_desktop:
+              ansible_python_interpreter: /usr/bin/python3
+              ansible_host: <add the IPV4 address of the target host>
+              ansible_ssh_private_key_file: <add the path to local SSH private key file>
+              ansible_user: cloud-user
+              ansible_ssh_common_args: -o StrictHostKeyChecking=accept-new
+
+        ```
+
+        ### 3. Configure and apply the template
+
+        #### 3.1. Interactive Mode
+
+        By running the following command, you can trigger an interactive session that
+        prompts you for the necessary user inputs, and then applies changes to your
+        target EWC environment:
+
+        ```bash
+        ansible-playbook -i inventory.yml remote-desktop-flavour.yml
+        ```
+
+        #### 3.2. Non-Interactive Mode
+
+        >💡 To learn more about defining variables at runtime, checkout the
+        [official Ansible documentation](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html).
+
+        You can also run in non-interactive mode by passing the
+        `--extra-vars` or `-e` flag, followed by a map of  key-value pairs; one for
+        each and every available input (see [inputs section](#inputs) below). For
+        example:
+
+        ```bash
+        ansible-playbook \
+          -i inventory.yml \
+          -e '{"whitelisted_ip_ranges": ["10.0.0.0/24"]}' \
+          remote-desktop-flavour.yml
+        ```
+
+        ### 4. Install the local client and connect to your remote desktop
+        >⚠️ When configuring a connection, be sure to select "MATE" (instead of
+        "KDE" or any other options) in the `Session Type` drop-down list, towards the
+        bottom of the `Session` tab. This is required for the local client to correctly
+        communicate with your remote desktop.
+
+        Install the remote desktop client on Microsoft Window, Mac OS or Linux by
+        following the links on the [official X2Go installation page](https://wiki.x2go.org/doku.php/doc:installation:x2goclient). Then follow the [official X2Go client usage page](https://wiki.x2go.org/doku.php/doc:usage:x2goclient)
+        if you do not know how to configure a new session.
+
+        For a session creation
+        example, representative of a typical EWC environment, checkout the Remote
+        Desktop section of
+        [this official EWC documentation page](https://confluence.ecmwf.int/display/EWCLOUDKB/EUMETSAT+tenancy%3A+Default+setup).
+
+        ## Inputs
+
+        | Name | Description | Type | Default | Required |
+        |------|-------------|------|---------|----------|
+        | whitelisted_ip_ranges | IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: `['10.0.0.0/24','192.168.1.0/24']` | `list(string)` | n/a | no |
+
+
+        ## Dependencies
+
+        > ⚠️ Only RockyLinux 8.10 instances are currently supported due
+        to constrains imposed by the required ewc-ansible-role-remote-desktop Ansible
+        Role.
+
+        > 💡 A VM plan with at least 4GB of RAM is recommended for successful setup and
+        stable operation.
+
+        | Name | Version | License |Home URL |
+        |------|---------|-------|---|
+        | ewc-ansible-role-remote-desktop | 1.0 | MIT |  https://github.com/ewcloud/ewc-ansible-role-remote-desktop |
+
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning
       sources:
-        - https://github.com/ewcloud/ewc-flavours/blob/main/remote-desktop.yml
+        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/remote-desktop-flavour/remote-desktop-flavour.yml
       inputs:
-        - name: password_allowed_ip_ranges
-          description: "IP ranges (in CIDR format) to be allowed for password access in SSHD configuration."
+        - name: whitelisted_ip_ranges
+          description: "IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: ['10.0.0.0/24','192.168.1.0/24']"
           type: List[str]
+          default: None
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
-          url: https://github.com/ewcloud/ewc-flavours/issues
-        - name: EWC Support Team
-          email: testemail@ewcloud.int
-          url: https://github.com/ewcloud/ewc-flavours/issues
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
-      annotations:
-        technology: "Ansible Playbook,Helm Charts"
-        category: "Remote Access & Desktop"
-        supportLevel: "EWC"
-        licenseType: "MIT License"
-      displayName: Remote Desktop
-      summary: Virtual desktop instance providing remote graphical access to applications and development environments.
-      license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
-      published: false
-    ssh-bastion:
-      name: "ssh-bastion"
-      version: "1.0.0"
-      description: |
-        The SSH bastion/proxy is the barrier between your internal machines (without public or floating IPs) and the public internet.
-        With the SSH bastion, you'll have an extra layer of security on top of your VMs.
-        It's equipped with fail2ban, automatic security updates and more.
-      home: https://github.com/ewcloud/ewc-flavours
-      sources:
-        - https://github.com/ewcloud/ewc-flavours/blob/main/ssh-bastion-flavour.yml
-      inputs:
-        - name: password_allowed_ip_ranges
-          description: "IP ranges (in CIDR format) to be allowed for password access in SSHD configuration."
-          type: List[str]
-      maintainers:
-        - name: EWC Team
-          email: support@ewcloud.int
-          url: https://github.com/ewcloud/ewc-flavours/issues
+          url: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/issues
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook"
-        category: "Remote Access & Desktop"
-        supportLevel: "EWC"
+        category: "Remote Access & Desktop,Deployable"
+        supportLevel: "EWC-supported"
         licenseType: "MIT License"
-      displayName: SSH bastion
-      summary: Barrier between your internal machines (without public or floating IPs) and the public internet.
-      license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
-      published: false
+      displayName: Remote desktop flavour
+      summary: Transforms an existing VM into a secure, graphical desktop environment using X2Go and MATE, enabling simple remote access and intuitive cloud-based development for tenant users.
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/LICENSE
+      published: true
+    
+    ssh-bastion-flavour:
+      name: "ssh-bastion-flavour"
+      version: "1.0.0"
+      description: |
+        The [SSH](https://en.wikipedia.org/wiki/Secure_Shell) bastion or proxy server
+        is a barrier between your internal machines (which lack a public or floating IP
+        address) and the public internet. With the SSH proxy, you'll have an extra layer of
+        security on top of your instances. It's equipped with
+        [Fail2ban](https://github.com/fail2ban/fail2ban),
+        intrusion prevention software designed to prevent brute-force attacks.
+
+        This template is for tenant admins wishing to hardening the way tenant users
+        connect to the [European Weather Cloud (EWC)](https://europeanweather.cloud/),
+        as well as tenant users whom are mindful about safe-keeping the compute resources
+        or data withing their work environments.
+
+        ## Functionality
+        The template is designed to:
+
+        * Configure a pre-existing virtual machine running RockyLinux, with public IP
+        address, and a minimum recommended 4GB of RAM, as entrypoint for users who
+        wish to reach private EWC networks, from the public internet, via SSH.
+
+        ## Prerequisites
+        >💡 Versions listed correspond to minimal prerequisites.
+
+        To successfully run this playbook, the following packages should be available in your work environment:
+
+        | Name | Version | License | Home URL |
+        |------|---------|----- |-----|
+        | git | 2.0 | GPLv2  | https://git-scm.com/downloads |
+        | python | 3.9   | PSF | https://www.python.org/downloads  |
+        | ansible | 2.15 |  GPLv3+ | https://pypi.org/project/ansible  |
+
+        ## Usage
+
+        ### 1. Download  Ansible dependencies
+        >💡 By default, Ansible Roles are installed under the `~/.ansible/roles` directory within your working environment.
+
+        Download the correct version of the Ansible dependencies, if you haven't done so already:
+
+        ```
+        ansible-galaxy role install -r requirements.yml
+        ```
+
+        ### 2. Specify the target host and SSH credentials
+        Create an inventory file to specify address/credentials that Ansible should use
+        to reach the virtual machine you wish to configure:
+
+        ```yaml
+        # inventory.yml
+        ---
+        ewcloud:
+          hosts:
+            ssh_bastion:
+              ansible_python_interpreter: /usr/bin/python3
+              ansible_host: <add the IPV4 address of the target host>
+              ansible_ssh_private_key_file: <add the path to local SSH private key file>
+              ansible_user: cloud-user
+              ansible_ssh_common_args: -o StrictHostKeyChecking=accept-new
+        ```
+
+        ### 3. Configure and apply the template
+
+        #### 3.1. Interactive Mode
+
+        By running the following command, you can trigger an interactive session that
+        prompts you for the necessary user inputs, and then applies changes to your
+        target EWC environment:
+
+        ```bash
+        ansible-playbook -i inventory.yml ssh-bastion-flavour.yml
+        ```
+
+        #### 3.2. Non-Interactive Mode
+
+        >💡 To learn more about defining variables at runtime, checkout the
+        [official Ansible documentation](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html).
+
+        You can also run in non-interactive mode by passing the
+        `--extra-vars` or `-e` flag, followed by a map of  key-value pairs; one for
+        each and every available input (see [inputs section](#inputs) below). For
+        example:
+
+        ```bash
+        ansible-playbook \
+          -i inventory.yml \
+          -e '{"whitelisted_ip_ranges": ["10.0.0.0/24"]}' \
+          ssh-bastion-flavour.yml
+        ```
+
+        ## Inputs
+
+        | Name | Description | Type | Default | Required |
+        |------|-------------|------|---------|----------|
+        | whitelisted_ip_ranges | IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: `['10.0.0.0/24','192.168.1.0/24']` | `list(string)` | n/a | no |
+
+        ## Dependencies
+
+        > ⚠️ Only RockyLinux 9.5 and RockyLinux 8.10 instances are currently supported due
+        to constrains imposed by the required ewc-ansible-role-ssh-bastion Ansible
+        Role.
+
+        > 💡 A VM plan with at least 4GB of RAM is recommended for successful setup and
+        stable operation.
+
+        | Name | Version | License |Home URL |
+        |------|---------|-------|-------|
+        | ewc-ansible-role-ssh-bastion | 1.3 | MIT | https://github.com/ewcloud/ewc-ansible-role-ssh-bastion |
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning
+      sources:
+        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ssh-bastion-flavour/ssh-bastion-flavour.yml
+      inputs:
+        - name: whitelisted_ip_ranges
+          description: "IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: ['10.0.0.0/24','192.168.1.0/24']"
+          type: List[str]
+          default: None
+      maintainers:
+        - name: EWC Team
+          email: support@ewcloud.int
+          url: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
+      annotations:
+        technology: "Ansible Playbook"
+        category: "Remote Access & Desktop,Deployable"
+        supportLevel: "EWC-supported"
+        licenseType: "MIT License"
+      displayName: SSH bastion flavour
+      summary: Tightens the configuration of a running VM, to operate as a secure SSH proxy with Fail2ban, providing tenant admins and users a fortified entry point to safely access private EWC networks from the public internet.
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/LICENSE
+      published: true
