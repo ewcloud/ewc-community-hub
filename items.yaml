@@ -939,7 +939,7 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook"
-        category: "Data Processing,Deployable"
+        category: "Data Processing,Deployable,EWCCLI-compatible"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
         others: "Earth Observation,Fire monitoring"
@@ -1120,7 +1120,7 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
         technology: "Ansible Playbook"
-        category: "Security,Identity & Access Management,Deployable"
+        category: "Security,Identity & Access Management,Deployable,EWCCLI-compatible"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
       displayName: IPA Client Enroll
@@ -1618,7 +1618,7 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook"
-        category: "Security,Identity & Access Management,Deployable"
+        category: "Security,Identity & Access Management,Deployable,EWCCLI-compatible"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
       displayName: IPA server flavour
@@ -2093,7 +2093,7 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook"
-        category: "Remote Access & Desktop,Deployable"
+        category: "Remote Access & Desktop,Deployable,EWCCLI-compatible"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
       displayName: Remote desktop flavour
@@ -2248,7 +2248,7 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook"
-        category: "Remote Access & Desktop,Deployable"
+        category: "Remote Access & Desktop,Deployable,EWCCLI-compatible"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
       displayName: SSH bastion flavour
