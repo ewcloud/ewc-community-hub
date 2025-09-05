@@ -20,10 +20,10 @@ jobs:
       - name: Install Node dependencies
         run: npm install -g ajv-cli
 
-      - name: Validate catalog metadata format
+      - name: Validate items metadata format
         run: |
           yq -o=json "items.yaml" > "items.json"
 
-      - name: Validate catalog metadata contents
+      - name: Validate items metadata contents
         run: |
-          ajv validate -s schemas/catalog/v1alpha1.json -d items.json --spec=draft2020
+          ajv validate -s schemas/items/v1alpha1.json -d items.json --spec=draft2020
