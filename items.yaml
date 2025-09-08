@@ -45,6 +45,7 @@ spec:
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
         - https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/ai-models.yml
+      pathToMainFile: ai-models.yml
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -105,6 +106,7 @@ spec:
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
         - https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/aifs-single-mse.yml
+      pathToMainFile: aifs-single-mse.yml
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -164,6 +166,7 @@ spec:
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
         - https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/anemoi.yml
+      pathToMainFile: anemoi.yml
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -229,6 +232,7 @@ spec:
       home: https://github.com/ewcloud/ewc-flavours
       sources:
         - https://github.com/ewcloud/ewc-flavours/blob/766090d57b3ad18d89f999e0601cb1fdf1e14eda/ecmwf-data-flavour.yml
+      pathToMainFile: playbooks/ecmwf-data-flavour/ecmwf-data-flavour.yml
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -294,6 +298,7 @@ spec:
       home: https://github.com/ewcloud/ewc-flavours
       sources:
         - https://github.com/ewcloud/ewc-flavours/blob/766090d57b3ad18d89f999e0601cb1fdf1e14eda/ecmwf-data-flavour.yml
+      pathToMainFile: playbooks/ecmwf-data-flavour/ecmwf-data-flavour.yml
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -316,6 +321,7 @@ spec:
       home: https://github.com/ewcloud/ewc-flavours
       sources:
         - https://github.com/ewcloud/ewc-flavours/blob/main/eumetcast-terrestrial.yml
+      pathToMainFile: eumetcast-terrestrial.yml
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -342,6 +348,7 @@ spec:
       home: https://github.com/ewcloud/ewc-flavours
       sources:
         - https://github.com/ewcloud/ewc-flavours/blob/main/data-tailor.yml
+      pathToMainFile: data-tailor.yml
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -462,6 +469,7 @@ spec:
       home: https://github.com/ewcloud/ewc-flavours
       sources:
         - https://github.com/ewcloud/ewc-flavours/blob/main/ipa-client-enroll.yml
+      pathToMainFile: ipa-client-enroll.yml
       inputs:
         - name: password_allowed_ip_ranges
           description: "IP ranges (in CIDR format) to be allowed for password access in SSHD configuration."
@@ -506,6 +514,7 @@ spec:
       home: https://github.com/ewcloud/ewc-flavours
       sources:
         - https://github.com/ewcloud/ewc-flavours/blob/main/ipa-client-disenroll.yml
+      pathToMainFile: ipa-client-disenroll.yml
       inputs:
         - name: ipa_client_hostname_override
           description: "hostname of the target vm to be disenrolled from the IPA server. Example: <openstack instance name>"
@@ -547,6 +556,7 @@ spec:
       home: https://github.com/ewcloud/ewc-flavours
       sources:
         - https://github.com/ewcloud/ewc-flavours/blob/main/ipa-server.yml
+      pathToMainFile: ipa-server.yml
       inputs:
         - name: ipa_domain_override
           description: "Domain name to be managed by the IPA server. Example: <memberstate>-<organization>-<projectname>.ewc"
@@ -622,6 +632,7 @@ spec:
       home: https://github.com/ewcloud/ewc-flavours
       sources:
         - https://github.com/ewcloud/ewc-flavours/blob/main/playbooks/jupyterhub-flavour/jupyterhub-flavour.yml
+      pathToMainFile: playbooks/jupyterhub-flavour/jupyterhub-flavour.yml
       inputs:
         - name: jupyterhub_local_cert_email
           description: "Email used for the certificate."
@@ -712,6 +723,7 @@ spec:
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
         - https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/ml-basic.yml
+      pathToMainFile: ml-basic.yml
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -777,6 +789,7 @@ spec:
       home: https://github.com/nordsat/ewc-playbooks
       sources:
         - https://github.com/nordsat/ewc-playbooks/blob/main/satellite-data-processing-main.yaml
+      pathToMainFile: satellite-data-processing-main.yaml
       maintainers:
         - name: NORDSAT
           url: https://github.com/nordsat/ewc-playbooks/issues
@@ -798,6 +811,7 @@ spec:
       home: https://github.com/ewcloud/ewc-flavours
       sources:
         - https://github.com/ewcloud/ewc-flavours/blob/main/remote-desktop.yml
+      pathToMainFile: remote-desktop.yml
       inputs:
         - name: password_allowed_ip_ranges
           description: "IP ranges (in CIDR format) to be allowed for password access in SSHD configuration."
@@ -829,6 +843,7 @@ spec:
       home: https://github.com/ewcloud/ewc-flavours
       sources:
         - https://github.com/ewcloud/ewc-flavours/blob/main/ssh-bastion-flavour.yml
+      pathToMainFile: ssh-bastion-flavour.yml
       inputs:
         - name: password_allowed_ip_ranges
           description: "IP ranges (in CIDR format) to be allowed for password access in SSHD configuration."
