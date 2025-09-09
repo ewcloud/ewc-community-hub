@@ -42,6 +42,8 @@ spec:
         
         ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
 
+      ewccli:
+        pathToMainFile: ai-models.yml
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
         - https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/ai-models.yml
@@ -555,6 +557,8 @@ spec:
         
         ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
 
+      ewccli:
+        pathToMainFile: aifs-single-mse.yml
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
         - https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/aifs-single-mse.yml
@@ -576,6 +580,8 @@ spec:
     ecmwf-anemoi:
       name: "ecmwf-anemoi"
       version: "1.0.0"
+      ewccli:
+        pathToMainFile: anemoi.yml
       description: |
         Create a conda environment with the Anemoi framework for weather forecasting based on machine learning and associated software stack.
         
@@ -634,8 +640,39 @@ spec:
       published: true
 
     ecmwf-data-flavour:
-      name: "ecmwf-data-flavour"
-      version: "1.0.0"
+      annotations:
+        technology: "Ansible Playbook"
+        category: "Compute,Data Access"
+        supportLevel: "EWC-supported"
+        licenseType: "Apache License 2.0"
+        others: "Deployable,EWCCLI-compatible"
+      ewccli:
+        inputs:
+          - name: reboot_if_required
+            default: true
+            description: Boolean to reboot the instance if required after an update.
+            type: bool
+          - name: ecmwf_toolbox_env_wipe
+            default: false
+            description: Boolean to decide whether to wipe the environment if exists prior to a reinstallation.
+            type: bool
+          - name: ecmwf_toolbox_env_name
+            default: "ecmwf-toolbox"
+            description: Name of the environment containing the ECMWF toolbox.
+            type: str
+          - name: ecmwf_toolbox_create_ipykernel
+            default: true
+            description: Boolean to create a system-wide kernel available.
+            type: bool
+          - name: conda_prefix
+            default: "/opt/conda"
+            description: Prefix where conda is installed.
+            type: str
+          - name: conda_user
+            default: "root"
+            description: User owning the conda installation.
+            type: str
+        pathToMainFile: playbooks/ecmwf-data-flavour/ecmwf-data-flavour.yml
       description: |
         Includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
         
@@ -681,93 +718,26 @@ spec:
         
         ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
 
-      home: https://github.com/ewcloud/ewc-flavours
-      sources:
-        - https://github.com/ewcloud/ewc-flavours/blob/766090d57b3ad18d89f999e0601cb1fdf1e14eda/ecmwf-data-flavour.yml
+      displayName: ECMWF Data Flavour
+      home: https://github.com/ewcloud/ewc-flavours/tree/2.0.0/playbooks/ecmwf-data-flavour
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
+      license: https://github.com/ewcloud/ewc-flavours/blob/2.0.0/LICENSE
+      published: true
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
           url: https://github.com/ewcloud/ewc-flavours/issues
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
-      annotations:
-        technology: "Ansible Playbook"
-        category: "Compute,Data Access"
-        supportLevel: "EWC"
-        licenseType: "Apache License 2.0"
-      displayName: ECMWF Data Flavour
-      summary: It includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
-      license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
-      published: true
-
-    ecmwf-data-flavour-2.0.0:
       name: "ecmwf-data-flavour"
+      sources:
+        - https://github.com/ewcloud/ewc-flavours.git
+      summary: It includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
       version: "2.0.0"
-      description: |
-        Includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
-        
-        Getting started
-        ---------------
-        
-        * Clone or download the code from the source repository.
-        * Install ansible and other dependencies. You may want to do it in its own virtual environment (`pip install -r requirements.txt`)
-        * Fetch the external requirements
-          ```bash
-          $ ansible-galaxy role install -r requirements.yml roles/
-          ```
-        
-        * Define your inventory in `inventory`
-        * Run the apropriate playbook 
-        
-          ```bash
-          $ ansible-playbook -i inventory ecmwf-data-flavour.yml
-          ```
-
-        You may use the following ansible variables to customise this playbook:
-        
-        | Variable | Description | Type | Default | Required |
-        |------|-------------|------|---------|----------|
-        | reboot_if_required | Reboot the instance if required after an update. | `boolean`| `true` | no |
-        | ecmwf_toolbox_env_wipe | Decide whether to wipe the environment if exists prior to a reinstallation. | `boolean` | `no` | no |
-        | ecmwf_toolbox_env_wipe | Name of the environment containing the ECMWF toolbox. | `string` | `ecmwf-toolbox` | no |
-        | ecmwf_toolbox_create_ipykernel | Create a system-wide kernel available. | `boolean` | yes | no |
-        | conda_prefix | Prefix where conda is installed. | `string` | `/opt/conda` | no |
-        | conda_user | User owning the conda installation. | `string` | `root` | no |
-      
-        Example usage:
-      
-        ```bash
-        ansible-playbook -i inventory ecmwf-data-flavour.yml
-        ```
-        
-        Author
-        ------------------
-        ECMWF for the European Weather Cloud
-        
-        <img src="https://climate.copernicus.eu/sites/default/files/inline-images/ECMWF.png"  width="120px" height="120px"> 
-        
-        ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
-
-      home: https://github.com/ewcloud/ewc-flavours
-      sources:
-        - https://github.com/ewcloud/ewc-flavours/blob/766090d57b3ad18d89f999e0601cb1fdf1e14eda/ecmwf-data-flavour.yml
-      maintainers:
-        - name: EWC Team
-          email: support@ewcloud.int
-          url: https://github.com/ewcloud/ewc-flavours/issues
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
-      annotations:
-        technology: "Ansible Playbook"
-        category: "Compute,Data Access"
-        supportLevel: "EWC"
-        licenseType: "Apache License 2.0"
-      displayName: ECMWF Data Flavour
-      summary: It includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
-      license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
-      published: true
-
+ 
     eumetcast-terrestrial:
       name: "eumetcast-terrestrial"
       version: "1.0.0"
+      ewccli:
+        pathToMainFile: eumetcast-terrestrial.yml
       description: |
         Service for receiving and processing EUMETCast Terrestrial data streams via IP multicast within a private network.
       home: https://github.com/ewcloud/ewc-flavours
@@ -795,6 +765,33 @@ spec:
     eumetsat-data-tailor-flavour:
       name: "eumetsat-data-tailor-flavour"
       version: "1.0.0"
+      ewccli:
+        pathToMainFile: playbooks/umetsat-data-tailor-flavour/umetsat-data-tailor-flavour.yml
+        inputs:
+          - name: data_tailor_env_wipe
+            description: flag to delete existing conda environment where data tailor was previously installed. Only yes will be accepted to approve
+            type: str
+            default: no
+          - name: data_tailor_env_name
+            description: name of conda environment where data tailor will be installed
+            type: str
+            default: epct-desktop
+          - name: conda_installer
+            description: URI of the installer to use
+            type: str
+            default: https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
+          - name: conda_update_base
+            description: boolean to decide wether base environment needs updating
+            type: bool
+            default: false
+          - name: conda_prefix
+            description: prefix where conda will be installed
+            type: str
+            default: /opt/conda
+          - name: conda_user
+            description: user that will own the conda installation
+            type: str
+            default: root
       description: |
         This Ansible Playbook configures an existing virtual machine running
         within the [European Weather Cloud (EWC)](https://europeanweather.cloud/), to equip it with the Data Tailor Standalone and EUMETSAT Data Access Client (EUMDAC).
@@ -907,31 +904,6 @@ spec:
       home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/eumetsat-data-tailor-flavour/eumetsat-data-tailor-flavour.yml
-      inputs:
-        - name: data_tailor_env_wipe
-          description: flag to delete existing conda environment where data tailor was previously installed. Only yes will be accepted to approve
-          type: str
-          default: no
-        - name: data_tailor_env_name
-          description: name of conda environment where data tailor will be installed
-          type: str
-          default: epct-desktop
-        - name: conda_installer
-          description: URI of the installer to use
-          type: str
-          default: https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
-        - name: conda_update_base
-          description: boolean to decide wether base environment needs updating
-          type: bool
-          default: false
-        - name: conda_prefix
-          description: prefix where conda will be installed
-          type: str
-          default: /opt/conda
-        - name: conda_user
-          description: user that will own the conda installation
-          type: str
-          default: root
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -951,6 +923,28 @@ spec:
     ipa-client-enroll-flavour:
       name: "ipa-client-enroll-flavour"
       version: "1.0.0"
+      ewccli:
+        pathToMainFile: playbooks/ipa-client-enroll-flavour/ipa-client-enroll-flavour.yml
+        inputs:
+          - name: ipa_client_hostname
+            description: "hostname of the target vm where the IPA client will be installed. Example: ipa-client-1"
+            type: str
+          - name: ipa_domain
+            description: "domain name managed by the IPA server. Example: eumetsat.sandbox.ewc"
+            type: str
+          - name: ipa_server_hostname
+            description: "hostname of the IPA server. Example: ipa-server-1"
+            type: str
+          - name: ipa_admin_username
+            description: "password of the administrator account from the IPA server. Example: my-secret-password"
+            type: str
+          - name: ipa_admin_password
+            description: "username of the administrator account from the IPA server. Example: ipaadmin"
+            type: str
+          - name: password_allowed_ip_ranges
+            description: "IP addresses or IP ranges (in CIDR format) to be allowed for password access in SSHD configuration. When in doubt, add only IP addresses you know and trust. Example: ['10.0.0.0/24','192.168.1.0/24']"
+            type: List[str]
+            default: ['10.0.0.0/8','172.16.0.0/12','192.168.0.0/16']
       description: |
         This Ansible Playbook configures an existing virtual machine in the
         [European Weather Cloud (EWC)](https://europeanweather.cloud/) to operate as a
@@ -1072,26 +1066,6 @@ spec:
       home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ipa-client-enroll-flavour/ipa-client-enroll-flavour.yml
-      inputs:
-        - name: ipa_client_hostname
-          description: "hostname of the target vm where the IPA client will be installed. Example: ipa-client-1"
-          type: str
-        - name: ipa_domain
-          description: "domain name managed by the IPA server. Example: eumetsat.sandbox.ewc"
-          type: str
-        - name: ipa_server_hostname
-          description: "hostname of the IPA server. Example: ipa-server-1"
-          type: str
-        - name: ipa_admin_username
-          description: "password of the administrator account from the IPA server. Example: my-secret-password"
-          type: str
-        - name: ipa_admin_password
-          description: "username of the administrator account from the IPA server. Example: ipaadmin"
-          type: str
-        - name: password_allowed_ip_ranges
-          description: "IP addresses or IP ranges (in CIDR format) to be allowed for password access in SSHD configuration. When in doubt, add only IP addresses you know and trust. Example: ['10.0.0.0/24','192.168.1.0/24']"
-          type: List[str]
-          default: ['10.0.0.0/8','172.16.0.0/12','192.168.0.0/16']
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -1110,27 +1084,29 @@ spec:
     ipa-client-disenroll-flavour:
       name: "ipa-client-disenroll-flavour"
       version: "1.0.0"
+      ewccli:
+        pathToMainFile: playbooks/ipa-client-disenroll-flavour/ipa-client-disenroll-flavour.yml
+        inputs:
+          - name: ipa_domain
+            description: "domain name managed by the IPA server. Example: eumetsat.sandbox.ewc"
+            type: str
+          - name: ipa_client_hostname
+            description: "hostname of the target vm to be disenrolled from the IPA server. Example: ipa-client-1"
+            type: str
+          - name: ipa_server_hostname
+            description: "hostname of the IPA server. Example: ipa-server-1"
+            type: str
+          - name: ipa_admin_username
+            description: "username of the administrator account from the IPA server. Example: ipaadmin"
+            type: str
+          - name: ipa_server_hostname
+            description: "password of the administrator account from the IPA server. Example: my-secret-password"
+            type: str
       description: |
         IPA CLient Disenroll.
       home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ipa-client-disenroll-flavour/ipa-client-disenroll-flavour.yml
-      inputs:
-        - name: ipa_domain
-          description: "domain name managed by the IPA server. Example: eumetsat.sandbox.ewc"
-          type: str
-        - name: ipa_client_hostname
-          description: "hostname of the target vm to be disenrolled from the IPA server. Example: ipa-client-1"
-          type: str
-        - name: ipa_server_hostname
-          description: "hostname of the IPA server. Example: ipa-server-1"
-          type: str
-        - name: ipa_admin_username
-          description: "username of the administrator account from the IPA server. Example: ipaadmin"
-          type: str
-        - name: ipa_server_hostname
-          description: "password of the administrator account from the IPA server. Example: my-secret-password"
-          type: str
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -1433,6 +1409,35 @@ spec:
     ipa-server-flavour:
       name: "ipa-server-flavouot"
       version: "1.0.0"
+      ewccli:
+        pathToMainFile: playbooks/ipa-server-flavour/ipa-server-flavour.yml
+        inputs:
+          - name: ipa_domain
+            description: "domain name to be managed by the IPA server. Example: eumetsat.sandbox.ewc"
+            type: str
+          - name: ipa_server_hostname
+            description: "hostname of the target vm where the IPA server will be installed. Example: ipa-server-1"
+            type: str
+          - name: ipa_admin_username
+            description: "username of administrator account to replace the default IPA admin. Example: ipaadmin"
+            type: str
+          - name: ipa_admin_password
+            description: "password of administrator account to replace the default IPA admin. Example: my-secret-password"
+            type: str
+          - name: ipa_admin_givenname
+            description: " 	given name of the administrator to replace the default IPA admin (not necessarily a real person's name). Example: EWC"
+            type: str
+          - name: ipa_admin_surname
+            description: "surname of the administrator to replace the default IPA admin (not necessarily a real person's name). Example: IPAADMIN"
+            type: str
+          - name: os_network_name
+            description: "OpenStack network to which the target virtual machine has access. Example: private"
+            type: str
+          - name: os_security_group_name
+            description: "OpenStack security group containing all firewall rules required by the IPA server/client communication. Example: ipa"
+            type: str
+        defaultSecurityGroups:
+          - ldap
       description: |
         This Ansible Playbook configures an existing virtual machine running
         within the [European Weather Cloud (EWC)](https://europeanweather.cloud/)
@@ -1563,33 +1568,6 @@ spec:
       home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ipa-server-flavour/ipa-server-flavour.yml
-      inputs:
-        - name: ipa_domain
-          description: "domain name to be managed by the IPA server. Example: eumetsat.sandbox.ewc"
-          type: str
-        - name: ipa_server_hostname
-          description: "hostname of the target vm where the IPA server will be installed. Example: ipa-server-1"
-          type: str
-        - name: ipa_admin_username
-          description: "username of administrator account to replace the default IPA admin. Example: ipaadmin"
-          type: str
-        - name: ipa_admin_password
-          description: "password of administrator account to replace the default IPA admin. Example: my-secret-password"
-          type: str
-        - name: ipa_admin_givenname
-          description: " 	given name of the administrator to replace the default IPA admin (not necessarily a real person's name). Example: EWC"
-          type: str
-        - name: ipa_admin_surname
-          description: "surname of the administrator to replace the default IPA admin (not necessarily a real person's name). Example: IPAADMIN"
-          type: str
-        - name: os_network_name
-          description: "OpenStack network to which the target virtual machine has access. Example: private"
-          type: str
-        - name: os_security_group_name
-          description: "OpenStack security group containing all firewall rules required by the IPA server/client communication. Example: ipa"
-          type: str
-      _defaultSecurityGroups:
-        - ldap
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -1766,6 +1744,42 @@ spec:
     jupyterhub-flavour:
       name: "jupyterhub-flavour"
       version: "1.0.0"
+      ewccli:
+        pathToMainFile: playbooks/jupyterhub-flavour/jupyterhub-flavour.yml
+        inputs:
+          - name: jupyterhub_local_cert_email
+            description: "Email used for the certificate."
+            type: str
+          - name: dns_domain
+            description: "DNS domain. If not present, it will try to guess from instance configured hostname in /etc/hostname."
+            type: str
+          - name: jupyterhub_local_env_wipe
+            default: false
+            description: "Boolean to decide whether to wipe the environment if exists prior to a reinstallation"
+            type: bool
+          - name: jupyterhub_local_env_name
+            default: "jupyterhub-local"
+            description: "Name of the environment containing the Jupyerhub."
+            type: str
+          - name: jupyterhub_local_test_cert
+            default: false
+            description: "Use Lets encrypt test certificate."
+            type: bool
+          - name: jupyterhub_local_with_otp
+            default: false
+            description: "Use OTP authentication for Jupyterhub. It requires manual run of google-authenticator by the user to configure your TOTP device after running this playbook"
+            type: bool
+          - name: conda_prefix
+            default: "/opt/conda"
+            description: "Prefix where conda is installed."
+            type: str
+          - name: conda_user
+            default: "root"
+            description: "User owning the conda installation. "
+            type: str
+        defaultSecurityGroups:
+          - ssh-http-https
+        externalIP: true
       description: |
         Installs and run JupyterHub on your instance, offering a convenient way to access it through the web.
 
@@ -1777,39 +1791,6 @@ spec:
       home: https://github.com/ewcloud/ewc-flavours
       sources:
         - https://github.com/ewcloud/ewc-flavours/blob/main/playbooks/jupyterhub-flavour/jupyterhub-flavour.yml
-      inputs:
-        - name: jupyterhub_local_cert_email
-          description: "Email used for the certificate."
-          type: str
-        - name: dns_domain
-          description: "DNS domain. If not present, it will try to guess from instance configured hostname in /etc/hostname."
-          type: str
-        - name: jupyterhub_local_env_wipe
-          default: false
-          description: "Boolean to decide whether to wipe the environment if exists prior to a reinstallation"
-          type: bool
-        - name: jupyterhub_local_env_name
-          default: "jupyterhub-local"
-          description: "Name of the environment containing the Jupyerhub."
-          type: str
-        - name: jupyterhub_local_test_cert
-          default: false
-          description: "Use Lets encrypt test certificate."
-          type: bool
-        - name: jupyterhub_local_with_otp
-          default: false
-          description: "Use OTP authentication for Jupyterhub. It requires manual run of google-authenticator by the user to configure your TOTP device after running this playbook"
-          type: bool
-        - name: conda_prefix
-          default: "/opt/conda"
-          description: "Prefix where conda is installed."
-          type: str
-        - name: conda_user
-          default: "root"
-          description: "User owning the conda installation. "
-          type: str
-      _defaultSecurityGroups:
-        - ssh-http-https
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -1828,6 +1809,8 @@ spec:
     ml-basic:
       name: "ml-basic"
       version: "1.0.0"
+      ewccli:
+        pathToMainFile: ml-basic.yml
       description: |
         Create a conda environment with the basic Machine Learning packages such as torch, xgboost, and scikit-learn. Check `files/env.yml` for all the details on the software included.
 
@@ -1908,6 +1891,8 @@ spec:
     pytroll:
       name: "pytroll"
       version: "1.0.0"
+      ewccli:
+        pathToMainFile: satellite-data-processing-main.yaml
       description: |
         Playbooks to install pytroll processing and wms in the EWC
       home: https://github.com/nordsat/ewc-playbooks
@@ -1930,6 +1915,13 @@ spec:
     remote-desktop-flavour:
       name: "remote-desktop-flavour"
       version: "1.0.0"
+      ewccli:
+        pathToMainFile: playbooks/remote-desktop-flavour/remote-desktop-flavour.yml
+        inputs:
+        - name: whitelisted_ip_ranges
+          description: "IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: ['10.0.0.0/24','192.168.1.0/24']"
+          type: List[str]
+          default: None
       description: |
         This Ansible Playbook configures virtual machines within the
         [European Weather Cloud (EWC)](https://europeanweather.cloud/) to
@@ -2060,11 +2052,6 @@ spec:
       home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/remote-desktop-flavour/remote-desktop-flavour.yml
-      inputs:
-        - name: whitelisted_ip_ranges
-          description: "IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: ['10.0.0.0/24','192.168.1.0/24']"
-          type: List[str]
-          default: None
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -2106,6 +2093,13 @@ spec:
     ssh-bastion-flavour:
       name: "ssh-bastion-flavour"
       version: "1.0.0"
+      ewccli:
+        pathToMainFile: playbooks/ssh-bastion-flavour/ssh-bastion-flavour.yml
+        inputs:
+          - name: whitelisted_ip_ranges
+            description: "IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: ['10.0.0.0/24','192.168.1.0/24']"
+            type: List[str]
+            default: None
       description: |
         The [SSH](https://en.wikipedia.org/wiki/Secure_Shell) bastion or proxy server
         is a barrier between your internal machines (which lack a public or floating IP
@@ -2215,11 +2209,6 @@ spec:
       home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ssh-bastion-flavour/ssh-bastion-flavour.yml
-      inputs:
-        - name: whitelisted_ip_ranges
-          description: "IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: ['10.0.0.0/24','192.168.1.0/24']"
-          type: List[str]
-          default: None
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int

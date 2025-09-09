@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-   "$id": "https://https://github.com/ewcloud/ewc-community-hub/blob/main/schemas/catalog/v1alpha1.json",
+  "$id": "https://github.com/ewcloud/ewc-community-hub/blob/main/schemas/items/v1alpha1.json",
   "type": "object",
   "properties": {
     "apiVersion": {
@@ -75,6 +75,67 @@
         "description": {
           "type": "string"
         },
+        "ewccli": {
+          "type": "object",
+          "properties": {
+            "defaultSecurityGrouyps": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "inputs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "description",
+                  "type"
+                ],
+                "additionalProperties": true
+              }
+            },
+            "outputs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "description",
+                  "type"
+                ],
+                "additionalProperties": true
+              }
+            },
+            "pathToMainFile": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": true
+        },
         "home": {
           "type": "string",
           "pattern": "^https://[\\w\\-\\./:#?=&%]+$"
@@ -85,51 +146,6 @@
         "icon": {
           "type": "string",
           "pattern": "^https://[\\w\\-\\./:#?=&%]+$"
-        },
-        "inputs": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "name": {
-                "type": "string"
-              },
-              "description": {
-                "type": "string"
-              },
-              "type": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "name",
-              "description",
-              "type"
-            ]
-          }
-        },
-        "outputs": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "name": {
-                "type": "string"
-              },
-              "description": {
-                "type": "string"
-              },
-              "type": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "name",
-              "description",
-              "type"
-            ],
-            "additionalProperties": false
-          }
         },
         "maintainers": {
           "type": "array",
@@ -203,7 +219,8 @@
         "sources",
         "summary",
         "version"
-      ]
+      ],
+      "additionalProperties": false
     }
   }
 }
