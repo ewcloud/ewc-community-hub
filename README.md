@@ -1,14 +1,14 @@
 # EWC Community Hub Items Catalog
-This repository hosts the official catalog of [items](./items.yaml) offered in the [EWC Community Hub](https://europeanweather.cloud/about).
+This repository hosts the official catalog of items offered in the [EWC Community Hub](https://europeanweather.cloud/about).
 
 ## Item's Metadata
+>⛔ The attribute `name` within each item entry must always match the unique key under which the totality of the item's metadata is defined.
+
 >⚠️  At least the `maintainers[*].email` or the `maintainers[*].url` property value should always be set.
 These to ensure end-users of the item can submit inquiries or receive request support, in accordance with the support level offered by the maintainer(s).
 
->⛔ The `name` attribute within each item entry must always match the unique key containing the rest of its metadata.
-
-The following example shows the information an onboarded item should/could include.`
-For details on the required and optional metadata (i.e. inputs for `ewccli` compatibility), checkout the [items' schema](./schemas/items/v1alpha1.json).
+Below we show an excerpt from [items.yaml](items.yaml), to exemplify the metadata of an onboarded item.
+For more details on required and/or optional metadata (i.e. inputs for `ewccli` compatibility), please refer to the items' metadata [schema definition](./schemas/items/v1alpha1.json).
 ```yaml
 ecmwf-data-flavour:
   annotations:
