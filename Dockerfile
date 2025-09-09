@@ -1,4 +1,4 @@
-FROM node:20-alpine3.19
+FROM docker.io/node:20-alpine3.19
 
 ENV AJV_CLI_VERSION=5.0.0
 ENV AJV_FORMATS_VERSION=2.1.0
