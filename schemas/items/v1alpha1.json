@@ -203,7 +203,8 @@
         "sources",
         "summary",
         "version"
-      ]
+      ],
+      "additionalProperties": false
     }
   }
 }
