@@ -784,7 +784,6 @@ spec:
       home: https://github.com/ewcloud/ewc-flavours
       sources:
         - https://github.com/ewcloud/ewc-flavours/blob/main/remote-desktop.yml
-      pathToMainFile:
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
