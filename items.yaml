@@ -947,28 +947,7 @@ spec:
       summary: Transforms an existing VM into a powerful satellite data customization hub, enabling users to efficiently subset, aggregate, reproject, and reformat data from METOP, MFG, MSG, MTG, and Sentinel-3 into GIS and image formats, offering faster processing and greater flexibility than web-based alternatives.
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/LICENSE
       published: true
-
-      home: https://github.com/ewcloud/ewc-ansible-role-ssh-bastion
-      sources:
-        - https://github.com/ewcloud/ewc-ansible-role-ssh-bastion/blob/main
-      maintainers:
-        - name: EWC Team
-          email: support@ewcloud.int
-          url: https://github.com/ewcloud/ewc-ansible-role-ssh-bastion/issues
-        - name: EWC Support Team
-          email: support@europeanweather.cloud
-          url: https://support.europeanweather.cloud/
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
-      annotations:
-        technology: "Ansible Role"
-        category: "Networking,Security,Access Management"
-        supportLevel: "EWC-supported"
-        licenseType: "MIT License"
-      displayName: EWC Ansible Role SSH Bastion
-      summary: Create secure SSH Bastion host providing controlled, audited access to private network resources.
-      license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
-      published: false
-    
+ 
     ipa-client-enroll-flavour:
       name: "ipa-client-enroll-flavour"
       version: "1.0.0"
