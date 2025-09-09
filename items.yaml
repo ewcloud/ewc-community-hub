@@ -164,9 +164,9 @@ spec:
         | `secret/ipa_admin_username` | Morpheus Cypher Secret | Read during enrollment/disenrollment Ansible Playbooks execution |
         | `secret/ipa_admin_password` | Morpheus Cypher Secret | Read during enrollment/disenrollment Ansible Playbooks execution |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-ipa-enroll-automation-via-morpheus
+      home: https://github.com/ewcloud/ewc-ansible-playbook-ipa-enroll-automation-via-morpheus/tree/1.0.0
       sources:
-        - https://github.com/ewcloud/ewc-ansible-playbook-ipa-enroll-automation-via-morpheus
+        - https://github.com/ewcloud/ewc-ansible-playbook-ipa-enroll-automation-via-morpheus.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -179,7 +179,7 @@ spec:
         licenseType: "MIT License"
       displayName: IPA Enroll/Disenroll Automation Ansible Playbook
       summary: Configures Morpheus (i.e. EWC's graphical control plane) to automate the enrollment/disenrollment of VMs, provisioned via the UI, into a fleet of IPA-aware instances.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-ipa-enroll-automation-via-morpheus/blob/main/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-ipa-enroll-automation-via-morpheus/blob/1.0.0/LICENSE
       published: false
 
     ewc-tf-module-openstack-compute:
@@ -315,9 +315,9 @@ spec:
         }
         ```
 
-      home: https://github.com/ewcloud/ewc-tf-module-openstack-compute
+      home: https://github.com/ewcloud/ewc-tf-module-openstack-compute/tree/1.4.0
       sources:
-        - https://github.com/ewcloud/ewc-tf-module-openstack-compute
+        - https://github.com/ewcloud/ewc-tf-module-openstack-compute.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -330,7 +330,7 @@ spec:
         licenseType: "MIT License"
       displayName: OpenStack Compute Instance Terraform Module
       summary: Simplifies the creation of EWC VMs, or state update and teardown of existing ones, via Terraform.
-      license: https://github.com/ewcloud/ewc-tf-module-openstack-compute/blob/main/LICENSE
+      license: https://github.com/ewcloud/ewc-tf-module-openstack-compute/blob/1.4.0/LICENSE
       published: true
 
     ewc-tf-module-openstack-security-group:
@@ -496,9 +496,9 @@ spec:
         | `security_group_name` | Name of the created security group |
         | `security_group_rules` | List of created security group rule IDs |
  
-      home: https://github.com/ewcloud/ewc-tf-module-openstack-security-group
+      home: https://github.com/ewcloud/ewc-tf-module-openstack-security-group/tree/1.0.0
       sources:
-        - https://github.com/ewcloud/ewc-tf-module-openstack-security-group
+        - https://github.com/ewcloud/ewc-tf-module-openstack-security-group.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -511,7 +511,7 @@ spec:
         licenseType: "MIT License"
       displayName: OpenStack Security Group Terraform Module
       summary: Automates the creation of EWC security groups and their rules, or update and teardown of existing ones, via Terraform.
-      license: https://github.com/ewcloud/ewc-tf-module-openstack-security-group/blob/main/LICENSE
+      license: https://github.com/ewcloud/ewc-tf-module-openstack-security-group/blob/1.0.0/LICENSE
       published: true
 
     ecmwf-aifs-single-mse:
@@ -901,9 +901,9 @@ spec:
         | ewc-ansible-role-conda | 1.1 |  Apache-2.0 | https://github.com/ewcloud/ewc-ansible-role-conda |
         | ewc-ansible-role-data-tailor | 1.0 |  MIT | https://github.com/ewcloud/ewc-ansible-role-data-tailor |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning
-      sources:
-        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/eumetsat-data-tailor-flavour/eumetsat-data-tailor-flavour.yml
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/eumetsat-data-tailor-flavour 
+      sources: 
+        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -917,7 +917,7 @@ spec:
         others: "Earth Observation,Fire monitoring"
       displayName: EUMETSAT Data Tailor flavour
       summary: Transforms an existing VM into a powerful satellite data customization hub, enabling users to efficiently subset, aggregate, reproject, and reformat data from METOP, MFG, MSG, MTG, and Sentinel-3 into GIS and image formats, offering faster processing and greater flexibility than web-based alternatives.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/LICENSE
       published: true
  
     ipa-client-enroll-flavour:
@@ -1063,9 +1063,9 @@ spec:
         |------|---------|------|-----|
         | ewc-ansible-role-ipa-client-enroll | 1.0 | MIT | https://github.com/ewcloud/ewc-ansible-role-ipa-client-enroll |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ipa-client-enroll-flavour
       sources:
-        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ipa-client-enroll-flavour/ipa-client-enroll-flavour.yml
+        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -1078,7 +1078,7 @@ spec:
         licenseType: "MIT License"
       displayName: IPA Client Enroll
       summary: Seamlessly integrates a running VM into a FreeIPA-managed fleet of instances, enabling centralized user authentication, DNS resolution, and secure remote access for simplified and scalable identity management.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/LICENSE
       published: true
 
     ipa-client-disenroll-flavour:
@@ -1104,9 +1104,9 @@ spec:
             type: str
       description: |
         IPA CLient Disenroll.
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning
+      home:  https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ipa-client-disenroll-flavour
       sources:
-        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ipa-client-disenroll-flavour/ipa-client-disenroll-flavour.yml
+        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -1119,7 +1119,7 @@ spec:
         licenseType: "MIT License"
       displayName: IPA Client Disenroll flavour
       summary: Simplifies the secure removal of a running VM from a FreeIPA-managed fleet of instances, reducing administrative overhead and enhancing security by eliminating stale credentials and DNS records. 
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/LICENSE
       published: true
 
     ipa-client-provisioning:
@@ -1255,9 +1255,9 @@ spec:
         | ewc-tf-module-openstack-compute | 1.3 | MIT | https://github.com/ewcloud/ewc-tf-module-openstack-compute  |
         | ewc-ansible-role-ipa-client-enroll | 1.0 | MIT | https://github.com/ewcloud/ewc-ansible-role-ipa-client-enroll |
  
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ipa-client-provisioning
       sources:
-        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ipa-client-provisioning/ipa-client-provisioning.yml
+        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -1270,7 +1270,7 @@ spec:
         licenseType: "MIT License"
       displayName: IPA client provisioning
       summary: Automates the creation or state update of a VM, plus its configuration as an IPA client, effectively enabling integration with a fleet of instances with centralized authentication, secure remote access, and DNS-based resource discovery in the EWC.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/LICENSE
       published: true
 
     ipa-client-teardown:
@@ -1388,9 +1388,9 @@ spec:
         | ewc-tf-module-openstack-compute | 1.3 | MIT | https://github.com/ewcloud/ewc-tf-module-openstack-compute  |
         | ewc-ansible-role-ipa-client-disenroll | 1.0 | MIT |  https://github.com/ewcloud/ewc-ansible-role-ipa-client-disenroll |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning
+      home:  https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ipa-client-teardown
       sources:
-        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ipa-client-teardown/ipa-client-teardown.yml
+        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -1403,7 +1403,7 @@ spec:
         licenseType: "MIT License"
       displayName: IPA client teardown
       summary: Simplifies the secure teardown of an IPA client VM in the EWC, disabling LDAP authentication, removing DNS records, and safely decommissioning the instance and its resources.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/LICENSE
       published: true
 
     ipa-server-flavour:
@@ -1565,9 +1565,9 @@ spec:
         |------|---------|------|------|
         | ewc-ansible-role-ipa-server | 1.0 |  MIT | https://github.com/ewcloud/ewc-ansible-role-ipa-server |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ipa-server-flavour
       sources:
-        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ipa-server-flavour/ipa-server-flavour.yml
+        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -1580,7 +1580,7 @@ spec:
         licenseType: "MIT License"
       displayName: IPA server flavour
       summary: Turns an existing VM into a FreeIPA server, a central place for user authentication, authorization, and DNS-based resource discovery for secure and efficient identity management.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/LICENSE
       published: true
 
     ipa-server-provisioning:
@@ -1723,9 +1723,9 @@ spec:
         | ewc-tf-module-openstack-compute | 1.0 | MIT | https://github.com/ewcloud/ewc-tf-module-openstack-compute  |
         | ewc-ansible-role-ipa-server | 1.0 | MIT | https://github.com/ewcloud/ewc-ansible-role-ipa-server |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ipa-server-provisioning
       sources:
-        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ipa-server-provisioning/ipa-server-provisioning.yml
+        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -1738,7 +1738,7 @@ spec:
         licenseType: "MIT License"
       displayName: IPA server provisioning
       summary: Automates the creation or state update of VM, plus its configuration as FreeIPA server, streamlining centralized user management, authentication, authorization, and DNS resolution for secure and efficient resource management.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/LICENSE
       published: true
 
     jupyterhub-flavour:
@@ -2049,9 +2049,9 @@ spec:
         |------|---------|-------|---|
         | ewc-ansible-role-remote-desktop | 1.0 | MIT |  https://github.com/ewcloud/ewc-ansible-role-remote-desktop |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/remote-desktop-flavour
       sources:
-        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/remote-desktop-flavour/remote-desktop-flavour.yml
+        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -2064,7 +2064,7 @@ spec:
         licenseType: "MIT License"
       displayName: Remote desktop flavour
       summary: Transforms an existing VM into a secure, graphical desktop environment using X2Go and MATE, enabling simple remote access and intuitive cloud-based development for tenant users.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/LICENSE
       published: true
 
     remote-desktop-provisioning:
@@ -2072,9 +2072,9 @@ spec:
       version: "1.0.0"
       description: |
  
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning
+      home:  https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/remote-desktop-provisioning
       sources:
-        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/remote-desktop-provisioning/remote-desktop-provisioning.yml
+        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -2087,7 +2087,7 @@ spec:
         licenseType: "MIT License"
       displayName: Remote desktop provisioning
       summary: Automates the creation or state update of a remote desktop VM, a basic yet secure cloud-based development environment with graphical interface. Uses X2Go and MATE to enable easy remote access for tenant users.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/LICENSE
       published: true
 
     ssh-bastion-flavour:
@@ -2206,9 +2206,9 @@ spec:
         | Name | Version | License |Home URL |
         |------|---------|-------|-------|
         | ewc-ansible-role-ssh-bastion | 1.3 | MIT | https://github.com/ewcloud/ewc-ansible-role-ssh-bastion |
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/tree/1.0.0/playbooks/ssh-bastion-flavour
       sources:
-        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ssh-bastion-flavour/ssh-bastion-flavour.yml
+        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -2221,7 +2221,7 @@ spec:
         licenseType: "MIT License"
       displayName: SSH bastion flavour
       summary: Tightens the configuration of a running VM, to operate as a secure SSH proxy with Fail2ban, providing tenant admins and users a fortified entry point to safely access private EWC networks from the public internet.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/LICENSE
       published: true
 
     ssh-bastion-provisioning:
@@ -2354,9 +2354,9 @@ spec:
         | ewc-tf-module-openstack-compute | 1.0 | MIT | https://github.com/ewcloud/ewc-tf-module-openstack-compute  |
         | ewc-ansible-role-ssh-bastion | 1.3 | MIT | https://github.com/ewcloud/ewc-ansible-role-ssh-bastion |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ssh-bastion-provisioning
       sources:
-        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ssh-bastion-provisioning/ssh-bastion-provisioning.yml
+        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -2369,5 +2369,5 @@ spec:
         licenseType: "MIT License"
       displayName: SSH bastion provisioning
       summary: Automates the creation or state update of a secure SSH bastion VM in the EWC, configured with Fail2ban to provide a fortified entry point for safely accessing private EWC networks from the public internet.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/LICENSE
       published: true
