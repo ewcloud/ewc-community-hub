@@ -45,7 +45,6 @@ spec:
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
         - https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/ai-models.yml
-      pathToMainFile: ai-models.yml
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -60,6 +59,8 @@ spec:
       summary: It features the most popular data driven forecast models such as Pangu Weather, Fourcastnet or graphcast.
       license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
       published: true
+      ewccli:
+        pathToMainFile: ai-models.yml
     ecmwf-aifs-single-mse:
       name: "ecmwf-aifs-single-mse"
       version: "1.0.0"
@@ -106,7 +107,6 @@ spec:
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
         - https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/aifs-single-mse.yml
-      pathToMainFile: aifs-single-mse.yml
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -121,6 +121,8 @@ spec:
       summary: It features the ECMWF AIFS Single data-driven model
       license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
       published: true
+      ewccli:
+        pathToMainFile: aifs-single-mse.yml
     ecmwf-anemoi:
       name: "ecmwf-anemoi"
       version: "1.0.0"
@@ -166,7 +168,6 @@ spec:
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
         - https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/anemoi.yml
-      pathToMainFile: anemoi.yml
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -181,6 +182,8 @@ spec:
       summary: It leverages the Anemoi framework to develop and run your AI-models or manage datasets.
       license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
       published: true
+      ewccli:
+        pathToMainFile: anemoi.yml
     ecmwf-data-flavour:
       name: "ecmwf-data-flavour"
       version: "1.0.0"
@@ -232,7 +235,6 @@ spec:
       home: https://github.com/ewcloud/ewc-flavours
       sources:
         - https://github.com/ewcloud/ewc-flavours/blob/766090d57b3ad18d89f999e0601cb1fdf1e14eda/ecmwf-data-flavour.yml
-      pathToMainFile: playbooks/ecmwf-data-flavour/ecmwf-data-flavour.yml
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -247,6 +249,8 @@ spec:
       summary: It includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: true
+      ewccli:
+        pathToMainFile: playbooks/ecmwf-data-flavour/ecmwf-data-flavour.yml
     ecmwf-data-flavour-2.0.0:
       name: "ecmwf-data-flavour"
       version: "2.0.0"
@@ -298,7 +302,6 @@ spec:
       home: https://github.com/ewcloud/ewc-flavours
       sources:
         - https://github.com/ewcloud/ewc-flavours/blob/766090d57b3ad18d89f999e0601cb1fdf1e14eda/ecmwf-data-flavour.yml
-      pathToMainFile: playbooks/ecmwf-data-flavour/ecmwf-data-flavour.yml
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -313,6 +316,8 @@ spec:
       summary: It includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: true
+      ewccli:
+        pathToMainFile: playbooks/ecmwf-data-flavour/ecmwf-data-flavour.yml
     eumetcast-terrestrial:
       name: "eumetcast-terrestrial"
       version: "1.0.0"
@@ -321,7 +326,6 @@ spec:
       home: https://github.com/ewcloud/ewc-flavours
       sources:
         - https://github.com/ewcloud/ewc-flavours/blob/main/eumetcast-terrestrial.yml
-      pathToMainFile: eumetcast-terrestrial.yml
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -340,6 +344,8 @@ spec:
       summary: Service for receiving and processing EUMETCast Terrestrial data streams via IP multicast within a private network.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: true
+      ewccli:
+        pathToMainFile: eumetcast-terrestrial.yml
     eumetsat-data-tailor:
       name: "eumetsat-data-tailor"
       version: "1.0.0"
@@ -348,7 +354,6 @@ spec:
       home: https://github.com/ewcloud/ewc-flavours
       sources:
         - https://github.com/ewcloud/ewc-flavours/blob/main/data-tailor.yml
-      pathToMainFile: data-tailor.yml
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -367,6 +372,8 @@ spec:
       summary: On-demand data processing service for subsetting, reformatting, and customising Earth observation data products.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: false
+      ewccli:
+        pathToMainFile: data-tailor.yml
     ewc-ansible-role-ssh-bastion:
       name: "ewc-ansible-role-ssh-bastion"
       version: "1.0.0"
@@ -469,26 +476,6 @@ spec:
       home: https://github.com/ewcloud/ewc-flavours
       sources:
         - https://github.com/ewcloud/ewc-flavours/blob/main/ipa-client-enroll.yml
-      pathToMainFile: ipa-client-enroll.yml
-      inputs:
-        - name: password_allowed_ip_ranges
-          description: "IP ranges (in CIDR format) to be allowed for password access in SSHD configuration."
-          type: List[str]
-        - name: ipa_client_hostname
-          description: "IP ranges (in CIDR format) to be allowed for password access in SSHD configuration."
-          type: str
-        - name: ipa_domain
-          description: "The IPA domain name. Example: <memberstate>-<organization>-<projectname>.ewc"
-          type: str
-        - name: ipa_admin_password
-          description: "The IPA Directory Manager/Admin password (at least 8 characters long)"
-          type: str
-        - name: ipa_admin_username
-          description: "Username of administrator account to replace the default IPA admin"
-          type: str
-        - name: ipa_server_hostname
-          description: "IPA server host name. Example: ldap"
-          type: str
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -506,6 +493,27 @@ spec:
       summary: IPA CLient Enroll.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: true
+      ewccli:
+        pathToMainFile: ipa-client-enroll.yml
+        inputs:
+          - name: password_allowed_ip_ranges
+            description: "IP ranges (in CIDR format) to be allowed for password access in SSHD configuration."
+            type: List[str]
+          - name: ipa_client_hostname
+            description: "IP ranges (in CIDR format) to be allowed for password access in SSHD configuration."
+            type: str
+          - name: ipa_domain
+            description: "The IPA domain name. Example: <memberstate>-<organization>-<projectname>.ewc"
+            type: str
+          - name: ipa_admin_password
+            description: "The IPA Directory Manager/Admin password (at least 8 characters long)"
+            type: str
+          - name: ipa_admin_username
+            description: "Username of administrator account to replace the default IPA admin"
+            type: str
+          - name: ipa_server_hostname
+            description: "IPA server host name. Example: ldap"
+            type: str
     ipa-client-disenroll:
       name: "ipa-client-disenroll"
       version: "1.0.0"
@@ -514,23 +522,6 @@ spec:
       home: https://github.com/ewcloud/ewc-flavours
       sources:
         - https://github.com/ewcloud/ewc-flavours/blob/main/ipa-client-disenroll.yml
-      pathToMainFile: ipa-client-disenroll.yml
-      inputs:
-        - name: ipa_client_hostname_override
-          description: "hostname of the target vm to be disenrolled from the IPA server. Example: <openstack instance name>"
-          type: str
-        - name: ipa_domain_override
-          description: "Domain name managed by the IPA server. Example: <memberstate>-<organization>-<projectname>.ewc"
-          type: str
-        - name: ipa_server_hostname_override
-          description: "The IPA Directory Manager/Admin password (at least 8 characters long)"
-          type: str
-        - name: ipa_admin_username_override
-          description: "Username of administrator account to replace the default IPA admin"
-          type: str
-        - name: ipa_server_hostname_override
-          description: "IPA server host name. Example: ldap"
-          type: str
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -548,6 +539,24 @@ spec:
       summary: IPA CLient Disenroll.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: false
+      ewccli:
+        pathToMainFile: ipa-client-disenroll.yml
+        inputs:
+          - name: ipa_client_hostname_override
+            description: "hostname of the target vm to be disenrolled from the IPA server. Example: <openstack instance name>"
+            type: str
+          - name: ipa_domain_override
+            description: "Domain name managed by the IPA server. Example: <memberstate>-<organization>-<projectname>.ewc"
+            type: str
+          - name: ipa_server_hostname_override
+            description: "The IPA Directory Manager/Admin password (at least 8 characters long)"
+            type: str
+          - name: ipa_admin_username_override
+            description: "Username of administrator account to replace the default IPA admin"
+            type: str
+          - name: ipa_server_hostname_override
+            description: "IPA server host name. Example: ldap"
+            type: str
     ipa-server:
       name: "ipa-server"
       version: "1.0.0"
@@ -556,51 +565,6 @@ spec:
       home: https://github.com/ewcloud/ewc-flavours
       sources:
         - https://github.com/ewcloud/ewc-flavours/blob/main/ipa-server.yml
-      pathToMainFile: ipa-server.yml
-      inputs:
-        - name: ipa_domain_override
-          description: "Domain name to be managed by the IPA server. Example: <memberstate>-<organization>-<projectname>.ewc"
-          type: str
-        - name: ipa_server_hostname_override
-          description: "Hostname of the target VM where the IPA server will be installed. Example: ipa-server-1"
-          type: str
-        - name: ipa_admin_username_override
-          description: "Username of administrator account to replace the default IPA admin"
-          type: str
-        - name: ipa_admin_password_override
-          description: "Password of administrator account to replace the default IPA admin"
-          type: str
-        - name: os_network_name_override
-          description: "OpenStack network to which the target virtual machine has access. Example: private"
-          type: str
-        - name: os_subnet_name_override
-          description: "OpenStack subnet in which the target virtual machine is running. Example: private subnet"
-          type: str
-        - name: os_subnet_cidr_override
-          description: "IP range (in CIDR format) that spans the OpenStack subnet in which the target virtual machine is running. Example: 10.0.0.0/24"
-          type: str
-        - name: os_security_group_name_override
-          default: "ldap"
-          description: "OpenStack security group containing all firewall rules required by the IPA server/client communication. Example: ipa"
-          type: str
-        - name: os_subnet_dns_nameserver_ip_default_override
-          default: "1.1.1.1"
-          description: "Default DNS nameserver IPv4 address registered on the OpenStack subnet where the IPA server will run. Example: 1.1.1.1"
-          type: str
-        - name: os_subnet_dns_nameserver_ip_fallback_override
-          default: "8.8.8.8"
-          description: "Fallback DNS nameserver IPv4 address registered on the OpenStack subnet where the IPA server will run. Example: 8.8.8.8"
-          type: str
-        - name: ipa_admin_givenname_override
-          default: "EWC"
-          description: "Given name of the administrator to replace the default IPA admin (does not need to be a physical person). Example: EWC"
-          type: str
-        - name: ipa_admin_surname_override
-          default: "IPAADMIN"
-          description: "Surname of the administrator to replace the default IPA admin (does not need to belong to a physical person). Example: IPAADMIN"
-          type: str
-      _defaultSecurityGroups:
-        - ldap
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -618,6 +582,52 @@ spec:
       summary: Centralized identity, authentication, and access management solution based on FreeIPA.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: false
+      ewccli:
+        pathToMainFile: ipa-server.yml
+        inputs:
+          - name: ipa_domain_override
+            description: "Domain name to be managed by the IPA server. Example: <memberstate>-<organization>-<projectname>.ewc"
+            type: str
+          - name: ipa_server_hostname_override
+            description: "Hostname of the target VM where the IPA server will be installed. Example: ipa-server-1"
+            type: str
+          - name: ipa_admin_username_override
+            description: "Username of administrator account to replace the default IPA admin"
+            type: str
+          - name: ipa_admin_password_override
+            description: "Password of administrator account to replace the default IPA admin"
+            type: str
+          - name: os_network_name_override
+            description: "OpenStack network to which the target virtual machine has access. Example: private"
+            type: str
+          - name: os_subnet_name_override
+            description: "OpenStack subnet in which the target virtual machine is running. Example: private subnet"
+            type: str
+          - name: os_subnet_cidr_override
+            description: "IP range (in CIDR format) that spans the OpenStack subnet in which the target virtual machine is running. Example: 10.0.0.0/24"
+            type: str
+          - name: os_security_group_name_override
+            default: "ldap"
+            description: "OpenStack security group containing all firewall rules required by the IPA server/client communication. Example: ipa"
+            type: str
+          - name: os_subnet_dns_nameserver_ip_default_override
+            default: "1.1.1.1"
+            description: "Default DNS nameserver IPv4 address registered on the OpenStack subnet where the IPA server will run. Example: 1.1.1.1"
+            type: str
+          - name: os_subnet_dns_nameserver_ip_fallback_override
+            default: "8.8.8.8"
+            description: "Fallback DNS nameserver IPv4 address registered on the OpenStack subnet where the IPA server will run. Example: 8.8.8.8"
+            type: str
+          - name: ipa_admin_givenname_override
+            default: "EWC"
+            description: "Given name of the administrator to replace the default IPA admin (does not need to be a physical person). Example: EWC"
+            type: str
+          - name: ipa_admin_surname_override
+            default: "IPAADMIN"
+            description: "Surname of the administrator to replace the default IPA admin (does not need to belong to a physical person). Example: IPAADMIN"
+            type: str
+        defaultSecurityGroups:
+          - ldap
     jupyterhub-flavour:
       name: "jupyterhub-flavour"
       version: "1.0.0"
@@ -632,40 +642,6 @@ spec:
       home: https://github.com/ewcloud/ewc-flavours
       sources:
         - https://github.com/ewcloud/ewc-flavours/blob/main/playbooks/jupyterhub-flavour/jupyterhub-flavour.yml
-      pathToMainFile: playbooks/jupyterhub-flavour/jupyterhub-flavour.yml
-      inputs:
-        - name: jupyterhub_local_cert_email
-          description: "Email used for the certificate."
-          type: str
-        - name: dns_domain
-          description: "DNS domain. If not present, it will try to guess from instance configured hostname in /etc/hostname."
-          type: str
-        - name: jupyterhub_local_env_wipe
-          default: false
-          description: "Boolean to decide whether to wipe the environment if exists prior to a reinstallation"
-          type: bool
-        - name: jupyterhub_local_env_name
-          default: "jupyterhub-local"
-          description: "Name of the environment containing the Jupyerhub."
-          type: str
-        - name: jupyterhub_local_test_cert
-          default: false
-          description: "Use Lets encrypt test certificate."
-          type: bool
-        - name: jupyterhub_local_with_otp
-          default: false
-          description: "Use OTP authentication for Jupyterhub. It requires manual run of google-authenticator by the user to configure your TOTP device after running this playbook"
-          type: bool
-        - name: conda_prefix
-          default: "/opt/conda"
-          description: "Prefix where conda is installed."
-          type: str
-        - name: conda_user
-          default: "root"
-          description: "User owning the conda installation. "
-          type: str
-      _defaultSecurityGroups:
-        - ssh-http-https
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -680,6 +656,42 @@ spec:
       summary: It installs and run jupyterhub on your instance, offering a convenient way to access it through the web.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: false
+      ewccli:
+        pathToMainFile: playbooks/jupyterhub-flavour/jupyterhub-flavour.yml
+        inputs:
+          - name: jupyterhub_local_cert_email
+            description: "Email used for the certificate."
+            type: str
+          - name: dns_domain
+            description: "DNS domain. If not present, it will try to guess from instance configured hostname in /etc/hostname."
+            type: str
+          - name: jupyterhub_local_env_wipe
+            default: false
+            description: "Boolean to decide whether to wipe the environment if exists prior to a reinstallation"
+            type: bool
+          - name: jupyterhub_local_env_name
+            default: "jupyterhub-local"
+            description: "Name of the environment containing the Jupyerhub."
+            type: str
+          - name: jupyterhub_local_test_cert
+            default: false
+            description: "Use Lets encrypt test certificate."
+            type: bool
+          - name: jupyterhub_local_with_otp
+            default: false
+            description: "Use OTP authentication for Jupyterhub. It requires manual run of google-authenticator by the user to configure your TOTP device after running this playbook"
+            type: bool
+          - name: conda_prefix
+            default: "/opt/conda"
+            description: "Prefix where conda is installed."
+            type: str
+          - name: conda_user
+            default: "root"
+            description: "User owning the conda installation. "
+            type: str
+        defaultSecurityGroups:
+          - ssh-http-https
+        externalIP: true
     ml-basic:
       name: "ml-basic"
       version: "1.0.0"
@@ -723,7 +735,6 @@ spec:
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
         - https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/ml-basic.yml
-      pathToMainFile: ml-basic.yml
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -738,6 +749,8 @@ spec:
       summary: It features an environment with the main machine learning packages like scikit-learn or torch.
       license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
       published: false
+      ewccli:
+        pathToMainFile: ml-basic.yml
     nwcsaf-datacube-xarray:
       name: "nwcsaf-datacube-xarray"
       version: "1.0.0"
@@ -780,7 +793,7 @@ spec:
       displayName: Openstack Compute
       summary: Pre-configured instance for deploying and managing OpenStack compute resources using Terraform.
       license: https://github.com/ewcloud/openstack-compute/blob/main/LICENSE
-      published: false
+      published: true
     pytroll:
       name: "pytroll"
       version: "1.0.0"
@@ -789,7 +802,6 @@ spec:
       home: https://github.com/nordsat/ewc-playbooks
       sources:
         - https://github.com/nordsat/ewc-playbooks/blob/main/satellite-data-processing-main.yaml
-      pathToMainFile: satellite-data-processing-main.yaml
       maintainers:
         - name: NORDSAT
           url: https://github.com/nordsat/ewc-playbooks/issues
@@ -802,7 +814,9 @@ spec:
       displayName: Pytroll Processing
       summary: Playbooks to install pytroll processing and wms in the EWC.
       license: https://github.com/nordsat/ewc-playbooks/blob/main/LICENSE
-      published: false
+      published: true
+      ewccli:
+        pathToMainFile: satellite-data-processing-main.yaml
     remote-desktop:
       name: "remote-desktop"
       version: "1.0.0"
@@ -811,11 +825,7 @@ spec:
       home: https://github.com/ewcloud/ewc-flavours
       sources:
         - https://github.com/ewcloud/ewc-flavours/blob/main/remote-desktop.yml
-      pathToMainFile: remote-desktop.yml
-      inputs:
-        - name: password_allowed_ip_ranges
-          description: "IP ranges (in CIDR format) to be allowed for password access in SSHD configuration."
-          type: List[str]
+      pathToMainFile:
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -832,7 +842,13 @@ spec:
       displayName: Remote Desktop
       summary: Virtual desktop instance providing remote graphical access to applications and development environments.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
-      published: false
+      published: true
+      ewccli:
+        pathToMainFile: remote-desktop.yml
+        inputs:
+          - name: password_allowed_ip_ranges
+            description: "IP ranges (in CIDR format) to be allowed for password access in SSHD configuration."
+            type: List[str]
     ssh-bastion:
       name: "ssh-bastion"
       version: "1.0.0"
@@ -843,11 +859,6 @@ spec:
       home: https://github.com/ewcloud/ewc-flavours
       sources:
         - https://github.com/ewcloud/ewc-flavours/blob/main/ssh-bastion-flavour.yml
-      pathToMainFile: ssh-bastion-flavour.yml
-      inputs:
-        - name: password_allowed_ip_ranges
-          description: "IP ranges (in CIDR format) to be allowed for password access in SSHD configuration."
-          type: List[str]
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -862,3 +873,12 @@ spec:
       summary: Barrier between your internal machines (without public or floating IPs) and the public internet.
       license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
       published: false
+      ewccli:
+        pathToMainFile: ssh-bastion-flavour.yml
+        inputs:
+          - name: password_allowed_ip_ranges
+            description: "IP ranges (in CIDR format) to be allowed for password access in SSHD configuration."
+            type: List[str]
+        defaultSecurityGroups:
+          - ssh
+        externalIP: true
