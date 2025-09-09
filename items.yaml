@@ -185,8 +185,12 @@ spec:
       ewccli:
         pathToMainFile: anemoi.yml
     ecmwf-data-flavour:
-      name: "ecmwf-data-flavour"
-      version: "1.0.0"
+      annotations:
+        technology: "Ansible Playbook"
+        category: "Compute,Data Access"
+        supportLevel: "EWC-supported"
+        licenseType: "Apache License 2.0"
+        others: "Deployable,EWCCLI-compatible"
       description: |
         Includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
         
@@ -232,92 +236,47 @@ spec:
         
         ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
 
-      home: https://github.com/ewcloud/ewc-flavours
-      sources:
-        - https://github.com/ewcloud/ewc-flavours/blob/766090d57b3ad18d89f999e0601cb1fdf1e14eda/ecmwf-data-flavour.yml
+      displayName: ECMWF Data Flavour
+      ewccli:
+        inputs:
+          - name: reboot_if_required
+            default: true
+            description: Boolean to reboot the instance if required after an update.
+            type: bool
+          - name: ecmwf_toolbox_env_wipe
+            default: false
+            description: Boolean to decide whether to wipe the environment if exists prior to a reinstallation.
+            type: bool
+          - name: ecmwf_toolbox_env_name
+            default: "ecmwf-toolbox"
+            description: Name of the environment containing the ECMWF toolbox.
+            type: str
+          - name: ecmwf_toolbox_create_ipykernel
+            default: true
+            description: Boolean to create a system-wide kernel available.
+            type: bool
+          - name: conda_prefix
+            default: "/opt/conda"
+            description: Prefix where conda is installed.
+            type: str
+          - name: conda_user
+            default: "root"
+            description: User owning the conda installation.
+            type: str
+        pathToMainFile: playbooks/ecmwf-data-flavour/ecmwf-data-flavour.yml
+      home: https://github.com/ewcloud/ewc-flavours/tree/2.0.0/playbooks/ecmwf-data-flavour
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
+      license: https://github.com/ewcloud/ewc-flavours/blob/2.0.0/LICENSE
+      published: true
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
           url: https://github.com/ewcloud/ewc-flavours/issues
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
-      annotations:
-        technology: "Ansible Playbook"
-        category: "Compute,Data Access"
-        supportLevel: "EWC"
-        licenseType: "Apache License 2.0"
-      displayName: ECMWF Data Flavour
-      summary: It includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
-      license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
-      published: true
-      ewccli:
-        pathToMainFile: playbooks/ecmwf-data-flavour/ecmwf-data-flavour.yml
-    ecmwf-data-flavour-2.0.0:
       name: "ecmwf-data-flavour"
+      sources:
+        - https://github.com/ewcloud/ewc-flavours.git
+      summary: It includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
       version: "2.0.0"
-      description: |
-        Includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
-        
-        Getting started
-        ---------------
-        
-        * Clone or download the code from the source repository.
-        * Install ansible and other dependencies. You may want to do it in its own virtual environment (`pip install -r requirements.txt`)
-        * Fetch the external requirements
-          ```bash
-          $ ansible-galaxy role install -r requirements.yml roles/
-          ```
-        
-        * Define your inventory in `inventory`
-        * Run the apropriate playbook 
-        
-          ```bash
-          $ ansible-playbook -i inventory ecmwf-data-flavour.yml
-          ```
-
-        You may use the following ansible variables to customise this playbook:
-        
-        | Variable | Description | Type | Default | Required |
-        |------|-------------|------|---------|----------|
-        | reboot_if_required | Reboot the instance if required after an update. | `boolean`| `true` | no |
-        | ecmwf_toolbox_env_wipe | Decide whether to wipe the environment if exists prior to a reinstallation. | `boolean` | `no` | no |
-        | ecmwf_toolbox_env_wipe | Name of the environment containing the ECMWF toolbox. | `string` | `ecmwf-toolbox` | no |
-        | ecmwf_toolbox_create_ipykernel | Create a system-wide kernel available. | `boolean` | yes | no |
-        | conda_prefix | Prefix where conda is installed. | `string` | `/opt/conda` | no |
-        | conda_user | User owning the conda installation. | `string` | `root` | no |
-      
-        Example usage:
-      
-        ```bash
-        ansible-playbook -i inventory ecmwf-data-flavour.yml
-        ```
-        
-        Author
-        ------------------
-        ECMWF for the European Weather Cloud
-        
-        <img src="https://climate.copernicus.eu/sites/default/files/inline-images/ECMWF.png"  width="120px" height="120px"> 
-        
-        ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
-
-      home: https://github.com/ewcloud/ewc-flavours
-      sources:
-        - https://github.com/ewcloud/ewc-flavours/blob/766090d57b3ad18d89f999e0601cb1fdf1e14eda/ecmwf-data-flavour.yml
-      maintainers:
-        - name: EWC Team
-          email: support@ewcloud.int
-          url: https://github.com/ewcloud/ewc-flavours/issues
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
-      annotations:
-        technology: "Ansible Playbook"
-        category: "Compute,Data Access"
-        supportLevel: "EWC"
-        licenseType: "Apache License 2.0"
-      displayName: ECMWF Data Flavour
-      summary: It includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
-      license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
-      published: true
-      ewccli:
-        pathToMainFile: playbooks/ecmwf-data-flavour/ecmwf-data-flavour.yml
     eumetcast-terrestrial:
       name: "eumetcast-terrestrial"
       version: "1.0.0"
