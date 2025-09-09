@@ -56,16 +56,18 @@ The pipelines are configured to run upon pull request opening, subject to approv
 
 ### Running Locally
 
-If you wish to validate changes to the metadata on your own, you can emulate the steps performed by the automation.
-Make sure your working environment has [Docker](https://docs.docker.com/engine/install/) installed.
-Then, to validate any changes in the metadata against the expected schema, simply run:
+If you wish to validate changes to the metadata on before opening a pull request, you can emulate the steps performed by the GitHub automation.
+Make sure your working environment has [Docker](https://docs.docker.com/engine/install/) installed to
+setup the validation tool locally (one time operation):
 
 ```bash
-docker run --rm \
-  -v .:/tmp:ro \
-  weibeld/ajv-cli:5.0.0 \
-  ajv \
-  -s tmp/schemas/catalog/v1alpha1.json \
+docker build --tag ewc/ajv-cli:5.0.0 .
+```
+Then, to validate any changes in the metadata against the expected schema, run:
+```bash
+docker run --rm --volume .:/tmp:ro \
+  ewc/ajv-cli:5.0.0 \
+  -s tmp/schemas/items/v1alpha1.json \
   -d /tmp/items.yaml \
   -c ajv-formats \
   --spec draft2020
