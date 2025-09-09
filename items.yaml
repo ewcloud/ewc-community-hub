@@ -174,7 +174,8 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook"
-        category: "Security,Identity & Access Management,Deployable"
+        category: "Security,Identity & Access Management"
+        others: "Deployable"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
       displayName: IPA Enroll/Disenroll Automation Ansible Playbook
@@ -325,7 +326,8 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Terraform Module"
-        category: "Compute,Deployable"
+        category: "Compute"
+        others: "Deployable"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
       displayName: OpenStack Compute Instance Terraform Module
@@ -506,7 +508,8 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Terraform Module"
-        category: "Network,Deployable"
+        category: "Network"
+        others: "Deployable"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
       displayName: OpenStack Security Group Terraform Module
@@ -911,10 +914,10 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook"
-        category: "Data Processing,Deployable,EWCCLI-compatible"
+        category: "Data Processing"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
-        others: "Earth Observation,Fire monitoring"
+        others: "Earth Observation,Fire monitoring,Deployable,EWCCLI-compatible"
       displayName: EUMETSAT Data Tailor flavour
       summary: Transforms an existing VM into a powerful satellite data customization hub, enabling users to efficiently subset, aggregate, reproject, and reformat data from METOP, MFG, MSG, MTG, and Sentinel-3 into GIS and image formats, offering faster processing and greater flexibility than web-based alternatives.
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/LICENSE
@@ -1073,7 +1076,8 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
         technology: "Ansible Playbook"
-        category: "Security,Identity & Access Management,Deployable,EWCCLI-compatible"
+        category: "Security,Identity & Access Management"
+        others: "Deployable,EWCCLI-compatible"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
       displayName: IPA Client Enroll
@@ -1114,7 +1118,8 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
       annotations:
         technology: "Ansible Playbook"
-        category: "Security,Identity & Access Management,Deployable"
+        category: "Security,Identity & Access Management"
+        others: "Deployable,EWCCLI-compatible"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
       displayName: IPA Client Disenroll flavour
@@ -1265,7 +1270,8 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook,Terraform Module"
-        category: "Security,Identity & Access Management,Compute,Deployable"
+        category: "Security,Identity & Access Management,Compute"
+        others: "Deployable"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
       displayName: IPA client provisioning
@@ -1398,7 +1404,8 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook,Terraform Module"
-        category: "Security,Identity & Access Management,Compute,Deployable"
+        category: "Security,Identity & Access Management,Compute"
+        others: "Deployable"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
       displayName: IPA client teardown
@@ -1575,7 +1582,8 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook"
-        category: "Security,Identity & Access Management,Deployable,EWCCLI-compatible"
+        category: "Security,Identity & Access Management"
+        others: "Deployable,EWCCLI-compatible"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
       displayName: IPA server flavour
@@ -1733,7 +1741,8 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook,Terraform Module"
-        category: "Security,Identity & Access Management,Compute,Deployable"
+        category: "Security,Identity & Access Management,Compute"
+        others: "Deployable"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
       displayName: IPA server provisioning
@@ -2059,7 +2068,8 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook"
-        category: "Remote Access & Desktop,Deployable,EWCCLI-compatible"
+        category: "Remote Access & Desktop"
+        others: "Deployable,EWCCLI-compatible"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
       displayName: Remote desktop flavour
@@ -2082,7 +2092,8 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook,Terraform Module"
-        category: "Remote Access & Desktop,Compute,Deployable"
+        category: "Remote Access & Desktop,Compute"
+        others: "Deployable"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
       displayName: Remote desktop provisioning
@@ -2216,7 +2227,8 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook"
-        category: "Remote Access & Desktop,Deployable,EWCCLI-compatible"
+        category: "Remote Access & Desktop"
+        others: "Deployable,EWCCLI-compatible"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
       displayName: SSH bastion flavour
@@ -2364,7 +2376,8 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook,Terraform Module"
-        category: "Remote Access & Desktop,Compute,Deployable"
+        category: "Remote Access & Desktop,Compute"
+        others: "Deployable"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
       displayName: SSH bastion provisioning
