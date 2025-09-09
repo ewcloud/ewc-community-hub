@@ -1088,24 +1088,6 @@ spec:
     ipa-client-disenroll-flavour:
       name: "ipa-client-disenroll-flavour"
       version: "1.0.0"
-      ewccli:
-        pathToMainFile: playbooks/ipa-client-disenroll-flavour/ipa-client-disenroll-flavour.yml
-        inputs:
-          - name: ipa_domain
-            description: "domain name managed by the IPA server. Example: eumetsat.sandbox.ewc"
-            type: str
-          - name: ipa_client_hostname
-            description: "hostname of the target vm to be disenrolled from the IPA server. Example: ipa-client-1"
-            type: str
-          - name: ipa_server_hostname
-            description: "hostname of the IPA server. Example: ipa-server-1"
-            type: str
-          - name: ipa_admin_username
-            description: "username of the administrator account from the IPA server. Example: ipaadmin"
-            type: str
-          - name: ipa_server_hostname
-            description: "password of the administrator account from the IPA server. Example: my-secret-password"
-            type: str
       description: |
         IPA CLient Disenroll.
       home:  https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ipa-client-disenroll-flavour
@@ -1119,7 +1101,7 @@ spec:
       annotations:
         technology: "Ansible Playbook"
         category: "Security,Identity & Access Management"
-        others: "Deployable,EWCCLI-compatible"
+        others: "Deployable"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
       displayName: IPA Client Disenroll flavour
