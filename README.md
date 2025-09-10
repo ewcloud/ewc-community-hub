@@ -1,5 +1,5 @@
 # EWC Community Hub Items Catalog
-This repository hosts the official catalog of items offered in the [EWC Community Hub](https://europeanweather.cloud/about).
+This repository hosts the official catalog of items offered in the [EWC Community Hub](https://europeanweather.cloud/community-hub).
 
 ## Item's Metadata
 >⛔ The attribute `name` within each item entry must always match the unique key under which the totality of the item's metadata is defined.
