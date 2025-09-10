@@ -736,35 +736,6 @@ spec:
       summary: It includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
       version: "2.0.0"
  
-    eumetcast-terrestrial:
-      name: "eumetcast-terrestrial"
-      version: "1.0.0"
-      ewccli:
-        pathToMainFile: eumetcast-terrestrial.yml
-      description: |
-        Service for receiving and processing EUMETCast Terrestrial data streams via IP multicast within a private network.
-      home: https://github.com/ewcloud/ewc-flavours
-      sources:
-        - https://github.com/ewcloud/ewc-flavours.git
-      maintainers:
-        - name: EWC Team
-          email: support@ewcloud.int
-          url: https://github.com/ewcloud/ewc-flavours/issues
-        - name: EWC Support Team
-          email: testemail@ewcloud.int
-          url: https://github.com/ewcloud/ewc-flavours/issues
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
-      annotations:
-        technology: "Ansible Playbook"
-        category: "Networking,Data Reception"
-        supportLevel: "EWC"
-        licenseType: "MIT License"
-        others: "Earth Observation,Eumetcast Terrestrial"
-      displayName: EUMETCast Terrestrial
-      summary: Service for receiving and processing EUMETCast Terrestrial data streams via IP multicast within a private network.
-      license: https://github.com/ewcloud/ewc-flavours/blob/main/LICENSE
-      published: true
-
     eumetsat-data-tailor-flavour:
       name: "eumetsat-data-tailor-flavour"
       version: "1.0.0"
@@ -1876,7 +1847,7 @@ spec:
         technology: "Jupyter Notebook"
         category: "Training,Data Access"
         supportLevel: "Community"
-        licenseType: "MIT"
+        licenseType: "MIT License"
       displayName: NWCSAF Datacube Xarray
       summary: Jupyter Notebooks for Unlocking Large Datasets on Cloud-Native Data Workflows.
       license: https://gitlab.aemet.es/jllisov/vzarr/-/blob/main/LICENSE
