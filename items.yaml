@@ -44,7 +44,7 @@ spec:
 
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
-        - https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/ai-models.yml
+        - https://github.com/ewcloud/ewc-ecmwf-ai-stacks.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -106,7 +106,7 @@ spec:
 
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
-        - https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/aifs-single-mse.yml
+        - https://github.com/ewcloud/ewc-ecmwf-ai-stacks.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -167,7 +167,7 @@ spec:
 
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
-        - https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/anemoi.yml
+        - https://github.com/ewcloud/ewc-ecmwf-ai-stacks.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -284,7 +284,7 @@ spec:
         Service for receiving and processing EUMETCast Terrestrial data streams via IP multicast within a private network.
       home: https://github.com/ewcloud/ewc-flavours
       sources:
-        - https://github.com/ewcloud/ewc-flavours/blob/main/eumetcast-terrestrial.yml
+        - https://github.com/ewcloud/ewc-flavours.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -312,7 +312,7 @@ spec:
         On-demand data processing service for subsetting, reformatting, and customising Earth observation data products.
       home: https://github.com/ewcloud/ewc-flavours
       sources:
-        - https://github.com/ewcloud/ewc-flavours/blob/main/data-tailor.yml
+        - https://github.com/ewcloud/ewc-flavours.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -409,7 +409,7 @@ spec:
 
       home: https://github.com/ewcloud/ewc-ansible-role-ssh-bastion
       sources:
-        - https://github.com/ewcloud/ewc-ansible-role-ssh-bastion/blob/main
+        - https://github.com/ewcloud/ewc-ansible-role-ssh-bastion.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -434,7 +434,7 @@ spec:
         IPA CLient Enroll.
       home: https://github.com/ewcloud/ewc-flavours
       sources:
-        - https://github.com/ewcloud/ewc-flavours/blob/main/ipa-client-enroll.yml
+        - https://github.com/ewcloud/ewc-flavours.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -480,7 +480,7 @@ spec:
         IPA CLient Disenroll.
       home: https://github.com/ewcloud/ewc-flavours
       sources:
-        - https://github.com/ewcloud/ewc-flavours/blob/main/ipa-client-disenroll.yml
+        - https://github.com/ewcloud/ewc-flavours.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -523,7 +523,7 @@ spec:
         Centralized identity, authentication, and access management solution based on FreeIPA.
       home: https://github.com/ewcloud/ewc-flavours
       sources:
-        - https://github.com/ewcloud/ewc-flavours/blob/main/ipa-server.yml
+        - https://github.com/ewcloud/ewc-flavours.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -600,7 +600,7 @@ spec:
         Therefore in order to login you need to use username/password from a local user existing in the machine. 
       home: https://github.com/ewcloud/ewc-flavours
       sources:
-        - https://github.com/ewcloud/ewc-flavours/blob/main/playbooks/jupyterhub-flavour/jupyterhub-flavour.yml
+        - https://github.com/ewcloud/ewc-flavours.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -693,7 +693,7 @@ spec:
 
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
-        - https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/ml-basic.yml
+        - https://github.com/ewcloud/ewc-ecmwf-ai-stacks.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -717,7 +717,7 @@ spec:
         Jupyter notebooks on using Icechunk, Virtualizar, and Kerchunk to enable Single-Point Access to Distributed Cloud Files through xarray.
       home: https://gitlab.aemet.es/jllisov/vzarr
       sources:
-        - https://gitlab.aemet.es/jllisov/vzarr
+        - https://gitlab.aemet.es/jllisov/vzarr.git
       maintainers:
         - name: NWCSAF
           email: jllisov@aemet.es
@@ -738,7 +738,7 @@ spec:
         Pre-configured instance for deploying and managing OpenStack compute resources using Terraform.
       home: https://github.com/ewcloud/openstack-compute
       sources:
-        - https://github.com/ewcloud/openstack-compute
+        - https://github.com/ewcloud/openstack-compute.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -760,7 +760,7 @@ spec:
         Playbooks to install pytroll processing and wms in the EWC
       home: https://github.com/nordsat/ewc-playbooks
       sources:
-        - https://github.com/nordsat/ewc-playbooks/blob/main/satellite-data-processing-main.yaml
+        - https://github.com/nordsat/ewc-playbooks.git
       maintainers:
         - name: NORDSAT
           url: https://github.com/nordsat/ewc-playbooks/issues
@@ -783,7 +783,7 @@ spec:
         Virtual desktop instance providing remote graphical access to applications and development environments.
       home: https://github.com/ewcloud/ewc-flavours
       sources:
-        - https://github.com/ewcloud/ewc-flavours/blob/main/remote-desktop.yml
+        - https://github.com/ewcloud/ewc-flavours.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -816,7 +816,7 @@ spec:
         It's equipped with fail2ban, automatic security updates and more.
       home: https://github.com/ewcloud/ewc-flavours
       sources:
-        - https://github.com/ewcloud/ewc-flavours/blob/main/ssh-bastion-flavour.yml
+        - https://github.com/ewcloud/ewc-flavours.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
