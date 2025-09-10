@@ -740,21 +740,21 @@ spec:
       name: "eumetsat-data-tailor-flavour"
       version: "1.0.0"
       ewccli:
-        pathToRequirementsFile: playbooks/ecmwf-data-flavour/requirements.yml
+        pathToRequirementsFile: playbooks/eumetsat-data-tailor-flavour/requirements.yml
         pathToMainFile: playbooks/eumetsat-data-tailor-flavour/eumetsat-data-tailor-flavour.yml
         inputs:
           - name: data_tailor_env_wipe
             description: flag to delete existing conda environment where data tailor was previously installed. Only yes will be accepted to approve
             type: str
-            default: no
+            default: "no"
           - name: data_tailor_env_name
             description: name of conda environment where data tailor will be installed
             type: str
-            default: epct-desktop
+            default: "epct-desktop"
           - name: conda_installer
             description: URI of the installer to use
             type: str
-            default: https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
+            default: "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh"
           - name: conda_update_base
             description: boolean to decide wether base environment needs updating
             type: bool
@@ -762,11 +762,11 @@ spec:
           - name: conda_prefix
             description: prefix where conda will be installed
             type: str
-            default: /opt/conda
+            default: "/opt/conda"
           - name: conda_user
             description: user that will own the conda installation
             type: str
-            default: root
+            default: "root"
       description: |
         This Ansible Playbook configures an existing virtual machine running
         within the [European Weather Cloud (EWC)](https://europeanweather.cloud/), to equip it with the Data Tailor Standalone and EUMETSAT Data Access Client (EUMDAC).
