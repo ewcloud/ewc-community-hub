@@ -46,7 +46,7 @@ spec:
         pathToMainFile: ai-models.yml
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
-        - https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/ai-models.yml
+        - https://github.com/ewcloud/ewc-ecmwf-ai-stacks.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -564,7 +564,7 @@ spec:
         pathToMainFile: aifs-single-mse.yml
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
-        - https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/aifs-single-mse.yml
+        - https://github.com/ewcloud/ewc-ecmwf-ai-stacks.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -626,7 +626,7 @@ spec:
 
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
-        - https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/anemoi.yml
+        - https://github.com/ewcloud/ewc-ecmwf-ai-stacks.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -745,7 +745,7 @@ spec:
         Service for receiving and processing EUMETCast Terrestrial data streams via IP multicast within a private network.
       home: https://github.com/ewcloud/ewc-flavours
       sources:
-        - https://github.com/ewcloud/ewc-flavours/blob/main/eumetcast-terrestrial.yml
+        - https://github.com/ewcloud/ewc-flavours.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -1089,7 +1089,7 @@ spec:
       name: "ipa-client-disenroll-flavour"
       version: "1.0.0"
       description: |
-      home:  https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ipa-client-disenroll-flavour
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ipa-client-disenroll-flavour
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -1375,7 +1375,7 @@ spec:
         | ewc-tf-module-openstack-compute | 1.3 | MIT | https://github.com/ewcloud/ewc-tf-module-openstack-compute  |
         | ewc-ansible-role-ipa-client-disenroll | 1.0 | MIT |  https://github.com/ewcloud/ewc-ansible-role-ipa-client-disenroll |
 
-      home:  https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ipa-client-teardown
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ipa-client-teardown
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -1778,9 +1778,9 @@ spec:
         See also [here](https://jupyterhub.readthedocs.io/en/5.2.1/tutorial/getting-started/authenticators-users-basics.html)
 
         Therefore in order to login you need to use username/password from a local user existing in the machine. 
-      home: https://github.com/ewcloud/ewc-flavours
+      home: https://github.com/ewcloud/ewc-flavours/blob/main/playbooks/jupyterhub-flavour
       sources:
-        - https://github.com/ewcloud/ewc-flavours/blob/main/playbooks/jupyterhub-flavour/jupyterhub-flavour.yml
+        - https://github.com/ewcloud/ewc-flavours.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -1840,7 +1840,7 @@ spec:
 
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
-        - https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/ml-basic.yml
+        - https://github.com/ewcloud/ewc-ecmwf-ai-stacks.git
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
@@ -1863,7 +1863,7 @@ spec:
               Jupyter notebooks on using Icechunk, Virtualizar, and Kerchunk to enable Single-Point Access to Distributed Cloud Files through xarray.
       home: https://gitlab.aemet.es/jllisov/vzarr
       sources:
-        - https://gitlab.aemet.es/jllisov/vzarr
+        - https://gitlab.aemet.es/jllisov/vzarr.git
       maintainers:
         - name: NWCSAF
           email: jllisov@aemet.es
@@ -1887,7 +1887,7 @@ spec:
         Playbooks to install pytroll processing and wms in the EWC
       home: https://github.com/nordsat/ewc-playbooks
       sources:
-        - https://github.com/nordsat/ewc-playbooks/blob/main/satellite-data-processing-main.yaml
+        - https://github.com/nordsat/ewc-playbooks.git
       maintainers:
         - name: NORDSAT
           url: https://github.com/nordsat/ewc-playbooks/issues
