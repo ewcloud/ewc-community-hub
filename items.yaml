@@ -769,7 +769,8 @@ spec:
       name: "eumetsat-data-tailor-flavour"
       version: "1.0.0"
       ewccli:
-        pathToMainFile: playbooks/umetsat-data-tailor-flavour/umetsat-data-tailor-flavour.yml
+        pathToRequirementsFile: playbooks/ecmwf-data-flavour/requirements.yml
+        pathToMainFile: playbooks/eumetsat-data-tailor-flavour/eumetsat-data-tailor-flavour.yml
         inputs:
           - name: data_tailor_env_wipe
             description: flag to delete existing conda environment where data tailor was previously installed. Only yes will be accepted to approve
@@ -927,6 +928,7 @@ spec:
       name: "ipa-client-enroll-flavour"
       version: "1.0.0"
       ewccli:
+        pathToRequirementsFile: playbooks/ipa-client-enroll-flavour/requirements.yml
         pathToMainFile: playbooks/ipa-client-enroll-flavour/ipa-client-enroll-flavour.yml
         inputs:
           - name: ipa_client_hostname
@@ -1398,6 +1400,8 @@ spec:
       name: "ipa-server-flavouot"
       version: "1.0.0"
       ewccli:
+        defaultImageName: Rocky-9.5-20250604142417
+        pathToRequirementsFile: playbooks/ipa-server-flavour/requirements.yml
         pathToMainFile: playbooks/ipa-server-flavour/ipa-server-flavour.yml
         inputs:
           - name: ipa_domain
@@ -1906,6 +1910,8 @@ spec:
       name: "remote-desktop-flavour"
       version: "1.0.0"
       ewccli:
+        defaultImageName: Rocky-8.10-20250604144456
+        pathToRequirementsFile: playbooks/remote-desktop-flavour/requirements.yml
         pathToMainFile: playbooks/remote-desktop-flavour/remote-desktop-flavour.yml
         inputs:
         - name: whitelisted_ip_ranges
@@ -2229,6 +2235,8 @@ spec:
       name: "ssh-bastion-flavour"
       version: "1.0.0"
       ewccli:
+        defaultImageName: Rocky-9.5-20250604142417
+        pathToRequirementsFile: playbooks/ssh-bastion-flavour/requirements.yml
         pathToMainFile: playbooks/ssh-bastion-flavour/ssh-bastion-flavour.yml
         inputs:
           - name: whitelisted_ip_ranges
