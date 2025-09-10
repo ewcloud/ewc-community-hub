@@ -264,7 +264,7 @@ spec:
             description: User owning the conda installation.
             type: str
         pathToMainFile: playbooks/ecmwf-data-flavour/ecmwf-data-flavour.yml
-      home: https://github.com/ewcloud/ewc-flavours/tree/2.0.0/playbooks/ecmwf-data-flavour
+      home: https://github.com/ewcloud/ewc-flavours
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       license: https://github.com/ewcloud/ewc-flavours/blob/2.0.0/LICENSE
       published: true
