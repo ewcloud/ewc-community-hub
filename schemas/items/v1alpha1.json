@@ -78,7 +78,10 @@
         "ewccli": {
           "type": "object",
           "properties": {
-            "defaultSecurityGrouyps": {
+            "defaultImageName": {
+              "type": "string"
+            },
+            "defaultSecurityGroups": {
               "type": "array",
               "items": {
                 "type": "string"
@@ -129,6 +132,9 @@
                 ],
                 "additionalProperties": true
               }
+            },
+            "pathToRequirementsFile": {
+              "type": "string"
             },
             "pathToMainFile": {
               "type": "string"
