@@ -679,6 +679,7 @@ spec:
             description: User owning the conda installation.
             type: str
         pathToMainFile: playbooks/ecmwf-data-flavour/ecmwf-data-flavour.yml
+        pathToRequirementsFile: requirements.yml
       description: |
         Includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
         
@@ -1852,6 +1853,7 @@ spec:
       version: "2.0.0"
       ewccli:
         pathToMainFile: playbooks/jupyterhub-flavour/jupyterhub-flavour.yml
+        pathToRequirementsFile: requirements.yml
         inputs:
           - name: jupyterhub_local_cert_email
             description: "Email used for the certificate."
