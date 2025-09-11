@@ -179,7 +179,7 @@ spec:
         others: "Deployable"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
-      displayName: IPA Enroll/Disenroll Automation Ansible Playbook
+      displayName: IPA Enroll/Disenroll Automation Configuration
       summary: Configures Morpheus (i.e. EWC's graphical control plane) to automate the enrollment/disenrollment of VMs, provisioned via the UI, into a fleet of IPA-aware instances.
       license: https://github.com/ewcloud/ewc-ansible-playbook-ipa-enroll-automation-via-morpheus/blob/1.0.0/LICENSE
       published: false
@@ -331,7 +331,7 @@ spec:
         others: "Deployable"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
-      displayName: OpenStack Compute Instance Terraform Module
+      displayName: OpenStack Compute Instance
       summary: Simplifies the creation of EWC VMs, or state update and teardown of existing ones, via Terraform.
       license: https://github.com/ewcloud/ewc-tf-module-openstack-compute/blob/1.4.0/LICENSE
       published: true
@@ -513,7 +513,7 @@ spec:
         others: "Deployable"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
-      displayName: OpenStack Security Group Terraform Module
+      displayName: OpenStack Security Group
       summary: Automates the creation of EWC security groups and their rules, or update and teardown of existing ones, via Terraform.
       license: https://github.com/ewcloud/ewc-tf-module-openstack-security-group/blob/1.0.0/LICENSE
       published: true
@@ -893,7 +893,7 @@ spec:
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
         others: "Earth Observation,Fire monitoring,Deployable,EWCCLI-compatible"
-      displayName: EUMETSAT Data Tailor flavour
+      displayName: EUMETSAT Data Tailor Flavour
       summary: Transforms an existing VM into a powerful satellite data customization hub, enabling users to efficiently subset, aggregate, reproject, and reformat data from METOP, MFG, MSG, MTG, and Sentinel-3 into GIS and image formats, offering faster processing and greater flexibility than web-based alternatives.
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/LICENSE
       published: true
@@ -1056,7 +1056,7 @@ spec:
         others: "Deployable,EWCCLI-compatible"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
-      displayName: IPA Client Enroll
+      displayName: IPA Client Enroll Flavour
       summary: Seamlessly integrates a running VM into a FreeIPA-managed fleet of instances, enabling centralized user authentication, DNS resolution, and secure remote access for simplified and scalable identity management.
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/LICENSE
       published: true
@@ -1217,7 +1217,7 @@ spec:
         others: "Deployable,EWCCLI-compatible"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
-      displayName: IPA Client Disenroll flavour
+      displayName: IPA Client Disenroll Flavour
       summary: Simplifies the secure removal of a running VM from a FreeIPA-managed fleet of instances, reducing administrative overhead and enhancing security by eliminating stale credentials and DNS records. 
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/LICENSE
       published: true
@@ -1369,7 +1369,7 @@ spec:
         others: "Deployable"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
-      displayName: IPA client provisioning
+      displayName: IPA Client Provisioning
       summary: Automates the creation or state update of a VM, plus its configuration as an IPA client, effectively enabling integration with a fleet of instances with centralized authentication, secure remote access, and DNS-based resource discovery in the EWC.
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/LICENSE
       published: true
@@ -1503,7 +1503,7 @@ spec:
         others: "Deployable"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
-      displayName: IPA client teardown
+      displayName: IPA Client Teardown
       summary: Simplifies the secure teardown of an IPA client VM in the EWC, disabling LDAP authentication, removing DNS records, and safely decommissioning the instance and its resources.
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/LICENSE
       published: true
@@ -1683,7 +1683,7 @@ spec:
         others: "Deployable,EWCCLI-compatible"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
-      displayName: IPA server flavour
+      displayName: IPA Server Flavour
       summary: Turns an existing VM into a FreeIPA server, a central place for user authentication, authorization, and DNS-based resource discovery for secure and efficient identity management.
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/LICENSE
       published: true
@@ -1842,7 +1842,7 @@ spec:
         others: "Deployable"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
-      displayName: IPA server provisioning
+      displayName: IPA Server Provisioning
       summary: Automates the creation or state update of VM, plus its configuration as FreeIPA server, streamlining centralized user management, authentication, authorization, and DNS resolution for secure and efficient resource management.
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/LICENSE
       published: true
@@ -2174,7 +2174,7 @@ spec:
         others: "Deployable,EWCCLI-compatible"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
-      displayName: Remote desktop flavour
+      displayName: Remote Desktop Flavour
       summary: Transforms an existing VM into a secure, graphical desktop environment using X2Go and MATE, enabling simple remote access and intuitive cloud-based development for tenant users.
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/LICENSE
       published: true
@@ -2341,7 +2341,7 @@ spec:
         others: "Deployable"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
-      displayName: Remote desktop provisioning
+      displayName: Remote Desktop Provisioning
       summary: Automates the creation or state update of a remote desktop VM, a basic yet secure cloud-based development environment with graphical interface. Uses X2Go and MATE to enable easy remote access for tenant users.
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/LICENSE
       published: true
@@ -2478,7 +2478,7 @@ spec:
         others: "Deployable,EWCCLI-compatible"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
-      displayName: SSH bastion flavour
+      displayName: SSH Bastion Flavour
       summary: Tightens the configuration of a running VM, to operate as a secure SSH proxy with Fail2ban, providing tenant admins and users a fortified entry point to safely access private EWC networks from the public internet.
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/LICENSE
       published: true
@@ -2627,7 +2627,7 @@ spec:
         others: "Deployable"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
-      displayName: SSH bastion provisioning
+      displayName: SSH Bastion Provisioning
       summary: Automates the creation or state update of a secure SSH bastion VM in the EWC, configured with Fail2ban to provide a fortified entry point for safely accessing private EWC networks from the public internet.
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/LICENSE
       published: true
