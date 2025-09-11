@@ -57,6 +57,7 @@ spec:
         category: "Machine Learning & AI, GPU-accelerated"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
+        others: "Deployable,EWCCLI-compatible"
       displayName: AI Models
       summary: It features the most popular data driven forecast models such as Pangu Weather, Fourcastnet or graphcast.
       license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
@@ -575,6 +576,7 @@ spec:
         category: "Machine Learning & AI, GPU-accelerated"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
+        others: "Deployable,EWCCLI-compatible"
       displayName: ECMWF AIFS Single MSE
       summary: It features the ECMWF AIFS Single data-driven model
       license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
@@ -637,6 +639,7 @@ spec:
         category: "Machine Learning & AI, GPU-accelerated"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
+        others: "Deployable,EWCCLI-compatible"
       displayName: ECMWF Anemoi
       summary: It leverages the Anemoi framework to develop and run your AI-models or manage datasets.
       license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
@@ -1904,6 +1907,7 @@ spec:
         category: "Compute,Data Visualization,Data Processing"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
+        others: "Deployable,EWCCLI-compatible"
       displayName: JupyterHub Flavour
       summary: It installs and run jupyterhub on your instance, offering a convenient way to access it through the web.
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/LICENSE
@@ -1964,6 +1968,7 @@ spec:
         category: "Machine Learning & AI, GPU-accelerated"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
+        others: "Deployable,EWCCLI-compatible"
       displayName: ML Basic
       summary: It features an environment with the main machine learning packages like scikit-learn or torch.
       license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
@@ -2010,6 +2015,7 @@ spec:
         category: "Compute,Data Processing"
         supportLevel: "Community"
         licenseType: "GNU General Public License v3.0"
+        others: "Deployable,EWCCLI-compatible"
       displayName: Pytroll Processing
       summary: Playbooks to install pytroll processing and wms in the EWC.
       license: https://github.com/nordsat/ewc-playbooks/blob/main/LICENSE
