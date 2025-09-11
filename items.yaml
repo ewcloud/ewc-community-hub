@@ -1901,7 +1901,7 @@ spec:
         - name: EWC Team
           email: support@ewcloud.int
           url: https://github.com/ewcloud/ewc-flavours/issues
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/jupyterprob.jpg
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook"
         category: "Compute,Data Visualization,Data Processing"
