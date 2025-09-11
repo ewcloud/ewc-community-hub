@@ -1978,7 +1978,57 @@ spec:
       name: "nwcsaf-datacube-xarray"
       version: "1.0.0"
       description: |
-              Jupyter notebooks on using Icechunk, Virtualizar, and Kerchunk to enable Single-Point Access to Distributed Cloud Files through xarray.
+        Jupyter notebooks on using Icechunk, Virtualizar, and Kerchunk to enable Single-Point Access to Distributed Cloud Files through xarray.
+        
+        # Accessing NWC SAF buckets with kerchunk/virtualizarr/icechunk
+
+        ## Description
+
+        This project is a collection of notebooks that demonstrate how to build virtual data cubes from NWC SAF data buckets. It focuses specifically on the bucket containing NWC SAF GEO outputs hosted on the European Weather Cloud (EWC). The bucket used is a precursor to the future MTG format of NWC SAF, containing files with a time dimension. This bucket is publicly accessible within the EWC infrastructure. The bucket name is:
+
+        `nwc-saf.0-degree.level-2-cf`
+
+        ⚠️ Important: These notebooks are designed to be executed inside the EWC environment.
+        Please consider that these notebook should be executed inside the EWC.
+
+
+        ## ⚙️ Requirements
+        - EWC access (https://www.europeanweather.cloud/)
+        - Conda (Anaconda/Miniconda)
+
+
+        ## Installation
+
+        1. Clone the repository
+
+        ```bash
+        git clone https://gitlab.aemet.es/jllisov/vzarr.git
+        cd vzarr
+        ```
+
+        2. Create the Conda environment
+
+        ```bash
+        conda env create -f environment.yml
+        ```
+        This will create a Conda environment named Vzarr with all necessary dependencies.
+
+        3. Activate the environment
+
+        ```bash
+        conda activate Vzarr
+        ```
+
+        ## 📊 Run the Jupyter Notebooks
+
+        Once the environment is activated, launch JupyterLab:
+
+        ```bash
+        jupyter lab --ip 0.0.0.0 --port 8888
+        ```
+
+        Open the JupyterLab URL provided in the terminal and navigate to the notebooks.
+
       home: https://gitlab.aemet.es/jllisov/vzarr
       sources:
         - https://gitlab.aemet.es/jllisov/vzarr.git
