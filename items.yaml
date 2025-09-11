@@ -740,21 +740,21 @@ spec:
       name: "eumetsat-data-tailor-flavour"
       version: "1.0.0"
       ewccli:
-        pathToRequirementsFile: playbooks/ecmwf-data-flavour/requirements.yml
+        pathToRequirementsFile: playbooks/eumetsat-data-tailor-flavour/requirements.yml
         pathToMainFile: playbooks/eumetsat-data-tailor-flavour/eumetsat-data-tailor-flavour.yml
         inputs:
           - name: data_tailor_env_wipe
             description: flag to delete existing conda environment where data tailor was previously installed. Only yes will be accepted to approve
             type: str
-            default: no
+            default: "no"
           - name: data_tailor_env_name
             description: name of conda environment where data tailor will be installed
             type: str
-            default: epct-desktop
+            default: "epct-desktop"
           - name: conda_installer
             description: URI of the installer to use
             type: str
-            default: https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
+            default: "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh"
           - name: conda_update_base
             description: boolean to decide wether base environment needs updating
             type: bool
@@ -762,11 +762,11 @@ spec:
           - name: conda_prefix
             description: prefix where conda will be installed
             type: str
-            default: /opt/conda
+            default: "/opt/conda"
           - name: conda_user
             description: user that will own the conda installation
             type: str
-            default: root
+            default: "root"
       description: |
         This Ansible Playbook configures an existing virtual machine running
         within the [European Weather Cloud (EWC)](https://europeanweather.cloud/), to equip it with the Data Tailor Standalone and EUMETSAT Data Access Client (EUMDAC).
@@ -1061,7 +1061,145 @@ spec:
     ipa-client-disenroll-flavour:
       name: "ipa-client-disenroll-flavour"
       version: "1.0.0"
+      ewccli:
+        pathToMainFile: playbooks/ipa-client-disenroll-flavour/ipa-client-disenroll-flavour.yml
+        pathToRequirementsFile: playbooks/ipa-client-disenroll-flavour/requirements.yml
+        inputs:
+          - name: ipa_domain
+            description: "domain name managed by the IPA server. Example: eumetsat.sandbox.ewc"
+            type: str
+          - name: ipa_client_hostname
+            description: "hostname of the target vm to be disenrolled from the IPA server. Example: ipa-client-1"
+            type: str
+          - name: ipa_server_hostname
+            description: "hostname of the IPA server. Example: ipa-server-1"
+            type: str
+          - name: ipa_admin_username
+            description: "username of the administrator account from the IPA server. Example: ipaadmin"
+            type: str
+          - name: ipa_admin_password
+            description: "password of the administrator account from the IPA server. Example: my-secret-password"
+            type: str
       description: |
+        This Ansible Playbook configures an existing virtual machine in the
+        [European Weather Cloud (EWC)](https://europeanweather.cloud/) to disenroll
+        from a [IPA server](../ipa-server-flavour/).
+
+        IPA provides integrated identity management and DNS services for centralized
+        user authentication, authorization, and resource discovery. This template safely
+        removes a VM from a [FreeIPA](https://www.freeipa.org/page/Main_Page)-managed
+        environment, which is essential when decommissioning infrastructure to prevent
+        stale entries in the IPA directory—such as obsolete host records, and DNS
+        pointers—that could lead to management overhead, naming conflicts or security
+        vulnerabilities from lingering credentials.
+
+        Suitable for both tenant admin and tenant users, this template streamlines client
+        removal, ensuring a clean and efficient identity system. The end benefit for
+        users is reduced administrative burden, improved security posture,
+        and easier scaling or redeployment of resources. Follow the [instructions below](#usage)
+        to disenroll your instance.
+
+        ## Functionality
+        The template is designed to:
+        - Configure a pre-existing virtual machine, previously enrolled (likely with help of the [IPA client](../ipa-client-enroll-flavour/) template) to disconnect from an [IPA server](../ipa-server-flavour/).
+        - Disable user authentication and authorization (LDAP) for the target instance.
+        - Remove IPA server-internal DNS records referencing the target instance, if present.
+
+        ## Prerequisites
+        >💡 Versions listed correspond to minimal prerequisites.
+
+        To successfully run this playbook, the following packages should be available in your work environment:
+
+        | Name | Version | License | Home URL |
+        |------|---------|----- |-----|
+        | git | 2.0 | GPLv2  | https://git-scm.com/downloads |
+        | python | 3.9   | PSF | https://www.python.org/downloads  |
+        | ansible | 2.15 |  GPLv3+ | https://pypi.org/project/ansible  |
+
+        ## Usage
+
+        ### 1. Download  Ansible dependencies
+        >💡 By default, Ansible Roles are installed under the `~/.ansible/roles` directory within your working environment.
+
+        Download the correct version of the Ansible dependencies, if you haven't done so already:
+
+        ```
+        ansible-galaxy role install -r requirements.yml
+        ```
+
+        ### 2. Specify the target host and SSH credentials
+        >💡 To find out which is the default user for your chosen VM image,
+        checkout the [official EWC documentation](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+VM+images+and+default+users).
+
+        Create an inventory file to specify address/credentials that Ansible should use
+        to reach the virtual machine you wish to configure:
+
+        ```yaml
+        # inventory.yml
+        ---
+        ewcloud:
+          hosts:
+            ipa_client:
+              ansible_python_interpreter: /usr/bin/python3
+              ansible_host: <add the IPV4 address of the target host>
+              ansible_ssh_private_key_file: <add the path to local SSH private key file>
+              ansible_user: <add the default user according to your chosen VM image>
+              ansible_ssh_common_args: -o StrictHostKeyChecking=accept-new
+
+        ```
+
+        ### 3. Configure and apply the template
+
+        #### 3.1. Interactive Mode
+
+        By running the following command, you can trigger an interactive session that
+        prompts you for the necessary user inputs, and then applies changes to your
+        target EWC environment:
+
+        ```bash
+        ansible-playbook -i inventory.yml ipa-client-disenroll-flavour.yml
+        ```
+
+        #### 3.2. Non-Interactive Mode
+
+        >💡 To learn more about defining variables at runtime, checkout the
+        [official Ansible documentation](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html).
+
+        You can also run in non-interactive mode by passing the
+        `--extra-vars` or `-e` flag, followed by a map of  key-value pairs; one for
+        each and every available input (see [inputs section](#inputs) below). For
+        example:
+
+        ```bash
+        ansible-playbook \
+          -i inventory.yml \
+          -e '{
+              "ipa_domain": "eumetsat.sandbox.ewc",
+              "ipa_client_hostname": "ipa-client-1",
+              "ipa_server_hostname": "ipa-server-1",
+              "ipa_admin_username": "ipaadmin",
+              "ipa_admin_password": "my-secret-password"
+            }' \
+          ipa-client-disenroll-flavour.yml
+        ```
+
+        ## Inputs
+
+        | Name | Description | Type | Default | Required |
+        |------|-------------|------|---------|----------|
+        | ipa_domain | domain name managed by the IPA server. Example: `eumetsat.sandbox.ewc` | `string` | n/a | yes |
+        | ipa_client_hostname | hostname of the target vm to be disenrolled from the IPA server. Example: `ipa-client-1` | `string` | n/a | yes |
+        | ipa_server_hostname | hostname of the IPA server. Example: `ipa-server-1` | `string` | n/a | yes |
+        | ipa_admin_username | username of the administrator account from the IPA server. Example: `ipaadmin` | `string` | n/a | yes |
+        | ipa_admin_password | password of the administrator account from the IPA server. Example: `my-secret-password` | `string` | n/a | yes |
+
+
+        ## Dependencies
+
+        | Name | Version | License | Home URL |
+        |------|---------|------|----------|
+        | ewc-ansible-role-ipa-client-disenroll | 1.0 | MIT |  https://github.com/ewcloud/ewc-ansible-role-ipa-client-disenroll |
+
       home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/playbooks/ipa-client-disenroll-flavour
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
@@ -1073,7 +1211,7 @@ spec:
       annotations:
         technology: "Ansible Playbook"
         category: "Security,Identity & Access Management"
-        others: "Deployable"
+        others: "Deployable,EWCCLI-compatible"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
       displayName: IPA Client Disenroll flavour
