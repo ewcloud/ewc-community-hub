@@ -892,7 +892,7 @@ spec:
         category: "Data Processing"
         supportLevel: "EWC-supported"
         licenseType: "MIT License"
-        others: "Earth Observation,Fire monitoring,Deployable,EWCCLI-compatible"
+        others: "Deployable,EWCCLI-compatible"
       displayName: EUMETSAT Data Tailor Flavour
       summary: Transforms an existing VM into a powerful satellite data customization hub, enabling users to efficiently subset, aggregate, reproject, and reformat data from METOP, MFG, MSG, MTG, and Sentinel-3 into GIS and image formats, offering faster processing and greater flexibility than web-based alternatives.
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/LICENSE
