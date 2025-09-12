@@ -652,34 +652,6 @@ spec:
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
         others: "Deployable,EWCCLI-compatible"
-      ewccli:
-        inputs:
-          - name: reboot_if_required
-            default: true
-            description: Boolean to reboot the instance if required after an update.
-            type: bool
-          - name: ecmwf_toolbox_env_wipe
-            default: false
-            description: Boolean to decide whether to wipe the environment if exists prior to a reinstallation.
-            type: bool
-          - name: ecmwf_toolbox_env_name
-            default: "ecmwf-toolbox"
-            description: Name of the environment containing the ECMWF toolbox.
-            type: str
-          - name: ecmwf_toolbox_create_ipykernel
-            default: true
-            description: Boolean to create a system-wide kernel available.
-            type: bool
-          - name: conda_prefix
-            default: "/opt/conda"
-            description: Prefix where conda is installed.
-            type: str
-          - name: conda_user
-            default: "root"
-            description: User owning the conda installation.
-            type: str
-        pathToMainFile: playbooks/ecmwf-data-flavour/ecmwf-data-flavour.yml
-        pathToRequirementsFile: requirements.yml
       description: |
         Includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
         
@@ -726,15 +698,43 @@ spec:
         ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
 
       displayName: ECMWF Data Flavour
+      ewccli:
+        inputs:
+          - name: reboot_if_required
+            default: true
+            description: Boolean to reboot the instance if required after an update.
+            type: bool
+          - name: ecmwf_toolbox_env_wipe
+            default: false
+            description: Boolean to decide whether to wipe the environment if exists prior to a reinstallation.
+            type: bool
+          - name: ecmwf_toolbox_env_name
+            default: "ecmwf-toolbox"
+            description: Name of the environment containing the ECMWF toolbox.
+            type: str
+          - name: ecmwf_toolbox_create_ipykernel
+            default: true
+            description: Boolean to create a system-wide kernel available.
+            type: bool
+          - name: conda_prefix
+            default: "/opt/conda"
+            description: Prefix where conda is installed.
+            type: str
+          - name: conda_user
+            default: "root"
+            description: User owning the conda installation.
+            type: str
+        pathToMainFile: playbooks/ecmwf-data-flavour/ecmwf-data-flavour.yml
+        pathToRequirementsFile: requirements.yml
       home: https://github.com/ewcloud/ewc-flavours/tree/2.0.0/playbooks/ecmwf-data-flavour
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       license: https://github.com/ewcloud/ewc-flavours/blob/2.0.0/LICENSE
-      published: true
       maintainers:
         - name: EWC Team
           email: support@ewcloud.int
           url: https://github.com/ewcloud/ewc-flavours/issues
       name: "ecmwf-data-flavour"
+      published: true
       sources:
         - https://github.com/ewcloud/ewc-flavours.git
       summary: It includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
