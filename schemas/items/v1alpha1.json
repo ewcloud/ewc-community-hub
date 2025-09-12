@@ -54,7 +54,8 @@
               "pattern": ".+"
             },
             "supportLevel": {
-              "type": "string"
+              "type": "string",
+              "enum": ["EWC", "Community"]
             },
             "technology": {
               "type": "string",

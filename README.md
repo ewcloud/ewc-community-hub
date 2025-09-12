@@ -5,7 +5,7 @@ This repository hosts the official catalog of items offered in the [EWC Communit
 >⛔ The attribute `name` within each item entry must always match the unique key under which the totality of the item's metadata is defined.
 
 >⚠️  At least the `maintainers[*].email` or the `maintainers[*].url` property value should always be set.
-These to ensure end-users of the item can submit inquiries or receive request support, in accordance with the support level offered by the maintainer(s).
+These is to ensure end-users can submit inquiries or receive support, in accordance with the support level offered by Item owners.
 
 Below we show an excerpt from [items.yaml](items.yaml), to exemplify the metadata of an onboarded item.
 For more details on required and/or optional metadata (i.e. inputs for `ewccli` compatibility), please refer to the items' metadata [schema definition](./schemas/items/v1alpha1.json).
@@ -14,7 +14,7 @@ ecmwf-data-flavour:
   annotations:
     technology: "Ansible Playbook"
     category: "Compute,Data Access"
-    supportLevel: "EWC-supported"
+    supportLevel: "EWC"
     licenseType: "Apache License 2.0"
     others: "Deployable,EWCCLI-compatible"
   description: |
@@ -61,7 +61,6 @@ ecmwf-data-flavour:
     <img src="https://climate.copernicus.eu/sites/default/files/inline-images/ECMWF.png"  width="120px" height="120px"> 
     
     ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
-
   displayName: ECMWF Data Flavour
   ewccli:
     inputs:
@@ -94,12 +93,12 @@ ecmwf-data-flavour:
   home: https://github.com/ewcloud/ewc-flavours/tree/2.0.0/playbooks/ecmwf-data-flavour
   icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
   license: https://github.com/ewcloud/ewc-flavours/blob/2.0.0/LICENSE
-  published: true
   maintainers:
     - name: EWC Team
       email: support@ewcloud.int
       url: https://github.com/ewcloud/ewc-flavours/issues
   name: "ecmwf-data-flavour"
+  published: true
   sources:
     - https://github.com/ewcloud/ewc-flavours.git
   summary: It includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
