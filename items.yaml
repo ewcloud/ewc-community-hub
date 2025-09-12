@@ -43,7 +43,7 @@ spec:
         ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
 
       ewccli:
-        pathToMainFile: ai-models.yml
+        pathToMainFile: playbooks/ai-models/ai-models.yml
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
         - https://github.com/ewcloud/ewc-ecmwf-ai-stacks.git
@@ -562,7 +562,7 @@ spec:
         ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
 
       ewccli:
-        pathToMainFile: aifs-single-mse.yml
+        pathToMainFile: playbooks/aifs-single-mse/aifs-single-mse.yml
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
         - https://github.com/ewcloud/ewc-ecmwf-ai-stacks.git
@@ -586,7 +586,7 @@ spec:
       name: "ecmwf-anemoi"
       version: "1.0.0"
       ewccli:
-        pathToMainFile: anemoi.yml
+        pathToMainFile: playbooks/anemoi/anemoi.yml
       description: |
         Create a conda environment with the Anemoi framework for weather forecasting based on machine learning and associated software stack.
         
@@ -1919,7 +1919,7 @@ spec:
       name: "ml-basic"
       version: "1.0.0"
       ewccli:
-        pathToMainFile: ml-basic.yml
+        pathToMainFile: playbooks/ml-basic/ml-basic.yml
       description: |
         Create a conda environment with the basic Machine Learning packages such as torch, xgboost, and scikit-learn. Check `files/env.yml` for all the details on the software included.
 
