@@ -2126,7 +2126,7 @@ spec:
 
         Create the inventory file to list your hosts and groups. Example:
 
-        ```txt
+        ```bash
         [satellite_hosts]
         localhost ansible_connection=local
         ```
