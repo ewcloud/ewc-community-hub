@@ -898,7 +898,57 @@ spec:
       summary: Transforms an existing VM into a powerful satellite data customization hub, enabling users to efficiently subset, aggregate, reproject, and reformat data from METOP, MFG, MSG, MTG, and Sentinel-3 into GIS and image formats, offering faster processing and greater flexibility than web-based alternatives.
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.0.0/LICENSE
       published: true
- 
+
+    ewccli:
+      name: "ewccli"
+      version: "0.1.0"
+      description: |
+        ewccli Python Package is the European Weather Cloud (EWC) Command Line Interface (CLI).
+        This tool is developed to support EWC users on the use of the EWC services.
+
+        ## Prerequisites
+
+        - You will need a python environment to run the library implementation of this code. Python version **3.11** or higher.
+        - **git** installed on your operating system. (usually is available to most OS nowadays)
+
+        ### Openstack inputs
+
+        You can use the following [link](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+How+to+request+Openstack+Application+Credentials) to obtain:
+        - Applications Credentials (ID and secret)
+
+        ## Installing
+
+        We recommend installing **ewccli** inside a **virtual environment** to avoid dependency conflicts with system packages.
+
+        ### Installing with PIP from PyPI
+
+        The EWC CLI Python package is available through [PyPI](https://pypi.org/):
+
+        ```bash
+        pip install ewccli
+        ```
+
+        ## Getting started
+
+        Once installed, run `ewc` to verify everything works.
+
+      home: https://github.com/ewcloud/ewccli/tree/0.1.0
+      sources:
+        - https://github.com/ewcloud/ewccli.git
+      maintainers:
+        - name: EWC
+          email: support@europeanweather.cloud
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
+      annotations:
+        technology: "Python Package"
+        category: "Compute"
+        supportLevel: "EWC"
+        licenseType: "GNU General Public License v3.0"
+      displayName: EWC CLI
+      summary: European Weather Cloud (EWC) Command Line Interface (CLI) to interact with EWC services.
+      license: https://github.com/ewcloud/ewccli/blob/0.1.0/LICENSE
+      published: true
+
     ipa-client-enroll-flavour:
       name: "ipa-client-enroll-flavour"
       version: "1.0.0"
