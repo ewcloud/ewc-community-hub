@@ -2530,7 +2530,7 @@ spec:
         to constrains imposed by the required ewc-ansible-role-remote-desktop Ansible
         Role.
 
-        > �� A VM plan with at least 4GB of RAM is recommended for successful setup and
+        > 💡 A VM plan with at least 4GB of RAM is recommended for successful setup and
         stable operation.
 
         | Name | Version | License | Home URL |
