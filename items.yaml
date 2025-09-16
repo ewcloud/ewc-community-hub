@@ -4,7 +4,7 @@ spec:
   items:
     ai-models:
       name: "ai-models"
-      version: "1.0.0"
+      version: "1.0.1"
       description: |
         Create a conda environment with the ai-models package and associated plugins to run a set of data-driven weather forecasting models such as panguweather or graphcast. 
 
@@ -43,7 +43,7 @@ spec:
         ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
 
       ewccli:
-        pathToMainFile: ai-models.yml
+        pathToMainFile: playbooks/ai-models/ai-models.yml
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
         - https://github.com/ewcloud/ewc-ecmwf-ai-stacks.git
@@ -520,7 +520,7 @@ spec:
 
     ecmwf-aifs-single-mse:
       name: "ecmwf-aifs-single-mse"
-      version: "1.0.0"
+      version: "1.0.1"
       description: |
         Create a conda environment with AIFS Single MSE and associated software stack.
 
@@ -562,7 +562,7 @@ spec:
         ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
 
       ewccli:
-        pathToMainFile: aifs-single-mse.yml
+        pathToMainFile: playbooks/aifs-single-mse/aifs-single-mse.yml
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
         - https://github.com/ewcloud/ewc-ecmwf-ai-stacks.git
@@ -582,9 +582,74 @@ spec:
       license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
       published: true
 
+    ecmwf-aifs-ens-crps:
+      name: "ecmwf-aifs-ens-crps"
+      version: "1.0.1"
+      description: |
+        Create a conda environment with AIFS ENS CRPS data-driven model and associated software stack.
+        Featuring the ECMWF AIFS ENS CRPS data-driven model. Find more information in <https://huggingface.co/ecmwf/aifs-ens-1.0>
+
+        Requirements
+        ------------
+
+        This ansible role depends on ewc-ansible-role-conda and needs to be applied on a GPU-powered instance.
+
+        Role Variables
+        --------------
+
+        - `aifs_ens_crps_env_wipe`: Boolean to decide whether to wipe the environment if exists prior to a reinstallation. Default: no
+        - `aifs_ens_crps_env_name`: Name of the environment containing the ECMWF toolbox. Default: aifs-ens-crps
+        - `aifs_ens_crps_create_ipykernel`: Boolean to create a system-wide kernel available. Default: yes
+        - `conda_prefix`: Prefix where conda is installed. Default: `/opt/conda`
+        - `conda_user`: User owning the conda installation. Default: `root`
+        - `conda_prefix`: Prefix where conda is installed. Default: `/opt/conda`
+        - `conda_user`: User owning the conda installation. Default: `root`
+
+        Example Playbook
+        ----------------
+
+            - hosts: all
+              roles:
+                -  ewc-ansible-role-aifs-ens-crps
+
+        License
+        -------
+
+        Apache 2.0.
+
+        Author Information
+        ------------------
+
+        ECMWF for the European Weather Cloud
+        
+        <img src="https://climate.copernicus.eu/sites/default/files/inline-images/ECMWF.png"  width="120px" height="120px"> 
+        
+        ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
+
+      ewccli:
+        pathToMainFile: playbooks/aifs-ens-crps/aifs-ens-crps.yml
+      home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
+      sources:
+        - https://github.com/ewcloud/ewc-ecmwf-ai-stacks.git
+      maintainers:
+        - name: EWC Team
+          email: support@ewcloud.int
+          url: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
+      annotations:
+        technology: "Ansible Playbook"
+        category: "Machine Learning & AI, GPU-accelerated"
+        supportLevel: "EWC"
+        licenseType: "Apache License 2.0"
+        others: "Deployable,EWCCLI-compatible"
+      displayName: ECMWF AIFS ENS CRPS
+      summary: It features the ECMWF AIFS ENS CRPS data-driven model
+      license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
+      published: true
+
     ecmwf-anemoi:
       name: "ecmwf-anemoi"
-      version: "1.0.0"
+      version: "1.0.1"
       ewccli:
         pathToMainFile: anemoi.yml
       description: |
@@ -1963,11 +2028,11 @@ spec:
       displayName: JupyterHub Flavour
       summary: It installs and run jupyterhub on your instance, offering a convenient way to access it through the web.
       license: https://github.com/ewcloud/ewc-flavours/blob/2.0.0/LICENSE
-      published: false
+      published: true
 
     ml-basic:
       name: "ml-basic"
-      version: "1.0.0"
+      version: "1.0.1"
       ewccli:
         pathToMainFile: ml-basic.yml
       description: |
@@ -2024,7 +2089,7 @@ spec:
       displayName: ML Basic
       summary: It features an environment with the main machine learning packages like scikit-learn or torch.
       license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
-      published: false
+      published: true
 
     nwcsaf-datacube-xarray:
       name: "nwcsaf-datacube-xarray"
