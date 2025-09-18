@@ -18,49 +18,25 @@ ecmwf-data-flavour:
     licenseType: "Apache License 2.0"
     others: "Deployable,EWCCLI-compatible"
   description: |
-    Includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
-    
-    Getting started
-    ---------------
-    
-    * Clone or download the code from the source repository.
-    * Install ansible and other dependencies. You may want to do it in its own virtual environment (`pip install -r requirements.txt`)
-    * Fetch the external requirements
+    Includes the basic ECMWF software stack, with MARS client and an environment with [ecCodes](https://github.com/ecmwf/eccodes), [Metview](https://metview.readthedocs.io/en/latest/index.html), [Earthkit](https://github.com/ecmwf/earthkit) and [Aviso](https://pyaviso.readthedocs.io/en/latest/).
+
+    ## Usage
+    Example usage:
+
       ```bash
-      $ ansible-galaxy role install -r requirements.yml roles/
-      ```
-    
-    * Define your inventory in `inventory`
-    * Run the apropriate playbook 
-    
-      ```bash
-      $ ansible-playbook -i inventory ecmwf-data-flavour.yml
+      ansible-playbook -i inventory ecmwf-data-flavour.yml
       ```
 
-    You may use the following ansible variables to customise this playbook:
-    
-    | Variable | Description | Type | Default | Required |
-    |------|-------------|------|---------|----------|
-    | reboot_if_required | Reboot the instance if required after an update. | `boolean`| `true` | no |
-    | ecmwf_toolbox_env_wipe | Decide whether to wipe the environment if exists prior to a reinstallation. | `boolean` | `no` | no |
-    | ecmwf_toolbox_env_wipe | Name of the environment containing the ECMWF toolbox. | `string` | `ecmwf-toolbox` | no |
-    | ecmwf_toolbox_create_ipykernel | Create a system-wide kernel available. | `boolean` | yes | no |
-    | conda_prefix | Prefix where conda is installed. | `string` | `/opt/conda` | no |
-    | conda_user | User owning the conda installation. | `string` | `root` | no |
-  
-    Example usage:
-  
-    ```bash
-    ansible-playbook -i inventory ecmwf-data-flavour.yml
-    ```
-    
-    Author
-    ------------------
-    ECMWF for the European Weather Cloud
-    
-    <img src="https://climate.copernicus.eu/sites/default/files/inline-images/ECMWF.png"  width="120px" height="120px"> 
-    
-    ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
+    ## Inputs
+    You may use the following ansible variables to customize this playbook:
+
+    - `reboot_if_required`: Boolean to reboot the instance if required after an update. Default: `true`
+    - `ecmwf_toolbox_env_wipe`: Boolean to decide whether to wipe the environment if exists prior to a reinstallation. Default: `false`
+    - `ecmwf_toolbox_env_name`: Name of the environment containing the ECMWF toolbox. Default: `ecmwf-toolbox`
+    - `ecmwf_toolbox_create_ipykernel`: Boolean to create a system-wide kernel available. Default: `true`
+    - `conda_prefix`: Prefix where conda is installed. Default: `/opt/conda`
+    - `conda_user`: User owning the conda installation. Default: `root`
+
   displayName: ECMWF Data Flavour
   ewccli:
     inputs:
@@ -95,13 +71,13 @@ ecmwf-data-flavour:
   license: https://github.com/ewcloud/ewc-flavours/blob/2.0.0/LICENSE
   maintainers:
     - name: EWC Team
-      email: support@ewcloud.int
+      email: support@europeanweather.cloud
       url: https://github.com/ewcloud/ewc-flavours/issues
   name: "ecmwf-data-flavour"
   published: true
   sources:
     - https://github.com/ewcloud/ewc-flavours.git
-  summary: It includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
+  summary: Includes the basic ECMWF software stack, with MARS client and an environment with ecCodes, Metview, Earthkit and Aviso.
   version: "2.0.0"
 ```
 
