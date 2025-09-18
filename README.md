@@ -2,13 +2,9 @@
 This repository hosts the official catalog of items offered in the [EWC Community Hub](https://europeanweather.cloud/community-hub).
 
 ## Item's Metadata
->⛔ The attribute `name` within each item entry must always match the unique key under which the totality of the item's metadata is defined.
-
->⚠️  At least the `maintainers[*].email` or the `maintainers[*].url` property value should always be set.
-These is to ensure end-users can submit inquiries or receive support, in accordance with the support level offered by Item owners.
-
 Below we show an excerpt from [items.yaml](items.yaml), to exemplify the metadata of an onboarded item.
-For more details on required and/or optional metadata (i.e. inputs for `ewccli` compatibility), please refer to the items' metadata [schema definition](./schemas/items/v1alpha1.json).
+For more details on required attributes, as well as optional ones (such as inputs specification for `ewccli` compatibility),
+please refer to the items' metadata [schema definition](./schemas/items/v1alpha1.json).
 ```yaml
 ecmwf-data-flavour:
   annotations:
@@ -80,6 +76,11 @@ ecmwf-data-flavour:
   summary: Includes the basic ECMWF software stack, with MARS client and an environment with ecCodes, Metview, Earthkit and Aviso.
   version: "2.0.0"
 ```
+>⛔ The attribute `name` within each item entry must always match the key under which the item's metadata is defined, to 
+enforce uniqueness of all entries.
+
+>⚠️ At least one of the `maintainers[*].email` or the `maintainers[*].url` attributes should be set.
+These is to ensure end-users can submit inquiries or receive support, in accordance with the support level offered by Item owners.
 
 ## Schema Validation
 > 💡 To learn more about how you can onboard your item into the catalog, please check the [official EWC documentation](https://confluence.ecmwf.int/display/EWCLOUDKB/Contributing+a+new+Item+to+the+EWC+Community+Hub).
