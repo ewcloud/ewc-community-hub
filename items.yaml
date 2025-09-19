@@ -110,20 +110,6 @@ spec:
         their deletion via Morpheus UI, to ensure a clean and healthy internal DNS
         table.
 
-        ## Copyright and License
-        Copyright © EUMETSAT 2025.
-
-        The provided code and instructions are licensed under the [MIT license](./LICENSE).
-        They are intended to automate the setup of an environment that includes 
-        third-party software components.
-        The usage and distribution terms of the resulting environment are 
-        subject to the individual licenses of those third-party libraries.
-
-        Users are responsible for reviewing and complying with the licenses of
-        all third-party components included in the environment.
-
-        Contact [EUMETSAT](http://www.eumetsat.int) for details on the usage and distribution terms.
-
         ## Prerequisites
         >💡 Versions listed correspond to minimal prerequisites.
 
@@ -250,11 +236,6 @@ spec:
         |------|---------|-------|------|
         | ewc-ansible-role-ipa-client-enroll | 1.1 | MIT | https://github.com/ewcloud/ewc-ansible-role-ipa-client-enroll |
         | ewc-ansible-role-ipa-client-disenroll | 1.0 | MIT | https://github.com/ewcloud/ewc-ansible-role-ipa-client-disenroll  |
-
-        ## Authors
-
-        [European Weather Cloud](http://support.europeanweather.cloud/)
-        <[support@europeanweather.cloud](mailto:support@europeanweather.cloud)>
 
       home: https://github.com/ewcloud/ewc-ansible-playbook-ipa-enroll-automation-via-morpheus/tree/1.0.0
       sources:
