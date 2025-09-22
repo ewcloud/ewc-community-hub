@@ -1212,9 +1212,6 @@ spec:
         pathToRequirementsFile: playbooks/ipa-client-enroll-flavour/requirements.yml
         pathToMainFile: playbooks/ipa-client-enroll-flavour/ipa-client-enroll-flavour.yml
         inputs:
-          - name: ipa_client_hostname
-            description: "hostname of the target vm where the IPA client will be installed. Example: ipa-client-1"
-            type: str
           - name: ipa_domain
             description: "domain name managed by the IPA server. Example: eumetsat.sandbox.ewc"
             type: str
@@ -2498,7 +2495,7 @@ spec:
         pathToRequirementsFile: playbooks/remote-desktop-flavour/requirements.yml
         pathToMainFile: playbooks/remote-desktop-flavour/remote-desktop-flavour.yml
         inputs:
-        - name: whitelisted_ip_ranges
+        - name: fail2ban_whitelisted_ip_ranges
           description: "IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: ['10.0.0.0/24','192.168.1.0/24']"
           type: List[str]
           default: None
@@ -2831,7 +2828,7 @@ spec:
         pathToRequirementsFile: playbooks/ssh-bastion-flavour/requirements.yml
         pathToMainFile: playbooks/ssh-bastion-flavour/ssh-bastion-flavour.yml
         inputs:
-          - name: whitelisted_ip_ranges
+          - name: fail2ban_whitelisted_ip_ranges
             description: "IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: ['10.0.0.0/24','192.168.1.0/24']"
             type: List[str]
             default: None
