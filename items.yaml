@@ -1196,7 +1196,7 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Ansible Playbook,Terraform Module"
-        category: "Remote Access & Desktop,Compute"
+        category: "Remote Access & Desktop,Security,Identity & Access Management,Compute"
         others: "Deployable"
         supportLevel: "EWC"
         licenseType: "MIT License"
