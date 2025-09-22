@@ -1015,7 +1015,7 @@ spec:
       published: true
 
     default-stack-provisioning:
-      name: " default-stack-provisioning"
+      name: "default-stack-provisioning"
       version: "1.3.0"
       description: |
         >✅ This template can be safely applied from any local work environment, even running outside an EWC tenancy's private network.
