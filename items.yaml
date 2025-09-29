@@ -766,9 +766,9 @@ spec:
             type: str
         pathToMainFile: playbooks/ecmwf-data-flavour/ecmwf-data-flavour.yml
         pathToRequirementsFile: requirements.yml
-      home: https://github.com/ewcloud/ewc-flavours/tree/2.0.0/playbooks/ecmwf-data-flavour
+      home: https://github.com/ewcloud/ewc-flavours/tree/2.0.1/playbooks/ecmwf-data-flavour
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
-      license: https://github.com/ewcloud/ewc-flavours/blob/2.0.0/LICENSE
+      license: https://github.com/ewcloud/ewc-flavours/blob/2.0.1/LICENSE
       maintainers:
         - name: EWC Team
           email: support@europeanweather.cloud
@@ -777,8 +777,8 @@ spec:
       published: true
       sources:
         - https://github.com/ewcloud/ewc-flavours.git
-      summary: Includes the basic ECMWF software stack, with MARS client and an environment with ecCodes, Metview, Earthkit and Aviso.
-      version: "2.0.0"
+      summary: It includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
+      version: "2.0.1"
  
     eumetsat-data-tailor-flavour:
       name: "eumetsat-data-tailor-flavour"
@@ -1945,7 +1945,7 @@ spec:
 
     jupyterhub-flavour:
       name: "jupyterhub-flavour"
-      version: "2.0.0"
+      version: "2.0.1"
       ewccli:
         pathToMainFile: playbooks/jupyterhub-flavour/jupyterhub-flavour.yml
         pathToRequirementsFile: requirements.yml
@@ -1991,7 +1991,7 @@ spec:
         See also [here](https://jupyterhub.readthedocs.io/en/5.2.1/tutorial/getting-started/authenticators-users-basics.html)
 
         Therefore in order to login you need to use username/password from a local user existing in the machine. 
-      home: https://github.com/ewcloud/ewc-flavours/blob/2.0.0/playbooks/jupyterhub-flavour
+      home: https://github.com/ewcloud/ewc-flavours/blob/2.0.1/playbooks/jupyterhub-flavour
       sources:
         - https://github.com/ewcloud/ewc-flavours.git
       maintainers:
@@ -2007,7 +2007,7 @@ spec:
         others: "Deployable,EWCCLI-compatible"
       displayName: JupyterHub Flavour
       summary: It installs and run jupyterhub on your instance, offering a convenient way to access it through the web.
-      license: https://github.com/ewcloud/ewc-flavours/blob/2.0.0/LICENSE
+      license: https://github.com/ewcloud/ewc-flavours/blob/2.0.1/LICENSE
       published: true
 
     ml-basic:
