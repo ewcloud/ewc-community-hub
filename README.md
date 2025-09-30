@@ -83,7 +83,7 @@ enforce uniqueness of all entries.
 These is to ensure end-users can submit inquiries or receive support, in accordance with the support level offered by Item owners.
 
 ## Schema Validation
-> 💡 To learn more about how you can onboard your item into the catalog, please check the [official EWC documentation](https://confluence.ecmwf.int/display/EWCLOUDKB/Contributing+a+new+Item+to+the+EWC+Community+Hub).
+> 💡 To learn more about how you can onboard your item into the catalog, please check the [official EWC documentation](https://confluence.ecmwf.int/x/wyLOIQ).
 
 This repository relies on [GitHub](./.github/workflows/validate.yml) actions to automate the process of catalog/item metadata validation.
 The pipelines are configured to run upon pull request opening, subject to approval of the maintainers.
