@@ -1820,7 +1820,7 @@ spec:
             description: "OpenStack security group containing all firewall rules required by the IPA server/client communication. Example: ipa"
             type: str
         defaultSecurityGroups:
-          - ldap
+          - ipa
       description: |
         This Ansible Playbook configures an existing virtual machine running
         within the [European Weather Cloud (EWC)](https://europeanweather.cloud/)
