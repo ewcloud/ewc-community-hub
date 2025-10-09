@@ -65,107 +65,187 @@ spec:
 
     ewc-ansible-playbook-ipa-enroll-automation-via-morpheus:
       name: "ewc-ansible-playbook-ipa-enroll-automation-via-morpheus:"
-      version: "1.0.0"
+      version: "1.0.1"
       description: |
-        This repository contains a configuration template
+        >⚠️ In the past this functionality has been provided out-of-the-box for all 
+        EWC tenancies running on the EUMETSAT site. However, this is no longer the
+        case; after October 2025, EWC tenant admins wishing to integrate IPA enrollment
+        with Morpheus VM provisioning can use this template to enable said functionality
+        for newly onboarded tenancies, on both EUMETSAT or ECMWF sites.
+        
+        [IPA (identity, policy and audit)](https://www.freeipa.org/) is a software stack that serves both as an LDAP user
+        management system and as your internal DNS nameserver.
+        
+        [Morpheus UI](https://docs.morpheusdata.com/en/7.0.9),
+        on the other hand, is a web-based cloud orchestration tool that lets you manage
+        your EWC resources via a graphical interface. It has built-in 
+        [Automation](https://docs.morpheusdata.com/en/7.0.9/library/automation/automation.html)
+        features you may use for arranging sets of individual Tasks and accomplishing
+        some useful behavior, when managing with cloud resources via Morpheus.
+        
+        This configuration template
         (i.e. an [Ansible Playbook](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks.html))
-        to customize your environment in the
-        [European Weather Cloud (EWC)](https://europeanweather.cloud/).
-        Applying this template will trigger the configuration of [Morpheus](https://morpheusdata.com/)
-        entities, enabling you to edit/automate management of EWC computer resources'
-        life cycle via a web-based graphical user interphase (GUI).
-
-        Assuming an [IPA server](https://www.freeipa.org/) is already provisioned
-        and configured within the EWC environment, this template simplifies the remaining 
-        configuration to a one-time setup for Morpheus (i.e. Morpheus 
-        Integration, Tasks, Workflow and Network Domain) such that:
-        * New virtual machines created via the Morpheus GUI, within
-        a user-defined Morpheus Network Domain, will enroll onto a the IPA server's
-        provided DNS and LDAP services.
-        * Enrolled virtual machines will disenroll from the IPA server upon
-        their deletion via Morpheus GUI
-
+        customizes your environment in the
+        [European Weather Cloud (EWC)](https://europeanweather.cloud/), such that it
+        crates a Morpheus Automation to simplify the administration of a fleet of IPA-aware EWC compute instances.
+        
+        ## Functionality
+        > 💡 To provision and configure a VM as an IPA server from scratch and with
+        fully-managed state (i.e. safe for resizing or upgrading), 
+        you may deploy the [IPA Server Provisioning](https://europeanweather.cloud/community-hub/ipa-server-provisioning)
+        Community Hub Item.
+        
+        > 💡 To configure an existing VM as an IPA server,
+        you can deploy the [IPA Server Flavour](https://europeanweather.cloud/community-hub/ipa-server-flavour)
+        Community Hub Item.
+        
+        Once an IPA server is successfully provisioned
+        and configured within your EWC environment, this template reduces the
+        Morpheus configuration required to achieve the following behavior:
+        * New VMs created via the Morpheus UI, within
+        a user-defined Morpheus Network Domain, will enroll onto an IPA server's
+        provided DNS and LDAP services, enabling users to log into any VM with 
+        the same username and password.
+        
+        ![Automatic VM Enroll](https://raw.githubusercontent.com/ewcloud/ewc-ansible-playbook-ipa-enroll-automation-via-morpheus/refs/heads/main/docs/images/outcome_part1.webp)
+        
+        * Users may access any newly enrolled VMs with their existing LDAP credentials.
+        
+        ![Access via LDAP Credentials](https://raw.githubusercontent.com/ewcloud/ewc-ansible-playbook-ipa-enroll-automation-via-morpheus/refs/heads/main/docs/images/outcome_part2.webp)
+        
+        * Enrolled VMs will disenroll from the IPA server upon
+        their deletion via Morpheus UI, to ensure a clean and healthy internal DNS
+        table.
+        
+        ## Prerequisites
+        
+        To successfully run this playbook, the following packages should be available in your work environment:
+        
+        | Name | Version | License | Home URL |
+        |------|---------|----- |-----|
+        | git | >= 2.0 | GPLv2  | https://git-scm.com/downloads |
+        | python | >= 3.9   | PSF | https://www.python.org/downloads  |
+        | ansible | >= 2.15 |  GPLv3+ | https://pypi.org/project/ansible  |
+        | jmespath| >= 1.0 | MIT | https://pypi.org/project/jmespath  |
+        
         ## Usage
-
+        
         ### 1. Configure and apply the template
-
+        
+        ![Template Edition and Running](https://raw.githubusercontent.com/ewcloud/ewc-ansible-playbook-ipa-enroll-automation-via-morpheus/refs/heads/main/docs/images/item_run_part1.webp)
+        
         #### 1.1. Interactive Mode
-
+        
         By running the following command, you can trigger an interactive session that
         prompts you for the necessary user inputs, and then applies changes to your
         target EWC environment:
         ```bash
         ansible-playbook ipa-enroll-automation.yml
         ```
-
+        
         #### 1.2. Non-Interactive Mode
-
+        
         >💡 To learn more about defining variables at runtime, checkout the
         [official Ansible documentation](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html).
-
-        Although not recommended, you can also run in non-interactive mode by passing the
-        `--extra-vars` o `-e` flag, followed by a `"<input name>=<input value>"` key-value pair.
-        The flag and its follow up key-value pair must be set for each and every input ([see inputs section below](#inputs)):
+        
+        You can also run in non-interactive mode by passing the `--extra-vars` or `-e` flag, followed by a map of key-value pairs; one for each and every available input (see [inputs](#inputs) section below). For example:
         ```bash
-        ansible-playbook  \
-          -e "morpheus_api_token_override=abcdef12-34567-890a-bcde-f1234567890" \
-          -e "morpheus_api_url_override=https://hcmp.icsi.eumetsat.int" \
-          # ...
-          # all remaining input overrides
-          # ...
-          -e "morpheus_cypher_ipa_admin_password_override=my-secret-password" \
+        ansible-playbook \
+          -e '{ "morpheus_api_token":"<api-token>",
+                "morpheus_api_url":"https://morpheus.ecmwf.int",
+                "morpheus_tenant_name":"eumetsat-sandbox-ewc",
+                "update_morpheus_cypher":"yes",
+                "morpheus_cypher_ipa_domain":"eumetsat.sandbox.ewc",
+                "morpheus_cypher_ipa_server_hostname":"ipa-server-1",
+                "morpheus_cypher_ipa_admin_username":"ipaadmin",
+                "morpheus_cypher_ipa_admin_password":"my-secret-password"
+          }' \
           ipa-enroll-automation.yml
-          ```
+        ```
+        
         ### 2. Manually link the Morpheus Workflow to the user-defined Morpheus Domain
-        > ⚠️ As of 17.07.2025, technical limitations on the side of the
+        >⚠️ As of 17.07.2025, technical limitations on the side of the
         [Morpheus API](https://apidocs.morpheusdata.com/v7.0.9/reference/createnetworkdomain)
         lead to unreliable configuration of links between workflows and domains.
-        As a workaround, manual action over the Morpheus GUI is required.
-
-        Finalize the configuration over the Morpheus GUI:
-
-        1. Login to the Morpheus GUI of your EWC environment
+        As a workaround, manual action over the Morpheus UI is required.
+        
+        > ⛔ This step must be performed every time you update the template input values and
+        apply them.
+        
+        ![Morpheus Domain and Workflow linking](https://raw.githubusercontent.com/ewcloud/ewc-ansible-playbook-ipa-enroll-automation-via-morpheus/refs/heads/main/docs/images/item_run_part2.webp)
+        
+        Finalize the configuration over the Morpheus UI:
+        
+        1. Login to the Morpheus UI of your EWC environment
         2. From the top navigation bar, go to `Infrastructure > Network`.
         3. Select `Domains` from the sub navigation bar.
         4. A table will be displayed in the lower portion of the view port, and
         containing details of available domains in your EWC environment. Click on the
         edit icon (`🖉`) on the same row where your defined domain is listed.
         5. Within the pop-up edit form, click on the `Select Workflow` drop-down
-        menu and select `ipa-enroll-automation`. Click on `SAVE CHANGES` at the
+        menu and select `IPA Client Enroll Automation Via Morpheus`.
+        6. Click on `SAVE CHANGES` at the
         bottom of the form to finalize the setup.
-
+        
+        ### 3. (Optional) Further integrate your IPA Server with Morpheus Monitoring
+        
+        ![Morpheus Agent Installation](https://raw.githubusercontent.com/ewcloud/ewc-ansible-playbook-ipa-enroll-automation-via-morpheus/refs/heads/main/docs/images/openstack_cli_intro_webminar.jpg)
+        
+        VMs provisioned via Morpheus UI, such as the ones you may have created 
+        before applying this template or those you'll create afterwards (which
+        will automatically become part of your IPA-managed fleet), are equipped with a 
+        [Morpheus Agent](https://docs.morpheusdata.com/en/7.0.9/getting_started/functionality/agent/overview.html),
+        a daemon that provide statistics for the guest operating system and resource utilization, 
+        to enable monitoring and log aggregations.
+        
+        If you are fond of such Morpheus monitoring functionality,
+        watch [minutes
+        40:22-44:10 of this EWC webminar](https://youtu.be/MO3pYzSDQSM?feature=shared&t=2422)
+        to learn about how you can turn instances provisioned via Community Hub Item templating,
+        or alternative deployment methods, into Morpheus-monitored VMs. 
+        
         ## Inputs
-        > ⚠️ If set, the `update_morpheus_cypher` flag will trigger the creation/edition of secrets within Morpheus Cypher.
+        >⚠️ If set, the `update_morpheus_cypher` flag will trigger the creation/edition of secrets within Morpheus Cypher.
         To avoid unexpected behavior during IPA clients enrollment, ensure the values of all input secrets (i.e. those with
         `morpheus_cypher_` prefix) are set and match to the values used during the initial IPA server configuration in your
-        EWC environment.
-
+         EWC environment.
+        
         | Name | Description | Type | Default | Required |
         |------|-------------|------|---------|----------|
-        | morpheus_api_token_override | access token of the Morpheus API | `string` | n/a | yes |
-        | morpheus_api_url_override| Morpheus API URL. Examples: `https://morpheus.ecmwf.int`, `https://hcmp.icsi.eumetsat.int` | `string` | n/a | yes |
-        | morpheus_tenant_name_override| Morpheus tenant name.  Example: `<memberstate>-<organization>-<projectname>` | `string` | n/a | yes |
-        | update_morpheus_cypher_override | flag to update required secrets in Morpheus Cypher. Only `yes` will be accepted to approve | `string` | n/a | yes |
-        | morpheus_cypher_ipa_domain_override | name of domain managed by the IPA server. Must match with the value set used during used during configuration of a pre-existing IPA server within the EWC environment. Example: `<memberstate>-<organization>-<projectname>.ewc` | `string` | n/a | yes |
-        | morpheus_cypher_ipa_server_hostname_override | hostname of the IPA server. Must match with the value set used during used during configuration of a pre-existing IPA server within the EWC environment. Example: `ipa-server` | `string` | n/a | no |
-        | morpheus_cypher_ipa_admin_username_override | username of IPA Directory Manager/Admin. Must match with the value set used during used during configuration of a pre-existing IPA server within the EWC environment. Example: `ipa-admin` | `string` | n/a | no |
-        | morpheus_cypher_ipa_admin_password_override | password of IPA Directory Manager/Admin. Must match with the value set used during used during configuration of a pre-existing IPA server within the EWC environment | `string` | n/a | no |
-
+        | morpheus_api_token | access token of the Morpheus API | `string` | n/a | yes |
+        | morpheus_api_url| Morpheus API URL. Example: `https://morpheus.ecmwf.int` | `string` | n/a | yes |
+        | morpheus_tenant_name | Morpheus tenant name.  Example: `eumetsat-sandbox-ewc` | `string` | n/a | yes |
+        | update_morpheus_cypher | flag to update IPA administration data kept in Morpheus Cypher. Only `yes` will be accepted to approve | `string` | n/a | yes |
+        | morpheus_cypher_ipa_domain | name of domain managed by the IPA server.  Will be ignored if `update_morpheus_cypher!=yes`. If set, should match with the value set used during configuration of an existing IPA server within the EWC environment. Example: `eumetsat.sandbox.ewc` | `string` | n/a | yes |
+        | morpheus_cypher_ipa_server_hostname | hostname of the IPA server. Will be ignored if `update_morpheus_cypher!=yes`. If set, should match the value used during configuration of an existing IPA server within the EWC environment. Example: `ipa-server-1` | `string` | n/a | no |
+        | morpheus_cypher_ipa_admin_username | username of the administrator account from the IPA server. Will be ignored if `update_morpheus_cypher!=yes`. If set, should match the value used during configuration of an existing IPA server within the EWC environment. Example: `ipaadmin` | `string` | n/a | no |
+        | morpheus_cypher_ipa_admin_password | password of the administrator account from the IPA server. Will be ignored if `update_morpheus_cypher!=yes`. If set, should match the value set used during configuration of an existing IPA server within the EWC environment | `string` | n/a | no |
+        
         ## Outputs
-
+        
         | Name | Type | Description |
         |------|---------|---------|
-        | `ewc-flavours` | Morpheus Integration | Links to EWC Community Hub's GitHub repository where Ansible Playbooks for IPA client enrollment/disenrollment are published |
-        | `ipa-client-enroll` | Morpheus Task | Executes an Ansible Playbook to carry out IPA client enrollment |
-        | `ipa-client-disenroll` | Morpheus Task |  Executes an Ansible Playbook to perform IPA client disenrollment |
-        | `ipa-enroll-automation` | Morpheus Workflow | Orchestrates tasks to run specifically during provision and teardown stages of a virtual machine's life cycle  |
+        | `IPA Client Enroll Automation Via Morpheus ` | Morpheus Integration | Links to EWC Community Hub's GitHub repository where Ansible Playbooks for IPA client enrollment/disenrollment are published |
+        | `Enroll IPA Client` | Morpheus Task | Executes an Ansible Playbook to carry out IPA client enrollment |
+        | `Disenroll IPA Client` | Morpheus Task |  Executes an Ansible Playbook to perform IPA client disenrollment |
+        | `IPA Client Enroll Automation Via Morpheus` | Morpheus Workflow | Orchestrates tasks to run specifically during provision and teardown stages of a virtual machine's life cycle  |
         | `<user defined>` | Morpheus Domain | Encapsulates virtual machines and automates workflow triggering |
         | `secret/ipa_domain` | Morpheus Cypher Secret | Read during enrollment/disenrollment Ansible Playbooks execution |
         | `secret/ipa_server_hostname` | Morpheus Cypher Secret | Read during enrollment/disenrollment Ansible Playbooks execution |
         | `secret/ipa_admin_username` | Morpheus Cypher Secret | Read during enrollment/disenrollment Ansible Playbooks execution |
         | `secret/ipa_admin_password` | Morpheus Cypher Secret | Read during enrollment/disenrollment Ansible Playbooks execution |
+        
+        ## Dependencies
+        > ⚠️ Only Ubuntu 22.04 and RockyLinux 8.10 VM images are currently supported.
+        This is due to constrains imposed by the required
+        ewc-ansible-role-ipa-client-enroll Ansible Role.
+        
+        | Name | Version | License | Home URL |
+        |------|---------|-------|------|
+        | ewc-ansible-role-ipa-client-enroll | 1.1 | MIT | https://github.com/ewcloud/ewc-ansible-role-ipa-client-enroll |
+        | ewc-ansible-role-ipa-client-disenroll | 1.0 | MIT | https://github.com/ewcloud/ewc-ansible-role-ipa-client-disenroll  |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-ipa-enroll-automation-via-morpheus/tree/1.0.0
+      home: https://github.com/ewcloud/ewc-ansible-playbook-ipa-enroll-automation-via-morpheus/tree/1.0.1
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-ipa-enroll-automation-via-morpheus.git
       maintainers:
@@ -179,10 +259,10 @@ spec:
         others: "Deployable"
         supportLevel: "EWC"
         licenseType: "MIT License"
-      displayName: IPA Enroll/Disenroll Automation Configuration
+      displayName: IPA Client Enroll Automation Configuration
       summary: Configures Morpheus (i.e. EWC's graphical control plane) to automate the enrollment/disenrollment of VMs, provisioned via the UI, into a fleet of IPA-aware instances.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-ipa-enroll-automation-via-morpheus/blob/1.0.0/LICENSE
-      published: false
+      license: https://github.com/ewcloud/ewc-ansible-playbook-ipa-enroll-automation-via-morpheus/blob/1.0.1/LICENSE
+      published: true
 
     ewc-tf-module-openstack-compute:
       name: "ewc-tf-module-openstack-compute"
@@ -338,7 +418,7 @@ spec:
 
     ewc-tf-module-openstack-security-group:
       name: "ewc-tf-module-openstack-security-group"
-      version: "1.0.0"
+      version: "1.0.1"
       description: |
         > 💡 The module supports complex rule sets, such as those required to create a subnet security group for IPA services (i.e. Kerberos, LDAP and DNS).
 
@@ -363,7 +443,7 @@ spec:
               protocol         = "tcp"
               port_range_min   = 80
               port_range_max   = 80
-              remote_ip_prefix = "0.0.0.0/0"
+              remote_ip_prefix = "10.0.0.0/0"
             },
             {
               direction        = "ingress"
@@ -371,7 +451,7 @@ spec:
               protocol         = "udp"
               port_range_min   = 123
               port_range_max   = 123
-              remote_ip_prefix = "0.0.0.0/0"
+              remote_ip_prefix = "10.0.0.0/0"
             },
             {
               direction        = "ingress"
@@ -379,7 +459,7 @@ spec:
               protocol         = "tcp"
               port_range_min   = 88
               port_range_max   = 88
-              remote_ip_prefix = "0.0.0.0/0"
+              remote_ip_prefix = "10.0.0.0/0"
             },
             {
               direction        = "ingress"
@@ -387,7 +467,7 @@ spec:
               protocol         = "udp"
               port_range_min   = 88
               port_range_max   = 88
-              remote_ip_prefix = "0.0.0.0/0"
+              remote_ip_prefix = "10.0.0.0/0"
             },
             {
               direction        = "ingress"
@@ -395,7 +475,7 @@ spec:
               protocol         = "tcp"
               port_range_min   = 53
               port_range_max   = 53
-              remote_ip_prefix = "0.0.0.0/0"
+              remote_ip_prefix = "10.0.0.0/0"
             },
             {
               direction        = "ingress"
@@ -403,7 +483,7 @@ spec:
               protocol         = "udp"
               port_range_min   = 53
               port_range_max   = 53
-              remote_ip_prefix = "0.0.0.0/0"
+              remote_ip_prefix = "10.0.0.0/0"
             },
             {
               direction        = "ingress"
@@ -411,7 +491,7 @@ spec:
               protocol         = "tcp"
               port_range_min   = 389
               port_range_max   = 389
-              remote_ip_prefix = "0.0.0.0/0"
+              remote_ip_prefix = "10.0.0.0/0"
             },
             {
               direction        = "ingress"
@@ -427,7 +507,7 @@ spec:
               protocol         = "tcp"
               port_range_min   = 636
               port_range_max   = 636
-              remote_ip_prefix = "0.0.0.0/0"
+              remote_ip_prefix = "10.0.0.0/0"
             },
             {
               direction        = "ingress"
@@ -435,7 +515,7 @@ spec:
               protocol         = "tcp"
               port_range_min   = 464
               port_range_max   = 464
-              remote_ip_prefix = "0.0.0.0/0"
+              remote_ip_prefix = "10.0.0.0/0"
             },
             {
               direction        = "ingress"
@@ -443,7 +523,7 @@ spec:
               protocol         = "udp"
               port_range_min   = 464
               port_range_max   = 464
-              remote_ip_prefix = "0.0.0.0/0"
+              remote_ip_prefix = "10.0.0.0/0"
             },
             {
               direction        = "ingress"
@@ -451,7 +531,7 @@ spec:
               protocol         = "tcp"
               port_range_min   = 443
               port_range_max   = 443
-              remote_ip_prefix = "0.0.0.0/0"
+              remote_ip_prefix = "10.0.0.0/0"
             }
           ]
 
@@ -469,7 +549,7 @@ spec:
         |------|-------------|------|---------|:--------:|
         | `security_group_name` | Name of the security group. Example: `ipa` | `string` | n/a | yes |
         | `security_group_description` | Description of the security group | `string` | n/a | no |
-        | `security_group_rules` | List of security group rules | `list(object({direction = string, ether_type = string, protocol = string, port_range_min = number, port_range_max = number, remote_ip_prefix = string}))` | `[]` | no |
+        | `security_group_rules` | List of security group rules | `list(object({direction = string, ether_type = string, protocol = string, port_range_min = number, port_range_max = number, remote_ip_prefix = string}))` | n/a | yes |
         | `tags` | Map of tags to assign to the security group | `map(string)` | `{}` | no |
 
         ### Security Group Rules Input Structure
@@ -481,7 +561,7 @@ spec:
         - `protocol`: The protocol (e.g., `tcp`, `udp`, `icmp`, or `null` for any).
         - `port_range_min`: The minimum port number (1-65535, or `null` for protocols like `icmp`).
         - `port_range_max`: The maximum port number (1-65535, or `null` for protocols like `icmp`).
-        - `remote_ip_prefix`: The remote IP prefix in CIDR notation (e.g., `0.0.0.0/0`).
+        - `remote_ip_prefix`: The remote IP prefix in CIDR notation (e.g., `10.0.0.0/0`).
 
         ## SW Bill of Materials (SBoM)
         Third-party components used in the working environment.
@@ -498,8 +578,8 @@ spec:
         | `security_group_id` | ID of the created security group |
         | `security_group_name` | Name of the created security group |
         | `security_group_rules` | List of created security group rule IDs |
- 
-      home: https://github.com/ewcloud/ewc-tf-module-openstack-security-group/tree/1.0.0
+
+      home: https://github.com/ewcloud/ewc-tf-module-openstack-security-group/tree/1.0.1
       sources:
         - https://github.com/ewcloud/ewc-tf-module-openstack-security-group.git
       maintainers:
@@ -515,7 +595,7 @@ spec:
         licenseType: "MIT License"
       displayName: OpenStack Security Group
       summary: Automates the creation of EWC security groups and their rules, or update and teardown of existing ones, via Terraform.
-      license: https://github.com/ewcloud/ewc-tf-module-openstack-security-group/blob/1.0.0/LICENSE
+      license: https://github.com/ewcloud/ewc-tf-module-openstack-security-group/blob/1.0.1/LICENSE
       published: true
 
     ecmwf-aifs-single-mse:
@@ -718,49 +798,24 @@ spec:
         licenseType: "Apache License 2.0"
         others: "Deployable,EWCCLI-compatible"
       description: |
-        Includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
-        
-        Getting started
-        ---------------
-        
-        * Clone or download the code from the source repository.
-        * Install ansible and other dependencies. You may want to do it in its own virtual environment (`pip install -r requirements.txt`)
-        * Fetch the external requirements
+        Includes the basic ECMWF software stack, with MARS client and an environment with [ecCodes](https://github.com/ecmwf/eccodes), [Metview](https://metview.readthedocs.io/en/latest/index.html), [Earthkit](https://github.com/ecmwf/earthkit) and [Aviso](https://pyaviso.readthedocs.io/en/latest/).
+
+        ## Usage
+        Example usage:
+
           ```bash
-          $ ansible-galaxy role install -r requirements.yml roles/
-          ```
-        
-        * Define your inventory in `inventory`
-        * Run the apropriate playbook 
-        
-          ```bash
-          $ ansible-playbook -i inventory ecmwf-data-flavour.yml
+          ansible-playbook -i inventory ecmwf-data-flavour.yml
           ```
 
-        You may use the following ansible variables to customise this playbook:
-        
-        | Variable | Description | Type | Default | Required |
-        |------|-------------|------|---------|----------|
-        | reboot_if_required | Reboot the instance if required after an update. | `boolean`| `true` | no |
-        | ecmwf_toolbox_env_wipe | Decide whether to wipe the environment if exists prior to a reinstallation. | `boolean` | `no` | no |
-        | ecmwf_toolbox_env_wipe | Name of the environment containing the ECMWF toolbox. | `string` | `ecmwf-toolbox` | no |
-        | ecmwf_toolbox_create_ipykernel | Create a system-wide kernel available. | `boolean` | yes | no |
-        | conda_prefix | Prefix where conda is installed. | `string` | `/opt/conda` | no |
-        | conda_user | User owning the conda installation. | `string` | `root` | no |
-      
-        Example usage:
-      
-        ```bash
-        ansible-playbook -i inventory ecmwf-data-flavour.yml
-        ```
-        
-        Author
-        ------------------
-        ECMWF for the European Weather Cloud
-        
-        <img src="https://climate.copernicus.eu/sites/default/files/inline-images/ECMWF.png"  width="120px" height="120px"> 
-        
-        ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
+        ## Inputs
+        You may use the following ansible variables to customize this playbook:
+
+        - `reboot_if_required`: Boolean to reboot the instance if required after an update. Default: `true`
+        - `ecmwf_toolbox_env_wipe`: Boolean to decide whether to wipe the environment if exists prior to a reinstallation. Default: `false`
+        - `ecmwf_toolbox_env_name`: Name of the environment containing the ECMWF toolbox. Default: `ecmwf-toolbox`
+        - `ecmwf_toolbox_create_ipykernel`: Boolean to create a system-wide kernel available. Default: `true`
+        - `conda_prefix`: Prefix where conda is installed. Default: `/opt/conda`
+        - `conda_user`: User owning the conda installation. Default: `root`
 
       displayName: ECMWF Data Flavour
       ewccli:
@@ -791,9 +846,9 @@ spec:
             type: str
         pathToMainFile: playbooks/ecmwf-data-flavour/ecmwf-data-flavour.yml
         pathToRequirementsFile: requirements.yml
-      home: https://github.com/ewcloud/ewc-flavours/tree/2.0.0/playbooks/ecmwf-data-flavour
+      home: https://github.com/ewcloud/ewc-flavours/tree/2.0.1/playbooks/ecmwf-data-flavour
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
-      license: https://github.com/ewcloud/ewc-flavours/blob/2.0.0/LICENSE
+      license: https://github.com/ewcloud/ewc-flavours/blob/2.0.1/LICENSE
       maintainers:
         - name: EWC Team
           email: support@europeanweather.cloud
@@ -803,7 +858,7 @@ spec:
       sources:
         - https://github.com/ewcloud/ewc-flavours.git
       summary: It includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
-      version: "2.0.0"
+      version: "2.0.1"
  
     eumetsat-data-tailor-flavour:
       name: "eumetsat-data-tailor-flavour"
@@ -1372,10 +1427,6 @@ spec:
           - name: ipa_admin_password
             description: "username of the administrator account from the IPA server. Example: ipaadmin"
             type: str
-          - name: password_allowed_ip_ranges
-            description: "IP addresses or IP ranges (in CIDR format) to be allowed for password access in SSHD configuration. When in doubt, add only IP addresses you know and trust. Example: ['10.0.0.0/24','192.168.1.0/24']"
-            type: List[str]
-            default: ['10.0.0.0/8','172.16.0.0/12','192.168.0.0/16']
       description: |
         This Ansible Playbook configures an existing virtual machine in the
         [European Weather Cloud (EWC)](https://europeanweather.cloud/) to operate as a
@@ -2354,7 +2405,7 @@ spec:
 
     jupyterhub-flavour:
       name: "jupyterhub-flavour"
-      version: "2.0.0"
+      version: "2.0.1"
       ewccli:
         pathToMainFile: playbooks/jupyterhub-flavour/jupyterhub-flavour.yml
         pathToRequirementsFile: requirements.yml
@@ -2400,7 +2451,7 @@ spec:
         See also [here](https://jupyterhub.readthedocs.io/en/5.2.1/tutorial/getting-started/authenticators-users-basics.html)
 
         Therefore in order to login you need to use username/password from a local user existing in the machine. 
-      home: https://github.com/ewcloud/ewc-flavours/blob/2.0.0/playbooks/jupyterhub-flavour
+      home: https://github.com/ewcloud/ewc-flavours/blob/2.0.1/playbooks/jupyterhub-flavour
       sources:
         - https://github.com/ewcloud/ewc-flavours.git
       maintainers:
@@ -2416,7 +2467,7 @@ spec:
         others: "Deployable,EWCCLI-compatible"
       displayName: JupyterHub Flavour
       summary: It installs and run jupyterhub on your instance, offering a convenient way to access it through the web.
-      license: https://github.com/ewcloud/ewc-flavours/blob/2.0.0/LICENSE
+      license: https://github.com/ewcloud/ewc-flavours/blob/2.0.1/LICENSE
       published: true
 
     ml-basic:
