@@ -2187,6 +2187,7 @@ spec:
         defaultSecurityGroups:
           - ssh-http-https
         externalIP: true
+        checkDNS: true
       description: |
         Installs and run JupyterHub on your instance, offering a convenient way to access it through the web.
 
