@@ -266,7 +266,7 @@ spec:
 
     ewc-tf-module-openstack-compute:
       name: "ewc-tf-module-openstack-compute"
-      version: "1.4.1"
+      version: "1.4.0"
       description: |
         This [Terraform module](https://developer.hashicorp.com/terraform/language/modules) creates and
         configures [OpenStack compute](https://docs.openstack.org/nova/latest/)
@@ -397,7 +397,7 @@ spec:
         }
         ```
 
-      home: https://github.com/ewcloud/ewc-tf-module-openstack-compute/tree/1.4.1
+      home: https://github.com/ewcloud/ewc-tf-module-openstack-compute/tree/1.4.0
       sources:
         - https://github.com/ewcloud/ewc-tf-module-openstack-compute.git
       maintainers:
@@ -413,7 +413,7 @@ spec:
         licenseType: "MIT License"
       displayName: OpenStack Compute Instance
       summary: Simplifies the creation of EWC VMs, or state update and teardown of existing ones, via Terraform.
-      license: https://github.com/ewcloud/ewc-tf-module-openstack-compute/blob/1.4.1/LICENSE
+      license: https://github.com/ewcloud/ewc-tf-module-openstack-compute/blob/1.4.0/LICENSE
       published: true
 
     ewc-tf-module-openstack-security-group:
