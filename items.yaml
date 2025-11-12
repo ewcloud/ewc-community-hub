@@ -2904,7 +2904,7 @@ spec:
       published: true
 
     pytroll:
-      name: "pytroll"
+      name: "pytroll-processing"
       version: "1.0.0"
       ewccli:
         pathToMainFile: satellite-data-processing-main.yaml
