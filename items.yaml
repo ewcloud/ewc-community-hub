@@ -6,7 +6,7 @@ spec:
       name: "ai-models"
       version: "1.0.1"
       description: |
-        Create a conda environment with the ai-models package and associated plugins to run a set of data-driven weather forecasting models such as panguweather or graphcast. 
+        Create a conda environment with the ai-models package and associated plugins to run a set of data-driven weather forecasting models such as panguweather or graphcast.
 
         Requirements
         ------------
@@ -37,9 +37,9 @@ spec:
         ------------------
 
         ECMWF for the European Weather Cloud
-        
-        <img src="https://climate.copernicus.eu/sites/default/files/inline-images/ECMWF.png"  width="120px" height="120px"> 
-        
+
+        <img src="https://climate.copernicus.eu/sites/default/files/inline-images/ECMWF.png"  width="120px" height="120px">
+
         ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
 
       ewccli:
@@ -67,7 +67,7 @@ spec:
       name: "ewc-ansible-playbook-ipa-enroll-automation-via-morpheus:"
       version: "1.1.0"
       description: |
-        >⚠️ In the past this functionality has been provided out-of-the-box for all 
+        >⚠️ In the past this functionality has been provided out-of-the-box for all
         EWC tenancies running on the EUMETSAT site. However, this is no longer the
         case; after October 2025, EWC tenant admins wishing to integrate IPA enrollment
         with Morpheus VM provisioning can use this template to enable said functionality
@@ -78,7 +78,7 @@ spec:
 
         [Morpheus UI](https://docs.morpheusdata.com/en/7.0.9),
         on the other hand, is a web-based cloud orchestration tool that lets you manage
-        your EWC resources via a graphical interface. It has built-in 
+        your EWC resources via a graphical interface. It has built-in
         [Automation](https://docs.morpheusdata.com/en/7.0.9/library/automation/automation.html)
         features you may use for arranging sets of individual Tasks and accomplishing
         some useful behavior, when managing with cloud resources via Morpheus.
@@ -91,7 +91,7 @@ spec:
 
         ## Functionality
         > 💡 To provision and configure a VM as an IPA server from scratch and with
-        fully-managed state (i.e. safe for resizing or upgrading), 
+        fully-managed state (i.e. safe for resizing or upgrading),
         you may deploy the [IPA Server Provisioning](https://europeanweather.cloud/community-hub/ipa-server-provisioning)
         Community Hub Item.
 
@@ -104,7 +104,7 @@ spec:
         Morpheus configuration required to achieve the following behavior:
         * New VMs created via the Morpheus UI, within
         a user-defined Morpheus Network Domain, will enroll onto an IPA server's
-        provided DNS and LDAP services, enabling users to log into any VM with 
+        provided DNS and LDAP services, enabling users to log into any VM with
         the same username and password.
 
         ![Automatic VM Enroll](https://raw.githubusercontent.com/ewcloud/ewc-ansible-playbook-ipa-enroll-automation-via-morpheus/refs/heads/main/docs/images/outcome_part1.webp)
@@ -120,10 +120,10 @@ spec:
         ## Prerequisites
 
         * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
-        * Install [python](https://www.python.org/downloads) (version 3.9 or higher) 
+        * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
         * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
         * Install [jmespath](https://pypi.org/project/jmespath) (version 1.0 or higher)
-        * Get an Morpheus API credentials (see [API access](https://docs.morpheusdata.com/en/7.0.9/administration/user_settings/user_settings.html#api-access) section in the official Morpheus documentation) 
+        * Get an Morpheus API credentials (see [API access](https://docs.morpheusdata.com/en/7.0.9/administration/user_settings/user_settings.html#api-access) section in the official Morpheus documentation)
 
         ## Usage
 
@@ -207,18 +207,18 @@ spec:
 
         ![Morpheus Agent Installation](https://raw.githubusercontent.com/ewcloud/ewc-ansible-playbook-ipa-enroll-automation-via-morpheus/refs/heads/main/docs/images/openstack_cli_intro_webminar.jpg)
 
-        VMs provisioned via Morpheus UI, such as the ones you may have created 
+        VMs provisioned via Morpheus UI, such as the ones you may have created
         before applying this template or those you'll create afterwards (which
-        will automatically become part of your IPA-managed fleet), are equipped with a 
+        will automatically become part of your IPA-managed fleet), are equipped with a
         [Morpheus Agent](https://docs.morpheusdata.com/en/7.0.9/getting_started/functionality/agent/overview.html),
-        a daemon that provide statistics for the guest operating system and resource utilization, 
+        a daemon that provide statistics for the guest operating system and resource utilization,
         to enable monitoring and log aggregations.
 
         If you are fond of such Morpheus monitoring functionality,
         watch [minutes
         40:22-44:10 of this EWC webminar](https://youtu.be/MO3pYzSDQSM?feature=shared&t=2422)
         to learn about how you can turn instances provisioned via Community Hub Item templating,
-        or alternative deployment methods, into Morpheus-monitored VMs. 
+        or alternative deployment methods, into Morpheus-monitored VMs.
 
         ## Inputs
         >⚠️ If set, the `update_morpheus_cypher` flag will trigger the creation/edition of secrets within Morpheus Cypher.
@@ -301,26 +301,26 @@ spec:
           image_id       = "your-image-id"
           flavor_id      = "your-flavor-id"
           keypair_name   = "your-keypair-name"
-          
+
           networks = ["internal"]
-          
+
           instance_has_fip = true
-          
+
           os_volume = {
             enable = true
             size   = 80
           }
-          
+
           extra_volume      = true
           extra_volume_size = 100
-          
+
           security_groups = ["default", "web"]
-          
+
           instance_metadata = {
             environment = "production"
             role        = "web"
           }
-          
+
           tags = {
             environment = "production"
             project     = "website"
@@ -428,7 +428,7 @@ spec:
       description: |
         > 💡 The module supports complex rule sets, such as those required to create a subnet security group for IPA services (i.e. Kerberos, LDAP and DNS).
 
-        This Terraform module creates and configures an OpenStack Security Group with a user-defined set of rules. It is designed to be reusable, flexible, and aligned with Terraform best practices for OpenStack deployments. 
+        This Terraform module creates and configures an OpenStack Security Group with a user-defined set of rules. It is designed to be reusable, flexible, and aligned with Terraform best practices for OpenStack deployments.
 
         More specifically, the module:
         * Creates an OpenStack Security Group with customizable name and description.
@@ -642,9 +642,9 @@ spec:
         ------------------
 
         ECMWF for the European Weather Cloud
-        
-        <img src="https://climate.copernicus.eu/sites/default/files/inline-images/ECMWF.png"  width="120px" height="120px"> 
-        
+
+        <img src="https://climate.copernicus.eu/sites/default/files/inline-images/ECMWF.png"  width="120px" height="120px">
+
         ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
 
       ewccli:
@@ -707,9 +707,9 @@ spec:
         ------------------
 
         ECMWF for the European Weather Cloud
-        
-        <img src="https://climate.copernicus.eu/sites/default/files/inline-images/ECMWF.png"  width="120px" height="120px"> 
-        
+
+        <img src="https://climate.copernicus.eu/sites/default/files/inline-images/ECMWF.png"  width="120px" height="120px">
+
         ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
 
       ewccli:
@@ -740,7 +740,7 @@ spec:
         pathToMainFile: anemoi.yml
       description: |
         Create a conda environment with the Anemoi framework for weather forecasting based on machine learning and associated software stack.
-        
+
         Requirements
         ------------
 
@@ -772,9 +772,9 @@ spec:
         ------------------
 
         ECMWF for the European Weather Cloud
-        
-        <img src="https://climate.copernicus.eu/sites/default/files/inline-images/ECMWF.png"  width="120px" height="120px"> 
-        
+
+        <img src="https://climate.copernicus.eu/sites/default/files/inline-images/ECMWF.png"  width="120px" height="120px">
+
         ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
 
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
@@ -852,9 +852,9 @@ spec:
             type: str
         pathToMainFile: playbooks/ecmwf-data-flavour/ecmwf-data-flavour.yml
         pathToRequirementsFile: requirements.yml
-      home: https://github.com/ewcloud/ewc-flavours/tree/2.0.1/playbooks/ecmwf-data-flavour
+      home: https://github.com/ewcloud/ewc-flavours/tree/2.0.2/playbooks/ecmwf-data-flavour
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
-      license: https://github.com/ewcloud/ewc-flavours/blob/2.0.1/LICENSE
+      license: https://github.com/ewcloud/ewc-flavours/blob/2.0.2/LICENSE
       maintainers:
         - name: EWC Team
           email: support@europeanweather.cloud
@@ -864,8 +864,8 @@ spec:
       sources:
         - https://github.com/ewcloud/ewc-flavours.git
       summary: It includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
-      version: "2.0.1"
- 
+      version: "2.0.2"
+
     eumetsat-data-tailor-flavour:
       name: "eumetsat-data-tailor-flavour"
       version: "1.5.0"
@@ -905,9 +905,9 @@ spec:
         > 💡 Unlike the Data Tailor Web Services (DTWS), which can be used with EUMDAC or via https://tailor.eumetsat.int, the standalone version is generally faster and does not have limitations such as maximum concurrent jobs or workspace size.
 
         The Data Tailor is a product customization toolbox designed to:
-        * Enable users to tailor satellite data to their specific needs. 
-        * Offers the ability to subset and aggregate data products across space and time, filter layers, generate quick looks, reproject data onto new coordinate reference systems, and reformat data into widely used Geographic Information System (GIS) formats such as netCDF and GeoTIFF, as well as image formats like JPEG and PNG. 
-        * Customize data from various satellite collections, including METOP, MFG ,MSG, MTG (Meteosat Third Generation) and Sentinel-3. 
+        * Enable users to tailor satellite data to their specific needs.
+        * Offers the ability to subset and aggregate data products across space and time, filter layers, generate quick looks, reproject data onto new coordinate reference systems, and reformat data into widely used Geographic Information System (GIS) formats such as netCDF and GeoTIFF, as well as image formats like JPEG and PNG.
+        * Customize data from various satellite collections, including METOP, MFG ,MSG, MTG (Meteosat Third Generation) and Sentinel-3.
 
         For more information on capabilities of the Data Tailor, please refer to [Data Tailor Standalone Guide on User Portal](https://user.eumetsat.int/resources/user-guides/data-tailor-standalone-guide) and for more information about the available products and customizations inside the Data Tailor, please go to [Products and Customizations Available in the Data Tailor](https://user.eumetsat.int/resources/user-guides/data-store-detailed-guide#ID-Products-and-customisation-available-in-the-Data-Tailor) page.
 
@@ -916,7 +916,7 @@ spec:
         stable operation.
 
         * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
-        * Install [python](https://www.python.org/downloads) (version 3.9 or higher) 
+        * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
         * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
         * If you plan to configure an existing VM, jump to the [Usage](#usage) section below
         * If you have not yet provisioned a VM, it is required to do so. You may choose one of the following approaches:
@@ -925,12 +925,12 @@ spec:
             * Import the SSH public key into Morpheus (see [Adding the keys in Morpheus](https://confluence.ecmwf.int/display/EWCLOUDKB/Add+your+SSH+key+pair+to+Morpheus#AddyourSSHkeypairtoMorpheus-AddingthekeysinMorpheus) section of the EWC documentation)
             * Provision a new VM through the web portal (see [Provision a new Instance - Web](https://confluence.ecmwf.int/display/EWCLOUDKB/Provision+a+new+instance+-+web) section of the EWC) documentation
 
-            OR 
+            OR
           * B) Provision a new VM via CLI:
             * Create an SSH keypair (see [Creating the keys](https://confluence.ecmwf.int/display/EWCLOUDKB/Add+your+SSH+key+pair+to+Morpheus#AddyourSSHkeypairtoMorpheus-Creatingthekeys) section of the EWC documentation)
             * Add you SSH public key to OpenStack (see [Import SSH Key](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+OpenStack+Command-Line+client#EWCOpenStackCommandLineclient-ImportSSHkey) section of the EWC documentation).
             * Provision a new VM via the OpenStack CLI (see [How to create a VM using the OpenStack CLI](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+How+to+create+a+VM+using+the+Openstack+CLI) section of the EWC documentation)
-          
+
             OR
           * C) Deploy this template, together with a new VM, via the [EWCCLI](https://pypi.org/project/ewccli/)
 
@@ -1030,7 +1030,7 @@ spec:
         | conda_user | user that will own the conda installation | `string` | `root` | yes |
 
       home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/playbooks/eumetsat-data-tailor-flavour
-      sources: 
+      sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
         - name: EWC Team
@@ -1135,7 +1135,7 @@ spec:
         stable operation.
 
         * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
-        * Install [python](https://www.python.org/downloads) (version 3.9 or higher) 
+        * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
         * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
         * Get OpenStack API credentials (see [How to request OpenStack Application Credentials](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+How+to+request+Openstack+Application+Credentials) section of the EWC documentation)
         * If you plan to configure an existing VM, jump to the [Usage](#usage) section below
@@ -1145,7 +1145,7 @@ spec:
             * Import the SSH public key into Morpheus (see [Adding the keys in Morpheus](https://confluence.ecmwf.int/display/EWCLOUDKB/Add+your+SSH+key+pair+to+Morpheus#AddyourSSHkeypairtoMorpheus-AddingthekeysinMorpheus) section of the EWC documentation)
             * Provision a new VM through the web portal (see [Provision a new Instance - Web](https://confluence.ecmwf.int/display/EWCLOUDKB/Provision+a+new+instance+-+web) section of the EWC) documentation
 
-            OR 
+            OR
           * B) Provision a new VM via CLI:
             * Create an SSH keypair (see [Creating the keys](https://confluence.ecmwf.int/display/EWCLOUDKB/Add+your+SSH+key+pair+to+Morpheus#AddyourSSHkeypairtoMorpheus-Creatingthekeys) section of the EWC documentation)
             * Add you SSH public key to OpenStack (see [Import SSH Key](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+OpenStack+Command-Line+client#EWCOpenStackCommandLineclient-ImportSSHkey) section of the EWC documentation).
@@ -1235,7 +1235,7 @@ spec:
 
       displayName: HAProxy
       home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/tree/1.5.0/playbooks/haproxy-flavour
-      icon:  https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/LICENSE
       maintainers:
         - name: EWC Team
@@ -1285,7 +1285,7 @@ spec:
         ## Prerequisites
 
         * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
-        * Install [python](https://www.python.org/downloads) (version 3.9 or higher) 
+        * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
         * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
         * Install [terraform](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+IaC+via+Terraform+and+OpenTofu#EWCIaCviaTerraformandOpenTofu-InstallationoftheCLI) (version 1.0 or higher)
         * Get OpenStack API credentials (see [How to request OpenStack Application Credentials](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+How+to+request+Openstack+Application+Credentials) section of the EWC documentation)
@@ -1296,7 +1296,7 @@ spec:
         > ⚠️ Only RockyLinux versions 9 or 8 are supported due
         to constrains imposed by [dependencies](#dependencies).
 
-        > 💡 VM plans with at least 4GB of RAM is recommended for successful setup and stable operation 
+        > 💡 VM plans with at least 4GB of RAM is recommended for successful setup and stable operation
 
         >⛔ Execution of this template can potentially affect DNS resolution on existing VMs within your subnet. To prevent issues, enroll them to the new IPA server via the
         [IPA Client Enroll Flavour](https://europeanweather.cloud/community-hub/ipa-client-enroll-flavour)
@@ -1491,7 +1491,7 @@ spec:
         > ⚠️ Only Ubuntu version 24 and 22, or RockyLinux versions 9 or 8 supported due to constrains imposed by [dependencies](#dependencies).
 
         * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
-        * Install [python](https://www.python.org/downloads) (version 3.9 or higher) 
+        * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
         * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
         * Get OpenStack API credentials (see [How to request OpenStack Application Credentials](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+How+to+request+Openstack+Application+Credentials) section of the EWC documentation)
         * If you plan to configure an existing VM, jump to the [Usage](#usage) section below
@@ -1501,12 +1501,12 @@ spec:
             * Import the SSH public key into Morpheus (see [Adding the keys in Morpheus](https://confluence.ecmwf.int/display/EWCLOUDKB/Add+your+SSH+key+pair+to+Morpheus#AddyourSSHkeypairtoMorpheus-AddingthekeysinMorpheus) section of the EWC documentation)
             * Provision a new VM through the web portal (see [Provision a new Instance - Web](https://confluence.ecmwf.int/display/EWCLOUDKB/Provision+a+new+instance+-+web) section of the EWC) documentation
 
-            OR 
+            OR
           * B) Provision a new VM via CLI:
             * Create an SSH keypair (see [Creating the keys](https://confluence.ecmwf.int/display/EWCLOUDKB/Add+your+SSH+key+pair+to+Morpheus#AddyourSSHkeypairtoMorpheus-Creatingthekeys) section of the EWC documentation)
             * Add you SSH public key to OpenStack (see [Import SSH Key](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+OpenStack+Command-Line+client#EWCOpenStackCommandLineclient-ImportSSHkey) section of the EWC documentation).
             * Provision a new VM via the OpenStack CLI (see [How to create a VM using the OpenStack CLI](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+How+to+create+a+VM+using+the+Openstack+CLI) section of the EWC documentation)
-          
+
             OR
           * C) Deploy this template, together with a new VM, as part of the [IPA Client Provisioning Community Hub Item](https://europeanweather.cloud/community-hub/ipa-client-provisioning)
 
@@ -1678,7 +1678,7 @@ spec:
         ## Prerequisites
 
         * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
-        * Install [python](https://www.python.org/downloads) (version 3.9 or higher) 
+        * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
         * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
         * You require an existing VM already enrolled into your IPA Server.
         * Your require SSH access to the exiting VM (i.e. your public SSH key must be registered on the target machine)
@@ -1794,7 +1794,7 @@ spec:
         supportLevel: "EWC"
         licenseType: "MIT License"
       displayName: IPA Client Disenroll Flavour
-      summary: Simplifies the secure removal of a running VM from a FreeIPA-managed fleet of instances, reducing administrative overhead and enhancing security by eliminating stale credentials and DNS records. 
+      summary: Simplifies the secure removal of a running VM from a FreeIPA-managed fleet of instances, reducing administrative overhead and enhancing security by eliminating stale credentials and DNS records.
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/LICENSE
       published: true
 
@@ -1836,7 +1836,7 @@ spec:
         ## Prerequisites
 
         * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
-        * Install [python](https://www.python.org/downloads) (version 3.9 or higher) 
+        * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
         * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
         * Install [terraform](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+IaC+via+Terraform+and+OpenTofu#EWCIaCviaTerraformandOpenTofu-InstallationoftheCLI) (version 1.0 or higher)
         * Get OpenStack API credentials (see [How to request OpenStack Application Credentials](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+How+to+request+Openstack+Application+Credentials) section of the EWC documentation)
@@ -1991,7 +1991,7 @@ spec:
         ## Prerequisites
 
         * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
-        * Install [python](https://www.python.org/downloads) (version 3.9 or higher) 
+        * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
         * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
         * Install [terraform](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+IaC+via+Terraform+and+OpenTofu#EWCIaCviaTerraformandOpenTofu-InstallationoftheCLI) (version 1.0 or higher)
         * Get OpenStack API credentials (see [How to request OpenStack Application Credentials](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+How+to+request+Openstack+Application+Credentials) section of the EWC documentation)
@@ -2156,7 +2156,7 @@ spec:
         stable operation.
 
         * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
-        * Install [python](https://www.python.org/downloads) (version 3.9 or higher) 
+        * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
         * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
         * Get OpenStack API credentials (see [How to request OpenStack Application Credentials](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+How+to+request+Openstack+Application+Credentials) section of the EWC documentation)
         * If you plan to configure an existing VM, jump to the [Usage](#usage) section below
@@ -2166,12 +2166,12 @@ spec:
             * Import the SSH public key into Morpheus (see [Adding the keys in Morpheus](https://confluence.ecmwf.int/display/EWCLOUDKB/Add+your+SSH+key+pair+to+Morpheus#AddyourSSHkeypairtoMorpheus-AddingthekeysinMorpheus) section of the EWC documentation)
             * Provision a new VM through the web portal (see [Provision a new Instance - Web](https://confluence.ecmwf.int/display/EWCLOUDKB/Provision+a+new+instance+-+web) section of the EWC) documentation
 
-            OR 
+            OR
           * B) Provision a new VM via CLI:
             * Create an SSH keypair (see [Creating the keys](https://confluence.ecmwf.int/display/EWCLOUDKB/Add+your+SSH+key+pair+to+Morpheus#AddyourSSHkeypairtoMorpheus-Creatingthekeys) section of the EWC documentation)
             * Add you SSH public key to OpenStack (see [Import SSH Key](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+OpenStack+Command-Line+client#EWCOpenStackCommandLineclient-ImportSSHkey) section of the EWC documentation).
             * Provision a new VM via the OpenStack CLI (see [How to create a VM using the OpenStack CLI](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+How+to+create+a+VM+using+the+Openstack+CLI) section of the EWC documentation)
-          
+
             OR
           * C) Deploy this template, together with a new VM, as part of the [IPA Server Provisioning Community Hub Item](https://europeanweather.cloud/community-hub/ipa-server-provisioning)
 
@@ -2365,7 +2365,7 @@ spec:
         ## Prerequisites
 
         * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
-        * Install [python](https://www.python.org/downloads) (version 3.9 or higher) 
+        * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
         * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
         * Install [terraform](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+IaC+via+Terraform+and+OpenTofu#EWCIaCviaTerraformandOpenTofu-InstallationoftheCLI) (version 1.0 or higher)
         * Get OpenStack API credentials (see [How to request OpenStack Application Credentials](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+How+to+request+Openstack+Application+Credentials) section of the EWC documentation)
@@ -2515,7 +2515,7 @@ spec:
 
     jupyterhub-flavour:
       name: "jupyterhub-flavour"
-      version: "2.0.1"
+      version: "2.0.2"
       ewccli:
         pathToMainFile: playbooks/jupyterhub-flavour/jupyterhub-flavour.yml
         pathToRequirementsFile: requirements.yml
@@ -2561,8 +2561,8 @@ spec:
         With the default Authenticator, any user with an account and password on the system will be allowed to login.
         See also [here](https://jupyterhub.readthedocs.io/en/5.2.1/tutorial/getting-started/authenticators-users-basics.html)
 
-        Therefore in order to login you need to use username/password from a local user existing in the machine. 
-      home: https://github.com/ewcloud/ewc-flavours/blob/2.0.1/playbooks/jupyterhub-flavour
+        Therefore in order to login you need to use username/password from a local user existing in the machine.
+      home: https://github.com/ewcloud/ewc-flavours/blob/2.0.2/playbooks/jupyterhub-flavour
       sources:
         - https://github.com/ewcloud/ewc-flavours.git
       maintainers:
@@ -2578,7 +2578,7 @@ spec:
         others: "Deployable,EWCCLI-compatible"
       displayName: JupyterHub Flavour
       summary: It installs and run jupyterhub on your instance, offering a convenient way to access it through the web.
-      license: https://github.com/ewcloud/ewc-flavours/blob/2.0.1/LICENSE
+      license: https://github.com/ewcloud/ewc-flavours/blob/2.0.2/LICENSE
       published: true
 
     ml-basic:
@@ -2618,9 +2618,9 @@ spec:
         ------------------
 
         ECMWF for the European Weather Cloud
-        
-        <img src="https://climate.copernicus.eu/sites/default/files/inline-images/ECMWF.png"  width="120px" height="120px"> 
-        
+
+        <img src="https://climate.copernicus.eu/sites/default/files/inline-images/ECMWF.png"  width="120px" height="120px">
+
         ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
 
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
@@ -2650,137 +2650,137 @@ spec:
         licenseType: "MIT License"
         others: "Deployable"
       description: |
-       >💡 Not to be confused with Nginx, the web server and reverse proxy.
+        >💡 Not to be confused with Nginx, the web server and reverse proxy.
 
-        This Ansible Playbook configures an existing virtual machine running
-        within the [European Weather Cloud (EWC)](https://europeanweather.cloud/), to operate as a [Nginx Proxy Manager](https://nginxproxymanager.com/) server.
+         This Ansible Playbook configures an existing virtual machine running
+         within the [European Weather Cloud (EWC)](https://europeanweather.cloud/), to operate as a [Nginx Proxy Manager](https://nginxproxymanager.com/) server.
 
-        Nginx Proxy Manager is full-featured tool that helps to lower the barriers to entry for users who are interested in learning and working with [Nginx](https://nginx.org/en/) servers.
+         Nginx Proxy Manager is full-featured tool that helps to lower the barriers to entry for users who are interested in learning and working with [Nginx](https://nginx.org/en/) servers.
 
-        ## Functionality
-        * Virtual host management
-        * Ability to cache assets
-        * Blocking of common exploits
-        * Websocket support
-        * Access list configuration
-        * SSL and HTTP/2 support
-        * Host redirection with HTTP code configuration
-        * TCP and UDP stream support
-        * User management
-        * Nginx Proxy
-        * Manager log auditing
+         ## Functionality
+         * Virtual host management
+         * Ability to cache assets
+         * Blocking of common exploits
+         * Websocket support
+         * Access list configuration
+         * SSL and HTTP/2 support
+         * Host redirection with HTTP code configuration
+         * TCP and UDP stream support
+         * User management
+         * Nginx Proxy
+         * Manager log auditing
 
-        ## Prerequisites
-        > ⚠️ Only Ubuntu version 24 and 22 supported due to constrains imposed by [dependencies](#dependencies).
+         ## Prerequisites
+         > ⚠️ Only Ubuntu version 24 and 22 supported due to constrains imposed by [dependencies](#dependencies).
 
-        > 💡 A VM plan with at least 8GB of RAM is recommended for successful setup and
-        stable operation.
+         > 💡 A VM plan with at least 8GB of RAM is recommended for successful setup and
+         stable operation.
 
-        * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
-        * Install [python](https://www.python.org/downloads) (version 3.9 or higher) 
-        * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
-        * Get OpenStack API credentials (see [How to request OpenStack Application Credentials](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+How+to+request+Openstack+Application+Credentials) section of the EWC documentation)
-        * If you plan to configure an existing VM, jump to the [Usage](#usage) section below
-        * If you have not yet provisioned a VM, it is required to do so. You may choose one of the following approaches:
-          * A) Provision a new VM via UI:
-            * Create an SSH keypair (see [Creating the keys](https://confluence.ecmwf.int/display/EWCLOUDKB/Add+your+SSH+key+pair+to+Morpheus#AddyourSSHkeypairtoMorpheus-Creatingthekeys) section of the EWC documentation)
-            * Import the SSH public key into Morpheus (see [Adding the keys in Morpheus](https://confluence.ecmwf.int/display/EWCLOUDKB/Add+your+SSH+key+pair+to+Morpheus#AddyourSSHkeypairtoMorpheus-AddingthekeysinMorpheus) section of the EWC documentation)
-            * Provision a new VM through the web portal (see [Provision a new Instance - Web](https://confluence.ecmwf.int/display/EWCLOUDKB/Provision+a+new+instance+-+web) section of the EWC) documentation
+         * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
+         * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
+         * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
+         * Get OpenStack API credentials (see [How to request OpenStack Application Credentials](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+How+to+request+Openstack+Application+Credentials) section of the EWC documentation)
+         * If you plan to configure an existing VM, jump to the [Usage](#usage) section below
+         * If you have not yet provisioned a VM, it is required to do so. You may choose one of the following approaches:
+           * A) Provision a new VM via UI:
+             * Create an SSH keypair (see [Creating the keys](https://confluence.ecmwf.int/display/EWCLOUDKB/Add+your+SSH+key+pair+to+Morpheus#AddyourSSHkeypairtoMorpheus-Creatingthekeys) section of the EWC documentation)
+             * Import the SSH public key into Morpheus (see [Adding the keys in Morpheus](https://confluence.ecmwf.int/display/EWCLOUDKB/Add+your+SSH+key+pair+to+Morpheus#AddyourSSHkeypairtoMorpheus-AddingthekeysinMorpheus) section of the EWC documentation)
+             * Provision a new VM through the web portal (see [Provision a new Instance - Web](https://confluence.ecmwf.int/display/EWCLOUDKB/Provision+a+new+instance+-+web) section of the EWC) documentation
 
-            OR 
-          * B) Provision a new VM via CLI:
-            * Create an SSH keypair (see [Creating the keys](https://confluence.ecmwf.int/display/EWCLOUDKB/Add+your+SSH+key+pair+to+Morpheus#AddyourSSHkeypairtoMorpheus-Creatingthekeys) section of the EWC documentation)
-            * Add you SSH public key to OpenStack (see [Import SSH Key](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+OpenStack+Command-Line+client#EWCOpenStackCommandLineclient-ImportSSHkey) section of the EWC documentation).
-            * Provision a new VM via the OpenStack CLI (see [How to create a VM using the OpenStack CLI](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+How+to+create+a+VM+using+the+Openstack+CLI) section of the EWC documentation)
+             OR
+           * B) Provision a new VM via CLI:
+             * Create an SSH keypair (see [Creating the keys](https://confluence.ecmwf.int/display/EWCLOUDKB/Add+your+SSH+key+pair+to+Morpheus#AddyourSSHkeypairtoMorpheus-Creatingthekeys) section of the EWC documentation)
+             * Add you SSH public key to OpenStack (see [Import SSH Key](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+OpenStack+Command-Line+client#EWCOpenStackCommandLineclient-ImportSSHkey) section of the EWC documentation).
+             * Provision a new VM via the OpenStack CLI (see [How to create a VM using the OpenStack CLI](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+How+to+create+a+VM+using+the+Openstack+CLI) section of the EWC documentation)
 
-        ## Usage
+         ## Usage
 
-        ### 1. Clone the repository
+         ### 1. Clone the repository
 
-        ```bash
-        git clone https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
-        ```
+         ```bash
+         git clone https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
+         ```
 
-        #### 1.1. Change to the specific Item's subdirectory
+         #### 1.1. Change to the specific Item's subdirectory
 
-        ```bash
-        cd ewc-ansible-playbook-flavours-and-provisioning/playbooks/nginx-proxy-manager-flavour
-        ```
+         ```bash
+         cd ewc-ansible-playbook-flavours-and-provisioning/playbooks/nginx-proxy-manager-flavour
+         ```
 
-        #### 1.2. (Optional) Checkout an specific Item's version
-        >⚠️ Make sure to replace `x.y.z` in the command below, with your version of preference.
+         #### 1.2. (Optional) Checkout an specific Item's version
+         >⚠️ Make sure to replace `x.y.z` in the command below, with your version of preference.
 
-        ```bash
-        git checkout x.y.z
-        ```
+         ```bash
+         git checkout x.y.z
+         ```
 
-        ### 2. Download  Ansible dependencies
-        >💡 By default, Ansible Roles are installed under the `~/.ansible/roles` directory within your working environment.
+         ### 2. Download  Ansible dependencies
+         >💡 By default, Ansible Roles are installed under the `~/.ansible/roles` directory within your working environment.
 
-        Download the correct version of the Ansible dependencies, if you haven't done so already:
+         Download the correct version of the Ansible dependencies, if you haven't done so already:
 
-        ```
-        ansible-galaxy role install -r requirements.yml
-        ```
+         ```
+         ansible-galaxy role install -r requirements.yml
+         ```
 
-        ### 3. Specify the target host and SSH credentials
-        Create an inventory file to specify address/credentials that Ansible should use
-        to reach the virtual machine you wish to configure:
+         ### 3. Specify the target host and SSH credentials
+         Create an inventory file to specify address/credentials that Ansible should use
+         to reach the virtual machine you wish to configure:
 
-        ```yaml
-        # inventory.yml
-        ---
-        ewcloud:
-          hosts:
-            nginx_proxy_manager:
-              ansible_python_interpreter: /usr/bin/python3
-              ansible_host: <add the IPV4 address of the target host>
-              ansible_ssh_private_key_file: <add the path to local SSH private key file>
-              ansible_user: ubuntu
-              ansible_ssh_common_args: -o StrictHostKeyChecking=accept-new
-        ```
+         ```yaml
+         # inventory.yml
+         ---
+         ewcloud:
+           hosts:
+             nginx_proxy_manager:
+               ansible_python_interpreter: /usr/bin/python3
+               ansible_host: <add the IPV4 address of the target host>
+               ansible_ssh_private_key_file: <add the path to local SSH private key file>
+               ansible_user: ubuntu
+               ansible_ssh_common_args: -o StrictHostKeyChecking=accept-new
+         ```
 
-        ### 4. Configure and apply the template
+         ### 4. Configure and apply the template
 
-        #### 4.1. Interactive Mode
+         #### 4.1. Interactive Mode
 
-        By running the following command, you can trigger an interactive session that
-        prompts you for the necessary user inputs, and then applies changes to your
-        target EWC environment:
+         By running the following command, you can trigger an interactive session that
+         prompts you for the necessary user inputs, and then applies changes to your
+         target EWC environment:
 
-        ```bash
-        ansible-playbook -i inventory.yml nginx-proxy-manager-flavour.yml
-        ```
+         ```bash
+         ansible-playbook -i inventory.yml nginx-proxy-manager-flavour.yml
+         ```
 
-        #### 4.2. Non-Interactive Mode
+         #### 4.2. Non-Interactive Mode
 
-        >💡 To learn more about defining variables at runtime, checkout the
-        [official Ansible documentation](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html).
+         >💡 To learn more about defining variables at runtime, checkout the
+         [official Ansible documentation](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html).
 
-        You can also run in non-interactive mode by passing the
-        `--extra-vars` or `-e` flag, followed by a map of  key-value pairs; one for
-        each and every available input (see [inputs section](#inputs) below). For
-        example:
+         You can also run in non-interactive mode by passing the
+         `--extra-vars` or `-e` flag, followed by a map of  key-value pairs; one for
+         each and every available input (see [inputs section](#inputs) below). For
+         example:
 
-        ```bash
-        ansible-playbook \
-          -i inventory.yml \
-          -e "npm_admin_ui_port=8080" \
-          -e "os_security_group_name=nginx-proxy-manager" \
-          nginx-proxy-manager-flavour.yml
-        ```
+         ```bash
+         ansible-playbook \
+           -i inventory.yml \
+           -e "npm_admin_ui_port=8080" \
+           -e "os_security_group_name=nginx-proxy-manager" \
+           nginx-proxy-manager-flavour.yml
+         ```
 
-        ## Inputs
-        > ⛔ If deploying to an instance on the ECMWF site, using a high port numbers such as in the example above will prevent you from accessing the Nginx Proxy Manager UI from the pubic internet, even when a valid security group is attached to the instance. This is due to the outer perimeter firewall of the ECMWF site. For details see [EWC Security guidelines - Restrictive firewall (allow-listing)](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+Security+guidelines#EWCSecurityguidelines-Restrictivefirewall(allow-listing)).
+         ## Inputs
+         > ⛔ If deploying to an instance on the ECMWF site, using a high port numbers such as in the example above will prevent you from accessing the Nginx Proxy Manager UI from the pubic internet, even when a valid security group is attached to the instance. This is due to the outer perimeter firewall of the ECMWF site. For details see [EWC Security guidelines - Restrictive firewall (allow-listing)](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+Security+guidelines#EWCSecurityguidelines-Restrictivefirewall(allow-listing)).
 
-        | Name | Description | Type | Default | Required |
-        |------|-------------|------|---------|:--------:|
-        | npm_admin_ui_port | port number at which the Nginx Proxy Manager admin UI is served | `number` | `8080`  | yes |
-        | os_security_group_name | OpenStack security group containing all firewall rules required for Nginx Proxy Manager operation  | `string` | `nginx-proxy-manager` | yes |
+         | Name | Description | Type | Default | Required |
+         |------|-------------|------|---------|:--------:|
+         | npm_admin_ui_port | port number at which the Nginx Proxy Manager admin UI is served | `number` | `8080`  | yes |
+         | os_security_group_name | OpenStack security group containing all firewall rules required for Nginx Proxy Manager operation  | `string` | `nginx-proxy-manager` | yes |
 
       displayName: Nginx Proxy Manager
       home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/tree/1.5.0/playbooks/nginx-proxy-manager-flavour
-      icon:  https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/LICENSE
       maintainers:
         - name: EWC Team
@@ -2876,8 +2876,8 @@ spec:
 
         `ewc-playbooks` provides **Ansible playbooks** to set up a robust, containerized environment for processing satellite data using the **Pytroll** ecosystem. Supported datasets include:
 
-        - **FCI** – Flexible Combined Imager (MTG-I)  
-        - **SEVIRI** – Spinning Enhanced Visible and Infrared Imager (MSG)  
+        - **FCI** – Flexible Combined Imager (MTG-I)
+        - **SEVIRI** – Spinning Enhanced Visible and Infrared Imager (MSG)
         - **VIIRS** – Visible Infrared Imaging Radiometer Suite (NOAA/NASA)
 
         Optionally, a **WMS server** can be deployed to serve processed imagery for visualization in GIS clients.
@@ -2908,9 +2908,9 @@ spec:
         ```
         where:
 
-        - **`*-processing/`**: Container builds and Ansible tasks for satellite processing.  
-        - **`*-wms/`**: Container configuration for WMS services.  
-        - **`defaults.yml`**: Default variables.  
+        - **`*-processing/`**: Container builds and Ansible tasks for satellite processing.
+        - **`*-wms/`**: Container configuration for WMS services.
+        - **`defaults.yml`**: Default variables.
         - **`satellite-data-processing-main.yaml`**: Main playbook orchestrating all deployments.
 
         ## Tested Platforms
@@ -3000,10 +3000,10 @@ spec:
         pathToRequirementsFile: playbooks/remote-desktop-flavour/requirements.yml
         pathToMainFile: playbooks/remote-desktop-flavour/remote-desktop-flavour.yml
         inputs:
-        - name: fail2ban_whitelisted_ip_ranges
-          description: "IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: ['10.0.0.0/24','192.168.1.0/24']"
-          type: List[str]
-          default: None
+          - name: fail2ban_whitelisted_ip_ranges
+            description: "IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: ['10.0.0.0/24','192.168.1.0/24']"
+            type: List[str]
+            default: None
       description: |
         This Ansible Playbook configures virtual machines within the
         [European Weather Cloud (EWC)](https://europeanweather.cloud/) to
@@ -3034,7 +3034,7 @@ spec:
         stable operation.
 
         * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
-        * Install [python](https://www.python.org/downloads) (version 3.9 or higher) 
+        * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
         * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
         * If you plan to configure an existing VM, jump to the [Usage](#usage) section below
         * If you have not yet provisioned a VM, it is required to do so. You may choose one of the following approaches:
@@ -3043,12 +3043,12 @@ spec:
             * Import the SSH public key into Morpheus (see [Adding the keys in Morpheus](https://confluence.ecmwf.int/display/EWCLOUDKB/Add+your+SSH+key+pair+to+Morpheus#AddyourSSHkeypairtoMorpheus-AddingthekeysinMorpheus) section of the EWC documentation)
             * Provision a new VM through the web portal (see [Provision a new Instance - Web](https://confluence.ecmwf.int/display/EWCLOUDKB/Provision+a+new+instance+-+web) section of the EWC) documentation
 
-            OR 
+            OR
           * B) Provision a new VM via CLI:
             * Create an SSH keypair (see [Creating the keys](https://confluence.ecmwf.int/display/EWCLOUDKB/Add+your+SSH+key+pair+to+Morpheus#AddyourSSHkeypairtoMorpheus-Creatingthekeys) section of the EWC documentation)
             * Add you SSH public key to OpenStack (see [Import SSH Key](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+OpenStack+Command-Line+client#EWCOpenStackCommandLineclient-ImportSSHkey) section of the EWC documentation).
             * Provision a new VM via the OpenStack CLI (see [How to create a VM using the OpenStack CLI](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+How+to+create+a+VM+using+the+Openstack+CLI) section of the EWC documentation)
-          
+
             OR
           * C) Deploy this template, together with a new VM, as part of the [Remote Desktop Provisioning Community Hub Item](https://europeanweather.cloud/community-hub/remote-desktop-provisioning)
 
@@ -3219,7 +3219,7 @@ spec:
         ## Prerequisites
 
         * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
-        * Install [python](https://www.python.org/downloads) (version 3.9 or higher) 
+        * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
         * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
         * Install [terraform](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+IaC+via+Terraform+and+OpenTofu#EWCIaCviaTerraformandOpenTofu-InstallationoftheCLI) (version 1.0 or higher)
         * Get OpenStack API credentials (see [How to request OpenStack Application Credentials](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+How+to+request+Openstack+Application+Credentials) section of the EWC documentation)
@@ -3335,7 +3335,7 @@ spec:
         | security_group_name | security group name to apply to the instance | `string` | `ipa` | yes |
         | fail2ban_whitelisted_ip_ranges | IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: `['10.0.0.0/24','192.168.1.0/24']` | `list(string)` | `''` | no |
 
-      home:  https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/playbooks/remote-desktop-provisioning
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/playbooks/remote-desktop-provisioning
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -3394,7 +3394,7 @@ spec:
         stable operation.
 
         * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
-        * Install [python](https://www.python.org/downloads) (version 3.9 or higher) 
+        * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
         * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
         * If you plan to configure an existing VM, jump to the [Usage](#usage) section below
         * If you have not yet provisioned a VM, it is required to do so. You may choose one of the following approaches:
@@ -3403,12 +3403,12 @@ spec:
             * Import the SSH public key into Morpheus (see [Adding the keys in Morpheus](https://confluence.ecmwf.int/display/EWCLOUDKB/Add+your+SSH+key+pair+to+Morpheus#AddyourSSHkeypairtoMorpheus-AddingthekeysinMorpheus) section of the EWC documentation)
             * Provision a new VM through the web portal (see [Provision a new Instance - Web](https://confluence.ecmwf.int/display/EWCLOUDKB/Provision+a+new+instance+-+web) section of the EWC) documentation
 
-            OR 
+            OR
           * B) Provision a new VM via CLI:
             * Create an SSH keypair (see [Creating the keys](https://confluence.ecmwf.int/display/EWCLOUDKB/Add+your+SSH+key+pair+to+Morpheus#AddyourSSHkeypairtoMorpheus-Creatingthekeys) section of the EWC documentation)
             * Add you SSH public key to OpenStack (see [Import SSH Key](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+OpenStack+Command-Line+client#EWCOpenStackCommandLineclient-ImportSSHkey) section of the EWC documentation).
             * Provision a new VM via the OpenStack CLI (see [How to create a VM using the OpenStack CLI](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+How+to+create+a+VM+using+the+Openstack+CLI) section of the EWC documentation)
-          
+
             OR
           * C) Deploy this template, together with a new VM, as part of the [SSH Bastion Provisioning Community Hub Item](https://europeanweather.cloud/community-hub/ssh-bastion-provisioning)
 
@@ -3559,7 +3559,7 @@ spec:
         ## Prerequisites
 
         * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
-        * Install [python](https://www.python.org/downloads) (version 3.9 or higher) 
+        * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
         * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
         * Install [terraform](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+IaC+via+Terraform+and+OpenTofu#EWCIaCviaTerraformandOpenTofu-InstallationoftheCLI) (version 1.0 or higher)
         * Get OpenStack API credentials (see [How to request OpenStack Application Credentials](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+How+to+request+Openstack+Application+Credentials) section of the EWC documentation)
