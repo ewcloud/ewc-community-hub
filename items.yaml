@@ -2903,7 +2903,7 @@ spec:
       license: https://gitlab.aemet.es/jllisov/vzarr/-/blob/main/LICENSE
       published: true
 
-    pytroll:
+    pytroll-processing:
       name: "pytroll-processing"
       version: "1.0.0"
       ewccli:
