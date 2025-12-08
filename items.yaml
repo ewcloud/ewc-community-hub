@@ -606,7 +606,7 @@ spec:
 
     ecmwf-aifs-single-mse:
       name: "ecmwf-aifs-single-mse"
-      version: "1.0.1"
+      version: "1.1.0"
       description: |
         Create a conda environment with AIFS Single MSE and associated software stack.
 
@@ -670,7 +670,7 @@ spec:
 
     ecmwf-aifs-ens-crps:
       name: "ecmwf-aifs-ens-crps"
-      version: "1.0.1"
+      version: "1.0.2"
       description: |
         Create a conda environment with AIFS ENS CRPS data-driven model and associated software stack.
         Featuring the ECMWF AIFS ENS CRPS data-driven model. Find more information in <https://huggingface.co/ecmwf/aifs-ens-1.0>
