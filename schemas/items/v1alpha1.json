@@ -76,19 +76,13 @@
         "description": {
           "type": "string"
         },
-        "ewccli": {
+        "values": {
           "type": "object",
           "properties": {
             "defaultImageName": {
               "type": "string"
             },
-            "defaultSecurityGroups": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "inputs": {
+            "inputSpec": {
               "type": "array",
               "items": {
                 "type": "object",
@@ -111,7 +105,7 @@
                 "additionalProperties": true
               }
             },
-            "outputs": {
+            "outputSpec": {
               "type": "array",
               "items": {
                 "type": "object",
@@ -131,7 +125,7 @@
                   "description",
                   "type"
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               }
             },
             "pathToRequirementsFile": {
@@ -139,6 +133,24 @@
             },
             "pathToMainFile": {
               "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "ewccli": {
+          "type": "object",
+          "properties": {
+            "defaultSecurityGroups": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "externalIP": {
+              "type": "boolean"
+            },
+            "checkDNS": {
+              "type": "boolean"
             }
           },
           "additionalProperties": true
