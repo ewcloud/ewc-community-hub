@@ -2196,7 +2196,7 @@ spec:
         defaultImageName: Rocky-9.5-20250604142417
         pathToRequirementsFile: playbooks/ipa-server-flavour/requirements.yml
         pathToMainFile: playbooks/ipa-server-flavour/ipa-server-flavour.yml
-        input:
+        inputs:
           - name: ipa_domain
             description: "domain name to be managed by the IPA server. Example: eumetsat.sandbox.ewc"
             type: str
@@ -2647,7 +2647,7 @@ spec:
       ewccli:
         pathToMainFile: playbooks/jupyterhub-flavour/jupyterhub-flavour.yml
         pathToRequirementsFile: requirements.yml
-        input:
+        inputs:
           - name: jupyterhub_local_cert_email
             description: "Email used for the certificate."
             type: str
@@ -3165,7 +3165,7 @@ spec:
         defaultImageName: Rocky-9.5-20250604142417
         pathToRequirementsFile: playbooks/remote-desktop-flavour/requirements.yml
         pathToMainFile: playbooks/remote-desktop-flavour/remote-desktop-flavour.yml
-        input:
+        inputs:
           - name: fail2ban_whitelisted_ip_ranges
             description: "IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: ['10.0.0.0/24','192.168.1.0/24']"
             type: List[str]
@@ -3536,7 +3536,7 @@ spec:
         defaultImageName: Rocky-9.5-20250604142417
         pathToRequirementsFile: playbooks/ssh-bastion-flavour/requirements.yml
         pathToMainFile: playbooks/ssh-bastion-flavour/ssh-bastion-flavour.yml
-        input:
+        inputs:
           - name: fail2ban_whitelisted_ip_ranges
             description: "IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: ['10.0.0.0/24','192.168.1.0/24']"
             type: List[str]
