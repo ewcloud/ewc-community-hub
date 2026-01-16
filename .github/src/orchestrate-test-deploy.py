@@ -189,7 +189,8 @@ def dispatch_and_register(thread_id: str) -> None:
         )
         return
 
-    sleep(3 * dispatch_delay_seconds)
+    buffer_seconds = 1
+    sleep(dispatch_delay_seconds + buffer_seconds)
 
     runs = github_api(
         "GET",
@@ -436,6 +437,7 @@ def main() -> None:
             print(f"main - {pending.qsize()} pending, {in_progress.qsize()} in progress, {done.qsize()} done")
             sleep(5)
             if datetime.now(timezone.utc) >= total_deadline:
+                print("main - Total timeout reached")
                 break
 
         stop.set()
