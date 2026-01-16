@@ -2224,7 +2224,7 @@ spec:
         defaultSecurityGroups:
           - ipa
       values:
-        defaultImageName: Rocky-9.5-20250604142417
+        osImageName: Rocky-9.5-20250604142417
         pathToRequirementsFile: playbooks/ipa-server-flavour/requirements.yml
         pathToMainFile: playbooks/ipa-server-flavour/ipa-server-flavour.yml
         inputSpec:
@@ -3171,7 +3171,7 @@ spec:
             type: List[str]
             default: None
       values:
-        defaultImageName: Rocky-9.5-20250604142417
+        osImageName: Rocky-9.5-20250604142417
         pathToRequirementsFile: playbooks/remote-desktop-flavour/requirements.yml
         pathToMainFile: playbooks/remote-desktop-flavour/remote-desktop-flavour.yml
         inputSpec:
@@ -3542,7 +3542,7 @@ spec:
             type: List[str]
             default: None
       values:
-        defaultImageName: Rocky-9.5-20250604142417
+        osImageName: Rocky-9.5-20250604142417
         pathToRequirementsFile: playbooks/ssh-bastion-flavour/requirements.yml
         pathToMainFile: playbooks/ssh-bastion-flavour/ssh-bastion-flavour.yml
         inputSpec:
