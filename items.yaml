@@ -1098,6 +1098,127 @@ spec:
       license: https://github.com/ewcloud/ewccli/blob/0.1.0/LICENSE
       published: true
 
+    ewc-gh-action-test-deploy-ansible-playbook:
+      name: "ewc-gh-action-test-deploy-ansible-playbook"
+      version: "2.1.0"
+      description: |
+        This GitHub Action setups all necessary OpenStack resources for a Ansible Playbook to run,  executes it and reports about its success/failure in a nice looking summary (within GitHub UI), as well as machine-friendly artifacts for postprocessing.
+
+        Runs with user-defined `Python` and `Ansible` versions, extra variable inputs and any `Ansible Roles` a test scenario may require.
+
+        ## What's new
+
+        - Added compatibility with the [ewc-community-hub](https://github.com/ewcloud/ewc-community-hub) repository to enable upstream test orchestration and by enforcing naming and formatting convention of workflow inputs.
+
+        ## Prerequisites
+
+        1. Acquire OpenStack application credentials with enough permissions to modify compute instances
+        2. Extract the following attributes from your app credentials and store them within your repository's GitHub secrets:
+            - `OS_AUTH_URL`
+            - `OS_REGION_NAME`
+            - `OS_APPLICATION_CREDENTIAL_ID`
+            - `OS_APPLICATION_CREDENTIAL_SECRET`
+        4. Create an ssh keypair
+        3. Upload the public ssh key to OpenStack
+        5. Within your repository's GitHub secrets, store the value of the private ssh key as:
+            - `ANSIBLE_SSH_PRIVATE_KEY`
+
+
+        ## Usage
+        >💡 For live usage examples in EWC Community Hub's context, checkout these [ECMWF test workflow](https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/.github/workflows/test-ecmwf.yml) and [EUMETSAT test workflow](https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/.github/workflows/test-eumetsat.yml) definitions.
+
+        ```yaml
+        # .github/workflows/test.yml
+        ---
+        name: Test Deploy Ansible Playbook
+
+        on:
+          workflow_dispatch:
+
+        permissions:
+          contents: read
+          actions: write
+
+        jobs:
+          test-deploy-ansible-playbook:
+            runs-on: ubuntu-latest
+            timeout-minutes: 30
+            steps:
+              - name: Checkout code
+                uses: actions/checkout@v4
+
+              - name: Test deployment
+                id: test-deployment
+                uses: ewcloud/ewc-gh-action-test-deploy-ansible-playbook@v2
+                with:
+                  osAuthUrl: '${{ secrets.OS_AUTH_URL }}'
+                  osRegionName: '${{ secrets.OS_REGION_NAME }}'
+                  osApplicationCredentialId: '${{ secrets.OS_APPLICATION_CREDENTIAL_ID }}'
+                  osApplicationCredentialSecret: '${{ secrets.OS_APPLICATION_CREDENTIAL_SECRET }}'
+                  osExternalNetworkName: 'external'
+                  osPrivateNetworkName: 'private'
+                  osSecurityGroupName: 'ssh'
+                  osFlavorName: 'eo1.small'
+                  osImageName: 'ubuntu-24.04-20250604102601'
+                  osKeypairName: 'github-keypair'
+                  ansibleUser: 'ubuntu'
+                  ansibleSshPrivateKey: '${{ secrets.ANSIBLE_SSH_PRIVATE_KEY }}'
+                  pathToMainFile: 'site.yml'
+
+              - name: Upload test deployment result
+                uses: actions/upload-artifact@v4
+                with:
+                  name: artifacts_${{ github.run_id }}
+                  path: ${{ steps.test-deployment.outputs.artifactPath }}
+        ```
+
+        ## Inputs
+
+        | Name | Description | Type | Default | Required |
+        |------|-------------|------|---------|:--------:|
+        | ansibleSshPrivateKey | Value of the private ssh keypair for compute instance access | `string` | n/a | yes |
+        | ansibleUser | Operative system user which Ansible impersonates when connecting to the test compute instance | `string` | n/a | yes |
+        | ansibleVersion | Ansible version to be used during testing (must be supported by the specified Python version) | `string` | `10.7.0` | yes |
+        | osApplicationCredentialId | OpenStack application credential ID | `string` | n/a | yes |
+        | osApplicationCredentialSecret | OpenStack application credential secret | `string` | n/a | yes |
+        | osAuthUrl | URL pointing to OpenStack authentication API | `string` | n/a | yes |
+        | osExternalNetworkName | Name of the external OpenStack network for floating IPs | `string` | n/a | yes |
+        | osFlavorName | Name the OpenStack flavor to use for the instance | `string` | n/a | yes |
+        | osImageName | Name of the image to use for the OpenStack compute instance | `string` | n/a | yes |
+        | osKeypairName | Name of the pre-uploaded public ssh keypair in OpenStack | `string` | n/a | yes |
+        | osPrivateNetworkName | Name of the private OpenStack network name to attach the test compute instance to | `string` | n/a | yes |
+        | osRegionName | OpenStack region name. Example: `RegionOne` | `string` | n/a | yes |
+        | osSecurityGroupName | Name of the OpenStack security group assigned to the test compute instance | `string` | n/a | yes |
+        | pathToMainFile | Path to main file for the Ansible Playbook execution. Example: `playbooks/ssh-bastion-flavour/ssh-bastion-flavour.yml` | `string` | n/a | yes |
+        | pathToRequirementsFile | Path to requirements file needed for the Ansible Playbook. Example: `playbooks/ssh-bastion-flavour/requirements.yml` | `string` | n/a | no |
+        | pythonVersion | Python version to be used during testing | `string` | `3.9.25` | yes |
+        | inputSpecJson | Input values for the Ansible Playbook, in JSON format. Example: `{"fail2ban_whitelisted_ip_ranges":""}` | `string` | n/a | no |
+        | instanceNamePrefix | Prefix for the OpenStack compute instance (will prepend to the GitHub run id) | `string` | `github` | yes |
+
+        ## Outputs
+
+        | Name | Description | Type |
+        |------|-------------|------|
+        | artifactPath | Path where artifacts were written in the workflow workspace | `string` |
+
+
+      home: https://github.com/ewcloud/ewc-gh-action-test-deploy-ansible-playbook/tree/2.1.0
+      sources:
+        - https://github.com/ewcloud/ewc-gh-action-test-deploy-ansible-playbook.git
+      maintainers:
+        - name: EWC
+          email: support@europeanweather.cloud
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
+      annotations:
+        technology: "GitHub Action"
+        category: "Automation"
+        supportLevel: "EWC"
+        licenseType: "MIT License"
+      displayName: Test Deploy Ansible Playbook
+      summary: Automatically setup all necessary OpenStack resources for an Ansible Playbook to run on, execute it and report status via a summary in GitHub's UI and machine-friendly result artifacts.
+      license: https://github.com/ewcloud/ewc-gh-action-test-deploy-ansible-playbook/blob/2.1.0/LICENSE
+      published: true
+
     haproxy-flavour:
       annotations:
         technology: "Ansible Playbook"
