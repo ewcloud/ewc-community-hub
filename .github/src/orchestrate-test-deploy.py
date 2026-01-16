@@ -14,7 +14,7 @@ from json import dumps as json_dumps
 from os import environ, getenv
 from queue import Queue, Empty
 from pathlib import Path
-from requests import request, Response, exceptions
+from requests import request, Response
 from time import sleep
 from threading import Event
 from typing import Any
@@ -180,11 +180,8 @@ def dispatch_and_register(thread_id: str) -> None:
 
     try:
         dispatch.raise_for_status()
-    except exceptions.HTTPError:
-        print(
-            f"::warning::{thread_id} - Failed to dispatch workflow for '{item}'",
-            flush=True,
-        )
+    except Exception as e:
+        print(f"::warning::{thread_id} - Failed to dispatch workflow for '{item}' with exception '{e}'", flush=True)
         move_to_done(
             item,
             "DISPATCH_FAILED",
@@ -206,10 +203,9 @@ def dispatch_and_register(thread_id: str) -> None:
 
     try:
         runs.raise_for_status()
-    except exceptions.HTTPError:
+    except Exception as e:
         print(
-            f"::warning::{thread_id} - Failed register workflow run for '{item}'",
-            flush=True,
+            f"::warning::{thread_id} - Failed to register workflow run for '{item}' with exception: '{e}'", flush=True
         )
         move_to_done(item, "REGISTER_FAILED", f"HTTP request failed with code {runs.status_code}")
         return
@@ -227,7 +223,7 @@ def dispatch_and_register(thread_id: str) -> None:
 
         case 0:
             print(f"::warning::{thread_id} - Failed to register workflow for item '{item}'", flush=True)
-            move_to_done(item, "REGISTER_FAILED", f"HTTP request failed with code {runs.status_code}")
+            move_to_done(item, "REGISTER_FAILED", f"No runs match registration criteria for '{item}'")
 
         case 1:
             item.run_id = runs[0]["id"]
@@ -236,10 +232,10 @@ def dispatch_and_register(thread_id: str) -> None:
 
         case _:
             print(
-                f"::warning::{thread_id} - Multiple runs match criteria for item '{item}'",
+                f"::warning::{thread_id} - Multiple runs match registration criteria for '{item}'",
                 flush=True,
             )
-            move_to_done(item, "REGISTER_FAILED", f"Multiple runs of item '{item}'")
+            move_to_done(item, "REGISTER_FAILED", f"Multiple possible runs for '{item}'")
 
 
 def check_status(thread_id: str) -> None:
@@ -268,9 +264,9 @@ def check_status(thread_id: str) -> None:
 
     try:
         run.raise_for_status()
-    except exceptions.HTTPError:
+    except Exception as e:
         print(
-            f"::warning::{thread_id} - Failed to check status for '{item}' (run ID: '{item.run_id}')",
+            f"::warning::{thread_id} - Failed to check status for '{item}' (run ID: '{item.run_id}') with exception: '{e}'",
             flush=True,
         )
         in_progress.put(item)
@@ -298,19 +294,13 @@ def reduce_summarize(spec_items: dict) -> None:
 
     for q in (pending, in_progress):
         while not q.empty():
-            try:
-                item = q.get_nowait()
-                move_to_done(item, "TIMED_OUT", "Total deadline reached")
-            except Empty:
-                break
+            item = q.get_nowait()
+            move_to_done(item, "TIMED_OUT", "Total deadline reached")
 
     items: list[Item] = []
     while not done.empty():
-        try:
-            item = done.get_nowait()
-            items.append(item)
-        except Empty:
-            break
+        item = done.get_nowait()
+        items.append(item)
 
     site = (
         GH_DOWNSTREAM_WORKFLOW_FILE.split(".")[0].replace("test-", "").upper()
@@ -449,7 +439,7 @@ def main() -> None:
                 break
 
         stop.set()
-        print("main - Raised timeout event...")
+        print("main - Raised stop event...")
         sleep(60)
 
     reduce_summarize(spec_items)
