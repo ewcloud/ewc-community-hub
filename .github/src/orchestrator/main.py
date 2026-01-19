@@ -23,6 +23,7 @@ from yaml import safe_load as yaml_safe_load
 GH_API_TOKEN = environ["GH_API_TOKEN"]
 GH_DOWNSTREAM_WORKFLOW_FILE = environ["GH_DOWNSTREAM_WORKFLOW_FILE"]
 ITEMS_FILTER = getenv("ITEMS_FILTER", "")
+ITEMS_TECHNOLOGY = getenv("ITEMS_TECHNOLOGY", "Ansible Playbook")
 POLLING_INTERVAL_SECONDS = int(environ["POLLING_INTERVAL_SECONDS"])
 RUN_TIMEOUT_MINUTES = int(environ["RUN_TIMEOUT_MINUTES"])
 TOTAL_TIMEOUT_MINUTES = int(environ["TOTAL_TIMEOUT_MINUTES"])
@@ -92,23 +93,29 @@ def move_to_done(item: Item, state: str, error: str | None = None) -> None:
 # --- Subroutines ---
 
 
-def read_spec_items(technology: str = "Ansible Playbook") -> dict:
+def read_spec_items() -> dict:
     with open(CATALOG_FILE) as f:
         catalog = yaml_safe_load(f)
 
     if ITEMS_FILTER:
-        keys = set(ITEMS_FILTER.split(","))
+        filtered_item_names = set(item_name.strip() for item_name in ITEMS_FILTER.split(","))
+        print(
+            f"main - Reading Items with name: {filtered_item_names}",
+            flush=True,
+        )
 
-        for key in keys:
-            if key not in catalog["spec"]["items"]:
-                del catalog["spec"]["items"][key]
+    print(f"main - Reading Items with annotation: 'technology={ITEMS_TECHNOLOGY}'", flush=True)
 
     spec_items = {}
 
     for key, item in catalog["spec"]["items"].items():
 
+        name = item.get("name")
+        if name not in filtered_item_names:
+            continue
+
         annotation = item.get("annotations").get("technology")
-        if annotation != technology:
+        if annotation != ITEMS_TECHNOLOGY:
             continue
 
         values = item.get("values", {})
@@ -118,6 +125,9 @@ def read_spec_items(technology: str = "Ansible Playbook") -> dict:
         spec_item = {subkey: item[subkey] for subkey in ["name", "version", "values", "sources"]}
 
         spec_items.update({key: spec_item})
+
+    if len(spec_items) < 1:
+        print("::warning::main - Item name and annotation filtering returned no matches!", flush=True)
 
     return spec_items
 
@@ -216,7 +226,7 @@ def dispatch_and_register(thread_id: str) -> None:
     runs_count = len(runs)
 
     print(
-        f"{thread_id} - Registering {runs_count} run(s): '{json_dumps(runs, indent=4)[:1000]} ...'",
+        f"{thread_id} - Registering {runs_count} run(s): '{json_dumps(runs, indent=4)[:1000]}...'",
         flush=True,
     )
 
@@ -276,7 +286,7 @@ def check_status(thread_id: str) -> None:
     run = run.json()
 
     print(
-        f"{thread_id} - Checking run: '{json_dumps(run, indent=4)[:1000]} ...'",
+        f"{thread_id} - Checking run: '{json_dumps(run, indent=4)[:1000]}...'",
         flush=True,
     )
 

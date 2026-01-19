@@ -59,6 +59,7 @@ jobs:
         env:
           GH_API_TOKEN: ${{ secrets.GH_API_TOKEN }}
           ITEMS_FILTER: ${{ inputs.items-filter }}
+          ITEMS_TECHNOLOGY: "Ansible Playbook"
           POLLING_INTERVAL_SECONDS: ${{ inputs.polling-interval-seconds }}
           RUN_TIMEOUT_MINUTES: ${{ inputs.run-timeout-minutes }}
           TOTAL_TIMEOUT_MINUTES: ${{ inputs.total-timeout-minutes }}
