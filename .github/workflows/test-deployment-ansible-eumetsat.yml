@@ -1,4 +1,4 @@
-name: Deployments Testing on EUMETSAT
+name: Ansible Deployments Testing on ECMWF
 
 on:
   workflow_dispatch:
@@ -17,13 +17,13 @@ on:
       run-timeout-minutes:
         description: Max per-workflow runtime. If the corresponding downstream run is in progress, it will be marked as timed out
         required: true
-        default: 20
+        default: 10
         type: number
 
       total-timeout-minutes:
         description: Max total runtime for the orchestrator workflow. Any downstream runs in progress at this point will be marked as timed out
         required: true
-        default: 180
+        default: 90
         type: number
 
       max-concurrent-workflows:
@@ -38,9 +38,9 @@ permissions:
 
 jobs:
   orchestrate:
-    name: Orchestrate
+    name: Deployment test
     runs-on: ubuntu-latest
-    timeout-minutes: 200 # must be bigger than inputs.total-timeout-minutes
+    timeout-minutes: 100 # must be bigger than inputs.total-timeout-minutes
 
     steps:
       - name: Checkout catalog repository
@@ -52,10 +52,10 @@ jobs:
           python-version: '3.12'
 
       - name: Install additional dependencies
-        run: pip install -r .github/src/requirements.txt
+        run: pip install -r .github/src/orchestrator/requirements.txt
 
-      - name: Orchestrate test deployments
-        run: python .github/src/orchestrate-test-deploy.py
+      - name: Orchestrate deployments testing
+        run: python .github/src/orchestrator/main.py
         env:
           GH_API_TOKEN: ${{ secrets.GH_API_TOKEN }}
           ITEMS_FILTER: ${{ inputs.items-filter }}
@@ -63,4 +63,4 @@ jobs:
           RUN_TIMEOUT_MINUTES: ${{ inputs.run-timeout-minutes }}
           TOTAL_TIMEOUT_MINUTES: ${{ inputs.total-timeout-minutes }}
           MAX_CONCURRENT_WORKFLOWS: ${{ inputs.max-concurrent-workflows }}
-          GH_DOWNSTREAM_WORKFLOW_FILE: "test-eumetsat.yml" 
+          GH_DOWNSTREAM_WORKFLOW_FILE: "test-ecmwf.yml"

@@ -36,7 +36,7 @@ HEADERS = {
 }
 
 CATALOG_FILE = f"{environ['GITHUB_WORKSPACE']}/items.yaml"
-SUMMARY_TEMPLATE_FILE = f"{environ['GITHUB_WORKSPACE']}/.github/src/summary.template.md"
+SUMMARY_TEMPLATE_FILE = f"{environ['GITHUB_WORKSPACE']}/.github/src/orchestrator/summary.template.md"
 RED_LIGHT = "🔴"
 YELLOW_LIGHT = "🟡"
 GREEN_LIGHT = "🟢"
