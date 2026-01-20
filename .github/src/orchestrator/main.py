@@ -1,12 +1,8 @@
 #!/usr/bin/env python3
 
-# Orchestration for downstream concurrent runs of `Test Deploy Ansible Playbook v2` GitHub Actions
-# ( see https://github.com/ewcloud/ewc-gh-action-test-deploy-ansible-playbook/tree/v2).
-#
-# NOTE: To devs, coding style guidelines enforced by running
-# ```bash
-# black --line-length 120 ./ && flake8 ./ && mypy --show-error-codes --pretty ./
-# ````
+# Orchestration for downstream concurrent runs of any workflow that adheres to same input schema of
+# a GitHub Action lke `Test Deploy Ansible Playbook v2` 
+# (https://github.com/ewcloud/ewc-gh-action-test-deploy-ansible-playbook/tree/v2).
 
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
