@@ -34,7 +34,7 @@ jobs:
               exit 1
           fi
 
-      - name: Validate items metadata format
+      - name: Validate items metadata serialization
         run: |
           yq -o=json "items.yaml" > "items.json"
 
