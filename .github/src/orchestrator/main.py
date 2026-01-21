@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
-# Orchestration for downstream concurrent runs of any workflow that adheres to same input schema of
-# a GitHub Action lke `Test Deploy Ansible Playbook v2` 
-# (https://github.com/ewcloud/ewc-gh-action-test-deploy-ansible-playbook/tree/v2).
+# Orchestration of downstream concurrent workflows to test Items deployment, filtered by their name and/or technology.
+#
+# It forwards as input any attributes/values of the `items.<item key>.values` metadata within `items.yaml` BUT
+# adding a mutation: `inputSpec` is serialized and forwarded downstream as JSON string value for a new `inputSpecJson` attribute.
+# ( see example of compatible downstream workflow at https://github.com/ewcloud/ewc-gh-action-test-deploy-ansible-playbook/tree/v2 ).
 
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
