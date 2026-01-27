@@ -20,7 +20,21 @@ jobs:
       - name: Install Node dependencies
         run: npm install -g ajv-cli
 
-      - name: Validate items metadata format
+      - name: Validate items metadata styling
+        run: |
+          char_count_before_trim=$(cat items.yaml | wc -m)
+          
+          sed -i 's/[[:space:]]*$//' items.yaml
+
+          char_count_after_trim=$(cat items.yaml | wc -m)
+          char_count_diff=$(( $char_count_before_trim - $char_count_after_trim ))
+
+          if [[ "$char_count_diff" -gt "0" ]]; then
+              echo "items.yaml contains ${char_count_diff} trailing space(s) that must be trimmed"
+              exit 1
+          fi
+
+      - name: Validate items metadata serialization
         run: |
           yq -o=json "items.yaml" > "items.json"
 
