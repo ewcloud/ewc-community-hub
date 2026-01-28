@@ -1100,7 +1100,7 @@ spec:
 
     ewc-gh-action-test-deploy-ansible-playbook:
       name: "ewc-gh-action-test-deploy-ansible-playbook"
-      version: "2.1.0"
+      version: "2.1.1"
       description: |
         This GitHub Action setups all necessary OpenStack resources for a Ansible Playbook to run,  executes it and reports about its success/failure in a nice looking summary (within GitHub UI), as well as machine-friendly artifacts for postprocessing.
 
@@ -1112,15 +1112,15 @@ spec:
 
         ## Prerequisites
 
-        1. Acquire OpenStack application credentials with enough permissions to modify compute instances
-        2. Extract the following attributes from your app credentials and store them within your repository's GitHub secrets:
+        * Get OpenStack API credentials (see [How to request OpenStack Application Credentials](https://confluence.ecmwf.int/x/TiRNH) section of the EWC documentation)
+        * Extract the following attributes from your app credentials and store them within your repository's GitHub secrets (see [Creating secrets for a repository](https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets#creating-secrets-for-a-repository) section of the GitHub documentation):
             - `OS_AUTH_URL`
             - `OS_REGION_NAME`
             - `OS_APPLICATION_CREDENTIAL_ID`
             - `OS_APPLICATION_CREDENTIAL_SECRET`
-        4. Create an ssh keypair
-        3. Upload the public ssh key to OpenStack
-        5. Within your repository's GitHub secrets, store the value of the private ssh key as:
+        * Create an SSH keypair (see [Generating a new SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent?platform=linux#generating-a-new-ssh-key) section of the GitHub documentation )
+        * Add you SSH public key to OpenStack (see [Import SSH Key](https://confluence.ecmwf.int/x/TyRNH) section of the EWC documentation).
+        * Once more, update your repository's GitHub secrets to include the value of the private ssh key as:
             - `ANSIBLE_SSH_PRIVATE_KEY`
 
 
@@ -1202,7 +1202,7 @@ spec:
         | artifactPath | Path where artifacts were written in the workflow workspace | `string` |
 
 
-      home: https://github.com/ewcloud/ewc-gh-action-test-deploy-ansible-playbook/tree/2.1.0
+      home: https://github.com/ewcloud/ewc-gh-action-test-deploy-ansible-playbook/tree/2.1.1
       sources:
         - https://github.com/ewcloud/ewc-gh-action-test-deploy-ansible-playbook.git
       maintainers:
@@ -1214,9 +1214,9 @@ spec:
         category: "Automation"
         supportLevel: "EWC"
         licenseType: "MIT License"
-      displayName: Test Deploy Ansible Playbook
-      summary: Automatically setup all necessary OpenStack resources for an Ansible Playbook to run on, execute it and report status via a summary in GitHub's UI and machine-friendly result artifacts.
-      license: https://github.com/ewcloud/ewc-gh-action-test-deploy-ansible-playbook/blob/2.1.0/LICENSE
+      displayName: Ansible Playbook Test Deployment via GitHub Actions
+      summary: Automatically setup all necessary OpenStack test resources for an Ansible Playbook to run on, execute it and report test status via a summary in GitHub's UI and machine-friendly result artifacts.
+      license: https://github.com/ewcloud/ewc-gh-action-test-deploy-ansible-playbook/blob/2.1.1/LICENSE
       published: true
 
     haproxy-flavour:
