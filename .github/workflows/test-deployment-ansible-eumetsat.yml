@@ -17,13 +17,7 @@ on:
       run-timeout-minutes:
         description: Max per-workflow runtime. If the corresponding downstream run is in progress, it will be marked as timed out
         required: true
-        default: 10
-        type: number
-
-      total-timeout-minutes:
-        description: Max total runtime for the orchestrator workflow. Any downstream runs in progress at this point will be marked as timed out
-        required: true
-        default: 90
+        default: 20
         type: number
 
       max-concurrent-workflows:
@@ -40,7 +34,7 @@ jobs:
   orchestrate:
     name: Deployment test
     runs-on: ubuntu-latest
-    timeout-minutes: 100 # must be bigger than inputs.total-timeout-minutes
+    timeout-minutes: 200
 
     steps:
       - name: Checkout catalog repository
@@ -62,6 +56,6 @@ jobs:
           ITEMS_TECHNOLOGY: "Ansible Playbook"
           POLLING_INTERVAL_SECONDS: ${{ inputs.polling-interval-seconds }}
           RUN_TIMEOUT_MINUTES: ${{ inputs.run-timeout-minutes }}
-          TOTAL_TIMEOUT_MINUTES: ${{ inputs.total-timeout-minutes }}
           MAX_CONCURRENT_WORKFLOWS: ${{ inputs.max-concurrent-workflows }}
           GH_DOWNSTREAM_WORKFLOW_FILE: "test-eumetsat.yml"
+          TOTAL_TIMEOUT_MINUTES: 180 # must be smaller than jobs.orchestrate.timeout-minutes

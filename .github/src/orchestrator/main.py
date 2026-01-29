@@ -418,7 +418,7 @@ def checker(thread_id: str) -> None:
 
 def main() -> None:
     start_time = datetime.now(timezone.utc)
-    buffer_minutes = 3
+    buffer_minutes = 2
     total_deadline = (
         start_time + timedelta(minutes=TOTAL_TIMEOUT_MINUTES) - timedelta(minutes=buffer_minutes)
     )  # include few mins of buffer to have time for wrap up before the runtime force-quits
