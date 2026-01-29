@@ -1100,7 +1100,7 @@ spec:
 
     ewc-gh-action-test-deploy-ansible-playbook:
       name: "ewc-gh-action-test-deploy-ansible-playbook"
-      version: "2.1.1"
+      version: "2.1.2"
       description: |
         This GitHub Action setups all necessary OpenStack resources for a Ansible Playbook to run,  executes it and reports about its success/failure in a nice looking summary (within GitHub UI), as well as machine-friendly artifacts for postprocessing.
 
@@ -1202,7 +1202,7 @@ spec:
         | artifactPath | Path where artifacts were written in the workflow workspace | `string` |
 
 
-      home: https://github.com/ewcloud/ewc-gh-action-test-deploy-ansible-playbook/tree/2.1.1
+      home: https://github.com/ewcloud/ewc-gh-action-test-deploy-ansible-playbook/tree/2.1.2
       sources:
         - https://github.com/ewcloud/ewc-gh-action-test-deploy-ansible-playbook.git
       maintainers:
@@ -1216,7 +1216,7 @@ spec:
         licenseType: "MIT License"
       displayName: Ansible Playbook Test Deployment via GitHub Actions
       summary: Automatically setup all necessary OpenStack test resources for an Ansible Playbook to run on, execute it and report test status via a summary in GitHub's UI and machine-friendly result artifacts.
-      license: https://github.com/ewcloud/ewc-gh-action-test-deploy-ansible-playbook/blob/2.1.1/LICENSE
+      license: https://github.com/ewcloud/ewc-gh-action-test-deploy-ansible-playbook/blob/2.1.2/LICENSE
       published: true
 
     haproxy-flavour:
