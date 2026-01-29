@@ -1,4 +1,4 @@
-name: Ansible Deployments Testing on ECMWF
+name: Ansible Deployments Testing on EUMETSAT
 
 on:
   workflow_dispatch:
@@ -64,4 +64,4 @@ jobs:
           RUN_TIMEOUT_MINUTES: ${{ inputs.run-timeout-minutes }}
           TOTAL_TIMEOUT_MINUTES: ${{ inputs.total-timeout-minutes }}
           MAX_CONCURRENT_WORKFLOWS: ${{ inputs.max-concurrent-workflows }}
-          GH_DOWNSTREAM_WORKFLOW_FILE: "test-ecmwf.yml"
+          GH_DOWNSTREAM_WORKFLOW_FILE: "test-eumetsat.yml"
