@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 
-# Orchestration of downstream concurrent workflows to test Items deployment, filtered by their name and/or technology.
+# Orchestration of downstream concurrent workflows to test Items deployment, filtered by:
+# 1. a match between the value of the `annotations[].technology` attributes and the value of the `ITEMS_TECHNOLOGY`env var
+# 2. the presence of the `others` with value `Deployable` in the Item's metadata
+# 3. the presence of the `values` attribute in the Item's metadata
+# 4. (optional) a match between the value of the `items.<item key>` attributes and the value of the `ITEMS_FILTER`env var
 #
 # It forwards as input any attributes/values of the `items.<item key>.values` metadata within `items.yaml` BUT
 # adding a mutation: `inputSpec` is serialized and forwarded downstream as JSON string value for a new `inputSpecJson` attribute.
@@ -102,7 +106,7 @@ def read_spec_items() -> dict:
             flush=True,
         )
 
-    print(f"main - Reading Items with annotation: 'technology={ITEMS_TECHNOLOGY}'", flush=True)
+    print(f"main - Reading Items with annotation: 'others=Deployable' and 'technology={ITEMS_TECHNOLOGY}'", flush=True)
 
     spec_items = {}
 
@@ -112,8 +116,12 @@ def read_spec_items() -> dict:
         if name not in filtered_item_names:
             continue
 
-        annotation = item.get("annotations").get("technology")
-        if annotation != ITEMS_TECHNOLOGY:
+        others_annotation = item.get("annotations").get("others", "")
+        if "Deployable" not in others_annotation:
+            continue
+
+        technology_annotation = item.get("annotations").get("technology", "")
+        if technology_annotation != ITEMS_TECHNOLOGY:
             continue
 
         values = item.get("values", {})
