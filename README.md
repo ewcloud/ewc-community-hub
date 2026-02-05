@@ -34,8 +34,8 @@ ecmwf-data-flavour:
     - `conda_user`: User owning the conda installation. Default: `root`
 
   displayName: ECMWF Data Flavour
-  values:
-    inputSpec:
+  ewccli:
+    inputs:
       - name: reboot_if_required
         default: true
         description: Boolean to reboot the instance if required after an update.
