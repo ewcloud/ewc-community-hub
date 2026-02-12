@@ -853,7 +853,7 @@ spec:
         pathToMainFile: playbooks/ecmwf-data-flavour/ecmwf-data-flavour.yml
         pathToRequirementsFile: requirements.yml
       values:
-        osImageName: ubuntu-24.04-20250604102601
+        osImageName: Ubuntu-24.04-20251007115108
         ansibleUser: ubuntu
         inputSpec:
           - name: reboot_if_required
@@ -902,6 +902,7 @@ spec:
       ewccli:
         pathToRequirementsFile: playbooks/eumetsat-data-tailor-flavour/requirements.yml
         pathToMainFile: playbooks/eumetsat-data-tailor-flavour/eumetsat-data-tailor-flavour.yml
+        defaultImageName: Ubuntu-22.04-20251007115800
         inputs:
           - name: data_tailor_env_wipe
             description: flag to delete existing conda environment where data tailor was previously installed. Only yes will be accepted to approve
@@ -928,7 +929,7 @@ spec:
             type: str
             default: "root"
       values:
-        osImageName: ubuntu-24.04-20250604102601
+        osImageName: Ubuntu-22.04-20251007115800
         ansibleUser: ubuntu
         pathToRequirementsFile: playbooks/eumetsat-data-tailor-flavour/requirements.yml
         pathToMainFile: playbooks/eumetsat-data-tailor-flavour/eumetsat-data-tailor-flavour.yml
@@ -1434,7 +1435,7 @@ spec:
             description: "OpenStack security group containing all firewall rules required for Nginx Proxy Manager operation"
             type: str
             default: ssh-http-https
-        osImageName: ubuntu-24.04-20250604102601
+        osImageName: Ubuntu-24.04-20251007115108
         pathToMainFile: playbooks/ha.yml
         pathToRequirementsFile: playbooks/nginx-proxy-manager-flavour/requirements.yml
       version: "1.5.0"
@@ -2285,7 +2286,7 @@ spec:
       name: "ipa-server-flavour"
       version: "1.5.0"
       ewccli:
-        defaultImageName: Rocky-9.5-20250604142417
+        defaultImageName: Rocky-9.6-20251107141503
         pathToRequirementsFile: playbooks/ipa-server-flavour/requirements.yml
         pathToMainFile: playbooks/ipa-server-flavour/ipa-server-flavour.yml
         inputs:
@@ -2316,7 +2317,7 @@ spec:
         defaultSecurityGroups:
           - ipa
       values:
-        osImageName: Rocky-9.5-20250604142417
+        osImageName: Rocky-9.6-20251107141503
         ansibleUser: cloud-user
         pathToRequirementsFile: playbooks/ipa-server-flavour/requirements.yml
         pathToMainFile: playbooks/ipa-server-flavour/ipa-server-flavour.yml
@@ -3064,7 +3065,7 @@ spec:
             description: "OpenStack security group containing all firewall rules required for Nginx Proxy Manager operation"
             type: str
             default: nginx-proxy-manager
-        osImageName: ubuntu-24.04-20250604102601
+        osImageName: Ubuntu-24.04-20251007115108
         pathToMainFile: playbooks/nginx-proxy-manager-flavour/nginx-proxy-manager-flavour.yml
         pathToRequirementsFile: playbooks/nginx-proxy-manager-flavour/requirements.yml
       version: "1.5.0"
@@ -3272,7 +3273,7 @@ spec:
       name: "remote-desktop-flavour"
       version: "1.5.0"
       ewccli:
-        defaultImageName: Rocky-9.5-20250604142417
+        defaultImageName: Rocky-9.6-20251107141503
         pathToRequirementsFile: playbooks/remote-desktop-flavour/requirements.yml
         pathToMainFile: playbooks/remote-desktop-flavour/remote-desktop-flavour.yml
         inputs:
@@ -3281,7 +3282,7 @@ spec:
             type: List[str]
             default: None
       values:
-        osImageName: Rocky-9.5-20250604142417
+        osImageName: Rocky-9.6-20251107141503
         ansibleUser: cloud-user
         pathToRequirementsFile: playbooks/remote-desktop-flavour/requirements.yml
         pathToMainFile: playbooks/remote-desktop-flavour/remote-desktop-flavour.yml
@@ -3644,7 +3645,7 @@ spec:
       name: "ssh-bastion-flavour"
       version: "1.5.0"
       ewccli:
-        defaultImageName: Rocky-9.5-20250604142417
+        defaultImageName: Rocky-9.6-20251107141503
         pathToRequirementsFile: playbooks/ssh-bastion-flavour/requirements.yml
         pathToMainFile: playbooks/ssh-bastion-flavour/ssh-bastion-flavour.yml
         inputs:
@@ -3653,7 +3654,7 @@ spec:
             type: List[str]
             default: None
       values:
-        osImageName: Rocky-9.5-20250604142417
+        osImageName: Rocky-9.6-20251107141503
         ansibleUser: cloud-user
         pathToRequirementsFile: playbooks/ssh-bastion-flavour/requirements.yml
         pathToMainFile: playbooks/ssh-bastion-flavour/ssh-bastion-flavour.yml
