@@ -399,7 +399,7 @@ def dispatcher(thread_id: str) -> None:
                 f"{thread_id} - Max concurrency reached. Will wait before dispatching new workflows...",
                 flush=True,
             )
-            sleep(15)
+            sleep(10)
             continue
 
         try:
@@ -456,6 +456,8 @@ def main() -> None:
         for i in range(max_workers - 1):
             executor.submit(checker, thread_id=f"checker_n{i}")
 
+        sleep(30)
+
         while not pending.empty() or not in_progress.empty():
 
             print(f"main - {pending.qsize()} pending, {in_progress.qsize()} in progress, {done.qsize()} done")
@@ -466,7 +468,7 @@ def main() -> None:
 
         stop.set()
         print("main - Raised stop event...")
-        sleep(60)
+        sleep(30)
 
     reduce_summarize(spec_items)
 
