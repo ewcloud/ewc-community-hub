@@ -898,7 +898,7 @@ spec:
 
     eumetsat-data-tailor-flavour:
       name: "eumetsat-data-tailor-flavour"
-      version: "1.5.0"
+      version: "1.5.2"
       ewccli:
         pathToRequirementsFile: playbooks/eumetsat-data-tailor-flavour/requirements.yml
         pathToMainFile: playbooks/eumetsat-data-tailor-flavour/eumetsat-data-tailor-flavour.yml
@@ -1089,7 +1089,7 @@ spec:
         | conda_prefix | prefix where conda will be installed | `string` | `/opt/conda` | yes |
         | conda_user | user that will own the conda installation | `string` | `root` | yes |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/playbooks/eumetsat-data-tailor-flavour
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.2/playbooks/eumetsat-data-tailor-flavour
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -1105,7 +1105,7 @@ spec:
         others: "Deployable,EWCCLI-compatible"
       displayName: EUMETSAT Data Tailor Flavour
       summary: Transforms an existing VM into a powerful satellite data customization hub, enabling users to efficiently subset, aggregate, reproject, and reformat data from METOP, MFG, MSG, MTG, and Sentinel-3 into GIS and image formats, offering faster processing and greater flexibility than web-based alternatives.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.2/LICENSE
       published: true
 
     ewccli:
@@ -1415,9 +1415,9 @@ spec:
         | os_security_group_name | OpenStack security group containing all firewall rules required for HAProxy operation | `string` | `ssh-http-https` | yes |
 
       displayName: HAProxy
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/tree/1.5.0/playbooks/haproxy-flavour
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/tree/1.5.2/playbooks/haproxy-flavour
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.2/LICENSE
       maintainers:
         - name: EWC Team
           email: support@europeanweather.cloud
@@ -1437,11 +1437,11 @@ spec:
         osImageName: ubuntu-24.04-20250604102601
         pathToMainFile: playbooks/ha.yml
         pathToRequirementsFile: playbooks/nginx-proxy-manager-flavour/requirements.yml
-      version: "1.5.0"
+      version: "1.5.2"
 
     default-stack-provisioning:
       name: "default-stack-provisioning"
-      version: "1.5.0"
+      version: "1.5.2"
       description: |
         >✅ This template can be safely applied from any local work environment, even running outside an EWC tenancy's private network.
 
@@ -1578,8 +1578,7 @@ spec:
                 "remote_desktop_instance_index": 1,
                 "remote_desktop_flavor_name":"eo1.large",
                 "remote_desktop_image_name":"Rocky-9.5-20250604142417",
-                "remote_desktop_instance_has_fip":"yes",
-                "fail2ban_whitelisted_ip_ranges":""
+                "remote_desktop_instance_has_fip":"yes"
             }' \
             default-stack-provisioning.yml
         ```
@@ -1618,9 +1617,9 @@ spec:
         | remote_desktop_flavor_name | name the flavor to use for the instance. To learn about available options, checkout the [official EWC VM plans documentation](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+VM+plans)  | `string` | `eo1.large` | yes |
         | remote_desktop_image_name | name of the image to use for the instance. For complete information on  available options, see the [official EWC Images documentation](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+Virtual+Images+Available) | `string` | `Rocky-9.5-20250604142417`  | yes |
         | remote_desktop_instance_has_fip | technically required to temporarily assign a floating IP to the instance to securely connect from localhost during initial configuration. 💡 The template ensures to remove the floating IP during post-provisioning | `string` | `yes` | yes |
-        | fail2ban_whitelisted_ip_ranges | IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: `['10.0.0.0/24','192.168.1.0/24']` | `list(string)` | `''` | no |
+        | fail2ban_whitelisted_ip_ranges | IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: `['10.0.0.0/24','192.168.1.0/24']` | `list(string)` | `null` | no |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/playbooks/default-stack-provisioning
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.2/playbooks/default-stack-provisioning
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -1636,12 +1635,12 @@ spec:
         licenseType: "MIT License"
       displayName: Default Stack Provisioning
       summary: Automates the creation and state management of three VMs, plus their OS configuration. Each of them serves an specific role (IPA server, SSH bastion or remote desktop). Together, they enable secure access, centralized user management, and a fully graphical development environment within the EWC.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.2/LICENSE
       published: true
 
     ipa-client-enroll-flavour:
       name: "ipa-client-enroll-flavour"
-      version: "1.5.0"
+      version: "1.5.2"
       ewccli:
         pathToRequirementsFile: playbooks/ipa-client-enroll-flavour/requirements.yml
         pathToMainFile: playbooks/ipa-client-enroll-flavour/ipa-client-enroll-flavour.yml
@@ -1799,7 +1798,7 @@ spec:
         | ipa_admin_username | username of the administrator account from the IPA server | `string` | `ipaadmin` | yes |
         | ipa_admin_password | password of the administrator account from the IPA server. Example: `my-secret-password` | `string` | n/a | yes |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/playbooks/ipa-client-enroll-flavour
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.2/playbooks/ipa-client-enroll-flavour
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -1815,12 +1814,12 @@ spec:
         licenseType: "MIT License"
       displayName: IPA Client Enroll Flavour
       summary: Seamlessly integrates a running VM into a FreeIPA-managed fleet of instances, enabling centralized user authentication, DNS resolution, and secure remote access for simplified and scalable identity management.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.2/LICENSE
       published: true
 
     ipa-client-disenroll-flavour:
       name: "ipa-client-disenroll-flavour"
-      version: "1.5.0"
+      version: "1.5.2"
       ewccli:
         pathToMainFile: playbooks/ipa-client-disenroll-flavour/ipa-client-disenroll-flavour.yml
         pathToRequirementsFile: playbooks/ipa-client-disenroll-flavour/requirements.yml
@@ -1970,7 +1969,7 @@ spec:
         | ipa_admin_username | username of the administrator account from the IPA server | `string` | `ipaadmin` | yes |
         | ipa_admin_password | password of the administrator account from the IPA server. Example: `my-secret-password` | `string` | n/a | yes |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/playbooks/ipa-client-disenroll-flavour
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.2/playbooks/ipa-client-disenroll-flavour
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -1986,12 +1985,12 @@ spec:
         licenseType: "MIT License"
       displayName: IPA Client Disenroll Flavour
       summary: Simplifies the secure removal of a running VM from a FreeIPA-managed fleet of instances, reducing administrative overhead and enhancing security by eliminating stale credentials and DNS records.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.2/LICENSE
       published: true
 
     ipa-client-provisioning:
       name: "ipa-client-provisioning"
-      version: "1.5.0"
+      version: "1.5.2"
       description: |
         >✅ This template can be applied from any local work environment, even running outside an EWC tenancy's private network.
 
@@ -2130,7 +2129,7 @@ spec:
         | ipa_admin_username | username of the administrator account from the IPA server | `string` | `ipaadmin` | yes |
         | ipa_admin_password | password of the administrator account from the IPA server | `string` | n/a | yes |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/playbooks/ipa-client-provisioning
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.2/playbooks/ipa-client-provisioning
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -2146,12 +2145,12 @@ spec:
         licenseType: "MIT License"
       displayName: IPA Client Provisioning
       summary: Automates the creation or state update of a VM, plus its configuration as an IPA client, effectively enabling integration with a fleet of instances with centralized authentication, secure remote access, and DNS-based resource discovery in the EWC.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.2/LICENSE
       published: true
 
     ipa-client-teardown:
       name: "ipa-client-teardown"
-      version: "1.5.0"
+      version: "1.5.2"
       description: |
         >✅ This template can be safely applied from any local work environment, even running outside an EWC tenancy's private network.
 
@@ -2262,7 +2261,7 @@ spec:
         | ipa_admin_username | username of the administrator account from the IPA server | `string` | `ipaadmin` | yes |
         | ipa_admin_password | password of the administrator account from the IPA server | `string` | n/a | yes |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/playbooks/ipa-client-teardown
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.2/playbooks/ipa-client-teardown
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -2278,12 +2277,12 @@ spec:
         licenseType: "MIT License"
       displayName: IPA Client Teardown
       summary: Simplifies the secure teardown of an IPA client VM in the EWC, disabling LDAP authentication, removing DNS records, and safely decommissioning the instance and its resources.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.2/LICENSE
       published: true
 
     ipa-server-flavour:
       name: "ipa-server-flavour"
-      version: "1.5.0"
+      version: "1.5.2"
       ewccli:
         defaultImageName: Rocky-9.5-20250604142417
         pathToRequirementsFile: playbooks/ipa-server-flavour/requirements.yml
@@ -2529,7 +2528,7 @@ spec:
         | os_network_name | OpenStack network to which the target virtual machine has access to | `string` | `private` | yes |
         | os_security_group_name | OpenStack security group containing all firewall rules required by the IPA server/client communication | `string` | `ipa` | yes |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/playbooks/ipa-server-flavour
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.2/playbooks/ipa-server-flavour
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -2545,12 +2544,12 @@ spec:
         licenseType: "MIT License"
       displayName: IPA Server Flavour
       summary: Turns an existing VM into a FreeIPA server, a central place for user authentication, authorization, and DNS-based resource discovery for secure and efficient identity management.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.2/LICENSE
       published: true
 
     ipa-server-provisioning:
       name: "ipa-server-provisioning"
-      version: "1.5.0"
+      version: "1.5.2"
       description: |
         >✅ This template can be safely applied from any local work environment, even running outside an EWC tenancy's private network.
 
@@ -2722,7 +2721,7 @@ spec:
         | ipa_admin_givenname | given name of the administrator to replace the default IPA admin (needs not be a physical person) | `string` | `EWC` | yes |
         | ipa_admin_surname | surname of the administrator to replace the default IPA admin (needs not to belong to a physical person)  | `string` | `IPAADMIN` | yes |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/playbooks/ipa-server-provisioning
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.2/playbooks/ipa-server-provisioning
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -2738,7 +2737,7 @@ spec:
         licenseType: "MIT License"
       displayName: IPA Server Provisioning
       summary: Automates the creation or state update of VM, plus its configuration as FreeIPA server, streamlining centralized user management, authentication, authorization, and DNS resolution for secure and efficient resource management.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.2/LICENSE
       published: true
 
     jupyterhub-flavour:
@@ -3041,9 +3040,9 @@ spec:
          | os_security_group_name | OpenStack security group containing all firewall rules required for Nginx Proxy Manager operation  | `string` | `nginx-proxy-manager` | yes |
 
       displayName: Nginx Proxy Manager
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/tree/1.5.0/playbooks/nginx-proxy-manager-flavour
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/tree/1.5.2/playbooks/nginx-proxy-manager-flavour
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.2/LICENSE
       maintainers:
         - name: EWC Team
           email: support@europeanweather.cloud
@@ -3067,7 +3066,7 @@ spec:
         osImageName: ubuntu-24.04-20250604102601
         pathToMainFile: playbooks/nginx-proxy-manager-flavour/nginx-proxy-manager-flavour.yml
         pathToRequirementsFile: playbooks/nginx-proxy-manager-flavour/requirements.yml
-      version: "1.5.0"
+      version: "1.5.2"
 
     nwcsaf-datacube-xarray:
       name: "nwcsaf-datacube-xarray"
@@ -3270,7 +3269,7 @@ spec:
 
     remote-desktop-flavour:
       name: "remote-desktop-flavour"
-      version: "1.5.0"
+      version: "1.5.2"
       ewccli:
         defaultImageName: Rocky-9.5-20250604142417
         pathToRequirementsFile: playbooks/remote-desktop-flavour/requirements.yml
@@ -3289,7 +3288,7 @@ spec:
           - name: fail2ban_whitelisted_ip_ranges
             description: "IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: ['10.0.0.0/24','192.168.1.0/24']"
             type: List[str]
-            default: ""
+            default: null
       description: |
         This Ansible Playbook configures virtual machines within the
         [European Weather Cloud (EWC)](https://europeanweather.cloud/) to
@@ -3414,10 +3413,7 @@ spec:
         example:
 
         ```bash
-        ansible-playbook \
-          -i inventory.yml \
-          -e '{"fail2ban_whitelisted_ip_ranges": ""}' \
-          remote-desktop-flavour.yml
+        ansible-playbook -i inventory.yml remote-desktop-flavour.yml
         ```
 
         ### 5. Install the local client and connect to your remote desktop
@@ -3439,9 +3435,9 @@ spec:
 
         | Name | Description | Type | Default | Required |
         |------|-------------|------|---------|----------|
-        | fail2ban_whitelisted_ip_ranges | IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: `['10.0.0.0/24','192.168.1.0/24']` | `list(string)` | `''` | no |
+        | fail2ban_whitelisted_ip_ranges | IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: `['10.0.0.0/24','192.168.1.0/24']` | `list(string)` | `null` | no |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/playbooks/remote-desktop-flavour
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.2/playbooks/remote-desktop-flavour
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -3457,12 +3453,12 @@ spec:
         licenseType: "MIT License"
       displayName: Remote Desktop Flavour
       summary: Transforms an existing VM into a secure, graphical desktop environment using X2Go and MATE, enabling simple remote access and intuitive cloud-based development for tenant users.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.2/LICENSE
       published: true
 
     remote-desktop-provisioning:
       name: "remote-desktop-provisioning"
-      version: "1.5.0"
+      version: "1.5.2"
       description: |
         >✅ This template can be safely applied from any local work environment, even running outside an EWC tenancy's private network.
 
@@ -3581,8 +3577,7 @@ spec:
                 "public_keypair_name":"my-public-key-name",
                 "private_keypair_path":"~/.ssh/id_rsa",
                 "private_network_name":"private",
-                "security_group_name":"ssh",
-                "fail2ban_whitelisted_ip_ranges":""
+                "security_group_name":"ssh"
             }' \
           remote-desktop-provisioning.yml
         ```
@@ -3619,9 +3614,9 @@ spec:
         | private_keypair_path| path to the local private keypair to use for SSH access to the instance | `string` | `~/.ssh/id_rsa` | yes |
         | private_networks_name | private network name to attach the instance to  | `string` | `private` | yes |
         | security_group_name | security group name to apply to the instance | `string` | `ipa` | yes |
-        | fail2ban_whitelisted_ip_ranges | IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: `['10.0.0.0/24','192.168.1.0/24']` | `list(string)` | `''` | no |
+        | fail2ban_whitelisted_ip_ranges | IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: `['10.0.0.0/24','192.168.1.0/24']` | `list(string)` | `null` | no |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/playbooks/remote-desktop-provisioning
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.2/playbooks/remote-desktop-provisioning
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -3637,12 +3632,12 @@ spec:
         licenseType: "MIT License"
       displayName: Remote Desktop Provisioning
       summary: Automates the creation or state update of a remote desktop VM, a basic yet secure cloud-based development environment with graphical interface. Uses X2Go and MATE to enable easy remote access for tenant users.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.2/LICENSE
       published: true
 
     ssh-bastion-flavour:
       name: "ssh-bastion-flavour"
-      version: "1.5.0"
+      version: "1.5.2"
       ewccli:
         defaultImageName: Rocky-9.5-20250604142417
         pathToRequirementsFile: playbooks/ssh-bastion-flavour/requirements.yml
@@ -3661,7 +3656,7 @@ spec:
           - name: fail2ban_whitelisted_ip_ranges
             description: "IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: ['10.0.0.0/24','192.168.1.0/24']"
             type: List[str]
-            default: ""
+            default: null
       description: |
         The [SSH](https://en.wikipedia.org/wiki/Secure_Shell) bastion or proxy server
         is a barrier between your internal machines (which lack a public or floating IP
@@ -3783,19 +3778,16 @@ spec:
         example:
 
         ```bash
-        ansible-playbook \
-          -i inventory.yml \
-          -e '{"fail2ban_whitelisted_ip_ranges":""}' \
-          ssh-bastion-flavour.yml
+        ansible-playbook -i inventory.yml ssh-bastion-flavour.yml
         ```
 
         ## Inputs
 
         | Name | Description | Type | Default | Required |
         |------|-------------|------|---------|----------|
-        | fail2ban_whitelisted_ip_ranges | IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: `['10.0.0.0/24','192.168.1.0/24']` | `list(string)` | `''` | no |
+        | fail2ban_whitelisted_ip_ranges | IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: `['10.0.0.0/24','192.168.1.0/24']` | `list(string)` | `null` | no |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/tree/1.5.0/playbooks/ssh-bastion-flavour
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/tree/1.5.2/playbooks/ssh-bastion-flavour
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -3811,12 +3803,12 @@ spec:
         licenseType: "MIT License"
       displayName: SSH Bastion Flavour
       summary: Tightens the configuration of a running VM, to operate as a secure SSH proxy with Fail2ban, providing tenant admins and users a fortified entry point to safely access private EWC networks from the public internet.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.2/LICENSE
       published: true
 
     ssh-bastion-provisioning:
       name: "ssh-bastion-provisioning"
-      version: "1.5.0"
+      version: "1.5.2"
       description: |
         >✅ This template can be safely applied from any local work environment, even running outside an EWC tenancy's private network.
 
@@ -3930,8 +3922,7 @@ spec:
                 "public_keypair_name":"my-public-key-name",
                 "private_keypair_path":"~/.ssh/id_rsa",
                 "private_network_name":"private",
-                "security_group_name":"ssh",
-                "fail2ban_whitelisted_ip_ranges":""
+                "security_group_name":"ssh"
             }' \
           ssh-bastion-provisioning.yml
         ```
@@ -3950,9 +3941,9 @@ spec:
         | private_keypair_name | path to the local private keypair to use for SSH access to the instance  | `string` | `~/.ssh/id_rsa` | yes |
         | private_network_name | private network name to attach the instance to  | `string` | `private` | yes |
         | security_group_name | security group name to apply to the instance | `string` | `ssh` | yes |
-        | fail2ban_whitelisted_ip_ranges | IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. Example: `['10.0.0.0/24','192.168.1.0/24']` | `list(string)` | `''` | no |
+        | fail2ban_whitelisted_ip_ranges | IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. Example: `['10.0.0.0/24','192.168.1.0/24']` | `list(string)` | `null` | no |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/playbooks/ssh-bastion-provisioning
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.2/playbooks/ssh-bastion-provisioning
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -3968,5 +3959,5 @@ spec:
         licenseType: "MIT License"
       displayName: SSH Bastion Provisioning
       summary: Automates the creation or state update of a secure SSH bastion VM in the EWC, configured with Fail2ban to provide a fortified entry point for safely accessing private EWC networks from the public internet.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.0/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.5.2/LICENSE
       published: true
