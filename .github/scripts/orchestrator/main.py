@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 # Orchestration of downstream concurrent workflows to test Items deployment, filtered by:
-# 1. a match between the value of the `annotations[].technology` attributes and the value of the `ITEMS_TECHNOLOGY`env var
-# 2. the presence of the `others` with value `Deployable` in the Item's metadata
+# 1. a match between the value of the `annotations[].technology` attributes and the value of the `ITEM_TECHNOLOGY_ANNOTATIONS`env var
+# 2. a match between the value of the `annotations[].others` attributes and the value of the `ITEM_OTHERS_ANNOTATIONS`env var
 # 3. the presence of the `values` attribute in the Item's metadata
-# 4. (optional) a match between the value of the `items.<item key>` attributes and the value of the `ITEMS_FILTER`env var
+# 4. (optional) a match between the value of the `items.<item key>` attributes and the value of the `ITEM_NAMES`env var
 #
 # It forwards as input any attributes/values of the `items.<item key>.values` metadata within `items.yaml` BUT
 # adding a mutation: `inputSpec` is serialized and forwarded downstream as JSON string value for a new `inputSpecJson` attribute.
@@ -24,8 +24,9 @@ from yaml import safe_load as yaml_safe_load
 
 GH_API_TOKEN = environ["GH_API_TOKEN"]
 GH_DOWNSTREAM_WORKFLOW_FILE = environ["GH_DOWNSTREAM_WORKFLOW_FILE"]
-ITEMS_FILTER = getenv("ITEMS_FILTER", "")
-ITEMS_TECHNOLOGY = getenv("ITEMS_TECHNOLOGY", "Ansible Playbook")
+ITEM_NAMES = getenv("ITEM_NAMES", "")
+ITEM_TECHNOLOGY_ANNOTATIONS = getenv("ITEM_TECHNOLOGY_ANNOTATIONS", "Ansible Playbook")
+ITEM_OTHERS_ANNOTATIONS = getenv("ITEM_OTHERS_ANNOTATIONS", "Deployable")
 POLLING_INTERVAL_SECONDS = int(environ["POLLING_INTERVAL_SECONDS"])
 RUN_TIMEOUT_MINUTES = int(environ["RUN_TIMEOUT_MINUTES"])
 TOTAL_TIMEOUT_MINUTES = int(environ["TOTAL_TIMEOUT_MINUTES"])
@@ -99,14 +100,21 @@ def read_spec_items() -> dict:
     with open(CATALOG_FILE) as f:
         catalog = yaml_safe_load(f)
 
-    if ITEMS_FILTER:
-        filtered_item_names = set(item_name.strip() for item_name in ITEMS_FILTER.split(","))
+    if ITEM_NAMES:
+        filtered_item_names = set(item_name.strip() for item_name in ITEM_NAMES.split(","))
         print(
             f"main - Reading Items with name: {filtered_item_names}",
             flush=True,
         )
 
-    print(f"main - Reading Items with annotation: 'others=Deployable' and 'technology={ITEMS_TECHNOLOGY}'", flush=True)
+    filter_item_others_annotations = set(
+        others_annotation.strip() for others_annotation in ITEM_OTHERS_ANNOTATIONS.split(",")
+    )
+    filter_item_technology_annotations = set(
+        technology_annotation.strip() for technology_annotation in ITEM_TECHNOLOGY_ANNOTATIONS.split(",")
+    )
+    print(f"main - Reading Items with annotation: 'others={filter_item_others_annotations}'", flush=True)
+    print(f"main - Reading Items with annotation: 'technology={filter_item_technology_annotations}'", flush=True)
 
     spec_items = {}
 
@@ -116,16 +124,16 @@ def read_spec_items() -> dict:
         if name not in filtered_item_names:
             continue
 
-        others_annotation = item.get("annotations").get("others", "")
-        if "Deployable" not in others_annotation:
-            continue
-
-        technology_annotation = item.get("annotations").get("technology", "")
-        if technology_annotation != ITEMS_TECHNOLOGY:
-            continue
-
         values = item.get("values", {})
         if not values:
+            continue
+
+        others_annotations = set(item.get("annotations", {}).get("others", ()))
+        if not filter_item_others_annotations.issubset(others_annotations):
+            continue
+
+        technology_annotations = set(item.get("annotations", {}).get("technology", ()))
+        if not filter_item_technology_annotations.issubset(technology_annotations):
             continue
 
         spec_item = {subkey: item[subkey] for subkey in ["name", "version", "values", "sources"]}
