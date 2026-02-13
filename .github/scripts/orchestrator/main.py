@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
-# Orchestration of downstream concurrent workflows to test Items deployment, filtered by:
-# 1. a match between the value of the `annotations[].technology` attributes and the value of the `ITEM_TECHNOLOGY_ANNOTATIONS`env var
-# 2. a match between the value of the `annotations[].others` attributes and the value of the `ITEM_OTHERS_ANNOTATIONS`env var
+# Orchestration of downstream concurrent workflows to test Items deployment, filtered by the following conditions:
+# 1. the value of the `ITEM_TECHNOLOGY_ANNOTATIONS`env var is a subset the `annotations[].technology` attribute values
+# 2. the value of the `ITEM_OTHERS_ANNOTATIONS`env var is a subset of the `annotations[].others` attribute values
 # 3. the presence of the `values` attribute in the Item's metadata
-# 4. (optional) a match between the value of the `items.<item key>` attributes and the value of the `ITEM_NAMES`env var
+# 4. (optional) the `items.<item key>.name` attribute values is in the list of names in the `ITEM_NAMES`env var
 #
 # It forwards as input any attributes/values of the `items.<item key>.values` metadata within `items.yaml` BUT
 # adding a mutation: `inputSpec` is serialized and forwarded downstream as JSON string value for a new `inputSpecJson` attribute.
@@ -107,14 +107,15 @@ def read_spec_items() -> dict:
             flush=True,
         )
 
-    filter_item_others_annotations = set(
+    filtered_item_others_annotations = set(
         others_annotation.strip() for others_annotation in ITEM_OTHERS_ANNOTATIONS.split(",")
     )
-    filter_item_technology_annotations = set(
+    print(f"main - Reading Items with annotations: 'others={filtered_item_others_annotations}'", flush=True)
+
+    filtered_item_technology_annotations = set(
         technology_annotation.strip() for technology_annotation in ITEM_TECHNOLOGY_ANNOTATIONS.split(",")
     )
-    print(f"main - Reading Items with annotation: 'others={filter_item_others_annotations}'", flush=True)
-    print(f"main - Reading Items with annotation: 'technology={filter_item_technology_annotations}'", flush=True)
+    print(f"main - Reading Items with annotations: 'technology={filtered_item_technology_annotations}'", flush=True)
 
     spec_items = {}
 
@@ -129,11 +130,11 @@ def read_spec_items() -> dict:
             continue
 
         others_annotations = set(item.get("annotations", {}).get("others", ()))
-        if not filter_item_others_annotations.issubset(others_annotations):
+        if not filtered_item_others_annotations.issubset(others_annotations):
             continue
 
         technology_annotations = set(item.get("annotations", {}).get("technology", ()))
-        if not filter_item_technology_annotations.issubset(technology_annotations):
+        if not filtered_item_technology_annotations.issubset(technology_annotations):
             continue
 
         spec_item = {subkey: item[subkey] for subkey in ["name", "version", "values", "sources"]}
