@@ -102,20 +102,17 @@ def read_spec_items() -> dict:
 
     if ITEM_NAMES:
         filtered_item_names = set(item_name.strip() for item_name in ITEM_NAMES.split(","))
-        print(
-            f"main - Reading Items with name: {filtered_item_names}",
-            flush=True,
-        )
-
-    filtered_item_others_annotations = set(
-        others_annotation.strip() for others_annotation in ITEM_OTHERS_ANNOTATIONS.split(",")
-    )
-    print(f"main - Reading Items with annotations: 'others={filtered_item_others_annotations}'", flush=True)
+        print(f"main - Reading Items with names: {filtered_item_names}", flush=True)
 
     filtered_item_technology_annotations = set(
         technology_annotation.strip() for technology_annotation in ITEM_TECHNOLOGY_ANNOTATIONS.split(",")
     )
-    print(f"main - Reading Items with annotations: 'technology={filtered_item_technology_annotations}'", flush=True)
+    print(f"main - Reading Items with technology annotations: {filtered_item_technology_annotations}", flush=True)
+
+    filtered_item_others_annotations = set(
+        others_annotation.strip() for others_annotation in ITEM_OTHERS_ANNOTATIONS.split(",")
+    )
+    print(f"main - Reading Items with others annotations: {filtered_item_others_annotations}", flush=True)
 
     spec_items = {}
 
@@ -129,11 +126,13 @@ def read_spec_items() -> dict:
         if not values:
             continue
 
-        others_annotations = set(item.get("annotations", {}).get("others", ()))
+        others_annotations = set((item.get("annotations", {}).get("others", ()),))
+        print(f"others annotations: {others_annotations}")
         if not filtered_item_others_annotations.issubset(others_annotations):
             continue
 
-        technology_annotations = set(item.get("annotations", {}).get("technology", ()))
+        technology_annotations = set((item.get("annotations", {}).get("technology", ()),))
+        print(f"technology annotations: {technology_annotations}")
         if not filtered_item_technology_annotations.issubset(technology_annotations):
             continue
 
