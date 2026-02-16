@@ -23,7 +23,7 @@ on:
       max-concurrent-workflows:
         description: Max number of concurrent downstream workflows
         required: true
-        default: 3
+        default: 5
         type: number
 
 permissions:
@@ -58,5 +58,5 @@ jobs:
           POLLING_INTERVAL_SECONDS: ${{ inputs.polling-interval-seconds }}
           RUN_TIMEOUT_MINUTES: ${{ inputs.run-timeout-minutes }}
           MAX_CONCURRENT_WORKFLOWS: ${{ inputs.max-concurrent-workflows }}
-          GH_DOWNSTREAM_WORKFLOW_FILE: "test-eumetsat.yml"
+          GH_DOWNSTREAM_WORKFLOW_FILE: "test-deployment-ansible-eumetsat.yml"
           TOTAL_TIMEOUT_MINUTES: 180 # must be smaller than jobs.orchestrate.timeout-minutes

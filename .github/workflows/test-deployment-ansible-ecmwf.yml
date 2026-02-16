@@ -23,7 +23,7 @@ on:
       max-concurrent-workflows:
         description: Max number of concurrent downstream workflows
         required: true
-        default: 3
+        default: 2
         type: number
 
 permissions:
