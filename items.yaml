@@ -3288,7 +3288,7 @@ spec:
         inputSpec:
           - name: fail2ban_whitelisted_ip_ranges
             description: "IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: ['10.0.0.0/24','192.168.1.0/24']"
-            type: List[str]
+            type: Optional[List[str]]
             default: null
       description: |
         This Ansible Playbook configures virtual machines within the
