@@ -3278,8 +3278,8 @@ spec:
         inputs:
           - name: fail2ban_whitelisted_ip_ranges
             description: "IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: ['10.0.0.0/24','192.168.1.0/24']"
-            type: List[str]
-            default: None
+            type: Optional[List[str]]
+            default: null
       values:
         osImageName: Rocky-9.6-20251107141503
         ansibleUser: cloud-user
@@ -3288,7 +3288,7 @@ spec:
         inputSpec:
           - name: fail2ban_whitelisted_ip_ranges
             description: "IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: ['10.0.0.0/24','192.168.1.0/24']"
-            type: List[str]
+            type: Optional[List[str]]
             default: null
       description: |
         This Ansible Playbook configures virtual machines within the
@@ -3646,8 +3646,8 @@ spec:
         inputs:
           - name: fail2ban_whitelisted_ip_ranges
             description: "IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: ['10.0.0.0/24','192.168.1.0/24']"
-            type: List[str]
-            default: None
+            type: Optional[List[str]]
+            default: null
         externalIP: true
       values:
         osImageName: Rocky-9.6-20251107141503
@@ -3657,7 +3657,7 @@ spec:
         inputSpec:
           - name: fail2ban_whitelisted_ip_ranges
             description: "IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: ['10.0.0.0/24','192.168.1.0/24']"
-            type: List[str]
+            type: Optional[List[str]]
             default: null
       description: |
         The [SSH](https://en.wikipedia.org/wiki/Secure_Shell) bastion or proxy server
