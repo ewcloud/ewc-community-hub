@@ -3,8 +3,8 @@ name: Ansible Deployments Testing on ECMWF
 on:
   workflow_dispatch:
     inputs:
-      items-filter:
-        description: Optional list of items to test (comma-separated). If not set, all eligible ones are processed
+      item-names:
+        description: Optional list of item names to test (comma-separated). If not set, all eligible ones are processed
         required: false
         type: string
 
@@ -23,7 +23,7 @@ on:
       max-concurrent-workflows:
         description: Max number of concurrent downstream workflows
         required: true
-        default: 5
+        default: 2
         type: number
 
 permissions:
@@ -46,14 +46,15 @@ jobs:
           python-version: '3.12'
 
       - name: Install additional dependencies
-        run: pip install -r .github/src/orchestrator/requirements.txt
+        run: pip install -r .github/scripts/orchestrator/requirements.txt
 
       - name: Orchestrate deployments testing
-        run: python .github/src/orchestrator/main.py
+        run: python .github/scripts/orchestrator/main.py
         env:
           GH_API_TOKEN: ${{ secrets.GH_API_TOKEN }}
-          ITEMS_FILTER: ${{ inputs.items-filter }}
-          ITEMS_TECHNOLOGY: "Ansible Playbook"
+          ITEM_NAMES: ${{ inputs.item-names }}
+          ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
+          ITEM_OTHERS_ANNOTATIONS: "Deployable"
           POLLING_INTERVAL_SECONDS: ${{ inputs.polling-interval-seconds }}
           RUN_TIMEOUT_MINUTES: ${{ inputs.run-timeout-minutes }}
           MAX_CONCURRENT_WORKFLOWS: ${{ inputs.max-concurrent-workflows }}

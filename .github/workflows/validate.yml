@@ -1,12 +1,19 @@
-name: Metadata Validation
+name: Validation
 
 on:
   pull_request:
     branches:
       - "main"
 
+env:
+  GH_API_TOKEN: ${{ secrets.GH_API_TOKEN }}
+  POLLING_INTERVAL_SECONDS: 60
+  RUN_TIMEOUT_MINUTES: 20
+  MAX_CONCURRENT_WORKFLOWS: 2
+
 jobs:
-  validate:
+  lint:
+    name: Metadata Linting
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -41,3 +48,113 @@ jobs:
       - name: Validate items metadata contents
         run: |
           ajv validate -s schemas/items/v1alpha1.json -d items.json --spec=draft2020
+
+  test-deploy-ansible-ecmwf:
+    name: Ansible Playbook Testing (Native) on ECMWF
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    environment: ECMWF
+    needs: lint
+
+    steps:
+      - name: Checkout catalog repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install additional dependencies
+        run: pip install -r .github/scripts/orchestrator/requirements.txt
+
+      - name: Orchestrate deployments testing
+        run: python .github/scripts/orchestrator/main.py
+        env:
+          ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
+          ITEM_OTHERS_ANNOTATIONS: "Deployable"
+          GH_DOWNSTREAM_WORKFLOW_FILE: "test-ecmwf.yml"
+          TOTAL_TIMEOUT_MINUTES: 90 # must be smaller than jobs.orchestrate.timeout-minutes
+  
+  test-deploy-ansible-eumetsat:
+    name: Ansible Playbook Testing (Native) on EUMETSAT
+    runs-on: ubuntu-latest
+    timeout-minutes: 200
+    environment: EUMETSAT
+    needs: lint
+
+    steps:
+      - name: Checkout catalog repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install additional dependencies
+        run: pip install -r .github/scripts/orchestrator/requirements.txt
+
+      - name: Orchestrate deployments testing
+        run: python .github/scripts/orchestrator/main.py
+        env:
+          ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
+          ITEM_OTHERS_ANNOTATIONS: "Deployable"
+          GH_DOWNSTREAM_WORKFLOW_FILE: "test-eumetsat.yml"
+          TOTAL_TIMEOUT_MINUTES: 180 # must be smaller than jobs.orchestrate.timeout-minutes
+
+  test-deploy-ansible-ecmwf-via-ewccli:
+    name: Ansible Playbook Testing (via EWCCLI) on ECMWF
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    environment: ECMWF
+    needs: test-deploy-ansible-ecmwf
+    if: ${{ always() }}
+
+    steps:
+      - name: Checkout catalog repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install additional dependencies
+        run: pip install -r .github/scripts/orchestrator/requirements.txt
+
+      - name: Orchestrate deployments testing
+        run: python .github/scripts/orchestrator/main.py
+        env:
+          ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
+          ITEM_OTHERS_ANNOTATIONS: "Deployable,EWCCLI-compatible"
+          GH_DOWNSTREAM_WORKFLOW_FILE: "test-deployment-ansible-ecmwf.yml"
+          TOTAL_TIMEOUT_MINUTES: 90 # must be smaller than jobs.orchestrate.timeout-minutes
+
+  test-deploy-ansible-eumetsat-via-ewccli:
+    name: Ansible Playbook Testing (via EWCCLI) on EUMETSAT
+    runs-on: ubuntu-latest
+    timeout-minutes: 200
+    environment: EUMETSAT
+    needs: test-deploy-ansible-eumetsat
+    if: ${{ always() }}
+
+    steps:
+      - name: Checkout catalog repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install additional dependencies
+        run: pip install -r .github/scripts/orchestrator/requirements.txt
+
+      - name: Orchestrate deployments testing
+        run: python .github/scripts/orchestrator/main.py
+        env:
+          ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
+          ITEM_OTHERS_ANNOTATIONS: "Deployable,EWCCLI-compatible"
+          GH_DOWNSTREAM_WORKFLOW_FILE: "test-deployment-ansible-eumetsat.yml"
+          TOTAL_TIMEOUT_MINUTES: 180 # must be smaller than jobs.orchestrate.timeout-minutes
