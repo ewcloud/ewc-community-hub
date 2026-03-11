@@ -4,7 +4,7 @@ spec:
   items:
     ai-models:
       name: "ai-models"
-      version: "1.0.1"
+      version: "1.6.0"
       description: |
         Create a conda environment with the ai-models package and associated plugins to run a set of data-driven weather forecasting models such as panguweather or graphcast.
 
@@ -69,7 +69,7 @@ spec:
 
     ewc-ansible-playbook-ipa-enroll-automation-via-morpheus:
       name: "ewc-ansible-playbook-ipa-enroll-automation-via-morpheus:"
-      version: "1.1.0"
+      version: "1.6.0"
       description: |
         >⚠️ In the past this functionality has been provided out-of-the-box for all
         EWC tenancies running on the EUMETSAT site. However, this is no longer the
@@ -276,7 +276,7 @@ spec:
 
     ewc-tf-module-openstack-compute:
       name: "ewc-tf-module-openstack-compute"
-      version: "1.4.0"
+      version: "1.6.0"
       description: |
         This [Terraform module](https://developer.hashicorp.com/terraform/language/modules) creates and
         configures [OpenStack compute](https://docs.openstack.org/nova/latest/)
@@ -428,7 +428,7 @@ spec:
 
     ewc-tf-module-openstack-security-group:
       name: "ewc-tf-module-openstack-security-group"
-      version: "1.0.1"
+      version: "1.6.0"
       description: |
         > 💡 The module supports complex rule sets, such as those required to create a subnet security group for IPA services (i.e. Kerberos, LDAP and DNS).
 
@@ -610,7 +610,7 @@ spec:
 
     ecmwf-aifs-single-mse:
       name: "ecmwf-aifs-single-mse"
-      version: "1.1.0"
+      version: "1.6.0"
       description: |
         Create a conda environment with AIFS Single MSE and associated software stack.
 
@@ -678,7 +678,7 @@ spec:
 
     ecmwf-aifs-ens-crps:
       name: "ecmwf-aifs-ens-crps"
-      version: "1.0.2"
+      version: "1.6.0"
       description: |
         Create a conda environment with AIFS ENS CRPS data-driven model and associated software stack.
         Featuring the ECMWF AIFS ENS CRPS data-driven model. Find more information in <https://huggingface.co/ecmwf/aifs-ens-1.0>
@@ -747,7 +747,7 @@ spec:
 
     ecmwf-anemoi:
       name: "ecmwf-anemoi"
-      version: "1.0.1"
+      version: "1.6.0"
       ewccli:
         pathToMainFile: anemoi.yml
       values:
@@ -910,11 +910,11 @@ spec:
       sources:
         - https://github.com/ewcloud/ewc-flavours.git
       summary: It includes the basic ECMWF software stack, with MARS client and an environment with `ecCodes`, `Metview`, `Earthkit` and `Aviso`.
-      version: "2.0.2"
+      version: "1.6.0"
 
     eumetsat-data-tailor-flavour:
       name: "eumetsat-data-tailor-flavour"
-      version: "1.5.2"
+      version: "1.6.0"
       ewccli:
         pathToRequirementsFile: playbooks/eumetsat-data-tailor-flavour/requirements.yml
         pathToMainFile: playbooks/eumetsat-data-tailor-flavour/eumetsat-data-tailor-flavour.yml
@@ -1127,7 +1127,7 @@ spec:
 
     ewccli:
       name: "ewccli"
-      version: "0.1.0"
+      version: "1.6.0"
       description: |
         ewccli Python Package is the European Weather Cloud (EWC) Command Line Interface (CLI).
         This tool is developed to support EWC users on the use of the EWC services.
@@ -1177,7 +1177,7 @@ spec:
 
     ewc-gh-action-test-deploy-ansible-playbook:
       name: "ewc-gh-action-test-deploy-ansible-playbook"
-      version: "2.1.2"
+      version: "1.6.0"
       description: |
         This GitHub Action setups all necessary OpenStack resources for a Ansible Playbook to run,  executes it and reports about its success/failure in a nice looking summary (within GitHub UI), as well as machine-friendly artifacts for postprocessing.
 
@@ -1452,13 +1452,13 @@ spec:
             description: "OpenStack security group containing all firewall rules required for Nginx Proxy Manager operation"
             type: str
             default: ssh-http-https
-        pathToMainFile: playbooks/haproxy-flavour/haproxy-flavour.yml
-        pathToRequirementsFile: playbooks/haproxy-flavour/requirements.yml
-      version: "1.5.2"
+        pathToMainFile: playbooks/ha.yml
+        pathToRequirementsFile: playbooks/nginx-proxy-manager-flavour/requirements.yml
+      version: "1.6.0"
 
     default-stack-provisioning:
       name: "default-stack-provisioning"
-      version: "1.5.2"
+      version: "1.6.0"
       description: |
         >✅ This template can be safely applied from any local work environment, even running outside an EWC tenancy's private network.
 
@@ -1657,7 +1657,7 @@ spec:
 
     ipa-client-enroll-flavour:
       name: "ipa-client-enroll-flavour"
-      version: "1.5.2"
+      version: "1.6.0"
       ewccli:
         pathToRequirementsFile: playbooks/ipa-client-enroll-flavour/requirements.yml
         pathToMainFile: playbooks/ipa-client-enroll-flavour/ipa-client-enroll-flavour.yml
@@ -1836,7 +1836,7 @@ spec:
 
     ipa-client-disenroll-flavour:
       name: "ipa-client-disenroll-flavour"
-      version: "1.5.2"
+      version: "1.6.0"
       ewccli:
         pathToMainFile: playbooks/ipa-client-disenroll-flavour/ipa-client-disenroll-flavour.yml
         pathToRequirementsFile: playbooks/ipa-client-disenroll-flavour/requirements.yml
@@ -2007,7 +2007,7 @@ spec:
 
     ipa-client-provisioning:
       name: "ipa-client-provisioning"
-      version: "1.5.2"
+      version: "1.6.0"
       description: |
         >✅ This template can be applied from any local work environment, even running outside an EWC tenancy's private network.
 
@@ -2167,7 +2167,7 @@ spec:
 
     ipa-client-teardown:
       name: "ipa-client-teardown"
-      version: "1.5.2"
+      version: "1.6.0"
       description: |
         >✅ This template can be safely applied from any local work environment, even running outside an EWC tenancy's private network.
 
@@ -2299,7 +2299,7 @@ spec:
 
     ipa-server-flavour:
       name: "ipa-server-flavour"
-      version: "1.5.2"
+      version: "1.6.0"
       ewccli:
         defaultImageName: Rocky-9.6-20251107141503
         pathToRequirementsFile: playbooks/ipa-server-flavour/requirements.yml
@@ -2566,7 +2566,7 @@ spec:
 
     ipa-server-provisioning:
       name: "ipa-server-provisioning"
-      version: "1.5.2"
+      version: "1.6.0"
       description: |
         >✅ This template can be safely applied from any local work environment, even running outside an EWC tenancy's private network.
 
@@ -2759,7 +2759,7 @@ spec:
 
     jupyterhub-flavour:
       name: "jupyterhub-flavour"
-      version: "2.0.2"
+      version: "1.6.0"
       ewccli:
         pathToMainFile: playbooks/jupyterhub-flavour/jupyterhub-flavour.yml
         pathToRequirementsFile: requirements.yml
@@ -2863,7 +2863,7 @@ spec:
 
     ml-basic:
       name: "ml-basic"
-      version: "1.0.1"
+      version: "1.6.0"
       ewccli:
         pathToMainFile: ml-basic.yml
       values:
@@ -3089,11 +3089,11 @@ spec:
         ansibleUser: ubuntu
         pathToMainFile: playbooks/nginx-proxy-manager-flavour/nginx-proxy-manager-flavour.yml
         pathToRequirementsFile: playbooks/nginx-proxy-manager-flavour/requirements.yml
-      version: "1.5.2"
+      version: "1.6.0"
 
     nwcsaf-datacube-xarray:
       name: "nwcsaf-datacube-xarray"
-      version: "1.0.0"
+      version: "1.6.0"
       description: |
         Jupyter notebooks on using Icechunk, Virtualizar, and Kerchunk to enable Single-Point Access to Distributed Cloud Files through xarray.
         Accessing NWC SAF buckets with kerchunk/virtualizarr/icechunk
@@ -3164,7 +3164,7 @@ spec:
 
     pytroll-processing:
       name: "pytroll-processing"
-      version: "1.0.0"
+      version: "1.6.0"
       ewccli:
         pathToMainFile: satellite-data-processing-main.yaml
       description: |
@@ -3292,7 +3292,7 @@ spec:
 
     remote-desktop-flavour:
       name: "remote-desktop-flavour"
-      version: "1.5.2"
+      version: "1.6.0"
       ewccli:
         defaultImageName: Rocky-9.6-20251107141503
         pathToRequirementsFile: playbooks/remote-desktop-flavour/requirements.yml
@@ -3481,7 +3481,7 @@ spec:
 
     remote-desktop-provisioning:
       name: "remote-desktop-provisioning"
-      version: "1.5.2"
+      version: "1.6.0"
       description: |
         >✅ This template can be safely applied from any local work environment, even running outside an EWC tenancy's private network.
 
@@ -3660,7 +3660,7 @@ spec:
 
     ssh-bastion-flavour:
       name: "ssh-bastion-flavour"
-      version: "1.5.2"
+      version: "1.6.0"
       ewccli:
         defaultImageName: Rocky-9.6-20251107141503
         pathToRequirementsFile: playbooks/ssh-bastion-flavour/requirements.yml
@@ -3832,7 +3832,7 @@ spec:
 
     ssh-bastion-provisioning:
       name: "ssh-bastion-provisioning"
-      version: "1.5.2"
+      version: "1.6.0"
       description: |
         >✅ This template can be safely applied from any local work environment, even running outside an EWC tenancy's private network.
 
@@ -3988,7 +3988,7 @@ spec:
 
     xcube-viewer-flavour:
       name: "xcube-viewer-flavour"
-      version: "0.0.1"
+      version: "1.6.0"
       ewccli:
         defaultImageName: Ubuntu-24.04-20251007115108
         defaultSecurityGroups: ssh-http-https
