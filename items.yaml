@@ -4217,7 +4217,7 @@ spec:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
         - name: EWC Team
-          email: support@europeanweather.cloud 
+          email: support@europeanweather.cloud
           url: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/issues
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
