@@ -4227,6 +4227,6 @@ spec:
         supportLevel: "EWC"
         licenseType: "MIT License"
       displayName: xcube Viewer Flavour
-      summary: Configures an existing Ubuntu 24.04 VM in the EWC with the xcube Viewer, a web-based tool for interactive visualization of multi-dimensional Earth Observation data.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.6.0/LICENSE
+      summary: xcube Viewer on EWC, a web-based tool for interactive visualization of multi-dimensional Earth Observation data.
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/LICENSE
       published: true
