@@ -3991,7 +3991,7 @@ spec:
       version: "1.6.0"
       ewccli:
         defaultImageName: Ubuntu-24.04-20251007115108
-        defaultSecurityGroups: ssh-http-https
+        defaultSecurityGroups: [ssh-http-https]
         pathToRequirementsFile: playbooks/xcube-viewer-flavour/requirements.yml
         pathToMainFile: playbooks/xcube-viewer-flavour/xcube-viewer-flavour.yml
         inputs:
