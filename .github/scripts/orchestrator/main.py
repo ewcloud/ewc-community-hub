@@ -176,7 +176,8 @@ def parse_items(spec_items: dict) -> list[Item]:
             del values["inputSpec"]
 
         repo_url = item["sources"][0]
-        owner, repo = repo_url.rstrip(".git").split("/")[-2:]
+        owner, repo = repo_url.split("/")[-2:]
+        repo = repo.replace(".git","")
 
         items.append(
             Item(
