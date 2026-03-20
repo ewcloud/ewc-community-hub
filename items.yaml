@@ -1436,7 +1436,7 @@ spec:
             type: str
             default: ssh-http-https
         osImageName: Ubuntu-24.04-20251007115108
-        pathToMainFile: playbooks//haproxy-flavour/haproxy-flavour.yml
+        pathToMainFile: playbooks/haproxy-flavour/haproxy-flavour.yml
         pathToRequirementsFile: playbooks/haproxy-flavour/requirements.yml
       version: "1.5.2"
 
