@@ -595,7 +595,7 @@ spec:
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
       annotations:
         technology: "Terraform Module"
-        category: "Network"
+        category: "Networking"
         others: "Deployable"
         supportLevel: "EWC"
         licenseType: "MIT License"
