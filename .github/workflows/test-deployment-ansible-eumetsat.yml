@@ -34,7 +34,7 @@ jobs:
   orchestrate:
     name: Deployment test
     runs-on: ubuntu-latest
-    timeout-minutes: 200
+    timeout-minutes: 300
 
     steps:
       - name: Checkout catalog repository
@@ -67,4 +67,4 @@ jobs:
           RUN_TIMEOUT_MINUTES: ${{ inputs.run-timeout-minutes }}
           MAX_CONCURRENT_WORKFLOWS: ${{ inputs.max-concurrent-workflows }}
           GH_DOWNSTREAM_WORKFLOW_FILE: "test-eumetsat.yml"
-          TOTAL_TIMEOUT_MINUTES: 180 # must be smaller than jobs.orchestrate.timeout-minutes
+          TOTAL_TIMEOUT_MINUTES: 290 # must be smaller than jobs.orchestrate.timeout-minutes
