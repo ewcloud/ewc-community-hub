@@ -4033,6 +4033,7 @@ spec:
         checkDNS: true
       values:
         osImageName: ubuntu-24.04-20250604102601
+        ansibleUser: ubuntu
         pathToRequirementsFile: playbooks/xcube-viewer-flavour/requirements.yml
         pathToMainFile: playbooks/xcube-viewer-flavour/xcube-viewer-flavour.yml
         inputSpec:
