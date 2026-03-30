@@ -6,7 +6,6 @@ on:
       - "main"
 
 env:
-  GH_API_TOKEN: ${{ secrets.GH_API_TOKEN }}
   POLLING_INTERVAL_SECONDS: 60
   RUN_TIMEOUT_MINUTES: 20
   MAX_CONCURRENT_WORKFLOWS: 2
@@ -68,9 +67,18 @@ jobs:
       - name: Install additional dependencies
         run: pip install -r .github/scripts/orchestrator/requirements.txt
 
+      - name: Generate installation token for EWC Community Hub CI Orchestrator GitHub App
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
       - name: Orchestrate deployments testing
         run: python .github/scripts/orchestrator/main.py
         env:
+          GH_API_TOKEN: ${{ steps.app-token.outputs.token }}
           ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
           ITEM_OTHERS_ANNOTATIONS: "Deployable"
           GH_DOWNSTREAM_WORKFLOW_FILE: "test-ecmwf.yml"
@@ -95,9 +103,18 @@ jobs:
       - name: Install additional dependencies
         run: pip install -r .github/scripts/orchestrator/requirements.txt
 
+      - name: Generate installation token for EWC Community Hub CI Orchestrator GitHub App
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
       - name: Orchestrate deployments testing
         run: python .github/scripts/orchestrator/main.py
         env:
+          GH_API_TOKEN: ${{ steps.app-token.outputs.token }}
           ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
           ITEM_OTHERS_ANNOTATIONS: "Deployable"
           GH_DOWNSTREAM_WORKFLOW_FILE: "test-eumetsat.yml"
@@ -123,9 +140,18 @@ jobs:
       - name: Install additional dependencies
         run: pip install -r .github/scripts/orchestrator/requirements.txt
 
+      - name: Generate installation token for EWC Community Hub CI Orchestrator GitHub App
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
       - name: Orchestrate deployments testing
         run: python .github/scripts/orchestrator/main.py
         env:
+          GH_API_TOKEN: ${{ steps.app-token.outputs.token }}
           ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
           ITEM_OTHERS_ANNOTATIONS: "Deployable,EWCCLI-compatible"
           GH_DOWNSTREAM_WORKFLOW_FILE: "test-deployment-ansible-ecmwf.yml"
@@ -151,9 +177,18 @@ jobs:
       - name: Install additional dependencies
         run: pip install -r .github/scripts/orchestrator/requirements.txt
 
+      - name: Generate installation token for EWC Community Hub CI Orchestrator GitHub App
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
       - name: Orchestrate deployments testing
         run: python .github/scripts/orchestrator/main.py
         env:
+          GH_API_TOKEN: ${{ steps.app-token.outputs.token }}
           ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
           ITEM_OTHERS_ANNOTATIONS: "Deployable,EWCCLI-compatible"
           GH_DOWNSTREAM_WORKFLOW_FILE: "test-deployment-ansible-eumetsat.yml"
