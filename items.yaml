@@ -3990,7 +3990,7 @@ spec:
       name: "xcube-viewer-flavour"
       version: "1.6.0"
       ewccli:
-        defaultImageName: Ubuntu-24.04-20251007115108
+        defaultImageName: ubuntu-24.04-2025060410260
         defaultSecurityGroups: [ssh-http-https]
         pathToRequirementsFile: playbooks/xcube-viewer-flavour/requirements.yml
         pathToMainFile: playbooks/xcube-viewer-flavour/xcube-viewer-flavour.yml
