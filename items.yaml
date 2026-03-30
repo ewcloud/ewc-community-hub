@@ -44,6 +44,10 @@ spec:
 
       ewccli:
         pathToMainFile: playbooks/ai-models/ai-models.yml
+      values:
+        pathToMainFile: playbooks/ai-models/ai-models.yml
+        osImageName: ubuntu-24.04-20250604102601
+        ansibleUser: ubuntu
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
         - https://github.com/ewcloud/ewc-ecmwf-ai-stacks.git
@@ -649,6 +653,10 @@ spec:
 
       ewccli:
         pathToMainFile: playbooks/aifs-single-mse/aifs-single-mse.yml
+      values:
+        pathToMainFile: playbooks/aifs-single-mse/aifs-single-mse.yml
+        osImageName: ubuntu-24.04-20250604102601
+        ansibleUser: ubuntu
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
         - https://github.com/ewcloud/ewc-ecmwf-ai-stacks.git
@@ -714,6 +722,10 @@ spec:
 
       ewccli:
         pathToMainFile: playbooks/aifs-ens-crps/aifs-ens-crps.yml
+      values:
+        pathToMainFile: playbooks/aifs-ens-crps/aifs-ens-crps.yml
+        osImageName: ubuntu-24.04-20250604102601
+        ansibleUser: ubuntu
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
         - https://github.com/ewcloud/ewc-ecmwf-ai-stacks.git
@@ -738,6 +750,10 @@ spec:
       version: "1.0.1"
       ewccli:
         pathToMainFile: anemoi.yml
+      values:
+        pathToMainFile: anemoi.yml
+        osImageName: ubuntu-24.04-20250604102601
+        ansibleUser: ubuntu
       description: |
         Create a conda environment with the Anemoi framework for weather forecasting based on machine learning and associated software stack.
 
@@ -853,7 +869,7 @@ spec:
         pathToMainFile: playbooks/ecmwf-data-flavour/ecmwf-data-flavour.yml
         pathToRequirementsFile: requirements.yml
       values:
-        osImageName: Ubuntu-24.04-20251007115108
+        osImageName: ubuntu-24.04-20250604102601
         ansibleUser: ubuntu
         inputSpec:
           - name: reboot_if_required
@@ -902,7 +918,7 @@ spec:
       ewccli:
         pathToRequirementsFile: playbooks/eumetsat-data-tailor-flavour/requirements.yml
         pathToMainFile: playbooks/eumetsat-data-tailor-flavour/eumetsat-data-tailor-flavour.yml
-        defaultImageName: Ubuntu-22.04-20251007115800
+        defaultImageName: ubuntu-24.04-20250604102601
         inputs:
           - name: data_tailor_env_wipe
             description: flag to delete existing conda environment where data tailor was previously installed. Only yes will be accepted to approve
@@ -929,7 +945,7 @@ spec:
             type: str
             default: "root"
       values:
-        osImageName: Ubuntu-22.04-20251007115800
+        osImageName: ubuntu-24.04-20250604102601
         ansibleUser: ubuntu
         pathToRequirementsFile: playbooks/eumetsat-data-tailor-flavour/requirements.yml
         pathToMainFile: playbooks/eumetsat-data-tailor-flavour/eumetsat-data-tailor-flavour.yml
@@ -1429,13 +1445,13 @@ spec:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       summary: Configures an existing VM as a high-performance load balancer, enhancing application speed, security, and scalability with easy management for TCP and HTTP workloads.
       values:
+        osImageName: ubuntu-24.04-20250604102601
         ansibleUser: ubuntu
         inputSpec:
           - name: os_security_group_name
             description: "OpenStack security group containing all firewall rules required for Nginx Proxy Manager operation"
             type: str
             default: ssh-http-https
-        osImageName: Ubuntu-24.04-20251007115108
         pathToMainFile: playbooks/haproxy-flavour/haproxy-flavour.yml
         pathToRequirementsFile: playbooks/haproxy-flavour/requirements.yml
       version: "1.5.2"
@@ -2783,6 +2799,8 @@ spec:
         externalIP: true
         checkDNS: true
       values:
+        osImageName: ubuntu-24.04-20250604102601
+        ansibleUser: ubuntu
         pathToMainFile: playbooks/jupyterhub-flavour/jupyterhub-flavour.yml
         pathToRequirementsFile: requirements.yml
         inputSpec:
@@ -2847,6 +2865,10 @@ spec:
       name: "ml-basic"
       version: "1.0.1"
       ewccli:
+        pathToMainFile: ml-basic.yml
+      values:
+        osImageName: ubuntu-24.04-20250604102601
+        ansibleUser: ubuntu
         pathToMainFile: ml-basic.yml
       description: |
         Create a conda environment with the basic Machine Learning packages such as torch, xgboost, and scikit-learn. Check `files/env.yml` for all the details on the software included.
@@ -3064,7 +3086,8 @@ spec:
             description: "OpenStack security group containing all firewall rules required for Nginx Proxy Manager operation"
             type: str
             default: nginx-proxy-manager
-        osImageName: Ubuntu-24.04-20251007115108
+        osImageName: ubuntu-24.04-20250604102601
+        ansibleUser: ubuntu
         pathToMainFile: playbooks/nginx-proxy-manager-flavour/nginx-proxy-manager-flavour.yml
         pathToRequirementsFile: playbooks/nginx-proxy-manager-flavour/requirements.yml
       version: "1.5.2"
