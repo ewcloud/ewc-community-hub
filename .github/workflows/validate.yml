@@ -6,9 +6,8 @@ on:
       - "main"
 
 env:
-  GH_API_TOKEN: ${{ secrets.GH_API_TOKEN }}
   POLLING_INTERVAL_SECONDS: 60
-  RUN_TIMEOUT_MINUTES: 20
+  RUN_TIMEOUT_MINUTES: 20 # Max runtime per each downstream workflow run
   MAX_CONCURRENT_WORKFLOWS: 2
 
 jobs:
@@ -17,12 +16,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: "lts/*"
+          node-version: 24
 
       - name: Install Node dependencies
         run: npm install -g ajv-cli
@@ -37,7 +36,7 @@ jobs:
           char_count_diff=$(( $char_count_before_trim - $char_count_after_trim ))
 
           if [[ "$char_count_diff" -gt "0" ]]; then
-              echo "items.yaml contains ${char_count_diff} trailing space(s) that must be trimmed"
+              echo "items.yaml contains ${char_count_diff} trailing space(s) that Must be trimmed"
               exit 1
           fi
 
@@ -52,109 +51,145 @@ jobs:
   test-deploy-ansible-ecmwf:
     name: Ansible Playbook Testing (Native) on ECMWF
     runs-on: ubuntu-latest
-    timeout-minutes: 100
+    timeout-minutes: 200
     environment: ECMWF
     needs: lint
 
     steps:
       - name: Checkout catalog repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
+          python-version: 3.12
 
       - name: Install additional dependencies
         run: pip install -r .github/scripts/orchestrator/requirements.txt
 
+      - name: Generate installation token for EWC Community Hub CI Orchestrator GitHub App
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
       - name: Orchestrate deployments testing
         run: python .github/scripts/orchestrator/main.py
         env:
+          GH_API_TOKEN: ${{ steps.app-token.outputs.token }}
           ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
           ITEM_OTHERS_ANNOTATIONS: "Deployable"
           GH_DOWNSTREAM_WORKFLOW_FILE: "test-ecmwf.yml"
-          TOTAL_TIMEOUT_MINUTES: 90 # must be smaller than jobs.orchestrate.timeout-minutes
+          TOTAL_TIMEOUT_MINUTES: 190 # Must be smaller than jobs.orchestrate.timeout-minutes
   
   test-deploy-ansible-eumetsat:
     name: Ansible Playbook Testing (Native) on EUMETSAT
     runs-on: ubuntu-latest
-    timeout-minutes: 200
+    timeout-minutes: 300
     environment: EUMETSAT
     needs: lint
 
     steps:
       - name: Checkout catalog repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
+          python-version: 3.12
 
       - name: Install additional dependencies
         run: pip install -r .github/scripts/orchestrator/requirements.txt
 
+      - name: Generate installation token for EWC Community Hub CI Orchestrator GitHub App
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
       - name: Orchestrate deployments testing
         run: python .github/scripts/orchestrator/main.py
         env:
+          GH_API_TOKEN: ${{ steps.app-token.outputs.token }}
           ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
           ITEM_OTHERS_ANNOTATIONS: "Deployable"
           GH_DOWNSTREAM_WORKFLOW_FILE: "test-eumetsat.yml"
-          TOTAL_TIMEOUT_MINUTES: 180 # must be smaller than jobs.orchestrate.timeout-minutes
+          TOTAL_TIMEOUT_MINUTES: 290 # Must be smaller than jobs.orchestrate.timeout-minutes
 
   test-deploy-ansible-ecmwf-via-ewccli:
     name: Ansible Playbook Testing (via EWCCLI) on ECMWF
     runs-on: ubuntu-latest
-    timeout-minutes: 100
+    timeout-minutes: 200
     environment: ECMWF
     needs: test-deploy-ansible-ecmwf
     if: ${{ always() }}
 
     steps:
       - name: Checkout catalog repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
+          python-version: 3.12
 
       - name: Install additional dependencies
         run: pip install -r .github/scripts/orchestrator/requirements.txt
 
+      - name: Generate installation token for EWC Community Hub CI Orchestrator GitHub App
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
       - name: Orchestrate deployments testing
         run: python .github/scripts/orchestrator/main.py
         env:
+          GH_API_TOKEN: ${{ steps.app-token.outputs.token }}
           ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
           ITEM_OTHERS_ANNOTATIONS: "Deployable,EWCCLI-compatible"
           GH_DOWNSTREAM_WORKFLOW_FILE: "test-deployment-ansible-ecmwf.yml"
-          TOTAL_TIMEOUT_MINUTES: 90 # must be smaller than jobs.orchestrate.timeout-minutes
+          TOTAL_TIMEOUT_MINUTES: 190 # Must be smaller than jobs.orchestrate.timeout-minutes
 
   test-deploy-ansible-eumetsat-via-ewccli:
     name: Ansible Playbook Testing (via EWCCLI) on EUMETSAT
     runs-on: ubuntu-latest
-    timeout-minutes: 200
+    timeout-minutes: 300
     environment: EUMETSAT
     needs: test-deploy-ansible-eumetsat
     if: ${{ always() }}
 
     steps:
       - name: Checkout catalog repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
+          python-version: 3.12
 
       - name: Install additional dependencies
         run: pip install -r .github/scripts/orchestrator/requirements.txt
 
+      - name: Generate installation token for EWC Community Hub CI Orchestrator GitHub App
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
       - name: Orchestrate deployments testing
         run: python .github/scripts/orchestrator/main.py
         env:
+          GH_API_TOKEN: ${{ steps.app-token.outputs.token }}
           ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
           ITEM_OTHERS_ANNOTATIONS: "Deployable,EWCCLI-compatible"
           GH_DOWNSTREAM_WORKFLOW_FILE: "test-deployment-ansible-eumetsat.yml"
-          TOTAL_TIMEOUT_MINUTES: 180 # must be smaller than jobs.orchestrate.timeout-minutes
+          TOTAL_TIMEOUT_MINUTES: 290 # Must be smaller than jobs.orchestrate.timeout-minutes
