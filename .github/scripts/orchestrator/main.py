@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 # Orchestration for downstream concurrent test deployment workflows.
 
-# Filtering Methods
-# Items to be tested are filtered by a combination (logical AND operation) of the following conditions:
+# Inclusion Methods
+# Items to be tested are filtered by a combination of the following conditions (logical AND):
 # 1. the value of the `ITEM_TECHNOLOGY_ANNOTATIONS`env var is equivalent to the `annotations[].technology` attribute values
 # 2. the value of the `ITEM_OTHERS_ANNOTATIONS`env var is equivalent of the `annotations[].others` attribute values
 # 3. the presence of the `values` attribute in the Item's metadata
-# 4. (optional) the `items.<item key>.name` attribute values is in the list of names in the `ITEM_NAMES`env var, if set
+# 4. the `items.<item key>.name` attribute values is in the list of names in the `ITEM_NAMES`env var (optional)
+#
+# Exclusion Methods
+# Items to NOT be tested can be specified by:
+# 1. the `items.<item key>.name` attribute values is in the list of names in the `EXCLUDED+ITEM_NAMES`env var (optional).
+# If set, overrides all inclusion criteria for the specified items.
 #
 # Deployment Methods
 # Tests are dispatched according to the metadata annotations `others`. The deployment options include Items' native (Ansible CLI,
@@ -38,6 +43,7 @@ from yaml import safe_load as yaml_safe_load
 GH_API_TOKEN = environ["GH_API_TOKEN"]
 GH_DOWNSTREAM_WORKFLOW_FILE = environ["GH_DOWNSTREAM_WORKFLOW_FILE"]
 ITEM_NAMES = getenv("ITEM_NAMES", "")
+EXCLUDED_ITEM_NAMES = getenv("EXCLUDED_ITEM_NAMES", "")
 ITEM_TECHNOLOGY_ANNOTATIONS = getenv("ITEM_TECHNOLOGY_ANNOTATIONS", "Ansible Playbook")
 ITEM_OTHERS_ANNOTATIONS = getenv("ITEM_OTHERS_ANNOTATIONS", "Deployable")
 POLLING_INTERVAL_SECONDS = int(environ["POLLING_INTERVAL_SECONDS"])
@@ -121,6 +127,10 @@ def read_spec_items() -> dict:
         filtered_item_names = set(item_name.strip() for item_name in ITEM_NAMES.split(","))
         print(f"main thread - Reading Items with names: {filtered_item_names}", flush=True)
 
+    if EXCLUDED_ITEM_NAMES:
+        excluded_item_names = set(item_name.strip() for item_name in EXCLUDED_ITEM_NAMES.split(","))
+        print(f"main thread - Excluding Items with names: {excluded_item_names}", flush=True)
+
     filtered_item_technology_annotations = set(
         technology_annotation.strip() for technology_annotation in ITEM_TECHNOLOGY_ANNOTATIONS.split(",")
     )
@@ -139,6 +149,9 @@ def read_spec_items() -> dict:
 
         name = item.get("name")
         if ITEM_NAMES and name not in filtered_item_names:
+            continue
+
+        if EXCLUDED_ITEM_NAMES and name in excluded_item_names:
             continue
 
         values = item.get("values", {})
