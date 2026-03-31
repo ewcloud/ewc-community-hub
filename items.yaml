@@ -1452,8 +1452,8 @@ spec:
             description: "OpenStack security group containing all firewall rules required for Nginx Proxy Manager operation"
             type: str
             default: ssh-http-https
-        pathToMainFile: playbooks/ha.yml
-        pathToRequirementsFile: playbooks/nginx-proxy-manager-flavour/requirements.yml
+        pathToMainFile: playbooks/haproxy-flavour/haproxy-flavour.yml
+        pathToRequirementsFile: playbooks/haproxy-flavour/requirements.yml
       version: "1.6.0"
 
     default-stack-provisioning:
