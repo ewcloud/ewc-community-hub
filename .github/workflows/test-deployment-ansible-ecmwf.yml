@@ -8,6 +8,11 @@ on:
         required: false
         type: string
 
+      excluded-item-names:
+        description: Optional list of item names to exclude from the test (comma-separated). If set, overrides all inclusion criteria for the specified items.
+        required: false
+        type: string
+
       polling-interval-seconds:
         description: Polling interval in seconds, for querying downstream status
         required: true
@@ -53,6 +58,7 @@ jobs:
         env:
           GH_API_TOKEN: ${{ secrets.GH_API_TOKEN }}
           ITEM_NAMES: ${{ inputs.item-names }}
+          EXCLUDED_ITEM_NAMES: ${{ inputs.excluded-item-names }}
           ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
           ITEM_OTHERS_ANNOTATIONS: "Deployable"
           POLLING_INTERVAL_SECONDS: ${{ inputs.polling-interval-seconds }}
