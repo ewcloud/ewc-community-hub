@@ -43,7 +43,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
+          python-version: 3.12
 
       - name: Install additional dependencies
         run: pip install -r .github/scripts/orchestrator/requirements.txt
@@ -67,4 +67,4 @@ jobs:
           RUN_TIMEOUT_MINUTES: ${{ inputs.run-timeout-minutes }}
           MAX_CONCURRENT_WORKFLOWS: ${{ inputs.max-concurrent-workflows }}
           GH_DOWNSTREAM_WORKFLOW_FILE: "test-deployment-ansible-eumetsat.yml"
-          TOTAL_TIMEOUT_MINUTES: 290 # must be smaller than jobs.orchestrate.timeout-minutes
+          TOTAL_TIMEOUT_MINUTES: 290 # Must be smaller than jobs.orchestrate.timeout-minutes

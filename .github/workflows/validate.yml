@@ -7,7 +7,7 @@ on:
 
 env:
   POLLING_INTERVAL_SECONDS: 60
-  RUN_TIMEOUT_MINUTES: 20 # Max per-workflow runtime
+  RUN_TIMEOUT_MINUTES: 20 # Max runtime per each downstream workflow run
   MAX_CONCURRENT_WORKFLOWS: 2
 
 jobs:
@@ -36,7 +36,7 @@ jobs:
           char_count_diff=$(( $char_count_before_trim - $char_count_after_trim ))
 
           if [[ "$char_count_diff" -gt "0" ]]; then
-              echo "items.yaml contains ${char_count_diff} trailing space(s) that must be trimmed"
+              echo "items.yaml contains ${char_count_diff} trailing space(s) that Must be trimmed"
               exit 1
           fi
 
@@ -62,7 +62,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
+          python-version: 3.12
 
       - name: Install additional dependencies
         run: pip install -r .github/scripts/orchestrator/requirements.txt
@@ -82,7 +82,7 @@ jobs:
           ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
           ITEM_OTHERS_ANNOTATIONS: "Deployable"
           GH_DOWNSTREAM_WORKFLOW_FILE: "test-ecmwf.yml"
-          TOTAL_TIMEOUT_MINUTES: 190 # must be smaller than jobs.orchestrate.timeout-minutes
+          TOTAL_TIMEOUT_MINUTES: 190 # Must be smaller than jobs.orchestrate.timeout-minutes
   
   test-deploy-ansible-eumetsat:
     name: Ansible Playbook Testing (Native) on EUMETSAT
@@ -98,7 +98,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
+          python-version: 3.12
 
       - name: Install additional dependencies
         run: pip install -r .github/scripts/orchestrator/requirements.txt
@@ -118,7 +118,7 @@ jobs:
           ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
           ITEM_OTHERS_ANNOTATIONS: "Deployable"
           GH_DOWNSTREAM_WORKFLOW_FILE: "test-eumetsat.yml"
-          TOTAL_TIMEOUT_MINUTES: 290 # must be smaller than jobs.orchestrate.timeout-minutes
+          TOTAL_TIMEOUT_MINUTES: 290 # Must be smaller than jobs.orchestrate.timeout-minutes
 
   test-deploy-ansible-ecmwf-via-ewccli:
     name: Ansible Playbook Testing (via EWCCLI) on ECMWF
@@ -135,7 +135,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
+          python-version: 3.12
 
       - name: Install additional dependencies
         run: pip install -r .github/scripts/orchestrator/requirements.txt
@@ -155,7 +155,7 @@ jobs:
           ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
           ITEM_OTHERS_ANNOTATIONS: "Deployable,EWCCLI-compatible"
           GH_DOWNSTREAM_WORKFLOW_FILE: "test-deployment-ansible-ecmwf.yml"
-          TOTAL_TIMEOUT_MINUTES: 190 # must be smaller than jobs.orchestrate.timeout-minutes
+          TOTAL_TIMEOUT_MINUTES: 190 # Must be smaller than jobs.orchestrate.timeout-minutes
 
   test-deploy-ansible-eumetsat-via-ewccli:
     name: Ansible Playbook Testing (via EWCCLI) on EUMETSAT
@@ -172,7 +172,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
+          python-version: 3.12
 
       - name: Install additional dependencies
         run: pip install -r .github/scripts/orchestrator/requirements.txt
@@ -192,4 +192,4 @@ jobs:
           ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
           ITEM_OTHERS_ANNOTATIONS: "Deployable,EWCCLI-compatible"
           GH_DOWNSTREAM_WORKFLOW_FILE: "test-deployment-ansible-eumetsat.yml"
-          TOTAL_TIMEOUT_MINUTES: 290 # must be smaller than jobs.orchestrate.timeout-minutes
+          TOTAL_TIMEOUT_MINUTES: 290 # Must be smaller than jobs.orchestrate.timeout-minutes
