@@ -3076,7 +3076,6 @@ spec:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       summary: Configures an existing VM as a user-friendly Nginx Proxy Manager server, simplifying virtual host management, SSL/HTTP/2 support, and security features like exploit blocking for efficient and secure proxy operations.
       values:
-        ansibleUser: ubuntu
         inputSpec:
           - name: npm_admin_ui_port
             description: "port number at which the Nginx Proxy Manager admin UI is served"
