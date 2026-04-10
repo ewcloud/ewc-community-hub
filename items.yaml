@@ -1177,15 +1177,18 @@ spec:
 
     ewc-gh-action-test-deploy-ansible-playbook:
       name: "ewc-gh-action-test-deploy-ansible-playbook"
-      version: "2.1.2"
+      version: "2.1.3"
       description: |
         This GitHub Action setups all necessary OpenStack resources for a Ansible Playbook to run,  executes it and reports about its success/failure in a nice looking summary (within GitHub UI), as well as machine-friendly artifacts for postprocessing.
 
-        Runs with user-defined `Python` and `Ansible` versions, extra variable inputs and any `Ansible Roles` a test scenario may require.
+        Takes in user-defined `Python` and `Ansible` versions, extra variable inputs and any number of  `Ansible Roles` required.
 
-        ## What's new
+        ## v2
+        ### What's new
 
         - Added compatibility with the [ewc-community-hub](https://github.com/ewcloud/ewc-community-hub) repository to enable upstream test orchestration and by enforcing naming and formatting convention of workflow inputs.
+
+        Please refer to the [CHANGELOG](./CHANGELOG.md) for more details about the latests release.
 
         ## Prerequisites
 
@@ -1205,7 +1208,7 @@ spec:
         >💡 For live usage examples in EWC Community Hub's context, checkout these [ECMWF test workflow](https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/.github/workflows/test-ecmwf.yml) and [EUMETSAT test workflow](https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/.github/workflows/test-eumetsat.yml) definitions.
 
         ```yaml
-        # .github/workflows/test.yml
+        # .github/workflows/test-eumetsat.yml
         ---
         name: Test Deploy Ansible Playbook
 
@@ -1222,7 +1225,7 @@ spec:
             timeout-minutes: 30
             steps:
               - name: Checkout code
-                uses: actions/checkout@v4
+                uses: actions/checkout@v6
 
               - name: Test deployment
                 id: test-deployment
@@ -1243,10 +1246,11 @@ spec:
                   pathToMainFile: 'site.yml'
 
               - name: Upload test deployment result
-                uses: actions/upload-artifact@v4
+                uses: actions/upload-artifact@v6
                 with:
                   name: artifacts_${{ github.run_id }}
                   path: ${{ steps.test-deployment.outputs.artifactPath }}
+                  retention-days: 90
         ```
 
         ## Inputs
@@ -1279,7 +1283,7 @@ spec:
         | artifactPath | Path where artifacts were written in the workflow workspace | `string` |
 
 
-      home: https://github.com/ewcloud/ewc-gh-action-test-deploy-ansible-playbook/tree/2.1.2
+      home: https://github.com/ewcloud/ewc-gh-action-test-deploy-ansible-playbook/tree/2.1.3
       sources:
         - https://github.com/ewcloud/ewc-gh-action-test-deploy-ansible-playbook.git
       maintainers:
@@ -1293,7 +1297,7 @@ spec:
         licenseType: "MIT License"
       displayName: Ansible Playbook Test Deployment via GitHub Actions
       summary: Automatically setup all necessary OpenStack test resources for an Ansible Playbook to run on, execute it and report test status via a summary in GitHub's UI and machine-friendly result artifacts.
-      license: https://github.com/ewcloud/ewc-gh-action-test-deploy-ansible-playbook/blob/2.1.2/LICENSE
+      license: https://github.com/ewcloud/ewc-gh-action-test-deploy-ansible-playbook/blob/2.1.3/LICENSE
       published: true
 
     haproxy-flavour:
