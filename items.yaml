@@ -1107,7 +1107,7 @@ spec:
         licenseType: "MIT License"
         others: "Deployable,EWCCLI-compatible"
       displayName: EUMETCast Terrestrial on AMT Flavour
-      summary:
+      summary: Turns a VM into a station that realiably captures and stores data from the EUMETCast Terrestrial service
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.7.0/LICENSE
       published: true
 
