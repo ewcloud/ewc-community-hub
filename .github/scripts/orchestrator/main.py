@@ -1,37 +1,9 @@
 #!/usr/bin/env python3
-# Orchestration for downstream concurrent test deployment workflows.
-
-# Inclusion Methods
-# Items to be tested are filtered by a combination of the following conditions (logical AND):
-# 1. the value of the `ITEM_TECHNOLOGY_ANNOTATIONS`env var is equivalent to the `annotations[].technology` attribute values
-# 2. the value of the `ITEM_OTHERS_ANNOTATIONS`env var is equivalent of the `annotations[].others` attribute values
-# 3. the presence of the `values` attribute in the Item's metadata
-# 4. the `items.<item key>.name` attribute values is in the list of names in the `ITEM_NAMES`env var (optional)
-#
-# Exclusion Methods
-# Items to NOT be tested can be specified by:
-# 1. the `items.<item key>.name` attribute values is in the list of names in the `EXCLUDED+ITEM_NAMES`env var (optional).
-# If set, overrides all inclusion criteria for the specified items.
-#
-# Deployment Methods
-# Tests are dispatched according to the metadata annotations `others`. The deployment options include Items' native (Ansible CLI,
-# Terraform CLI, etc.) OR EWCCLI:
-#
-# 1. Native: If deploying Items via their native method, the orchestrator forwards as input any attributes/values of the
-# `items.<item key>.values` metadata within `items.yaml` BUT adding a mutation: `inputSpec` attributed is serialized and
-# forwarded downstream as JSON-string with attribute name `inputSpecJson`. See example compatible downstream workflow file at
-# https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/76abcbad92b9122866c91d9ed1d9a0b35dc490e3/.github/workflows/test-ecmwf.yml#L1-L95
-#
-# 2. EWCCLI: If deploying via the EWCCLI, the orchestrator only forwards the Item name and the git ref of the branch where the
-# orchestrator was triggered. Any additional attributes/values are parsed by the EWCCLI directly from the catalog in the downstream
-# workflow. See example compatible downstream workflow file at
-# https://github.com/ewcloud/ewccli/blob/3405f8bf2aa458c5efaca8d646dff0a54d7191ee/.github/workflows/test-deployment-ansible-ecmwf.yml#L1-L63
-
 
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 from json import dumps as json_dumps
-from os import environ, getenv
+from os import environ, getenv, path
 from queue import Queue, Empty
 from pathlib import Path
 from requests import request, Response
@@ -39,6 +11,8 @@ from time import sleep
 from threading import Event
 from typing import Any
 from yaml import safe_load as yaml_safe_load
+
+# --- Input Environmental Variables ---
 
 GH_API_TOKEN = environ["GH_API_TOKEN"]
 GH_DOWNSTREAM_WORKFLOW_FILE = environ["GH_DOWNSTREAM_WORKFLOW_FILE"]
@@ -51,6 +25,8 @@ RUN_TIMEOUT_MINUTES = int(environ["RUN_TIMEOUT_MINUTES"])
 TOTAL_TIMEOUT_MINUTES = int(environ["TOTAL_TIMEOUT_MINUTES"])
 MAX_CONCURRENT_WORKFLOWS = int(environ["MAX_CONCURRENT_WORKFLOWS"])
 
+#  --- Global Static/Variable Defaults ---
+
 API_BASE = "https://api.github.com"
 HEADERS = {
     "Authorization": f"Bearer {GH_API_TOKEN}",
@@ -58,8 +34,12 @@ HEADERS = {
     "X-GitHub-Api-Version": "2022-11-28",
 }
 
-CATALOG_FILE = f"{environ['GITHUB_WORKSPACE']}/items.yaml"
-SUMMARY_TEMPLATE_FILE = f"{environ['GITHUB_WORKSPACE']}/.github/scripts/orchestrator/summary.template.md"
+REPO_ROOT_DIR = path.dirname(path.dirname(path.dirname(Path(__file__).parent.resolve())))
+GH_WORKSPACE = getenv("GITHUB_WORKSPACE", REPO_ROOT_DIR)
+CATALOG_FILE = f"{GH_WORKSPACE}/items.yaml"
+SUMMARY_TEMPLATE_FILE = f"{GH_WORKSPACE}/.github/scripts/orchestrator/summary.template.md"
+
+print(f"GH_WORKSPACE: {GH_WORKSPACE}")
 
 EWCCLI_ANNOTATION = "EWCCLI-compatible"
 EWCCLI_GH_API_REPO_ENDPOINT = "ewcloud/ewccli"
@@ -76,7 +56,7 @@ in_progress: Queue = Queue(maxsize=MAX_CONCURRENT_WORKFLOWS)
 done: Queue = Queue()
 stop: Event = Event()
 
-# --- Utilities ---
+# --- Classes ---
 
 
 class Item:
@@ -98,6 +78,9 @@ class Item:
         return f"<Item {self.key} state={self.state}>"
 
 
+# --- Subroutines ---
+
+
 def github_api(method: str, path: str, payload: dict | Any = None) -> Response:
     response = request(
         method,
@@ -114,9 +97,6 @@ def move_to_done(item: Item, state: str, error: str | None = None) -> None:
     if error:
         item.error = error
     done.put(item)
-
-
-# --- Subroutines ---
 
 
 def read_spec_items() -> dict:
@@ -190,7 +170,7 @@ def parse_items(spec_items: dict) -> list[Item]:
 
         repo_url = item["sources"][0]
         owner, repo = repo_url.split("/")[-2:]
-        repo = repo.replace(".git","")
+        repo = repo.replace(".git", "")
 
         items.append(
             Item(
