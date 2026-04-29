@@ -1099,7 +1099,7 @@ spec:
         - name: EWC Team
           email: support@europeanweather.cloud
           url: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/issues
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/eumetcastTerrestrialLogo.png
       annotations:
         technology: "Ansible Playbook"
         category: "Data Processing"
