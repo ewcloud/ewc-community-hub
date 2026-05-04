@@ -3499,7 +3499,7 @@ spec:
         supportLevel: "EWC"
         licenseType: "MIT License"
       displayName: Automation of OpenStack Backups
-      summary: Automate the process of copying compute resource from one OpenStack cloud to another. 
+      summary: Automate the process of copying compute resource from one OpenStack cloud to another.
       license: https://github.com/ewcloud/ewc-user-tools/blob/1.0.0/LICENSE
       published: true
 
