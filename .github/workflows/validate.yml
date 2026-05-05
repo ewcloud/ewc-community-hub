@@ -156,7 +156,7 @@ jobs:
           ITEM_OTHERS_ANNOTATIONS: "Deployable,EWCCLI-compatible"
           GH_DOWNSTREAM_WORKFLOW_FILE: "test-deployment-ansible-ecmwf.yml"
           TOTAL_TIMEOUT_MINUTES: 190 # Must be smaller than jobs.orchestrate.timeout-minutes
-          EXCLUDED_ITEM_NAMES: "xcube-viewer-flavour"
+          EXCLUDED_ITEM_NAMES: "xcube-viewer-flavour,eumetcast-terrestrial-amt-flavour"
 
   test-deploy-ansible-eumetsat-via-ewccli:
     name: Ansible Playbook Testing (via EWCCLI) on EUMETSAT
@@ -194,4 +194,4 @@ jobs:
           ITEM_OTHERS_ANNOTATIONS: "Deployable,EWCCLI-compatible"
           GH_DOWNSTREAM_WORKFLOW_FILE: "test-deployment-ansible-eumetsat.yml"
           TOTAL_TIMEOUT_MINUTES: 290 # Must be smaller than jobs.orchestrate.timeout-minutes
-          EXCLUDED_ITEM_NAMES: "xcube-viewer-flavour"
+          EXCLUDED_ITEM_NAMES: "xcube-viewer-flavour,eumetcast-terrestrial-amt-flavour"
