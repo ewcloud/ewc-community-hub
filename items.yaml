@@ -3374,6 +3374,8 @@ spec:
       version: "0.1.1"
       ewccli:
         pathToMainFile: satellite-data-processing-main.yaml
+      values:
+        pathToMainFile: satellite-data-processing-main.yaml
       description: |
         Playbooks to install and configure Pytroll-based satellite data processing pipelines and optionally a WMS server. These playbooks are used in the European Weather Cloud (EWC) environment.
 
