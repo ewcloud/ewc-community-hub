@@ -3371,7 +3371,7 @@ spec:
 
     pytroll-processing:
       name: "pytroll-processing"
-      version: "0.1.1"
+      version: "0.1.2"
       ewccli:
         pathToMainFile: satellite-data-processing-main.yaml
       values:
@@ -3481,7 +3481,7 @@ spec:
         ansible-playbook -i inventory path/to/playbook/filename.yaml -e "satellite_data_type=seviri"
         ```
 
-      home: https://github.com/nordsat/ewc-playbooks/tree/0.1.1
+      home: https://github.com/nordsat/ewc-playbooks/tree/0.1.2
       sources:
         - https://github.com/nordsat/ewc-playbooks.git
       maintainers:
@@ -3496,7 +3496,7 @@ spec:
         others: "Deployable,EWCCLI-compatible"
       displayName: Pytroll Processing
       summary: Playbooks to install pytroll processing and wms in the EWC.
-      license: https://github.com/nordsat/ewc-playbooks/blob/0.1.1/LICENSE
+      license: https://github.com/nordsat/ewc-playbooks/blob/0.1.2/LICENSE
       published: true
 
     remote-desktop-flavour:
