@@ -3371,8 +3371,10 @@ spec:
 
     pytroll-processing:
       name: "pytroll-processing"
-      version: "0.1.0"
+      version: "0.1.2"
       ewccli:
+        pathToMainFile: satellite-data-processing-main.yaml
+      values:
         pathToMainFile: satellite-data-processing-main.yaml
       description: |
         Playbooks to install and configure Pytroll-based satellite data processing pipelines and optionally a WMS server. These playbooks are used in the European Weather Cloud (EWC) environment.
@@ -3479,7 +3481,7 @@ spec:
         ansible-playbook -i inventory path/to/playbook/filename.yaml -e "satellite_data_type=seviri"
         ```
 
-      home: https://github.com/nordsat/ewc-playbooks/tree/0.1.0
+      home: https://github.com/nordsat/ewc-playbooks/tree/0.1.2
       sources:
         - https://github.com/nordsat/ewc-playbooks.git
       maintainers:
@@ -3494,7 +3496,7 @@ spec:
         others: "Deployable,EWCCLI-compatible"
       displayName: Pytroll Processing
       summary: Playbooks to install pytroll processing and wms in the EWC.
-      license: https://github.com/nordsat/ewc-playbooks/blob/0.1.0/LICENSE
+      license: https://github.com/nordsat/ewc-playbooks/blob/0.1.2/LICENSE
       published: true
 
     remote-desktop-flavour:
