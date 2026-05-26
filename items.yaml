@@ -1120,11 +1120,11 @@ spec:
         defaultImageName: Ubuntu-22.04-20251007115800
         inputs:
           - name: vfs_cache_mode
-            description: Tellicast license user identifier, equivalent to your EUMETSAT User Portal username.
+            description: Cache mode
             type: str
             default: writes
           - name: vfs_cache_max_size
-            description: Tellicast license activation key (i.e. the user key you obtained via from EUMETSAT Helpdesk).
+            description: Max total size of objects in the cache
             type: str
             default: 512Mi
       values:
@@ -1277,8 +1277,8 @@ spec:
         supportLevel: "EWC"
         licenseType: "MIT License"
         others: "Deployable,EWCCLI-compatible"
-      displayName: EUMETCast Terrestrial on AMT Flavour
-      summary: Turns a VM into a station that realiably captures and stores data from the EUMETCast Terrestrial service
+      displayName: EUMETSAT S3 Mount Flavour
+      summary: Enables a VM to access public EUMETSAT data stored in shared S3 buckets, just as if it was on the local filesystem
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.8.0/LICENSE
       published: true
 
