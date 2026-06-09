@@ -3578,7 +3578,7 @@ spec:
         others: "Deployable"
         supportLevel: "EWC"
         licenseType: "MIT License"
-      displayName: Automation of OpenStack Backups
+      displayName: OpenStack Parallel Migrate
       summary: Automate the process of copying compute resource from one OpenStack cloud to another.
       license: https://github.com/ewcloud/ewc-user-tools/blob/1.0.2/LICENSE
       published: true
