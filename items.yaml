@@ -3540,6 +3540,419 @@ spec:
       license: https://gitlab.aemet.es/jllisov/vzarr/-/blob/main/LICENSE
       published: true
 
+    openstack-backups:
+      name: "openstack-backups"
+      version: "1.0.1"
+      description: |
+        The OpenStack Horizon UI allows the manual creation of backups and snapshots from individual instances and volumes, but does not provide automation features for backing up or restoring multiple resources nor it offers options for the scheduling of backups. The OpenStack Command Line Interface (CLI) provides the same capabilities, without any automation features. The scheduling of backups using the OpenStack CLI must be done using `cron` jobs. Documentation on how to use the OpenStack CLI to create and schedule backups can be found [here](https://confluence.ecmwf.int/x/OISnHg) and to restore backups [here](https://confluence.ecmwf.int/x/2ijPJQ). With this script, users can create, schedule or restore multiple backups automatically.
+
+        ## Functionality
+        This script automates the creation, restoration and scheduling of backups using the OpenStack SDK. This allows users with OpenStack credentials to create backups or snapshots of multiple instances and their attached volumes, scheduling backups for a future time with and without repetition and with and without a retention count. It also allows the restoration of multiple instances or volumes, in-place or to a new instance or volume.
+
+
+        ## Prerequisites
+        * `python>=3.12`
+        * `openstacksdk>=3.0.0`
+        * `PyYAML>=6.0.1`
+        * `schedule>=1.1.0`
+
+        OR
+
+        * `docker>=29.1.3`
+
+        ## Usage
+        The script can be run either directly using the current python environment, satisfying the prerequisites above, or inside a docker container. In either case, it is necessary to first set up the authentication credentials file and the configuration file. It is highly recommended not to run this script within the VM you wish to back up or restore.
+
+        ### 1. Application credentials
+
+        To run this script it is necessary to have the required OpenStack application credentials to access the project/domain/cloud specified in the configuration file. You can find information on how to create application credentials and obtain the RC file or clouds.yaml file in [here](https://confluence.ecmwf.int/x/U3AEJQ)
+
+        ### 2. Configuration file
+
+        A configuration YAML file that contains the requested information to create, schedule or restore backups is required to run the script. A template YAML file can be found in the `templates` directory and some examples in the `tests` directory. The structure of this configuration file is as follows
+        ```
+        cloud: <cloud_name>
+        authentication: <credentials_method>
+
+        backup:
+        - name: <resource_name>
+          type: <resource_type>
+          mode: <backup_mode>
+        - ...
+
+        restore:
+        - name: <resource_name>
+          type: <resource_type>
+          mode: <backup_mode>
+        - ...
+        ```
+        where the `<cloud_name>` corresponds to the name of cloud (domain name) to which the various resources belong. The `authentication` node indicates the mode in which the credentials will be provided, which should be either `openrc` if the application credentials have been sourced from an OpenRC file, or `clouds.yaml` if the application credentials are stored in an eponymous file in the current directory. The optional `backup` node contains instructions to create and schedule backups, as explained below, and the optional `restore` node contains instructions to restore backups.
+
+
+        #### 2.1 Creating backups
+
+        The instructions to create backups must be provided in the `backup` node of the configuration file, following the structure
+        ```
+        ...
+        backup:
+        - name: <resource_name>
+          type: <resource_type>
+          mode: <backup_mode>
+          attachments:
+          - name: <attachment_name>
+            type: <attachment_type>
+            mode: <attachment_backup_mode>
+          - ...
+        - ...
+        ```
+
+        where `<resource_name>` is the name of the instance or volume to back up, `<resource_type>` is either `instance` or `volume` and `<backup_mode>` is either `snapshot` or `backup`. Any number of entries, corresponding to the resources to backup, can be provided to the `backup` node. By default, attachments are not backed up along with the resource (with the exception of root volume of volume-backed instances). In order to back these up, one must provide the `attachment` field to the resource, as seen above. It is possible to select to backup all attachments of the resource, with `attachments: all`, or a specific set, by providing a list of the resources to backup. It is recommended to stop instances and detaching volumes before backing them up. This is the default behaviour. The options `stop` and `detach` can be supplied to instances and volumes, respectively, to change this default behaviour.
+
+        #### 2.2 Scheduling backups
+
+        In order to schedule backups, one can add the `scheduler` field to any resource in the `backup` node. The `scheduler` node must containt, at least, the `start` field, which determines when to run the backup, in the format "yyyy-mm-dd, HH:MM". If repeated backups are desired, the field `repeat_every` can be either `day` or `week`, to repeat the backup daily or weekly. To stop the scheduled backups at some future point in time, the field `end` contains the date on which the scheduler will stop. Lastly, to only keep some amount of backups at a given time, the field `retention_count` can be provided. An example scheduled backup of an instance `my_instance` in `my_cloud`, to run weekly from the first of April of 2026 for a year, with a maximum of five backups on disk, could be
+        ```
+        cloud: my_cloud
+        backup:
+        - name: my_instance
+          type: instance
+          mode: snapshot
+          scheduler:
+            start: "2026-04-01, 00:00",
+            end: "2027-04-01, 00:00",
+            repeat_every: week,
+            retention_count: 5
+        ```
+        Note: it is not allowed to set up scheduled backups using this script more than a week apart. If one wishes to set this up, a cron job is recommended.
+
+        #### 2.3 Restoring backups
+
+        The `restore` node in the configuration file is used to specify any backups to be restored. The `backup` and `restore` nodes are not mutually exclusive, if both are provided all operations will be run. The structure of the `restore` node is as follows
+        ```
+        ...
+        restore:
+        - name: <resource_name>
+          type: instance
+          mode: <backup_mode>
+          in_place: False
+          new_name: <new_resource_name>
+          flavor: <new_flavor>
+          network: <new_network>
+        - name: <resource_name>
+          type: <resource_type>
+          mode: <backup_mode>
+          in_place: True
+        - ...
+        ```
+        where, as before, `<resource_name>` is the name of the instance or volume to restore, `<resource_type>` is either `instance` or `volume` and `<backup_mode>` is either `snapshot` or `backup`. The attachments of resources are not automatically restored, and if required to be restored, they should just be added to the list as another resource to restore in the same way. The field `in_place`, which defaults to `False`, can be provided for each resource and determines whether to restore in-place or as a new resource. For non-in-place restorations the field `new_name` can also be provided to fix the name of the new resource, otherwise a new name will be created for it. The non-in-place restoration of instances requires also the fields `flavor` and `network`,  and optionally `security_groups`, as these are required to create a new server.
+
+
+        ### 3. Running the script
+
+        As stated above, this script can be run directly within the current python environment or in a docker container. To run it directly using python, one must simply provide a positional argument corresponding to the path to the configuration file.
+
+        ```
+        $ python openstack_backups.py -h
+        usage: openstack_backups.py [-h] config_file_path
+
+        positional arguments:
+          config_file_path  Path to configuration file for the backups
+
+        options:
+          -h, --help        show this help message and exit
+        ```
+
+        As an example, to run the test configuration file provided in the `tests` directory, which schedules daily instance snapshots of a server called `TestVM`, do
+
+        ```
+        python openstack_backups.py test/test_backup.yaml
+        ```
+
+        ![Usage Example](https://raw.githubusercontent.com/ewcloud/ewc-user-tools/refs/heads/main/items/openstack-backups/images/Usage.webp)
+
+        ### 4. (Optional) Running the container
+
+        Optionally, instead of running the script in a local python environment, it can be run within a docker container. These can be done, after preparing the custom `clouds.yaml` and configuration file, by following these steps:
+
+        #### 4.1 Specify the location of the configuration file
+
+        First one must modify the last line of the `Dockerfile` file to specify the location of the configuration file of choice:
+        ```
+        ENTRYPOINT ["pipenv", "run", "python", "openstack_backups.py", "<custom_configuration_yaml_file>"]
+        ```
+        #### 4.2. Create the docker image
+
+        Then one must create the docker image with
+        ```
+        sudo docker build . -t openstack-backups
+        ```
+        Note that this step might take some time
+
+        #### 4.3 Launch the docker container
+
+        Lastly one can launch the docker container with
+        ```
+        sudo docker run openstack-backups
+        ```
+
+        ## Inputs
+
+        As described in the usage above, two inputs are required
+        * Authentication file. Must be called `clouds.yaml` and present in the directory where the script is run.
+        * Configuration file. YAML file with the instructions to create, schedule or restore backups.
+
+
+      home: https://github.com/ewcloud/ewc-user-tools/tree/1.0.2/items/openstack-backups
+      sources:
+        - https://github.com/ewcloud/ewc-user-tools.git
+      maintainers:
+        - name: EWC Team
+          email: support@europeanweather.cloud
+          url: https://github.com/ewcloud/ewc-user-tools/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
+      annotations:
+        technology: "Python Script"
+        category: "Automation"
+        others: "Deployable"
+        supportLevel: "EWC"
+        licenseType: "MIT License"
+      displayName: Automation of OpenStack Backups
+      summary: Automates the creation, restoration and scheduling of OpenStack VM disk backups.
+      license: https://github.com/ewcloud/ewc-user-tools/blob/1.0.2/LICENSE
+      published: true
+
+    openstack-parallel-migration:
+      name: "openstack-parallel-migration"
+      version: "1.0.2"
+      description: |
+        A script automating the process of copying resources (instances, volumes, and configurations) from one OpenStack cloud to another. It is designed specifically for users of the [European Weather Cloud (EWC)](https://europeanweather.cloud/), supporting migrations with resume capabilities, parallel transfers (e.i. multiple simultaneous operations), and preservation of networking and security settings.
+
+        # Functionality
+
+        > ⛔ All Public IP addresses will be different on the target cloud (these cannot be migrated).
+
+        > ⚠️ Migration of instances previously configured for `IPA/LDAP` or `SFS` operation is not supported.
+
+
+        The script allows users with Openstack Application credentials as a default authentication method to create a clone of their instances, stream them to a new project / tenant without the need to download & upload images to & from the instance running the script, create needed volumes and launch the newly created instances with the same IP address and Security Groups as in the source project / tenant.
+
+
+        ## Prerequisites
+
+        * Install [python](https://www.python.org/downloads) (version 3.12 or higher)
+        * Install [pv](https://www.ivarch.com/programs/pv.shtml) (version 1.6.6 or higher)
+        * Install [openstacksdk](https://docs.openstack.org/openstacksdk/latest/install/index.html) (version 4.9.0 or higher)
+        * Install [PyYAML](https://pypi.org/project/PyYAML/) (version 6.0.3 or higher)
+
+
+        # Usage
+
+        The script is run directly using a python environment, satisfying the prerequisites above. It is necessary to first do the following:
+        * Add the authentication credentials (default is Application Credentials) for the source and target cloud in a `clouds.yaml`.
+        * Configure which instances to migrate, flavor mapping between the clouds (default is already configured for EWC migration), prefixes, or parallism in `migrate.yaml`.
+        * Run script `openstack_parallel_migrate.py` script. Using switches overrides configuration in `migrate.yaml`.
+
+
+        ```bash
+        python3 openstack_parallel_migrate.py -h
+        ```
+
+        ```
+        usage: openstack_parallel_migrate.py [-h] [--config CONFIG] [--source SOURCE] [--target TARGET] [--servers SERVERS [SERVERS ...]] [--parallel PARALLEL]
+
+        OpenStack migration with resume support
+
+        options:
+          -h, --help            show this help message and exit
+          --config CONFIG       Path to migrate.yaml (default: migrate.yaml)
+          --source SOURCE       Override source cloud name from clouds.yaml
+          --target TARGET       Override target cloud name from clouds.yaml
+          --servers SERVERS [SERVERS ...]
+                                Override servers list from migrate.yaml
+          --parallel PARALLEL   Override parallel_streams from migrate.yaml
+        ```
+
+        #### Run with configuration set in migrate.yaml
+        ```bash
+        python3 openstack_parallel_migrate.py
+        ```
+
+        #### Run with overrides
+        ```bash
+        python3 openstack_parallel_migrate.py \
+          --source CLOUD \
+          --target CLOUD \
+          --servers Server1 Server2 \
+          --parallel 2
+        ```
+
+
+        # Example Usage
+
+        For an example run command such as:
+        ```bash
+        python3 openstack_parallel_migrate_curl.py --source source --target target_oidc --servers ahmedtst3 ahmedtst4
+        ```
+
+        The expected output would be:
+        ```
+        [INFO] Selected 2 server(s)
+        [INFO] Parallel streams: 2
+        [INFO] Buffered stream chunk size: 4194304 bytes
+        [INFO] ahmedtst3: detecting source workload layout
+        ahmedtst3:phases:   0%|                                                                                                                                                                            | 0/10 [00:00<?, ?it/s][INFO] ahmedtst4: detecting source workload layout
+        [INFO] ahmedtst3: preparing source image for root image c27886c2-f152-4a70-9c4d-d99b33b1df53
+        [INFO] ahmedtst4: preparing source image for root volume 9f1a1b7e-8b93-4556-ba3e-f0637a6d2fba                                                                                                      | 0/10 [00:00<?, ?it/s][INFO] ahmedtst3: streaming root image c27886c2-f152-4a70-9c4d-d99b33b1df53 to target image
+        [INFO] ahmedtst3: starting stream of image:c27886c2-f152-4a70-9c4d-d99b33b1df53 to target image mig-img-ahmedtst3-image-c27886c2-f152-4a70-9c4d-d99b33b1df53-afdbf665b9f2
+        [INFO] ahmedtst3: source Glance endpoint = https://api.waw3-1.cloudferro.com:9292/v2/
+        [INFO] ahmedtst4: streaming root volume 9f1a1b7e-8b93-4556-ba3e-f0637a6d2fba to target image                                                                                               | 1/10 [00:00<00:01,  6.32it/s][INFO] ahmedtst4: starting stream of volume:9f1a1b7e-8b93-4556-ba3e-f0637a6d2fba to target image mig-img-ahmedtst4-volume-9f1a1b7e-8b93-4556-ba3e-f0637a6d2fba-477d041735d5
+        [INFO] ahmedtst4: source Glance endpoint = https://api.waw3-1.cloudferro.com:9292/v2/
+        [INFO] ahmedtst3: target Glance endpoint = https://glance-api.cloud.central.data.destination-earth.eu:443/v2/
+        [INFO] ahmedtst4: target Glance endpoint = https://glance-api.cloud.central.data.destination-earth.eu:443/v2/                                                                              | 1/10 [00:00<00:01,  6.32it/s][INFO] Source curl URL: https://api.waw3-1.cloudferro.com:9292/v2/images/ea807a6d-9b81-4e80-b17f-317cc353892a/file
+        [INFO] Target curl URL: https://glance-api.cloud.central.data.destination-earth.eu:443/v2/images/aeecd94a-35d6-4642-be13-285c94239cce/file
+        [INFO] Source curl URL: https://api.waw3-1.cloudferro.com:9292/v2/images/21ef8013-8a7d-472b-9817-9fb1e032e624/file                                                                         | 1/10 [00:00<00:01,  6.32it/s][INFO] Target curl URL: https://glance-api.cloud.central.data.destination-earth.eu:443/v2/images/20fdec4d-8e6a-4776-b9e4-d2caee11510a/file                                                    | 0.00/16.0G [00:00<?, ?B/s]ahmedtst4:volume:9f1a1b7e-8b93-4556-ba3e-f0637a6d2fba:image:   0%|                                                                                                                            | 0.00/16.0G [00:00<?, ?B/saahmedtst4:root: 2.45GiB 0:00:38 [66.9MiB/s] [============ahmedtst3:root: 2.53GiB 0:00:40 [65.3MiB/s] [======================>                                                                                             ahmedtst3:root: 16.0GiB 0:04:20 [62.8MiB/s] [==========================================================================================================================================================>] 100%
+        [INFO] ahmedtst3: target image upload submitted: aeecd94a-35d6-4642-be13-285c94239cce
+        [INFO] ahmedtst3: creating target volume for root c27886c2-f152-4a70-9c4d-d99b33b1df53
+        [INFO] ahmedtst3: attempting target volume creation from image aeecd94a-35d6-4642-be13-285c94239cce
+        ahmedtst3:phases:  20%|████████████████████████████████▌                                                                                                                                  | 2/10 [04:23<20:38, 154.75s/ita
+        [INFO] -- Waiting for target volume a8bbf2fd-4d19-49da-ad33-d243128aa19a: current status=creating, target=available
+        ahmedtst3:phases:  20%|████████████████████████████████▌                                                                                                                                  | 2/10 [04:24<20:38, 154.75s/itahmedtst4:root: 16.0GiB 0:04:23 [62.2MiB/s] [==========================================================================================================================================================>] 100%
+        [INFO] ahmedtst4: target image upload submitted: 20fdec4d-8e6a-4776-b9e4-d2caee11510a                                                                                                               | 0/1 [00:00<?, ?it/s]
+        [INFO] ahmedtst4: creating target volume for root 9f1a1b7e-8b93-4556-ba3e-f0637a6d2fba
+        [INFO] ahmedtst4: attempting target volume creation from image 20fdec4d-8e6a-4776-b9e4-d2caee11510a
+        [INFO] -- Waiting for target volume a1505c72-9345-4cde-ad8e-e48af19c1528: current status=creating, target=available
+        [INFO] ahmedtst3: preparing source image for data volume d3bae72c-e83b-4096-bf0f-02611a69af00
+        [INFO] Source volume d3bae72c-e83b-4096-bf0f-02611a69af00 is in-use; creating snapshot mig-snap-d3bae72c-e83b-4096-bf0f-02611a69af00-dfad2c4d8956
+        [INFO] -- Waiting for source snapshot 61a2ab3c-24c8-44e5-a612-63d984f93476: current status=creating, target=available
+        [INFO] ahmedtst4: preparing source image for data volume d6b9208b-e15b-4ddb-b3f9-452cdf797826                                                                                              | 3/10 [04:34<10:23, 89.09s/it]
+        [INFO] Source volume d6b9208b-e15b-4ddb-b3f9-452cdf797826 is in-use; creating snapshot mig-snap-d6b9208b-e15b-4ddb-b3f9-452cdf797826-c6adb44b6e46
+        [INFO] -- Waiting for source snapshot 4d7c5b73-777b-4251-86e8-a6e3afcc0956: current status=creating, target=available                                                                               | 0/1 [00:00<?, ?it/s]
+        [INFO] ahmedtst3: Creating temporary clone volume mig-clone-d3bae72c-e83b-4096-bf0f-02611a69af00-3309bfd2d1f5 from snapshot 61a2ab3c-24c8-44e5-a612-63d984f93476
+        [INFO] -- Waiting for source temp volume 5ad137e8-7e3d-43b0-bd33-96b082b587e6: current status=creating, target=available
+        [INFO] ahmedtst4: Creating temporary clone volume mig-clone-d6b9208b-e15b-4ddb-b3f9-452cdf797826-a73ee87281c5 from snapshot 4d7c5b73-777b-4251-86e8-a6e3afcc0956                           | 3/10 [04:45<10:23, 89.09s/it]
+        [INFO] -- Waiting for source temp volume e9e96b78-24cf-4c54-8637-b7fc9d78799e: current status=creating, target=available                                                                   | 3/10 [04:37<10:28, 89.84s/it]
+        [INFO] ahmedtst3: Exporting source volume 5ad137e8-7e3d-43b0-bd33-96b082b587e6 -> source image src-export-d3bae72c-e83b-4096-bf0f-02611a69af00-raw-418eeb3c715b (raw)
+        [INFO] ahmedtst3: Source export image created: 9b908ffc-1a33-49fb-90aa-8791d576f6d3
+        [INFO] -- Waiting for source export image 9b908ffc-1a33-49fb-90aa-8791d576f6d3: current status=queued, target=active
+        [INFO] ahmedtst4: Exporting source volume e9e96b78-24cf-4c54-8637-b7fc9d78799e -> source image src-export-d6b9208b-e15b-4ddb-b3f9-452cdf797826-raw-ed9c8adde6e1 (raw)                      | 3/10 [04:55<10:23, 89.09s/it]
+        [INFO] ahmedtst4: Source export image created: e2f21a47-7fed-44c4-a188-e8c57ed3226e
+        [INFO] -- Waiting for source export image e2f21a47-7fed-44c4-a188-e8c57ed3226e: current status=queued, target=active
+        [INFO] -- Waiting for source export image 9b908ffc-1a33-49fb-90aa-8791d576f6d3: current status=saving, target=active
+        [INFO] -- Waiting for source export image e2f21a47-7fed-44c4-a188-e8c57ed3226e: current status=saving, target=active                                                                       | 3/10 [05:56<10:23, 89.09s/it]
+        [INFO] ahmedtst3: streaming data volume d3bae72c-e83b-4096-bf0f-02611a69af00 to target image
+        [INFO] ahmedtst3: starting stream of volume:d3bae72c-e83b-4096-bf0f-02611a69af00 to target image mig-img-ahmedtst3-volume-d3bae72c-e83b-4096-bf0f-02611a69af00-b2ae24fbd98b
+        [INFO] ahmedtst3: source Glance endpoint = https://api.waw3-1.cloudferro.com:9292/v2/
+        [INFO] ahmedtst3: target Glance endpoint = https://glance-api.cloud.central.data.destination-earth.eu:443/v2/
+        [INFO] Source curl URL: https://api.waw3-1.cloudferro.com:9292/v2/images/9b908ffc-1a33-49fb-90aa-8791d576f6d3/file
+        [INFO] Target curl URL: https://glance-api.cloud.central.data.destination-earth.eu:443/v2/images/60c13c68-b807-4344-97d2-215c18c5a4de/file
+        ahmedtst3:phases:  40%|█████████████████████████████████████████████████████████████████▏                                                                                                 | 4/10 [06:58<11:04, 110.81s/ita[INFO] ahmedtst4: streaming data volume d6b9208b-e15b-4ddb-b3f9-452cdf797826 to target image                                                                                                             ]  1% ETA 0:02:36
+        [INFO] ahmedtst4: starting stream of volume:d6b9208b-e15b-4ddb-b3f9-452cdf797826 to target image mig-img-ahmedtst4-volume-d6b9208b-e15b-4ddb-b3f9-452cdf797826-bb9472147cba
+        [INFO] ahmedtst4: source Glance endpoint = https://api.waw3-1.cloudferro.com:9292/v2/
+        [INFO] ahmedtst4: target Glance endpoint = https://glance-api.cloud.central.data.destination-earth.eu:443/v2/
+        [INFO] Source curl URL: https://api.waw3-1.cloudferro.com:9292/v2/images/e2f21a47-7fed-44c4-a188-e8c57ed3226e/file
+        [INFO] Target curl URL: https://glance-api.cloud.central.data.destination-earth.eu:443/v2/images/2828c53c-df72-46e2-9239-6bb561518043/file
+                                                                                                                                                                                                                                 aahmedtst3:data: 10.0GiB 0:02:39 [64.1MiB/s] [==========================================================================================================================================================>] 100%
+        ahmedtst4:data: 10.0GiB 0:02:36 [65.3MiB/s] [==========================================================================================================================================================>] 100%
+        [INFO] ahmedtst3: target image upload submitted: 60c13c68-b807-4344-97d2-215c18c5a4de
+        [INFO] ahmedtst3: creating target volume for data d3bae72c-e83b-4096-bf0f-02611a69af00
+        [INFO] ahmedtst3: attempting target volume creation from image 60c13c68-b807-4344-97d2-215c18c5a4de
+        [INFO] -- Waiting for target volume 5279e923-8cb8-47a5-bc9f-678cb03f531c: current status=creating, target=available
+        [INFO] ahmedtst4: target image upload submitted: 2828c53c-df72-46e2-9239-6bb561518043███████████████████▌                                                                                 | 5/10 [09:40<10:45, 129.11s/it]
+        [INFO] ahmedtst4: creating target volume for data d6b9208b-e15b-4ddb-b3f9-452cdf797826
+        [INFO] ahmedtst4: attempting target volume creation from image 2828c53c-df72-46e2-9239-6bb561518043                                                                                                 | 0/1 [00:00<?, ?it/s]
+        [INFO] -- Waiting for target volume 3ea20a95-c262-4dab-971c-205aa4833823: current status=creating, target=available
+        [INFO] ahmedtst3: creating target security groups and fixed ports
+        [INFO] ahmedtst3: creating target instance with root disk
+        [INFO] ahmedtst4: creating target security groups and fixed ports████████████████████████████████████████████████████████████████████████▊                                                 | 7/10 [09:51<03:00, 60.31s/it]
+        [INFO] ahmedtst4: creating target instance with root disk███████████████████████████████████████████████▌                                                                                 | 5/10 [09:41<10:45, 129.01s/it][INFO] -- Waiting for target server 98ccd72e-d46d-4e52-aa8e-5b67bb541d5c: current status=BUILD, target=ACTIVE
+        [INFO] -- Waiting for target server f01ac55e-3f6f-4fe2-8650-28d691189c41: current status=BUILD, target=ACTIVE████████████████████████████▊                                                 | 7/10 [09:53<03:00, 60.31s/it]
+        [INFO] ahmedtst3: stopping target instance to attach data volumes
+        [INFO] ahmedtst3: stopping target server before attaching data volumes
+        [INFO] -- Waiting for target server 98ccd72e-d46d-4e52-aa8e-5b67bb541d5c: current status=ACTIVE, target=SHUTOFF
+        [INFO] ahmedtst4: stopping target instance to attach data volumes█████████████████████████████████████████████████████████████████████████████████████████▏                                | 8/10 [10:04<01:29, 44.85s/it]
+        [INFO] ahmedtst4: stopping target server before attaching data volumes
+        [INFO] -- Waiting for target server f01ac55e-3f6f-4fe2-8650-28d691189c41: current status=ACTIVE, target=SHUTOFF
+        [INFO] -- Waiting for target server 98ccd72e-d46d-4e52-aa8e-5b67bb541d5c: current status=ACTIVE, target=SHUTOFF
+        ahmedtst3:phases:  80%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏                                | 8/10 [11:04<01:29, 44.85s/it]
+        [INFO] ahmedtst4: attaching data volume 3ea20a95-c262-4dab-971c-205aa4833823
+        [INFO] ahmedtst4: attaching target volume 3ea20a95-c262-4dab-971c-205aa4833823████████████████████████████████████████████████████████████████████████████▏                                | 8/10 [10:05<01:29, 44.85s/it]
+        [INFO] -- Waiting for target volume 3ea20a95-c262-4dab-971c-205aa4833823: current status=reserved, target=in-use
+        [INFO] ahmedtst3: attaching data volume 5279e923-8cb8-47a5-bc9f-678cb03f531c
+        [INFO] ahmedtst3: attaching target volume 5279e923-8cb8-47a5-bc9f-678cb03f531c
+        [INFO] -- Waiting for target volume 5279e923-8cb8-47a5-bc9f-678cb03f531c: current status=reserved, target=in-use
+        [INFO] ahmedtst4: starting target instance████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏                                | 8/10 [11:16<01:29, 44.85s/it]
+        [INFO] ahmedtst4: starting target server
+        [INFO] -- Waiting for target server f01ac55e-3f6f-4fe2-8650-28d691189c41: current status=SHUTOFF, target=ACTIVE
+        [INFO] ahmedtst3: starting target instance
+        [INFO] ahmedtst3: starting target server
+        [INFO] -- Waiting for target server 98ccd72e-d46d-4e52-aa8e-5b67bb541d5c: current status=SHUTOFF, target=ACTIVE
+        [INFO] ahmedtst4: completed███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                | 9/10 [11:26<00:56, 56.66s/it]
+        [INFO] ahmedtst4: migration completed
+        ahmedtst4:phases: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [11:28<00:00, 68.88s/it]
+
+
+        ahmedtst4:phases: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [11:28<00:00, 40.34s/it]
+        [INFO] ahmedtst3: completed
+        [INFO] ahmedtst3: migration completed
+        ahmedtst3:phases: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 10/10 [11:37<00:00, 69.72s/it]
+        ```
+
+
+        ## Features
+
+        * Performance-focused:
+          * BufferedStream generator that coalesces source chunks into 4 MiB blocks
+          * RAW format for temporary volume-export images on the source cloud
+        * Resume logic supported:
+          * If source temporary snapshot / clone volume / temp image already exists and is
+            not in error, reuse it on rerun and wait until it becomes usable.
+          * If source temporary resources are missing or in error, recreate them.
+          * If target image already exists and is usable, skip streaming and resume from
+            target volume creation.
+          * If target volume creation failed but target image succeeded, rerun resumes
+            target volume creation.
+          * If target server creation failed after the server was created, rerun resumes
+            from the existing target server.
+          * Source temporary resources are cleaned up after target image upload succeeds,
+            and also on rerun when a usable target image already exists.
+        * CLI overrides:
+            * `--source CLOUD`
+            * `--target CLOUD`
+            * `--servers vm1 vm2 ...`
+            * `--parallel N`
+        * Parallel instance migrations
+        * Live phase-based progress bars
+        * Per-server current stage tracking in separate state files
+        * Glance HTTP streaming source -> target
+        * Preserve fixed IPs by creating target ports with same fixed IPs on same-named target networks
+        * Target is always boot-from-volume
+        * Flavor mapping file support
+        * Security groups reused by exact name on target, with source rules copied into them
+        * Source workload support:
+            * Source instances booted from volume
+            * Source instances booted directly from image
+            * Attached data volumes in both cases
+
+
+      home: https://github.com/ewcloud/ewc-user-tools/tree/1.0.2/items/openstack-parallel-migration
+      sources:
+        - https://github.com/ewcloud/ewc-user-tools.git
+      maintainers:
+        - name: EWC Team
+          email: support@europeanweather.cloud
+          url: https://github.com/ewcloud/ewc-user-tools/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
+      annotations:
+        technology: "Python Script"
+        category: "Automation"
+        others: "Deployable"
+        supportLevel: "EWC"
+        licenseType: "MIT License"
+      displayName: OpenStack Parallel Migrate
+      summary: Automate the process of copying compute resource from one OpenStack cloud to another.
+      license: https://github.com/ewcloud/ewc-user-tools/blob/1.0.2/LICENSE
+      published: true
+
     pytroll-processing:
       name: "pytroll-processing"
       version: "0.1.2"
