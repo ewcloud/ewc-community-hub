@@ -4087,7 +4087,7 @@ spec:
       name: "remote-desktop-flavour"
       version: "1.8.0"
       ewccli:
-        defaultImageName: Rocky-9.6-20251107141503
+        defaultImageName: Rocky-9
         pathToRequirementsFile: playbooks/remote-desktop-flavour/requirements.yml
         pathToMainFile: playbooks/remote-desktop-flavour/remote-desktop-flavour.yml
         inputs:
@@ -4096,7 +4096,7 @@ spec:
             type: Optional[List[str]]
             default: null
       values:
-        osImageName: Rocky-9.6-20251107141503
+        osImageName: Rocky-9
         ansibleUser: cloud-user
         pathToRequirementsFile: playbooks/remote-desktop-flavour/requirements.yml
         pathToMainFile: playbooks/remote-desktop-flavour/remote-desktop-flavour.yml
@@ -4456,7 +4456,7 @@ spec:
       name: "ssh-bastion-flavour"
       version: "1.8.0"
       ewccli:
-        defaultImageName: Rocky-9.6-20251107141503
+        defaultImageName: Rocky-9
         pathToRequirementsFile: playbooks/ssh-bastion-flavour/requirements.yml
         pathToMainFile: playbooks/ssh-bastion-flavour/ssh-bastion-flavour.yml
         inputs:
@@ -4466,7 +4466,7 @@ spec:
             default: null
         externalIP: true
       values:
-        osImageName: Rocky-9.6-20251107141503
+        osImageName: Rocky-9
         ansibleUser: cloud-user
         pathToRequirementsFile: playbooks/ssh-bastion-flavour/requirements.yml
         pathToMainFile: playbooks/ssh-bastion-flavour/ssh-bastion-flavour.yml
@@ -4785,7 +4785,7 @@ spec:
       name: "xcube-viewer-flavour"
       version: "1.8.0"
       ewccli:
-        defaultImageName: ubuntu-24.04-2025060410260
+        defaultImageName: ubuntu-24.04
         defaultSecurityGroups: [ssh-http-https]
         pathToRequirementsFile: playbooks/xcube-viewer-flavour/requirements.yml
         pathToMainFile: playbooks/xcube-viewer-flavour/xcube-viewer-flavour.yml
@@ -4827,7 +4827,7 @@ spec:
         externalIP: true
         checkDNS: true
       values:
-        osImageName: ubuntu-24.04-20250604102601
+        osImageName: ubuntu-24.04
         ansibleUser: ubuntu
         pathToRequirementsFile: playbooks/xcube-viewer-flavour/requirements.yml
         pathToMainFile: playbooks/xcube-viewer-flavour/xcube-viewer-flavour.yml
