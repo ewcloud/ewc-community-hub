@@ -2676,7 +2676,7 @@ spec:
 
     ipa-server-flavour:
       name: "ipa-server-flavour"
-      version: "1.8.1"
+      version: "1.8.0"
       ewccli:
         defaultImageName: Rocky-9.6-20251107141503
         pathToRequirementsFile: playbooks/ipa-server-flavour/requirements.yml
