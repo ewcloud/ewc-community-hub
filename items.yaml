@@ -2676,9 +2676,9 @@ spec:
 
     ipa-server-flavour:
       name: "ipa-server-flavour"
-      version: "1.8.0"
+      version: "1.8.2"
       ewccli:
-        defaultImageName: Rocky-9.6-20251107141503
+        defaultImageName: Rocky-9
         pathToRequirementsFile: playbooks/ipa-server-flavour/requirements.yml
         pathToMainFile: playbooks/ipa-server-flavour/ipa-server-flavour.yml
         inputs:
@@ -2709,7 +2709,7 @@ spec:
         defaultSecurityGroups:
           - ipa
       values:
-        osImageName: Rocky-9.6-20251107141503
+        osImageName: Rocky-9
         ansibleUser: cloud-user
         pathToRequirementsFile: playbooks/ipa-server-flavour/requirements.yml
         pathToMainFile: playbooks/ipa-server-flavour/ipa-server-flavour.yml
@@ -2922,7 +2922,7 @@ spec:
         | os_network_name | OpenStack network to which the target virtual machine has access to | `string` | `private` | yes |
         | os_security_group_name | OpenStack security group containing all firewall rules required by the IPA server/client communication | `string` | `ipa` | yes |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.8.0/playbooks/ipa-server-flavour
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.8.2/playbooks/ipa-server-flavour
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -2938,7 +2938,7 @@ spec:
         licenseType: "MIT License"
       displayName: IPA Server Flavour
       summary: Turns an existing VM into a FreeIPA server, a central place for user authentication, authorization, and DNS-based resource discovery for secure and efficient identity management.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.8.0/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.8.2/LICENSE
       published: true
 
     ipa-server-provisioning:
