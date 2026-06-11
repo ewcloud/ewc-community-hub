@@ -100,7 +100,7 @@ spec:
         Community Hub Item.
 
         > 💡 To configure an existing VM as an IPA server,
-        you can deploy the [IPA Server Flavour](https://europeanweather.cloud/community-hub/ipa-server-flavour)
+        you can deploy the [IPA Server Flavour](https://europeanweather.cloud/community-hub/)
         Community Hub Item.
 
         Once an IPA server is successfully provisioned
@@ -2052,7 +2052,7 @@ spec:
       description: |
         This Ansible Playbook configures an existing virtual machine in the
         [European Weather Cloud (EWC)](https://europeanweather.cloud/) to operate as a
-        client of [IPA services](../ipa-server-flavour/).
+        client of [IPA services](..//).
 
         IPA provides integrated identity management and DNS services, enabling
         centralized user authentication, authorization, and resource discovery.
@@ -2234,7 +2234,7 @@ spec:
       description: |
         This Ansible Playbook configures an existing virtual machine in the
         [European Weather Cloud (EWC)](https://europeanweather.cloud/) to disenroll
-        from a [IPA server](../ipa-server-flavour/).
+        from a [IPA server](..//).
 
         IPA provides integrated identity management and DNS services for centralized
         user authentication, authorization, and resource discovery. This template safely
@@ -2676,7 +2676,7 @@ spec:
 
     ipa-server-flavour:
       name: "ipa-server-flavour"
-      version: "1.8.0"
+      version: "1.8.1"
       ewccli:
         defaultImageName: Rocky-9.6-20251107141503
         pathToRequirementsFile: playbooks/ipa-server-flavour/requirements.yml
