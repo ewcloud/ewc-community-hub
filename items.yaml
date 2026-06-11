@@ -2678,7 +2678,7 @@ spec:
       name: "ipa-server-flavour"
       version: "1.8.0"
       ewccli:
-        defaultImageName: Rocky-9.6-20251107141503
+        defaultImageName: Rocky-9
         pathToRequirementsFile: playbooks/ipa-server-flavour/requirements.yml
         pathToMainFile: playbooks/ipa-server-flavour/ipa-server-flavour.yml
         inputs:
@@ -2709,7 +2709,7 @@ spec:
         defaultSecurityGroups:
           - ipa
       values:
-        osImageName: Rocky-9.6-20251107141503
+        osImageName: Rocky-9
         ansibleUser: cloud-user
         pathToRequirementsFile: playbooks/ipa-server-flavour/requirements.yml
         pathToMainFile: playbooks/ipa-server-flavour/ipa-server-flavour.yml
