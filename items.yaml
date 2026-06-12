@@ -2049,6 +2049,9 @@ spec:
           - name: ipa_admin_password
             description: "username of the administrator account from the IPA server. Example: ipaadmin"
             type: str
+          - name: ipa_client_hostname
+            description: "hostname of the target vm where the IPA client will be installed."
+            type: str
       description: |
         This Ansible Playbook configures an existing virtual machine in the
         [European Weather Cloud (EWC)](https://europeanweather.cloud/) to operate as a
