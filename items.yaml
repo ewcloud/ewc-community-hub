@@ -914,16 +914,16 @@ spec:
 
     eumetcast-terrestrial-amt-flavour:
       name: "eumetcast-terrestrial-amt-flavour"
-      version: "1.8.0"
+      version: "1.12.0"
       ewccli:
         pathToRequirementsFile: playbooks/eumetcast-terrestrial-amt-flavour/requirements.yml
         pathToMainFile: playbooks/eumetcast-terrestrial-amt-flavour/eumetcast-terrestrial-amt-flavour.yml
         defaultImageName: Ubuntu-22.04
         inputs:
-          - name: tellicast_license_user_name
+          - name: tellicast_username
             description: Tellicast license user identifier, equivalent to your EUMETSAT User Portal username.
             type: str
-          - name: tellicast_license_user_key
+          - name: tellicast_user_key
             description: Tellicast license activation key (i.e. the user key you obtained via from EUMETSAT Helpdesk).
             type: str
       values:
@@ -932,10 +932,10 @@ spec:
         pathToRequirementsFile: playbooks/eumetcast-terrestrial-amt-flavour/requirements.yml
         pathToMainFile: playbooks/eumetcast-terrestrial-amt-flavour/eumetcast-terrestrial-amt-flavour.yml
         inputSpec:
-          - name: tellicast_license_user_name
+          - name: tellicast_username
             description: Tellicast license user identifier, equivalent to your EUMETSAT User Portal username.
             type: str
-          - name: tellicast_license_user_key
+          - name: tellicast_user_key
             description: Tellicast license activation key (i.e. the user key you obtained via from EUMETSAT Helpdesk).
             type: str
       description: |
