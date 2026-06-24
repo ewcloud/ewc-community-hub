@@ -927,7 +927,7 @@ spec:
             description: Tellicast license activation key (i.e. the user key you obtained via from EUMETSAT Helpdesk).
             type: str
       values:
-        osImageName: Ubuntu-22.04-20251007115800
+        osImageName: Ubuntu-22.04
         ansibleUser: ubuntu
         pathToRequirementsFile: playbooks/eumetcast-terrestrial-amt-flavour/requirements.yml
         pathToMainFile: playbooks/eumetcast-terrestrial-amt-flavour/eumetcast-terrestrial-amt-flavour.yml
