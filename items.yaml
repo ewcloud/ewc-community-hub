@@ -914,7 +914,7 @@ spec:
 
     eumetcast-terrestrial-amt-flavour:
       name: "eumetcast-terrestrial-amt-flavour"
-      version: "1.12.0"
+      version: "1.13.0"
       ewccli:
         pathToRequirementsFile: playbooks/eumetcast-terrestrial-amt-flavour/requirements.yml
         pathToMainFile: playbooks/eumetcast-terrestrial-amt-flavour/eumetcast-terrestrial-amt-flavour.yml
