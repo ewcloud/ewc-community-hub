@@ -46,7 +46,7 @@ spec:
         pathToMainFile: playbooks/ai-models/ai-models.yml
       values:
         pathToMainFile: playbooks/ai-models/ai-models.yml
-        osImageName: ubuntu-24.04-20250604102601
+        osImageName: Ubuntu-24.04
         ansibleUser: ubuntu
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
@@ -655,7 +655,7 @@ spec:
         pathToMainFile: playbooks/aifs-single-mse/aifs-single-mse.yml
       values:
         pathToMainFile: playbooks/aifs-single-mse/aifs-single-mse.yml
-        osImageName: ubuntu-24.04-20250604102601
+        osImageName: Ubuntu-24.04
         ansibleUser: ubuntu
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
@@ -724,7 +724,7 @@ spec:
         pathToMainFile: playbooks/aifs-ens-crps/aifs-ens-crps.yml
       values:
         pathToMainFile: playbooks/aifs-ens-crps/aifs-ens-crps.yml
-        osImageName: ubuntu-24.04-20250604102601
+        osImageName: Ubuntu-24.04
         ansibleUser: ubuntu
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
@@ -752,7 +752,7 @@ spec:
         pathToMainFile: anemoi.yml
       values:
         pathToMainFile: anemoi.yml
-        osImageName: ubuntu-24.04-20250604102601
+        osImageName: Ubuntu-24.04
         ansibleUser: ubuntu
       description: |
         Create a conda environment with the Anemoi framework for weather forecasting based on machine learning and associated software stack.
@@ -869,7 +869,7 @@ spec:
         pathToMainFile: playbooks/ecmwf-data-flavour/ecmwf-data-flavour.yml
         pathToRequirementsFile: requirements.yml
       values:
-        osImageName: ubuntu-24.04-20250604102601
+        osImageName: Ubuntu-24.04
         ansibleUser: ubuntu
         inputSpec:
           - name: reboot_if_required
@@ -918,7 +918,7 @@ spec:
       ewccli:
         pathToRequirementsFile: playbooks/eumetcast-terrestrial-amt-flavour/requirements.yml
         pathToMainFile: playbooks/eumetcast-terrestrial-amt-flavour/eumetcast-terrestrial-amt-flavour.yml
-        defaultImageName: Ubuntu-22.04-20251007115800
+        defaultImageName: Ubuntu-22.04
         inputs:
           - name: tellicast_license_user_name
             description: Tellicast license user identifier, equivalent to your EUMETSAT User Portal username.
@@ -927,7 +927,7 @@ spec:
             description: Tellicast license activation key (i.e. the user key you obtained via from EUMETSAT Helpdesk).
             type: str
       values:
-        osImageName: Ubuntu-22.04-20251007115800
+        osImageName: Ubuntu-22.04
         ansibleUser: ubuntu
         pathToRequirementsFile: playbooks/eumetcast-terrestrial-amt-flavour/requirements.yml
         pathToMainFile: playbooks/eumetcast-terrestrial-amt-flavour/eumetcast-terrestrial-amt-flavour.yml
@@ -1117,7 +1117,7 @@ spec:
       ewccli:
         pathToRequirementsFile: playbooks/eumetsat-s3-mount-flavour/requirements.yml
         pathToMainFile: playbooks/eumetsat-s3-mount-flavour/eumetsat-s3-mount-flavour.yml
-        defaultImageName: Ubuntu-22.04-20251007115800
+        defaultImageName: Ubuntu-22.04
         inputs:
           - name: vfs_cache_mode
             description: Cache mode
@@ -1128,7 +1128,7 @@ spec:
             type: str
             default: 512Mi
       values:
-        osImageName: Ubuntu-22.04-20251007115800
+        osImageName: Ubuntu-22.04
         ansibleUser: ubuntu
         pathToRequirementsFile: playbooks/eumetsat-s3-mount-flavour/requirements.yml
         pathToMainFile: playbooks/eumetsat-s3-mount-flavour/eumetsat-s3-mount-flavour.yml
@@ -1288,7 +1288,7 @@ spec:
       ewccli:
         pathToRequirementsFile: playbooks/eumetsat-data-tailor-flavour/requirements.yml
         pathToMainFile: playbooks/eumetsat-data-tailor-flavour/eumetsat-data-tailor-flavour.yml
-        defaultImageName: ubuntu-24.04-20250604102601
+        defaultImageName: Ubuntu-24.04
         inputs:
           - name: data_tailor_env_wipe
             description: flag to delete existing conda environment where data tailor was previously installed. Only yes will be accepted to approve
@@ -1315,7 +1315,7 @@ spec:
             type: str
             default: "root"
       values:
-        osImageName: ubuntu-24.04-20250604102601
+        osImageName: Ubuntu-24.04
         ansibleUser: ubuntu
         pathToRequirementsFile: playbooks/eumetsat-data-tailor-flavour/requirements.yml
         pathToMainFile: playbooks/eumetsat-data-tailor-flavour/eumetsat-data-tailor-flavour.yml
@@ -1819,7 +1819,7 @@ spec:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       summary: Configures an existing VM as a high-performance load balancer, enhancing application speed, security, and scalability with easy management for TCP and HTTP workloads.
       values:
-        osImageName: ubuntu-24.04-20250604102601
+        osImageName: Ubuntu-24.04
         ansibleUser: ubuntu
         inputSpec:
           - name: os_security_group_name
@@ -2678,7 +2678,7 @@ spec:
       name: "ipa-server-flavour"
       version: "1.8.4"
       ewccli:
-        defaultImageName: Rocky-9.6-20251107141503
+        defaultImageName: Rocky-9
         pathToRequirementsFile: playbooks/ipa-server-flavour/requirements.yml
         pathToMainFile: playbooks/ipa-server-flavour/ipa-server-flavour.yml
         inputs:
@@ -2703,7 +2703,7 @@ spec:
         defaultSecurityGroups:
           - ipa
       values:
-        osImageName: Rocky-9.6-20251107141503
+        osImageName: Rocky-9
         ansibleUser: cloud-user
         pathToRequirementsFile: playbooks/ipa-server-flavour/requirements.yml
         pathToMainFile: playbooks/ipa-server-flavour/ipa-server-flavour.yml
@@ -3187,7 +3187,7 @@ spec:
         externalIP: true
         checkDNS: true
       values:
-        osImageName: ubuntu-24.04-20250604102601
+        osImageName: Ubuntu-24.04
         ansibleUser: ubuntu
         pathToMainFile: playbooks/jupyterhub-flavour/jupyterhub-flavour.yml
         pathToRequirementsFile: requirements.yml
@@ -3255,7 +3255,7 @@ spec:
       ewccli:
         pathToMainFile: ml-basic.yml
       values:
-        osImageName: ubuntu-24.04-20250604102601
+        osImageName: Ubuntu-24.04
         ansibleUser: ubuntu
         pathToMainFile: ml-basic.yml
       description: |
@@ -3473,7 +3473,7 @@ spec:
             description: "OpenStack security group containing all firewall rules required for Nginx Proxy Manager operation"
             type: str
             default: nginx-proxy-manager
-        osImageName: ubuntu-24.04-20250604102601
+        osImageName: Ubuntu-24.04
         ansibleUser: ubuntu
         pathToMainFile: playbooks/nginx-proxy-manager-flavour/nginx-proxy-manager-flavour.yml
         pathToRequirementsFile: playbooks/nginx-proxy-manager-flavour/requirements.yml
@@ -4097,7 +4097,7 @@ spec:
       name: "remote-desktop-flavour"
       version: "1.8.4"
       ewccli:
-        defaultImageName: Rocky-9.6-20251107141503
+        defaultImageName: Rocky-9
         pathToRequirementsFile: playbooks/remote-desktop-flavour/requirements.yml
         pathToMainFile: playbooks/remote-desktop-flavour/remote-desktop-flavour.yml
         inputs:
@@ -4106,7 +4106,7 @@ spec:
             type: Optional[List[str]]
             default: null
       values:
-        osImageName: Rocky-9.6-20251107141503
+        osImageName: Rocky-9
         ansibleUser: cloud-user
         pathToRequirementsFile: playbooks/remote-desktop-flavour/requirements.yml
         pathToMainFile: playbooks/remote-desktop-flavour/remote-desktop-flavour.yml
@@ -4466,7 +4466,7 @@ spec:
       name: "ssh-bastion-flavour"
       version: "1.8.4"
       ewccli:
-        defaultImageName: Rocky-9.6-20251107141503
+        defaultImageName: Rocky-9
         pathToRequirementsFile: playbooks/ssh-bastion-flavour/requirements.yml
         pathToMainFile: playbooks/ssh-bastion-flavour/ssh-bastion-flavour.yml
         inputs:
@@ -4476,7 +4476,7 @@ spec:
             default: null
         externalIP: true
       values:
-        osImageName: Rocky-9.6-20251107141503
+        osImageName: Rocky-9
         ansibleUser: cloud-user
         pathToRequirementsFile: playbooks/ssh-bastion-flavour/requirements.yml
         pathToMainFile: playbooks/ssh-bastion-flavour/ssh-bastion-flavour.yml
@@ -4795,7 +4795,7 @@ spec:
       name: "xcube-viewer-flavour"
       version: "1.8.4"
       ewccli:
-        defaultImageName: ubuntu-24.04-2025060410260
+        defaultImageName: ubuntu-24.04
         defaultSecurityGroups: [ssh-http-https]
         pathToRequirementsFile: playbooks/xcube-viewer-flavour/requirements.yml
         pathToMainFile: playbooks/xcube-viewer-flavour/xcube-viewer-flavour.yml
@@ -4837,7 +4837,7 @@ spec:
         externalIP: true
         checkDNS: true
       values:
-        osImageName: ubuntu-24.04-20250604102601
+        osImageName: ubuntu-24.04
         ansibleUser: ubuntu
         pathToRequirementsFile: playbooks/xcube-viewer-flavour/requirements.yml
         pathToMainFile: playbooks/xcube-viewer-flavour/xcube-viewer-flavour.yml
