@@ -44,6 +44,7 @@ spec:
 
       ewccli:
         pathToMainFile: playbooks/ai-models/ai-models.yml
+        defaultImageName: Ubuntu-24.04
       values:
         pathToMainFile: playbooks/ai-models/ai-models.yml
         osImageName: Ubuntu-24.04
@@ -653,6 +654,7 @@ spec:
 
       ewccli:
         pathToMainFile: playbooks/aifs-single-mse/aifs-single-mse.yml
+        defaultImageName: Ubuntu-24.04
       values:
         pathToMainFile: playbooks/aifs-single-mse/aifs-single-mse.yml
         osImageName: Ubuntu-24.04
@@ -722,6 +724,7 @@ spec:
 
       ewccli:
         pathToMainFile: playbooks/aifs-ens-crps/aifs-ens-crps.yml
+        defaultImageName: Ubuntu-24.04
       values:
         pathToMainFile: playbooks/aifs-ens-crps/aifs-ens-crps.yml
         osImageName: Ubuntu-24.04
@@ -750,6 +753,7 @@ spec:
       version: "1.0.1"
       ewccli:
         pathToMainFile: anemoi.yml
+        defaultImageName: Ubuntu-24.04
       values:
         pathToMainFile: anemoi.yml
         osImageName: Ubuntu-24.04
@@ -841,6 +845,7 @@ spec:
 
       displayName: ECMWF Data Flavour
       ewccli:
+        defaultImageName: Ubuntu-24.04
         inputs:
           - name: reboot_if_required
             default: true
@@ -4785,7 +4790,7 @@ spec:
       name: "xcube-viewer-flavour"
       version: "1.8.0"
       ewccli:
-        defaultImageName: ubuntu-24.04
+        defaultImageName: Ubuntu-24.04
         defaultSecurityGroups: [ssh-http-https]
         pathToRequirementsFile: playbooks/xcube-viewer-flavour/requirements.yml
         pathToMainFile: playbooks/xcube-viewer-flavour/xcube-viewer-flavour.yml
@@ -4827,7 +4832,7 @@ spec:
         externalIP: true
         checkDNS: true
       values:
-        osImageName: ubuntu-24.04
+        osImageName: Ubuntu-24.04
         ansibleUser: ubuntu
         pathToRequirementsFile: playbooks/xcube-viewer-flavour/requirements.yml
         pathToMainFile: playbooks/xcube-viewer-flavour/xcube-viewer-flavour.yml
