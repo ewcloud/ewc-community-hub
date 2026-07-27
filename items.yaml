@@ -1824,7 +1824,7 @@ spec:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       summary: Configures an existing VM as a high-performance load balancer, enhancing application speed, security, and scalability with easy management for TCP and HTTP workloads.
       values:
-        osImageName: Ubuntu-24.04
+        osImageName: Ubuntu-24.04-20260519071420
         ansibleUser: ubuntu
         inputSpec:
           - name: os_security_group_name
@@ -3468,7 +3468,7 @@ spec:
             description: "OpenStack security group containing all firewall rules required for Nginx Proxy Manager operation"
             type: str
             default: nginx-proxy-manager
-        osImageName: Ubuntu-24.04
+        osImageName: Ubuntu-24.04-20260519071420
         ansibleUser: ubuntu
         pathToMainFile: playbooks/nginx-proxy-manager-flavour/nginx-proxy-manager-flavour.yml
         pathToRequirementsFile: playbooks/nginx-proxy-manager-flavour/requirements.yml
