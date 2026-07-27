@@ -297,7 +297,7 @@ spec:
 
         Before proceeding, if you lack OpenStack Application Credentials or do not know
         how to make them available to Ansible in your development environment, make sure
-        to check out the 
+        to check out the
         [EWC documentation](https://confluence.ecmwf.int/x/TiRNH).
 
         ## Usage
@@ -312,26 +312,26 @@ spec:
           image_id       = "your-image-id"
           flavor_id      = "your-flavor-id"
           keypair_name   = "your-keypair-name"
-          
+
           networks = ["internal"]
-          
+
           instance_has_fip = true
-          
+
           os_volume = {
             enable = true
             size   = 80
           }
-          
+
           extra_volume      = true
           extra_volume_size = 100
-          
+
           security_groups = ["default", "web"]
-          
+
           instance_metadata = {
             environment = "production"
             role        = "web"
           }
-          
+
           tags = {
             environment = "production"
             project     = "website"
