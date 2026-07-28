@@ -277,7 +277,7 @@ spec:
 
     ewc-tf-module-openstack-compute:
       name: "ewc-tf-module-openstack-compute"
-      version: "1.4.0"
+      version: "1.5.0"
       description: |
         This [Terraform module](https://developer.hashicorp.com/terraform/language/modules) creates and
         configures [OpenStack compute](https://docs.openstack.org/nova/latest/)
@@ -293,6 +293,13 @@ spec:
         - Integration with cloud-init for instance initialization
         - Flexible networking options
         - Resource tagging support with automatic app_name tagging
+
+        ## Authentication
+
+        Before proceeding, if you lack OpenStack Application Credentials or do not know
+        how to make them available to Ansible in your development environment, make sure
+        to check out the
+        [EWC documentation](https://confluence.ecmwf.int/x/TiRNH).
 
         ## Usage
 
@@ -360,55 +367,7 @@ spec:
         | external_network_name | Name of the external network for floating IPs | `string` | `"external"` | no |
         | tags | A map of tags to assign to all resources that support it | `map(string)` | `{}` | no |
 
-        ## SW Bill of Materials (SBoM)
-        Third-party components used in the working environment.
-
-        The following components will be included in the working environment:
-        | Component | Version | License | Home URL |
-        |------|---------|---------|--------------|
-        | terraform-provider-openstack | 1.53.0 |  MPL-2.0 |  https://github.com/terraform-provider-openstack/terraform-provider-openstack   |
-
-        ## Outputs
-
-        | Name | Description |
-        |------|-------------|
-        | instance-data | Comprehensive information about the created instance |
-        | volumes | Information about the attached volumes |
-
-        ## Instance Output Structure
-
-        ```hcl
-        {
-          name           = "app-name-instance-name-01"
-          id             = "instance-id"
-          internal_ip    = "192.168.1.10"
-          floating_ip    = "203.0.113.10"
-          networks       = [/* Network details */]
-          flavor_id      = "flavor-id"
-          volumes        = ["volume-id-1", "volume-id-2"]
-          access_address = "203.0.113.10"  # or internal IP if no floating IP
-        }
-        ```
-
-        ## Volumes Output Structure
-
-        ```hcl
-        {
-          primary  = "volume-id-primary"  # if os_volume.enable = true
-          volume_1 = {
-            id   = "volume-id-1"
-            name = "app_name_instance_name_01_volume"
-            size = 100
-          }
-          volume_2 = {
-            id   = "volume-id-2"
-            name = "app_name_instance_name_01_volume2"
-            size = 50
-          }
-        }
-        ```
-
-      home: https://github.com/ewcloud/ewc-tf-module-openstack-compute/tree/1.4.0
+      home: https://github.com/ewcloud/ewc-tf-module-openstack-compute/tree/1.5.0
       sources:
         - https://github.com/ewcloud/ewc-tf-module-openstack-compute.git
       maintainers:
@@ -424,7 +383,7 @@ spec:
         licenseType: "MIT License"
       displayName: OpenStack Compute Instance
       summary: Simplifies the creation of EWC VMs, or state update and teardown of existing ones, via Terraform.
-      license: https://github.com/ewcloud/ewc-tf-module-openstack-compute/blob/1.4.0/LICENSE
+      license: https://github.com/ewcloud/ewc-tf-module-openstack-compute/blob/1.5.0/LICENSE
       published: true
 
     ewc-tf-module-openstack-security-group:
