@@ -124,8 +124,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 200
     environment: ECMWF
-    needs: test-deploy-ansible-ecmwf
-    if: ${{ always() }}
+    needs: lint
 
     steps:
       - name: Checkout catalog repository
@@ -162,8 +161,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 300
     environment: EUMETSAT
-    needs: test-deploy-ansible-eumetsat
-    if: ${{ always() }}
+    needs: lint
 
     steps:
       - name: Checkout catalog repository
