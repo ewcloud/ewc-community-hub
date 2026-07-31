@@ -71,8 +71,8 @@ jobs:
         id: app-token
         uses: actions/create-github-app-token@v3
         with:
-          client-id: ${{ vars.APP_CLIENT_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          client-id: ${{ vars.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_CLIENT_ID }}
+          private-key: ${{ secrets.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
 
       - name: Orchestrate deployments testing
@@ -107,8 +107,8 @@ jobs:
         id: app-token
         uses: actions/create-github-app-token@v3
         with:
-          client-id: ${{ vars.APP_CLIENT_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          client-id: ${{ vars.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_CLIENT_ID }}
+          private-key: ${{ secrets.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
 
       - name: Orchestrate deployments testing
@@ -144,8 +144,8 @@ jobs:
         id: app-token
         uses: actions/create-github-app-token@v3
         with:
-          client-id: ${{ vars.APP_CLIENT_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          client-id: ${{ vars.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_CLIENT_ID }}
+          private-key: ${{ secrets.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
 
       - name: Orchestrate deployments testing
@@ -182,8 +182,8 @@ jobs:
         id: app-token
         uses: actions/create-github-app-token@v3
         with:
-          client-id: ${{ vars.APP_CLIENT_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          client-id: ${{ vars.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_CLIENT_ID }}
+          private-key: ${{ secrets.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
 
       - name: Orchestrate deployments testing
