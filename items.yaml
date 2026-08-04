@@ -3385,7 +3385,7 @@ spec:
     ipa-server-provisioning:
       name: "ipa-server-provisioning"
       version: "1.10.0"
-      description:
+      description: |
         >✅ This template can be safely applied from any local work environment, even running outside an EWC tenancy's private network.
 
         IPA (acronym for identity, policy and audit) and its open-source
