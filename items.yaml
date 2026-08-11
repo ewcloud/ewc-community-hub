@@ -1606,9 +1606,11 @@ spec:
 
     ewccli:
       name: "ewccli"
-      version: "0.7.0"
+      version: "0.7.1"
       description: |
+
         The `ewccli` is the European Weather Cloud (EWC) Command Line Interface (CLI). This tool is developed to support EWC users on the use of the EWC services.
+
 
         ## Prerequisites
 
@@ -1728,6 +1730,7 @@ spec:
         ```
         [my-profile]
         federee = EUMETSAT or ECMWF
+        region = CCI1 or CCI2 or ECIS-R1 or ECIS-R2
         tenant_name = eumetsat-ewc-communityhub
         application_credential_id =
         application_credential_secret =
@@ -1768,7 +1771,231 @@ spec:
 
         you can take advantage of the `--path-to-catalog` to point the EWCCLI to the correct source location, and deploy the Item to your target tenant of choice.
 
-      home: https://github.com/ewcloud/ewccli/tree/0.7.0
+        ### Preparing a test
+        Create a local catalogue file, named `./custom_catalog.yaml`, with the complete metadata for your Item:
+
+        >⚠️ Always verify the latest Items metadata schema directly from the [EWC Hub Catalogue documentation](https://github.com/ewcloud/ewc-community-hub?tab=readme-ov-file#items-metadata).
+
+        ```yaml
+        apiVersion: communityhub.europeanweather.cloud/v1alpha1
+        kind: CommunityHubCatalog
+        spec:
+          items:
+            my-test-item:
+              name: "my-test-item"
+              version: "0.0.1"
+              description: |
+                My first Item in EWC Community Hub
+
+              ewccli:
+                pathToRequirementsFile: path_to_your_requirements_file
+                pathToMainFile: path_to_your_main_ansible_playbook_file
+                publicIP: true
+                inputs:
+                  - name: myoptionalinput
+                    description: "myoptionalinput"
+                    type: str
+                    default: Add default key if you want this input to be optional. If this key is not set, the ewccli will expect this value to be provided by the user (mandatory input)
+                  - name: mymandatoryinput
+                    description: "mymandatoryinput: cli will complain if this is not provided as --item-inputs"
+                    type: str
+              home: https://github.com/your-repo
+              sources:
+                - https://github.com/your-repo.git OR /home/murdaca/custom-items/new-item
+              maintainers:
+                - name: your name or your org
+                  email: youremail
+                  url: https://github.com/your-repo/issues
+              icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
+              annotations:
+                technology: "Ansible Playbook"
+                category: "Test Item"
+                supportLevel: "Community"
+                licenseType: "Apache License 2.0"
+                others: "Deployable,EWCCLI-compatible"
+              displayName: My First EWC Community hub Item
+              summary: My test Item
+              license: https://github.com/your-repo/blob/main/LICENSE
+              published: true
+        ```
+
+        where
+
+        - `sources` can be (only the first element in the list is considered):
+            - Public repo URL (e.g. https://github.com/your-repo.git) if your repository is public already
+            - Absolute path to a directory with the Item (e.g. `/home/murdaca/custom-items/new-item`). The path needs to point to a directory that needs to exists an not be empty. (WARNING: No local path are accepted!)
+        - `pathToMainFile` is the relattive path to your directory or repository
+        - `pathToRequirementsFile` is the relattive path to your directory or repository
+        - `publicIP` is a flag used to enable deployment of
+        - `ewccli.inputs` is the list of inputs you want the user to be able to provide, they can be mandatory or optional, respecively with default key not set or set.
+
+        ### Running a test
+        Once metadata is correct and complete, execute `list`, `show` or `deploy` commands as needed:
+
+        ```bash
+        ewc hub --path-to-catalog ./custom_catalog.yaml list|show|deploy
+        ```
+        ```bash
+        ewc hub --path-to-catalog ./custom_catalog.yaml show
+        ```
+        ```bash
+        ewc hub --path-to-catalog ./custom_catalog.yaml deploy
+        ```
+
+        ## Backends
+
+        This section described the backends used and which commands are backed by those backends.
+
+        ### Openstack
+
+        Used by infra and hub subcommands.
+
+        ### Ansible
+
+        Used by hub subcommand.
+
+        ### Terraform
+
+        Used by hub subcommand. (COMING SOON)
+
+        ### Kubernetes
+
+        Used by dns, s3, k8s subcommmands. (COMING SOON)
+
+        ## SW Bill of Materials (SBoM)
+
+        ### Dependencies
+        The following dependencies are not included in the package but they are required and will be downloaded at build or compilation time:
+
+        | Dependency | Version | License | Home URL |
+        |------|---------|---------|--------------|
+        | requests | 2.32.5 | Apache Software License (Apache-2.0) | https://requests.readthedocs.io/en/latest |
+        | click | 8.1.8 | BSD-3-Clause | https://github.com/pallets/click |
+        | rich | 14.1.0 | MIT License | https://github.com/Textualize/rich |
+        | rich-click | 1.8.9 | MIT License | https://pypi.org/project/rich-click |
+        | prompt_toolkit | 3.0.51 | BSD-3-Clause License | https://python-prompt-toolkit.readthedocs.io/en/stable |
+        | pyyaml | 6.0.2 | MIT License | https://pyyaml.org |
+        | cryptography | 45.0.6 | Apache-2.0 OR BSD-3-Clause | https://github.com/pyca/cryptography |
+        | python-openstackclient | 8.2.0 | Apache Software License (Apache-2.0) | https://docs.openstack.org/python-openstackclient/latest |
+        | ansible | 10.7.0 | GNU General Public License v3 or later (GPLv3+) (GPL-3.0-or-later) | https://www.redhat.com/en/ansible-collaborative |
+        | ansible-runner | 2.4.1 | Apache Software License (Apache Software License, Version 2.0) | https://ansible.readthedocs.io/projects/runner/en/latest |
+        | kubernetes | 33.1.0 | Apache Software License (Apache License Version 2.0) | https://github.com/kubernetes-client/python |
+        | pydantic | 2.12.5 | MIT License | https://github.com/pydantic/pydantic |
+
+
+        ### Build/Edit/Test Dependencies
+        The following dependencies are only required for building/editing/testing the software:
+
+        | Dependency | Version | License | Home URL |
+        |------|---------|---------|--------------|
+        | pytest | 8.4.1  | MIT License (MIT) | https://docs.pytest.org/en/latest |
+        | pytest-html | 4.1.1 | MIT License (MIT)   | https://github.com/pytest-dev/pytest-html  |
+        | pytest-mock | 3.14.1  | MIT License (MIT) | https://github.com/pytest-dev/pytest-mock |
+        | coverage | 7.10.5  | Apache Software License (Apache License Version 2.0) | https://github.com/nedbat/coveragepy |
+        | pre-commit | 4.3.0  | MIT License (MIT) | https://github.com/pre-commit/pre-commit  |
+        | sphinx | 8.1.3  | BSD-2-Clause License | https://www.sphinx-doc.org/en/master |
+        | sphinx-click | 6.0.0  | MIT License (MIT) | https://github.com/click-contrib/sphinx-click |
+        | sphinx-rtd-theme | 3.0.2  | MIT License (MIT) | https://sphinx-rtd-theme.readthedocs.io/en/stable |
+        | pydeps | 3.0.1  | BSD-2-Clause License | https://github.com/thebjorn/pydeps  |
+
+        ## Changelog
+        All notable changes (i.e. fixes, features and breaking changes) are documented
+        in the [CHANGELOG.md](./CHANGELOG.md).
+
+        ## Contributing
+        Thanks for taking the time to join our community and start contributing!
+
+        Please make sure to:
+
+        - Familiarize yourself with our [Code of Conduct](./CODE_OF_CONDUCT.md) before
+        contributing.
+
+        - See [CONTRIBUTING.md](./CONTRIBUTING.md) for instructions on how to request
+        or submit changes.
+
+        ## Development
+
+        1. Fork this repository and move into it
+        ```bash
+        git clone https://github.com/ewcloud/ewccli.git && cd ewccli
+        ```
+
+        2. Install the package for testing
+        ```bash
+        pip install --user -e .[test]
+        ```
+
+        3. Modify the local code and test changes.
+
+        4. Push code to your fork and open a pull request.
+
+        ## Code Styling
+        Execute all linting tests by running:
+
+        ```bash
+        pre-commit run --all-files
+        ```
+        This will provide you with hints about:
+        * Basic format of the files (i.e. spacing, line breaking, etc.) using `black`
+        * [PEP](https://peps.python.org/) standars infringement flagged by `flake8`
+        * Static typing and type hinting recommendations given by `mypy`
+
+        ### Resolving Style Issues
+
+        To enforce basic formating issues , run:
+        ```bash
+        black ./
+        ```
+
+        Currently, there is no automated way of addressing errors raised by `flake8` and `mypy`.
+        To resolve those, check the logs from the `pre-commit` execution, understand the type of error and adjust the code accordingly.
+
+        ## Code Unittesting
+
+        Execute all tests by running:
+
+        ```bash
+        pytest
+        ```
+
+        ### Coverage Reporting
+
+        Generate unittest coverage reports in standard formats by executing:
+
+        ```bash
+        coverage run --module pytest --no-header --verbose -ra --junitxml=coverage.xml --html=coverage.html
+        ```
+
+        ## Documenting
+        Generate documentation from source code docstrings:
+
+        ```bash
+        sphinx-build -b html docs/source/ Documentation/
+        ```
+
+        ## Releasing to Package Registries
+
+        Checkout [RELEASING.md](./RELEASING.md) for details.
+
+
+        ## Copyright and License
+        Copyright © EUMETSAT, ECMWF 2026
+
+        The provided code and instructions are licensed under [GPLv3+](./LICENSE).
+        They are intended to automate the setup of an environment that includes
+        third-party software components.
+        The usage and distribution terms of the resulting environment are
+        subject to the individual licenses of those third-party libraries.
+
+        Users are responsible for reviewing and complying with the licenses of
+        all third-party components included in the environment.
+
+        Contact [EUMETSAT](http://www.eumetsat.int) for details on the usage and distribution terms.
+
+        ## Authors
+        * [**Francesco Murdaca**](mailto:francesco.murdaca@eumetsat.int) - *Initial work and maintainer* - [EUMETSAT](http://www.eumetsat.int)
+
+      home: https://github.com/ewcloud/ewccli/tree/0.7.1
       sources:
         - https://github.com/ewcloud/ewccli.git
       maintainers:
@@ -1782,7 +2009,7 @@ spec:
         licenseType: "GNU General Public License v3.0"
       displayName: EWC CLI
       summary: European Weather Cloud (EWC) Command Line Interface (CLI) to interact with EWC services.
-      license: https://github.com/ewcloud/ewccli/blob/0.7.0/LICENSE
+      license: https://github.com/ewcloud/ewccli/blob/0.7.1/LICENSE
       published: true
 
     ewc-gh-action-test-deploy-ansible-playbook:
