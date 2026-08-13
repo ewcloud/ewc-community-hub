@@ -3565,13 +3565,6 @@ spec:
 
 
 
-        Continuing the example, suppose two additional IP address, `1.1.1.1` and `8.8.8.8`, are still part of the DNS nameservers list. To remove then we would execute:
-
-        ```bash
-        openstack subnet unset --dns-nameserver 1.1.1.1 private-subnet && \
-        openstack subnet unset --dns-nameserver 8.8.8.8 private-subnet
-        ```
-
         ## Inputs
 
         | Name | Description | Type | Default | Required |
