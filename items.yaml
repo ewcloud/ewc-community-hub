@@ -5915,3 +5915,109 @@ spec:
       summary: xcube Viewer on EWC, a web-based tool for interactive visualization of multi-dimensional Earth Observation data.
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/main/LICENSE
       published: true
+
+    flexpart-ifs:
+      annotations:
+        technology: "Ansible Playbook"
+        category: "Data Access,Data Processing,Data Visualization"
+        supportLevel: "Community"
+        licenseType: "Apache License 2.0"
+        others: "Deployable,EWCCLI-compatible"
+      displayName: "FLEXPART-IFS Atmospheric Dispersion Workflow"
+      name: "flexpart-ifs"
+      version: "0.1.2"
+      published: true
+      summary: Deploys an end-to-end FLEXPART-IFS atmospheric transport and dispersion workflow on the European Weather Cloud using ECMWF IFS forecast data.
+      description: |
+        This blueprint deploys a ready-to-use FLEXPART-IFS atmospheric transport
+        and dispersion workflow on a virtual machine in the
+        European Weather Cloud (EWC).
+
+        The reference deployment has been validated on the ECMWF side of the EWC
+        using EWCCLI. Deployment on the EUMETSAT side has not yet been tested.
+
+        FLEXPART is a Lagrangian atmospheric transport and dispersion model used
+        to simulate the transport and dispersion of air masses and atmospheric
+        tracers. This workflow runs FLEXPART-IFS using meteorological input from
+        the ECMWF Integrated Forecasting System (IFS).
+
+        The complete processing chain is handled by the deployed workflow:
+
+          ECMWF MARS
+              -> flexprep
+              -> FLEXPART-IFS
+              -> Pyflexplot
+
+        IFS forecast data are retrieved directly from ECMWF MARS and prepared for
+        FLEXPART with flexprep:
+
+          https://gitlab.phaidra.org/flexpart/flexprep
+
+        FLEXPART-IFS then performs the atmospheric transport and dispersion
+        simulation:
+
+          https://github.com/MeteoSwiss/flexpart
+
+        The resulting FLEXPART output is processed with Pyflexplot to generate PDF
+        visualisations of the simulated dispersion:
+
+          https://github.com/MeteoSwiss-APN/pyflexplot
+
+        Workflow orchestration is provided by the MeteoSwiss
+        flex-container-orchestrator:
+
+          https://github.com/MeteoSwiss/flex-container-orchestrator
+
+        After deployment, simulations can be started from the command line using
+        the `flexpart-workflow` command.
+
+        For example, the following command selects the latest available IFS
+        forecast cycle, runs a 24-hour simulation, and uses `BEZ` (Beznau) as the
+        release location:
+
+            flexpart-workflow --latest --step 24 --location BEZ
+
+        Users can also select an explicit forecast date and time instead of the
+        latest available cycle, allowing simulations to be reproduced for a known
+        IFS forecast cycle.
+
+        The reference deployment has been validated on Ubuntu 24.04 with 8 vCPU,
+        16 GiB RAM, and 80 GB storage. This configuration is the recommended
+        baseline for the tested workflow.
+
+        The blueprint is compatible with deployment through EWCCLI. It has been
+        tested using an ECMWF-side EWCCLI profile. Users should follow the
+        deployment instructions in the blueprint repository for the currently
+        supported EWCCLI version and configuration.
+
+        If the native ECMWF MARS client is not already available on the virtual
+        machine, the blueprint applies the official ECMWF Data Flavour 2.0.2
+        before installing the FLEXPART-IFS workflow.
+
+        Access to ECMWF MARS is user-specific. MARS credentials and data
+        entitlements are not included in the blueprint. Users must provide their
+        own credentials and have permission to retrieve the requested IFS data.
+
+        Organisation-specific network configuration, including VPNs,
+        proxies, or SSH bastions, is deliberately kept outside the blueprint.
+        Such configuration should be provided through the user's local SSH or
+        Ansible environment when required.
+
+        Source code, deployment instructions, prerequisites, and usage examples
+        are available in the blueprint repository:
+
+          https://github.com/MeteoSwiss/flexpart-ifs-ewc-blueprint
+      home: https://github.com/MeteoSwiss/flexpart-ifs-ewc-blueprint/tree/0.1.2
+      sources:
+        - https://github.com/MeteoSwiss/flexpart-ifs-ewc-blueprint.git
+      ewccli:
+        pathToRequirementsFile: requirements.yml
+        pathToMainFile: deploy.yml
+        defaultImageName: Ubuntu-24.04
+        externalIP: true
+      license: https://github.com/MeteoSwiss/flexpart-ifs-ewc-blueprint/blob/0.1.2/LICENSE
+      icon: https://avatars.githubusercontent.com/u/10277948
+      maintainers:
+        - name: Nina Burgdorfer (MeteoSwiss)
+          email: nina.burgdorfer@meteoswiss.ch
+          url: https://github.com/MeteoSwiss/flexpart-ifs-ewc-blueprint/issues
