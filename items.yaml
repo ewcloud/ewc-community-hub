@@ -5925,7 +5925,7 @@ spec:
         others: "Deployable,EWCCLI-compatible"
       displayName: "FLEXPART-IFS Atmospheric Dispersion Workflow"
       name: "flexpart-ifs"
-      version: "0.1.1"
+      version: "0.1.2"
       published: true
       summary: Deploys an end-to-end FLEXPART-IFS atmospheric transport and dispersion workflow on the European Weather Cloud using ECMWF IFS forecast data.
       description: |
@@ -6007,7 +6007,7 @@ spec:
         are available in the blueprint repository:
 
           https://github.com/MeteoSwiss/flexpart-ifs-ewc-blueprint
-      home: https://github.com/MeteoSwiss/flexpart-ifs-ewc-blueprint/tree/0.1.1
+      home: https://github.com/MeteoSwiss/flexpart-ifs-ewc-blueprint/tree/0.1.2
       sources:
         - https://github.com/MeteoSwiss/flexpart-ifs-ewc-blueprint.git
       ewccli:
@@ -6015,7 +6015,7 @@ spec:
         pathToMainFile: deploy.yml
         defaultImageName: Ubuntu-24.04
         externalIP: true
-      license: https://github.com/MeteoSwiss/flexpart-ifs-ewc-blueprint/blob/0.1.1/LICENSE
+      license: https://github.com/MeteoSwiss/flexpart-ifs-ewc-blueprint/blob/0.1.2/LICENSE
       icon: https://avatars.githubusercontent.com/u/10277948
       maintainers:
         - name: Nina Burgdorfer (MeteoSwiss)
