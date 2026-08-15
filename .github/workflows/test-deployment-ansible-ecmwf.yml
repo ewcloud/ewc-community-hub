@@ -1,4 +1,4 @@
-name: Ansible Deployments Testing on ECMWF
+name: On-demand Ansible Deployments Testing to ECMWF
 
 on:
   workflow_dispatch:

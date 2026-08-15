@@ -1,4 +1,4 @@
-name: Ansible Deployments Testing on EUMETSAT
+name: On-demand Ansible Deployments Testing to EUMETSAT
 
 on:
   workflow_dispatch:

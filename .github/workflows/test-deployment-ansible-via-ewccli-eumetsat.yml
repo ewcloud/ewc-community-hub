@@ -1,4 +1,4 @@
-name: Ansible Deployments Testing via EWCCLI on EUMETSAT
+name: On-demand Ansible Deployments Testing via EWCCLI to EUMETSAT
 
 on:
   workflow_dispatch:
