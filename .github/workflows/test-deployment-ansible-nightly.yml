@@ -11,7 +11,7 @@ env:
   MAX_CONCURRENT_WORKFLOWS: 1
 jobs:
   test-deploy-ansible-ecmwf:
-    name: Ansible Playbook Testing (Native) on ECMWF
+    name: Deployment test on ECMWF
     runs-on: ubuntu-latest
     timeout-minutes: 200
     environment: ECMWF
@@ -47,7 +47,7 @@ jobs:
           TOTAL_TIMEOUT_MINUTES: 190 # Must be smaller than jobs.orchestrate.timeout-minutes
   
   test-deploy-ansible-eumetsat:
-    name: Ansible Playbook Testing (Native) on EUMETSAT
+    name: Deployment test on EUMETSAT
     runs-on: ubuntu-latest
     timeout-minutes: 300
     environment: EUMETSAT
@@ -83,7 +83,7 @@ jobs:
           TOTAL_TIMEOUT_MINUTES: 290 # Must be smaller than jobs.orchestrate.timeout-minutes
 
   test-deploy-ansible-ecmwf-via-ewccli:
-    name: Ansible Playbook Testing (via EWCCLI) on ECMWF
+    name: Deployment test via EWCCLI on ECMWF
     runs-on: ubuntu-latest
     timeout-minutes: 200
     environment: ECMWF
@@ -120,7 +120,7 @@ jobs:
           EXCLUDED_ITEM_NAMES: "xcube-viewer-flavour,eumetcast-terrestrial-amt-flavour,ipa-server-flavour"
 
   test-deploy-ansible-eumetsat-via-ewccli:
-    name: Ansible Playbook Testing (via EWCCLI) on EUMETSAT
+    name: Deployment test via EWCCLI on EUMETSAT
     runs-on: ubuntu-latest
     timeout-minutes: 300
     environment: EUMETSAT
