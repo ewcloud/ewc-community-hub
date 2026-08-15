@@ -6016,7 +6016,7 @@ spec:
         defaultImageName: Ubuntu-24.04
         externalIP: true
       license: https://github.com/MeteoSwiss/flexpart-ifs-ewc-blueprint/blob/0.1.2/LICENSE
-      icon: https://avatars.githubusercontent.com/u/10277948
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/MeteoSwissLogo.png
       maintainers:
         - name: Nina Burgdorfer (MeteoSwiss)
           email: nina.burgdorfer@meteoswiss.ch
