@@ -15,7 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 200
     environment: ECMWF
-    needs: lint
 
     steps:
       - name: Generate installation token for EWC Community Hub CI Orchestrator GitHub App
@@ -51,7 +50,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 300
     environment: EUMETSAT
-    needs: lint
 
     steps:
       - name: Generate installation token for EWC Community Hub CI Orchestrator GitHub App
@@ -87,7 +85,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 200
     environment: ECMWF
-    needs: lint
 
     steps:
       - name: Generate installation token for EWC Community Hub CI Orchestrator GitHub App
@@ -124,7 +121,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 300
     environment: EUMETSAT
-    needs: lint
 
     steps:
       - name: Generate installation token for EWC Community Hub CI Orchestrator GitHub App
