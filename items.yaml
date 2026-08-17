@@ -3812,6 +3812,7 @@ spec:
           - name: jupyterhub_local_cert_email
             description: "Email used for the certificate."
             type: str
+            default: admin@example.com
           - name: dns_domain
             description: "DNS domain. If not present, it will try to guess from instance configured hostname in /etc/hostname."
             type: str
@@ -3852,6 +3853,7 @@ spec:
           - name: jupyterhub_local_cert_email
             description: "Email used for the certificate."
             type: str
+            default: admin@example.com
           - name: dns_domain
             description: "DNS domain. If not present, it will try to guess from instance configured hostname in /etc/hostname."
             type: str
