@@ -44,11 +44,8 @@ spec:
 
       ewccli:
         pathToMainFile: playbooks/ai-models/ai-models.yml
-        defaultImageName: Ubuntu-24.04-GPU
       values:
         pathToMainFile: playbooks/ai-models/ai-models.yml
-        osImageName: Ubuntu-24.04-GPU
-        ansibleUser: ubuntu
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
         - https://github.com/ewcloud/ewc-ecmwf-ai-stacks.git
@@ -613,11 +610,8 @@ spec:
 
       ewccli:
         pathToMainFile: playbooks/aifs-single-mse/aifs-single-mse.yml
-        defaultImageName: Ubuntu-24.04-GPU
       values:
         pathToMainFile: playbooks/aifs-single-mse/aifs-single-mse.yml
-        osImageName: Ubuntu-24.04-GPU
-        ansibleUser: ubuntu
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
         - https://github.com/ewcloud/ewc-ecmwf-ai-stacks.git
@@ -683,11 +677,8 @@ spec:
 
       ewccli:
         pathToMainFile: playbooks/aifs-ens-crps/aifs-ens-crps.yml
-        defaultImageName: Ubuntu-24.04-GPU
       values:
         pathToMainFile: playbooks/aifs-ens-crps/aifs-ens-crps.yml
-        osImageName: Ubuntu-24.04-GPU
-        ansibleUser: ubuntu
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
         - https://github.com/ewcloud/ewc-ecmwf-ai-stacks.git
@@ -712,11 +703,8 @@ spec:
       version: "1.0.1"
       ewccli:
         pathToMainFile: anemoi.yml
-        defaultImageName: Ubuntu-24.04-GPU
       values:
         pathToMainFile: anemoi.yml
-        osImageName: Ubuntu-24.04-GPU
-        ansibleUser: ubuntu
       description: |
         Create a conda environment with the Anemoi framework for weather forecasting based on machine learning and associated software stack.
 
@@ -3913,10 +3901,7 @@ spec:
       version: "1.0.1"
       ewccli:
         pathToMainFile: ml-basic.yml
-        defaultImageName: Ubuntu-24.04-GPU
       values:
-        osImageName: Ubuntu-24.04-GPU
-        ansibleUser: ubuntu
         pathToMainFile: ml-basic.yml
       description: |
         Create a conda environment with the basic Machine Learning packages such as torch, xgboost, and scikit-learn. Check `files/env.yml` for all the details on the software included.
