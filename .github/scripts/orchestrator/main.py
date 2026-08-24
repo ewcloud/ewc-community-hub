@@ -99,31 +99,32 @@ def move_to_done(item: Item, state: str, error: str | None = None) -> None:
     done.put(item)
 
 
-def read_spec_items() -> dict:
+def read_spec_items(thread_id: str = "main") -> dict:
     with open(CATALOG_FILE) as f:
         catalog = yaml_safe_load(f)
 
     filtered_item_names = ()
     if ITEM_NAMES:
         filtered_item_names = set(item_name.strip() for item_name in ITEM_NAMES.split(","))
-        print(f"main thread - Reading Items with names: {filtered_item_names}", flush=True)
+        print(f"{thread_id:<13} - Reading Items with names: {filtered_item_names}", flush=True)
 
     excluded_item_names = ()
     if EXCLUDED_ITEM_NAMES:
         excluded_item_names = set(item_name.strip() for item_name in EXCLUDED_ITEM_NAMES.split(","))
-        print(f"main thread - Excluding Items with names: {excluded_item_names}", flush=True)
+        print(f"{thread_id:<13} - Excluding Items with names: {excluded_item_names}", flush=True)
 
     filtered_item_technology_annotations = set(
         technology_annotation.strip() for technology_annotation in ITEM_TECHNOLOGY_ANNOTATIONS.split(",")
     )
     print(
-        f"main thread - Reading Items with technology annotations: {filtered_item_technology_annotations}", flush=True
+        f"{thread_id:<13} - Reading Items with technology annotations: {filtered_item_technology_annotations}",
+        flush=True,
     )
 
     filtered_item_others_annotations = set(
         others_annotation.strip() for others_annotation in ITEM_OTHERS_ANNOTATIONS.split(",")
     )
-    print(f"main thread - Reading Items with others annotations: {filtered_item_others_annotations}", flush=True)
+    print(f"{thread_id:<13} - Reading Items with others annotations: {filtered_item_others_annotations}", flush=True)
 
     spec_items = {}
 
@@ -153,7 +154,7 @@ def read_spec_items() -> dict:
         spec_items.update({key: spec_item})
 
     if len(spec_items) < 1:
-        print("::warning::main thread - Item name and annotation filtering returned no matches!", flush=True)
+        print(f"::warning::{thread_id:<13} - Item name and annotation filtering returned no matches!", flush=True)
 
     return spec_items
 
@@ -347,8 +348,8 @@ def check_status(thread_id: str) -> None:
         in_progress.put(item)
 
 
-def reduce_summarize(spec_items: dict) -> None:
-    print(f"main thread - {pending.qsize()} pending, {in_progress.qsize()} in progress, {done.qsize()} done")
+def reduce_summarize(spec_items: dict, thread_id: str = "main") -> None:
+    print(f"{thread_id:<13} - {pending.qsize()} pending, {in_progress.qsize()} in progress, {done.qsize()} done")
 
     for q in (pending, in_progress):
         while not q.empty():
@@ -367,7 +368,7 @@ def reduce_summarize(spec_items: dict) -> None:
     else:
         site = "UNKNOWN"
         print(
-            f"::warning::main thread - Unable to parse site from GH_DOWNSTREAM_WORKFLOW_FILE. By convention, the workflow filename should include any of: ['ecmwf', 'eumetsat']. Got: '{GH_DOWNSTREAM_WORKFLOW_FILE}'"
+            f"::warning::{thread_id:<13} - Unable to parse site from GH_DOWNSTREAM_WORKFLOW_FILE. By convention, the workflow filename should include any of: ['ecmwf', 'eumetsat']. Got: '{GH_DOWNSTREAM_WORKFLOW_FILE}'"
         )
 
     status_rows = []
@@ -404,13 +405,13 @@ def reduce_summarize(spec_items: dict) -> None:
 
     template_path = Path(SUMMARY_TEMPLATE_FILE)
     if not template_path.is_file():
-        print(f"::error::main thread - Cannot find summary template at {template_path}", flush=True)
+        print(f"::error::{thread_id:<13} - Cannot find summary template at {template_path}", flush=True)
         return
 
     try:
         template_content = template_path.read_text(encoding="utf-8")
     except Exception as e:
-        print(f"::error::main thread - Failed to read template: {e}", flush=True)
+        print(f"::error::{thread_id:<13} - Failed to read template: {e}", flush=True)
         return
 
     summary_contents = template_content.format(
@@ -425,10 +426,10 @@ def reduce_summarize(spec_items: dict) -> None:
     try:
         summary_path.write_text(summary_contents, encoding="utf-8")
     except Exception as e:
-        print(f"::error::main thread - Failed to write summary: {e}", flush=True)
+        print(f"::error::{thread_id:<13} - Failed to write summary: {e}", flush=True)
 
     if is_any_failed_or_timeout:
-        raise SystemExit("::error::main thread - Deployment test(s) FAILING! Check the Summary for details")
+        raise SystemExit(f"::error::{thread_id:<13} - Deployment test(s) FAILING! Check the Summary for details")
 
 
 # --- Worker Thread ---
@@ -482,6 +483,7 @@ def tracker(thread_id: str) -> None:
 
 
 def main() -> None:
+    thread_id = "main"
     start_time = datetime.now(timezone.utc)
     buffer_minutes = 2
     total_deadline = (
@@ -508,14 +510,16 @@ def main() -> None:
         sleep(30)
         while not pending.empty() or not in_progress.empty():
 
-            print(f"main thread - {pending.qsize()} pending, {in_progress.qsize()} in progress, {done.qsize()} done")
+            print(
+                f"{thread_id:<13} - {pending.qsize()} pending, {in_progress.qsize()} in progress, {done.qsize()} done"
+            )
             sleep(5)
             if datetime.now(timezone.utc) >= total_deadline:
-                print("main thread - Total timeout reached")
+                print(f"{thread_id:<13} - Total timeout reached")
                 break
 
         stop.set()
-        print("main thread - Raised stop event...")
+        print(f"{thread_id:<13} - Raised stop event...")
         sleep(30)
 
     reduce_summarize(spec_items)
