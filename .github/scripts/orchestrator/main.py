@@ -428,7 +428,6 @@ def reduce_summarize(spec_items: dict) -> None:
         print(f"::error::main thread - Failed to write summary: {e}", flush=True)
 
     if is_any_failed_or_timeout:
-        print("::error::main thread - Deployment test(s) are FAILING. Check the summary for details!", flush=True)
         raise SystemExit("::error::main thread - Deployment test(s) are FAILING. Check the summary for details!")
 
 
