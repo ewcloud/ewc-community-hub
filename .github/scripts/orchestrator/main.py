@@ -450,7 +450,7 @@ def dispatcher(thread_id: str) -> None:
     print(f"{thread_id} thread - Caught stop event. Exiting... ", flush=True)
 
 
-def checker(thread_id: str) -> None:
+def tracker(thread_id: str) -> None:
     print(f"{thread_id} thread - Starting thread", flush=True)
 
     while not stop.is_set():
@@ -493,7 +493,7 @@ def main() -> None:
         executor.submit(dispatcher, thread_id="dispatcher-0")
 
         for i in range(max_workers - 1):
-            executor.submit(checker, thread_id=f"checker-{i}")
+            executor.submit(tracker, thread_id=f"tracker-{i}")
 
         sleep(30)
         while not pending.empty() or not in_progress.empty():
