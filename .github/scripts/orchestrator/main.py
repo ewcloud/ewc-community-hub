@@ -206,7 +206,7 @@ def dispatch_and_register(thread_id: str) -> None:
         dispatch = github_api(
             "POST",
             f"/repos/{EWCCLI_GH_API_REPO_ENDPOINT}/actions/workflows/{GH_DOWNSTREAM_WORKFLOW_FILE}/dispatches",
-            {"ref": "main", "inputs": {"itemName": item.name, "catalogRef": f"{environ['GITHUB_HEAD_REF']}"}},
+            {"ref": "main", "inputs": {"itemName": item.name, "catalogRef": f"{environ['GITHUB_REF_NAME']}"}},
         )
     else:
         dispatch = github_api(
@@ -416,7 +416,7 @@ def reduce_summarize(spec_items: dict, thread_id: str = "main") -> None:
 
     summary_contents = template_content.format(
         github_run_id=environ["GITHUB_RUN_ID"],
-        github_ref_name=environ["GITHUB_HEAD_REF"],
+        github_ref_name=environ["GITHUB_REF_NAME"],
         site=site,
         status_row=status_table_content,
         execution_plan=json_dumps(spec_items, indent=2),
