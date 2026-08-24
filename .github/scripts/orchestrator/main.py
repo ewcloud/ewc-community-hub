@@ -106,25 +106,28 @@ def read_spec_items(thread_id: str = "main") -> dict:
     filtered_item_names = set()
     if ITEM_NAMES:
         filtered_item_names = set(item_name.strip() for item_name in ITEM_NAMES.split(","))
-        print(f"{thread_id:<13} - Reading Items with names: {filtered_item_names}", flush=True)
+        print(f"thread {thread_id:<13} - Reading Items with names: {filtered_item_names}", flush=True)
 
     excluded_item_names = set()
     if EXCLUDED_ITEM_NAMES:
         excluded_item_names = set(item_name.strip() for item_name in EXCLUDED_ITEM_NAMES.split(","))
-        print(f"{thread_id:<13} - Excluding Items with names: {excluded_item_names}", flush=True)
+        print(f"thread {thread_id:<13} - Excluding Items with names: {excluded_item_names}", flush=True)
 
     filtered_item_technology_annotations = set(
         technology_annotation.strip() for technology_annotation in ITEM_TECHNOLOGY_ANNOTATIONS.split(",")
     )
     print(
-        f"{thread_id:<13} - Reading Items with technology annotations: {filtered_item_technology_annotations}",
+        f"thread {thread_id:<13} - Reading Items with technology annotations: {filtered_item_technology_annotations}",
         flush=True,
     )
 
     filtered_item_others_annotations = set(
         others_annotation.strip() for others_annotation in ITEM_OTHERS_ANNOTATIONS.split(",")
     )
-    print(f"{thread_id:<13} - Reading Items with others annotations: {filtered_item_others_annotations}", flush=True)
+    print(
+        f"thread {thread_id:<13} - Reading Items with others annotations: {filtered_item_others_annotations}",
+        flush=True,
+    )
 
     spec_items = {}
 
@@ -154,7 +157,9 @@ def read_spec_items(thread_id: str = "main") -> dict:
         spec_items.update({key: spec_item})
 
     if len(spec_items) < 1:
-        print(f"::warning::{thread_id:<13} - Item name and annotation filtering returned no matches!", flush=True)
+        print(
+            f"::warning::thread {thread_id:<13} - Item name and annotation filtering returned no matches!", flush=True
+        )
 
     return spec_items
 
@@ -349,7 +354,7 @@ def check_status(thread_id: str) -> None:
 
 
 def reduce_summarize(spec_items: dict, thread_id: str = "main") -> None:
-    print(f"{thread_id:<13} - {pending.qsize()} pending, {in_progress.qsize()} in progress, {done.qsize()} done")
+    print(f"thread {thread_id:<13} - {pending.qsize()} pending, {in_progress.qsize()} in progress, {done.qsize()} done")
 
     for q in (pending, in_progress):
         while not q.empty():
@@ -511,15 +516,15 @@ def main() -> None:
         while not pending.empty() or not in_progress.empty():
 
             print(
-                f"{thread_id:<13} - {pending.qsize()} pending, {in_progress.qsize()} in progress, {done.qsize()} done"
+                f"thread {thread_id:<13} - {pending.qsize()} pending, {in_progress.qsize()} in progress, {done.qsize()} done"
             )
             sleep(5)
             if datetime.now(timezone.utc) >= total_deadline:
-                print(f"{thread_id:<13} - Total timeout reached")
+                print(f"thread {thread_id:<13} - Total timeout reached")
                 break
 
         stop.set()
-        print(f"{thread_id:<13} - Raised stop event...")
+        print(f"thread {thread_id:<13} - Raised stop event...")
         sleep(30)
 
     reduce_summarize(spec_items)
