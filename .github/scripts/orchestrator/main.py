@@ -490,10 +490,10 @@ def main() -> None:
     )  # include 1 additional worker to take owner ship of workflow dispatching and run id retrieving
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
 
-        executor.submit(dispatcher, thread_id="dispatcher-0")
+        executor.submit(dispatcher, thread_id="dispatcher_0")
 
         for i in range(max_workers - 1):
-            executor.submit(tracker, thread_id=f"tracker-{i}")
+            executor.submit(tracker, thread_id=f"tracker_{i}")
 
         sleep(30)
         while not pending.empty() or not in_progress.empty():
