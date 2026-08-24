@@ -103,12 +103,12 @@ def read_spec_items(thread_id: str = "main") -> dict:
     with open(CATALOG_FILE) as f:
         catalog = yaml_safe_load(f)
 
-    filtered_item_names = ()
+    filtered_item_names = set()
     if ITEM_NAMES:
         filtered_item_names = set(item_name.strip() for item_name in ITEM_NAMES.split(","))
         print(f"{thread_id:<13} - Reading Items with names: {filtered_item_names}", flush=True)
 
-    excluded_item_names = ()
+    excluded_item_names = set()
     if EXCLUDED_ITEM_NAMES:
         excluded_item_names = set(item_name.strip() for item_name in EXCLUDED_ITEM_NAMES.split(","))
         print(f"{thread_id:<13} - Excluding Items with names: {excluded_item_names}", flush=True)
