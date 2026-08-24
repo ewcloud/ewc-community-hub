@@ -216,7 +216,7 @@ def dispatch_and_register(thread_id: str) -> None:
         )
 
     print(
-        f"{thread_id} thread - Sent dispatch request for '{item}'",
+        f"thread {thread_id:<13} - Sent dispatch request for '{item}'",
         flush=True,
     )
 
@@ -224,7 +224,7 @@ def dispatch_and_register(thread_id: str) -> None:
         dispatch.raise_for_status()
     except Exception as e:
         print(
-            f"::warning::{thread_id} thread - Failed to dispatch workflow for '{item}' with exception '{e}'", flush=True
+            f"::warning::thread {thread_id:<13} - Failed to dispatch workflow for '{item}' with exception '{e}'", flush=True
         )
         move_to_done(
             item,
@@ -248,7 +248,7 @@ def dispatch_and_register(thread_id: str) -> None:
         )
 
     print(
-        f"{thread_id} thread - Sent register request for '{item}'",
+        f"thread {thread_id:<13} - Sent register request for '{item}'",
         flush=True,
     )
 
@@ -256,7 +256,7 @@ def dispatch_and_register(thread_id: str) -> None:
         runs.raise_for_status()
     except Exception as e:
         print(
-            f"::warning::{thread_id} thread - Failed to register workflow run for '{item}' with exception: '{e}'",
+            f"::warning::thread {thread_id:<13} - Failed to register workflow run for '{item}' with exception: '{e}'",
             flush=True,
         )
         move_to_done(item, "REGISTER_FAILED", f"HTTP request failed with code {runs.status_code}")
@@ -267,14 +267,14 @@ def dispatch_and_register(thread_id: str) -> None:
     runs_count = len(runs)
 
     print(
-        f"{thread_id} thread - Registering {runs_count} run(s): '{json_dumps(runs, indent=4)[:1000]}...'",
+        f"thread {thread_id:<13} - Registering {runs_count} run(s): '{json_dumps(runs, indent=4)[:1000]}...'",
         flush=True,
     )
 
     match runs_count:
 
         case 0:
-            print(f"::warning::{thread_id} thread - Failed to register workflow for item '{item}'", flush=True)
+            print(f"::warning::thread {thread_id:<13} - Failed to register workflow for item '{item}'", flush=True)
             move_to_done(item, "REGISTER_FAILED", f"No runs match registration criteria for {item.name}")
 
         case 1:
@@ -284,7 +284,7 @@ def dispatch_and_register(thread_id: str) -> None:
 
         case _:
             print(
-                f"::warning::{thread_id} thread - Multiple runs match registration criteria for '{item}'",
+                f"::warning::thread {thread_id:<13} - Multiple runs match registration criteria for '{item}'",
                 flush=True,
             )
             move_to_done(item, "REGISTER_FAILED", f"Multiple possible runs for {item.name}")
@@ -313,7 +313,7 @@ def check_status(thread_id: str) -> None:
         run = github_api("GET", f"/repos/{item.owner}/{item.repo}/actions/runs/{item.run_id}")
 
     print(
-        f"{thread_id} thread - Sent check request for '{item}'",
+        f"thread {thread_id:<13} - Sent check request for '{item}'",
         flush=True,
     )
 
@@ -321,7 +321,7 @@ def check_status(thread_id: str) -> None:
         run.raise_for_status()
     except Exception as e:
         print(
-            f"::warning::{thread_id} thread - Failed to check status for {item.name} (run ID: '{item.run_id}') with exception: '{e}'",
+            f"::warning::thread {thread_id:<13} - Failed to check status for {item.name} (run ID: '{item.run_id}') with exception: '{e}'",
             flush=True,
         )
         in_progress.put(item)
@@ -330,7 +330,7 @@ def check_status(thread_id: str) -> None:
     run = run.json()
 
     print(
-        f"{thread_id} thread - Checking run: '{json_dumps(run, indent=4)[:1000]}...'",
+        f"thread {thread_id:<13} - Checking run: '{json_dumps(run, indent=4)[:1000]}...'",
         flush=True,
     )
 
@@ -427,13 +427,13 @@ def reduce_summarize(spec_items: dict) -> None:
 
 def dispatcher(thread_id: str) -> None:
 
-    print(f"{thread_id} thread - Starting thread", flush=True)
+    print(f"thread {thread_id:<13} - Starting thread", flush=True)
 
     while not stop.is_set():
 
         if in_progress.full():
             print(
-                f"{thread_id} thread - Max concurrency reached. Will wait before dispatching new workflows...",
+                f"thread {thread_id:<13} - Max concurrency reached. Will wait before dispatching new workflows...",
                 flush=True,
             )
             sleep(10)
@@ -443,15 +443,15 @@ def dispatcher(thread_id: str) -> None:
             dispatch_and_register(thread_id)
         except Exception as e:
             print(
-                f"::error::{thread_id} thread - Failed to dispatch workflow due to an unexpected error: {e}", flush=True
+                f"::error::thread {thread_id:<13} - Failed to dispatch workflow due to an unexpected error: {e}", flush=True
             )
             raise e
 
-    print(f"{thread_id} thread - Caught stop event. Exiting... ", flush=True)
+    print(f"thread {thread_id:<13} - Caught stop event. Exiting... ", flush=True)
 
 
 def tracker(thread_id: str) -> None:
-    print(f"{thread_id} thread - Starting thread", flush=True)
+    print(f"thread {thread_id:<13} - Starting thread", flush=True)
 
     while not stop.is_set():
 
@@ -460,12 +460,12 @@ def tracker(thread_id: str) -> None:
             sleep(POLLING_INTERVAL_SECONDS)
         except Exception as e:
             print(
-                f"::error::{thread_id} thread - Failed to check for workflow status due to an unexpected error: {e}",
+                f"::error::thread {thread_id:<13} - Failed to check for workflow status due to an unexpected error: {e}",
                 flush=True,
             )
             raise e
 
-    print(f"{thread_id} thread - Caught stop event. Exiting... ", flush=True)
+    print(f"thread {thread_id:<13} - Caught stop event. Exiting... ", flush=True)
 
 
 # --- Main Thread ---
