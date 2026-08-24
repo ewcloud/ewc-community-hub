@@ -224,7 +224,8 @@ def dispatch_and_register(thread_id: str) -> None:
         dispatch.raise_for_status()
     except Exception as e:
         print(
-            f"::warning::thread {thread_id:<13} - Failed to dispatch workflow for '{item}' with exception '{e}'", flush=True
+            f"::warning::thread {thread_id:<13} - Failed to dispatch workflow for '{item}' with exception '{e}'",
+            flush=True,
         )
         move_to_done(
             item,
@@ -368,6 +369,7 @@ def reduce_summarize(spec_items: dict) -> None:
         )
 
     status_rows = []
+    is_any_failed_or_timeout = False
     for item in items:
         state_viz = {
             "PLANNED": f"`planning` {GRAY_LIGHT}",
@@ -377,6 +379,8 @@ def reduce_summarize(spec_items: dict) -> None:
             "FAILED": f" `failing` {RED_LIGHT}",
             "TIMED_OUT": f"`timing out` {YELLOW_LIGHT}",
         }.get(item.state, f"`unknown` {GRAY_LIGHT}")
+
+        is_any_failed_or_timeout = is_any_failed_or_timeout | ("COMPLETED" not in item.state)
 
         if not item.run_id:
             run_link = "—"
@@ -421,6 +425,10 @@ def reduce_summarize(spec_items: dict) -> None:
     except Exception as e:
         print(f"::error::main thread - Failed to write summary: {e}", flush=True)
 
+    if is_any_failed_or_timeout:
+        print("::error::main thread - Deployment test(s) are FAILING. Check the summary for details!", flush=True)
+        raise SystemExit("::error::main thread - Deployment test(s) are FAILING. Check the summary for details!")
+
 
 # --- Worker Thread ---
 
@@ -443,7 +451,8 @@ def dispatcher(thread_id: str) -> None:
             dispatch_and_register(thread_id)
         except Exception as e:
             print(
-                f"::error::thread {thread_id:<13} - Failed to dispatch workflow due to an unexpected error: {e}", flush=True
+                f"::error::thread {thread_id:<13} - Failed to dispatch workflow due to an unexpected error: {e}",
+                flush=True,
             )
             raise e
 
