@@ -2448,9 +2448,9 @@ spec:
         * [How to modify HAproxy config file](./docs/how-to/how-to-modify-haproxy-config-file.md)
 
       displayName: HAProxy
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/tree/1.11.0/playbooks/haproxy-flavour
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/tree/1.11.1/playbooks/haproxy-flavour
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.0/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.1/LICENSE
       maintainers:
         - name: EWC Team
           email: support@europeanweather.cloud
@@ -2470,11 +2470,11 @@ spec:
             default: ssh-http-https
         pathToMainFile: playbooks/haproxy-flavour/haproxy-flavour.yml
         pathToRequirementsFile: playbooks/haproxy-flavour/requirements.yml
-      version: "1.11.0"
+      version: "1.11.1"
 
     default-stack-provisioning:
       name: "default-stack-provisioning"
-      version: "1.11.0"
+      version: "1.11.1"
       description: |
         >✅ This template can be safely applied from any local work environment, even running outside an EWC tenancy's private network.
 
@@ -2673,7 +2673,7 @@ spec:
         Checkout the [troubleshooting documentation](../../docs/troubleshooting.md) for
         information on common problems and how to troubleshoot them.
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.0/playbooks/default-stack-provisioning
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.1/playbooks/default-stack-provisioning
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -2689,12 +2689,12 @@ spec:
         licenseType: "MIT License"
       displayName: Default Stack Provisioning
       summary: Automates the creation and state management of three VMs, plus their OS configuration. Each of them serves an specific role (IPA server, SSH bastion or remote desktop). Together, they enable secure access, centralized user management, and a fully graphical development environment within the EWC.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.0/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.1/LICENSE
       published: true
 
     htc-execute-flavour:
       name: "htc-execute-flavour"
-      version: "1.11.0"
+      version: "1.11.1"
       ewccli:
         pathToRequirementsFile: playbooks/htc-execute-flavour/requirements.yml
         pathToMainFile: playbooks/htc-execute-flavour/htc-execute-flavour.yml
@@ -2957,7 +2957,7 @@ spec:
         * [How to submit jobs](./docs/how-to/how-to-submit-jobs.md)
 
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.0/playbooks/htc-execute-flavour
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.1/playbooks/htc-execute-flavour
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -2973,12 +2973,12 @@ spec:
         licenseType: "MIT License"
       displayName: HTC Execute Flavour
       summary: Enables users to contribute with VMs towards the shared resources pool of the EWC HTC Batch Processing service
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.0/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.1/LICENSE
       published: true
 
     htc-submit-flavour:
       name: "htc-submit-flavour"
-      version: "1.11.0"
+      version: "1.11.1"
       ewccli:
         pathToRequirementsFile: playbooks/htc-submit-flavour/requirements.yml
         pathToMainFile: playbooks/htc-submit-flavour/htc-submit-flavour.yml
@@ -3236,7 +3236,7 @@ spec:
         * [How to submit Docker jobs](./docs/how-to-submit-docker-jobs.md)
         * [How to submit Singularity jobs](./docs/how-to-submit-singularity-jobs.md)
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.0/playbooks/htc-submit-flavour
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.1/playbooks/htc-submit-flavour
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -3252,12 +3252,12 @@ spec:
         licenseType: "MIT License"
       displayName: HTC Execute Flavour
       summary: Setups a workspace from where users can submit computation tasks onto the shared resource pool managed by EWC HTC Batch Processing service
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.0/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.1/LICENSE
       published: true
 
     ipa-client-enroll-flavour:
       name: "ipa-client-enroll-flavour"
-      version: "1.11.0"
+      version: "1.11.1"
       ewccli:
         pathToRequirementsFile: playbooks/ipa-client-enroll-flavour/requirements.yml
         pathToMainFile: playbooks/ipa-client-enroll-flavour/ipa-client-enroll-flavour.yml
@@ -3492,7 +3492,7 @@ spec:
         |------|---------|
         | ewc-ansible-role-ipa-client-enroll | https://github.com/ewcloud/ewc-ansible-role-ipa-client-enroll |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.0/playbooks/ipa-client-enroll-flavour
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.1/playbooks/ipa-client-enroll-flavour
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -3508,12 +3508,12 @@ spec:
         licenseType: "MIT License"
       displayName: IPA Client Enroll Flavour
       summary: Seamlessly integrates a running VM into a FreeIPA-managed fleet of instances, enabling centralized user authentication, DNS resolution, and secure remote access for simplified and scalable identity management.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.0/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.1/LICENSE
       published: true
 
     ipa-client-disenroll-flavour:
       name: "ipa-client-disenroll-flavour"
-      version: "1.11.0"
+      version: "1.11.1"
       ewccli:
         pathToMainFile: playbooks/ipa-client-disenroll-flavour/ipa-client-disenroll-flavour.yml
         pathToRequirementsFile: playbooks/ipa-client-disenroll-flavour/requirements.yml
