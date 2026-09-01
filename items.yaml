@@ -2964,7 +2964,7 @@ spec:
         - name: EWC Team
           email: support@europeanweather.cloud
           url: https://github.com/ewcloud/ewc-flavours/issues
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/HTCondorLogo.png
       annotations:
         technology: "Ansible Playbook"
         category: "Data Processing"
@@ -3243,7 +3243,7 @@ spec:
         - name: EWC Team
           email: support@europeanweather.cloud
           url: https://github.com/ewcloud/ewc-flavours/issues
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWC%20-%20Emblem%20color.png
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/HTCondorLogo.png
       annotations:
         technology: "Ansible Playbook"
         category: "Data Processing"
