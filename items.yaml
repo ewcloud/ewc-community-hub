@@ -866,7 +866,7 @@ spec:
 
     eumetcast-terrestrial-amt-flavour:
       name: "eumetcast-terrestrial-amt-flavour"
-      version: "1.10.1"
+      version: "1.11.2"
       ewccli:
         pathToRequirementsFile: playbooks/eumetcast-terrestrial-amt-flavour/requirements.yml
         pathToMainFile: playbooks/eumetcast-terrestrial-amt-flavour/eumetcast-terrestrial-amt-flavour.yml
@@ -922,23 +922,50 @@ spec:
         * Automatically cleans up disk space by keeping only the latest 5 minutes of transmitted data, under the `/home/eumetuser/data` subdirectory.
 
         ## Prerequisites
-        > ⛔ When deploy on ECMWF site, network traffic required by this Item may be blocked due to ECMWF Firewall. Please get in touch with us through the [EWC Support portal](https://support.europeanweather.cloud/).
-
-        > 💡 This Item is supported by the [EWCCLI](https://www.europeanweather.cloud/community-hub/ewc-cli)
-        and can be deployed, together with a compatible VM, via it. Checkout the [EWC User Stories: I want to use the ewccli](https://confluence.ecmwf.int/x/NlYiK) documentation pages to learn how.
+        > ⛔ When deploying on ECMWF site, network traffic required by this Item may be blocked due to ECMWF Firewall. Please get in touch with us through the [EWC Support portal](https://support.europeanweather.cloud/).
 
         * Register a user account on the [EUMETSAT User Portal](https://eoportal.eumetsat.int/)
         * Subscribe to the service and data for EUMETCast Terrestrial
           * Ensure you select at least one EKU (temporal quota allocation)
         * Request a EUMETCast Terrestrial user key for access from the EWC:
           * Write to EUMETSAT Helpdesk ([ops@eumetsat.int](mailto:ops@eumetsat.int)), making sure to provide them your EUMETSAT User Portal username alongside your request
+        * Verify the `eumetcast` OpenStack Security Group exists in your EWC tenancy
+          > 💡 You may create Security Groups via [this EWC Community Hub Item](https://europeanweather.cloud/community-hub/openstack-compute-instance) if pre-required ones are missing.
+
+        ## Usage
+
+        ### Deploy via EWCCLI
+
+        >⚠️ By default, deploying via EWCCLI is only possible from within your EWC private network. You may override by passing the `--external-ip` flag upon deployment. Caution is advised as this weakens security on the deployed VM.
+
+        #### 1. Setup working environment
+
+        ```bash
+        pip install ewccli
+        ```
+
+        #### 2. Configure access credentials
+
+        ```bash
+        ewc login
+        ```
+
+        #### 3. Deploy
+        >💡 To lean about EWCCLI deployment customization, checkout the [EWC User Stories: I want to use the ewccli](https://confluence.ecmwf.int/x/NlYiK) documentation pages.
+
+
+        ```bash
+        ewc hub deploy eumetcast-terrestrial-amt-flavour
+        ```
+
+        ### Deploy via native tooling (Ansible)
+
+        #### 1. Setup working environment
+
         * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
         * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
         * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
-
-        * Verify the `eumetcast` OpenStack Security Group exists in your EWC tenancy
-          > 💡 You may create Security Groups via [this EWC Community Hub Item](https://europeanweather.cloud/community-hub/openstack-compute-instance) if pre-required ones are missing.
-        * If you plan to configure an existing VM, ensure it meets the minium requirements before moving on to the [Usage](#usage) section below:
+        * If you plan to configure an existing VM, ensure it meets the minium requirements before proceeding:
           * VM Image: Ubuntu 22
           * VM Plan: 8 CPU cores, 64GB RAM, 265GB Disk + 1TB Disk (secondary)
             > ⚠️ Make sure the secondary disk is formatted and mounted by following this guide steps from the [EWC Knowledge Base](https://confluence.ecmwf.int/x/WHAEJQ#EWCCloudManagementUIStorageAddavolumetoaninstance-Formatthenewdisk).
@@ -948,22 +975,19 @@ spec:
 
           Otherwise, provision a new VM with above specifications before continuing (see [EWC Getting Started: Provision a VM](https://confluence.ecmwf.int/x/2RvEJg) for details).
 
-
-        ## Usage
-
-        ### 1. Clone the repository
+        #### 2. Clone the repository
 
         ```bash
         git clone https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
         ```
 
-        #### 1.1. Change to the specific Item's subdirectory
+        #### 2.1. Change to the specific Item's subdirectory
 
         ```bash
         cd playbooks/eumetcast-terrestrial-amt-flavour
         ```
 
-        #### 1.2. Checkout an specific Item's version
+        #### 2.2. Checkout an specific Item's version
         >⚠️ Make sure to replace `x.y.z` in the command below, with your version of preference.
 
         ```bash
@@ -971,7 +995,7 @@ spec:
         ```
 
 
-        ### 2. Download Ansible dependencies
+        #### 3. Download Ansible dependencies
         >💡 By default, Ansible Roles are installed under the `~/.ansible/roles` directory within your working environment.
 
         Download the correct version of the Ansible dependencies, if you haven't done so already:
@@ -980,13 +1004,13 @@ spec:
         ansible-galaxy role install --force -r requirements.yml
         ```
 
-        ### 3. Specify the target host and SSH credentials
+        #### 4. Specify the target host and SSH credentials
         Create an inventory file, to specify address/credentials that your local working environment should use
         to connect to the target VM.
 
         Copy into the file one of the two snippets below, and replace the placeholders (i.e. values enclosed in `<` `>` characters):
 
-        * **Connecting form within the EWC tenancy's network**
+        * **To connect within the EWC private network**
 
           ```yaml
           # inventory.yml
@@ -995,16 +1019,32 @@ spec:
             hosts:
               target:
                 ansible_python_interpreter: auto
-                ansible_host: <add the IP address of the target host>
+                ansible_host: <add the PRIVATE IP address of the target host>
                 ansible_ssh_private_key_file: <add the path to local SSH private key file>
-                ansible_user: cloud-user
+                ansible_user: ubuntu
                 ansible_ssh_common_args: -o StrictHostKeyChecking=no
           ```
 
         **OR**
 
+        * **To connect from the public internet to a EWC public IP address**
 
-        *  **Connecting from outside the EWC tenancy's network**
+          ```yaml
+          # inventory.yml
+          ---
+          ewcloud:
+            hosts:
+              target:
+                ansible_python_interpreter: auto
+                ansible_host: <add the PUBLIC IP address of the target host>
+                ansible_ssh_private_key_file: <add the path to local SSH private key file>
+                ansible_user: ubuntu
+                ansible_ssh_common_args: -o StrictHostKeyChecking=no
+          ```
+
+        **OR**
+
+        *  **To connect from the public the public internet to a EWC private IP address**
 
             > ⚠️ This requires an [SSH Bastion](https://europeanweather.cloud/community-hub/ssh-bastion-provisioning) to be already provisioned within your EWC tenancy.
 
@@ -1014,8 +1054,8 @@ spec:
             ewcloud:
               hosts:
                 target:
-                  ansible_host: <add the IP address of the target host>
-                  ansible_ssh_user: cloud-user
+                  ansible_host: <add the PRIVATE IP address of the target host>
+                  ansible_ssh_user:  ubuntu
                   ansible_ssh_private_key_file: <add the path to local SSH private key file>
                   ansible_python_interpreter: auto
 
@@ -1030,11 +1070,11 @@ spec:
                                   -o BatchMode=yes
                                   -W %h:%p
                                   -i <add the path to local SSH private key file>
-                                  cloud-user@<add the IP address of the ssh bastion>"
+                                  cloud-user@<add the PUBLIC IP address of the SSH bastion>"
             ```
 
 
-        ### 4. Configure and apply the template
+        #### 5. Configure and apply the template
 
         * **Interactive Mode**
 
@@ -1088,7 +1128,7 @@ spec:
 
         Checkout the [how-to guides](./docs/how-to/) to learn about management of the Item after initial setup.
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/playbooks/eumetcast-terrestrial-amt-flavour
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/playbooks/eumetcast-terrestrial-amt-flavour
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -1104,12 +1144,12 @@ spec:
         others: "Deployable,EWCCLI-compatible"
       displayName: EUMETCast Terrestrial on AMT Flavour
       summary: Turns a VM into a station that realiably captures and stores data from the EUMETCast Terrestrial service
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/LICENSE
       published: true
 
     eumetsat-s3-mount-flavour:
       name: "eumetsat-s3-mount-flavour"
-      version: "1.10.1"
+      version: "1.11.2"
       ewccli:
         pathToRequirementsFile: playbooks/eumetsat-s3-mount-flavour/requirements.yml
         pathToMainFile: playbooks/eumetsat-s3-mount-flavour/eumetsat-s3-mount-flavour.yml
@@ -1138,7 +1178,6 @@ spec:
             type: str
             default: 512Mi
       description: |
-
         This Ansible Playbook configures a virtual machine existing
         within the [European Weather Cloud (EWC)](https://europeanweather.cloud/), enabling to access remote public [EUMETSAT data buckets](https://confluence.ecmwf.int/x/FUEXHQ) as if they were stored on a local disk.
 
@@ -1151,16 +1190,45 @@ spec:
         - Boot-safe design; does not block boot on `S3` outage
 
         ## Prerequisites
-        > 💡 This Item is supported by the [EWCCLI](https://www.europeanweather.cloud/community-hub/ewc-cli)
-        and can be deployed, together with a compatible VM, via it. Checkout the [EWC User Stories: I want to use the ewccli](https://confluence.ecmwf.int/x/NlYiK) documentation pages to learn how.
+
+        * Verify the `ssh-https` OpenStack Security Group exists in your EWC tenancy
+          > 💡 You may create Security Groups via [this EWC Community Hub Item](https://europeanweather.cloud/community-hub/openstack-compute-instance) if pre-required ones are missing.
+
+
+        ## Usage
+
+        ### Deploy via EWCCLI
+
+        >⚠️ By default, deploying via EWCCLI is only possible from within your EWC private network. You may override by passing the `--external-ip` flag upon deployment. Caution is advised as this weakens security on the deployed VM.
+
+        #### 1. Setup working environment
+
+        ```bash
+        pip install ewccli
+        ```
+
+        #### 2. Configure access credentials
+
+        ```bash
+        ewc login
+        ```
+
+        #### 3. Deploy
+        >💡 To lean about EWCCLI deployment customization, checkout the [EWC User Stories: I want to use the ewccli](https://confluence.ecmwf.int/x/NlYiK) documentation pages.
+
+
+        ```bash
+        ewc hub deploy eumetsat-s3-mount-flavour
+        ```
+
+        ### Deploy via native tooling (Ansible)
+
+        #### 1. Setup working environment
 
         * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
         * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
         * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
-
-        * Verify the `ssh-https` OpenStack Security Group exists in your EWC tenancy
-          > 💡 You may create Security Groups via [this EWC Community Hub Item](https://europeanweather.cloud/community-hub/openstack-compute-instance) if pre-required ones are missing.
-        * If you plan to configure an existing VM, ensure it meets the minium requirements before moving on to the [Usage](#usage) section below:
+        * If you plan to configure an existing VM, ensure it meets the minium requirements before proceeding:
           * VM Image: Ubuntu or RockyLinux
           * VM Plan: 4 CPU cores, 8GB RAM, 40GB Disk
           * Network: Private
@@ -1169,22 +1237,19 @@ spec:
 
           Otherwise, provision a new VM with above specifications before continuing (see [EWC Getting Started: Provision a VM](https://confluence.ecmwf.int/x/2RvEJg) for details).
 
-
-        ## Usage
-
-        ### 1. Clone the repository
+        #### 2. Clone the repository
 
         ```bash
         git clone https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
         ```
 
-        #### 1.1. Change to the specific Item's subdirectory
+        #### 2.1. Change to the specific Item's subdirectory
 
         ```bash
         cd playbooks/eumetsat-s3-mount-flavour
         ```
 
-        #### 1.2. Checkout an specific Item's version
+        #### 2.2. Checkout an specific Item's version
         >⚠️ Make sure to replace `x.y.z` in the command below, with your version of preference.
 
         ```bash
@@ -1192,7 +1257,7 @@ spec:
         ```
 
 
-        ### 2. Download Ansible dependencies
+        #### 3. Download Ansible dependencies
         >💡 By default, Ansible Roles are installed under the `~/.ansible/roles` directory within your working environment.
 
         Download the correct version of the Ansible dependencies, if you haven't done so already:
@@ -1201,28 +1266,45 @@ spec:
         ansible-galaxy role install --force -r requirements.yml
         ```
 
-        ### 3. Specify the target host and SSH credentials
+        #### 4. Specify the target host and SSH credentials
         Create an inventory file, to specify address/credentials that your local working environment should use
         to connect to the target VM.
 
         Copy into the file one of the two snippets below, and replace the placeholders (i.e. values enclosed in `<` `>` characters):
 
-        * **Connecting form within the EWC tenancy's network**
+        * **To connect within the EWC private network**
           ```yaml
           # inventory.yml
           ---
           ewcloud:
             hosts:
               target:
-                ansible_python_interpreter: /usr/bin/python3
-                ansible_host: <add the IPV4 address of the target host>
+                ansible_python_interpreter: auto
+                ansible_host: <add the PRIVATE IP address of the target host>
                 ansible_ssh_private_key_file: <add the path to local SSH private key file>
                 ansible_user: <add the default user according to your chosen VM image>
                 ansible_ssh_common_args: -o StrictHostKeyChecking=no
           ```
         **OR**
 
-        *  **Connecting from outside the EWC tenancy's network**
+        * **To connect from the public internet to a EWC public IP address**
+
+          ```yaml
+          # inventory.yml
+          ---
+          ewcloud:
+            hosts:
+              target:
+                ansible_python_interpreter: auto
+                ansible_host: <add the PUBLIC IP address of the target host>
+                ansible_ssh_private_key_file: <add the path to local SSH private key file>
+                ansible_user: <add the default user according to your chosen VM image>
+                ansible_ssh_common_args: -o StrictHostKeyChecking=no
+          ```
+
+        **OR**
+
+        *  **To connect from the public the public internet to a EWC private IP address**
 
             > ⚠️ This requires an [SSH Bastion](https://europeanweather.cloud/community-hub/ssh-bastion-provisioning) to be already provisioned within your EWC tenancy.
 
@@ -1232,7 +1314,7 @@ spec:
             ewcloud:
               hosts:
                 target:
-                  ansible_host: <add the IP address of the target host>
+                  ansible_host: <add the PRIVATE IP address of the target host>
                   ansible_ssh_user: <add the default user according to your chosen VM image>
                   ansible_ssh_private_key_file: <add the path to local SSH private key file>
                   ansible_python_interpreter: auto
@@ -1248,11 +1330,11 @@ spec:
                                   -o BatchMode=yes
                                   -W %h:%p
                                   -i <add the path to local SSH private key file>
-                                  cloud-user@<add the IP address of the ssh bastion>"
+                                  cloud-user@<add the PUBLIC IP address of the SSH bastion>"
 
             ```
 
-        ### 4. Configure and apply the template
+        #### 5. Configure and apply the template
 
         * **Interactive Mode**
 
@@ -1306,7 +1388,7 @@ spec:
         |------|---------|
         | ewc-ansible-role-eumetsat-s3-mount | https://github.com/ewcloud/ewc-ansible-role-eumetsat-s3-mount  |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/playbooks/eumetsat-s3-mount-flavour
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/playbooks/eumetsat-s3-mount-flavour
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -1322,12 +1404,12 @@ spec:
         others: "Deployable,EWCCLI-compatible"
       displayName: EUMETSAT S3 Mount Flavour
       summary: Enables a VM to access public EUMETSAT data stored in shared S3 buckets, just as if it was on the local filesystem
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/LICENSE
       published: true
 
     eumetsat-data-tailor-flavour:
       name: "eumetsat-data-tailor-flavour"
-      version: "1.10.1"
+      version: "1.11.2"
       ewccli:
         pathToRequirementsFile: playbooks/eumetsat-data-tailor-flavour/requirements.yml
         pathToMainFile: playbooks/eumetsat-data-tailor-flavour/eumetsat-data-tailor-flavour.yml
@@ -1404,16 +1486,43 @@ spec:
 
         ## Prerequisites
 
-        > 💡 This Item is supported by the [EWCCLI](https://www.europeanweather.cloud/community-hub/ewc-cli),
-        and can be deployed, together with a compatible VM, via it. Checkout the [EWC User Stories: I want to use the ewccli](https://confluence.ecmwf.int/x/NlYiK) documentation pages to learn how.
+        * Verify the `ssh-https` OpenStack Security Group exists in your EWC tenancy
+          > 💡 You may create Security Groups via [this EWC Community Hub Item](https://europeanweather.cloud/community-hub/openstack-compute-instance) if pre-required ones are missing.
+
+        ## Usage
+
+        ### Deploy via EWCCLI
+
+        >⚠️ By default, deploying via EWCCLI is only possible from within your EWC private network. You may override by passing the `--external-ip` flag upon deployment. Caution is advised as this weakens security on the deployed VM.
+
+        #### 1. Setup working environment
+
+        ```bash
+        pip install ewccli
+        ```
+
+        #### 2. Configure access credentials
+
+        ```bash
+        ewc login
+        ```
+
+        #### 3. Deploy
+        >💡 To lean about EWCCLI deployment customization, checkout the [EWC User Stories: I want to use the ewccli](https://confluence.ecmwf.int/x/NlYiK) documentation pages.
+
+
+        ```bash
+        ewc hub deploy data-tailor-flavour
+        ```
+
+        ### Deploy via native tooling (Ansible)
+
+        #### 1. Setup working environment
 
         * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
         * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
         * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
-
-        * Verify the `ssh-https` OpenStack Security Group exists in your EWC tenancy
-          > 💡 You may create Security Groups via [this EWC Community Hub Item](https://europeanweather.cloud/community-hub/openstack-compute-instance) if pre-required ones are missing.
-        * If you plan to configure an existing VM, ensure it meets the minium requirements before moving on to the [Usage](#usage) section below:
+        * If you plan to configure an existing VM, ensure it meets the minium requirements before proceeding:
           * VM Image: Ubuntu 24 or 22
           * VM Plan: 4 CPU cores, 16GB RAM, 80GB Disk
           * Network: Private
@@ -1422,29 +1531,26 @@ spec:
 
           Otherwise, provision a new VM with above specifications before continuing (see [EWC Getting Started: Provision a VM](https://confluence.ecmwf.int/x/2RvEJg) for details).
 
-
-        ## Usage
-
-        ### 1. Clone the repository
+        #### 2. Clone the repository
 
         ```bash
         git clone https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
         ```
 
-        #### 1.1. Change to the specific Item's subdirectory
+        #### 2.1. Change to the specific Item's subdirectory
 
         ```bash
         cd ewc-ansible-playbook-flavours-and-provisioning/playbooks/eumetsat-data-tailor-flavour
         ```
 
-        #### 1.2. Checkout an specific Item's version
+        #### 2.2. Checkout an specific Item's version
         >⚠️ Make sure to replace `x.y.z` in the command below, with your version of preference.
 
         ```bash
         git checkout x.y.z
         ```
 
-        ### 2. Download Ansible dependencies
+        #### 3. Download Ansible dependencies
         >💡 By default, Ansible Roles are installed under the `~/.ansible/roles` directory within your working environment.
 
         Download the correct version of the Ansible dependencies, if you haven't done so already:
@@ -1453,13 +1559,13 @@ spec:
         ansible-galaxy role install --force -r requirements.yml
         ```
 
-        ### 3. Specify the target host and SSH credentials
+        #### 4. Specify the target host and SSH credentials
         Create an inventory file, to specify address/credentials that your local working environment should use
         to connect to the target VM.
 
         Copy into the file one of the two snippets below, and replace the placeholders (i.e. values enclosed in `<` `>` characters):
 
-        * **Connecting form within the EWC tenancy's network**
+        * **To connect within the EWC private network**
 
           ```yaml
           # inventory.yml
@@ -1468,16 +1574,32 @@ spec:
             hosts:
               target:
                 ansible_python_interpreter: auto
-                ansible_host: <add the IP address of the target host>
+                ansible_host: <add the PRIVATE IP address of the target host>
                 ansible_ssh_private_key_file: <add the path to local SSH private key file>
-                ansible_user: <add the default user according to your chosen VM image>
+                ansible_user: ubuntu
                 ansible_ssh_common_args: -o StrictHostKeyChecking=no
           ```
 
         **OR**
 
+        * **To connect from the public internet to a EWC public IP address**
 
-        *  **Connecting from outside the EWC tenancy's network**
+          ```yaml
+          # inventory.yml
+          ---
+          ewcloud:
+            hosts:
+              target:
+                ansible_python_interpreter: auto
+                ansible_host: <add the PUBLIC IP address of the target host>
+                ansible_ssh_private_key_file: <add the path to local SSH private key file>
+                ansible_user: ubuntu
+                ansible_ssh_common_args: -o StrictHostKeyChecking=no
+          ```
+
+        **OR**
+
+        *  **To connect from the public the public internet to a EWC private IP address**
 
             > ⚠️ This requires an [SSH Bastion](https://europeanweather.cloud/community-hub/ssh-bastion-provisioning) to be already provisioned within your EWC tenancy.
 
@@ -1489,8 +1611,8 @@ spec:
             ewcloud:
               hosts:
                 target:
-                  ansible_host: <add the IP address of the target host>
-                  ansible_ssh_user: <add the default user according to your chosen VM image>
+                  ansible_host: <add the PRIVATE IP address of the target host>
+                  ansible_ssh_user: ubuntu
                   ansible_ssh_private_key_file: <add the path to local SSH private key file>
                   ansible_python_interpreter: auto
 
@@ -1505,12 +1627,12 @@ spec:
                                   -o BatchMode=yes
                                   -W %h:%p
                                   -i <add the path to local SSH private key file>
-                                  cloud-user@<add the IP address of the ssh bastion>"
+                                  cloud-user@<add the PUBLIC IP address of the SSH bastion>"
 
             ```
 
 
-        ### 4. Configure and apply the template
+        #### 5. Configure and apply the template
 
         * **Interactive Mode**
 
@@ -1573,7 +1695,7 @@ spec:
         Checkout the following how-to guides to learn about management of the Item after initial setup:
         * [How to initialize the environment](./docs/how-to/how-to-initialize-environment.md)
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/playbooks/eumetsat-data-tailor-flavour
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/playbooks/eumetsat-data-tailor-flavour
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -1589,7 +1711,7 @@ spec:
         others: "Deployable,EWCCLI-compatible"
       displayName: EUMETSAT Data Tailor Flavour
       summary: Transforms an existing VM into a powerful satellite data customization hub, enabling users to efficiently subset, aggregate, reproject, and reformat data from METOP, MFG, MSG, MTG, and Sentinel-3 into GIS and image formats, offering faster processing and greater flexibility than web-based alternatives.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/LICENSE
       published: true
 
     ewccli:
@@ -2156,13 +2278,45 @@ spec:
         * Rate limits.
 
         ## Prerequisites
-        * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
-        * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
-        * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
 
         * Verify the `ssh-https` OpenStack Security Group exists in your EWC tenancy
           > 💡 You may create Security Groups via [this EWC Community Hub Item](https://europeanweather.cloud/community-hub/openstack-compute-instance) if pre-required ones are missing.
-        * If you plan to configure an existing VM, ensure it meets the minium requirements before moving on to the [Usage](#usage) section below:
+
+        ## Usage
+
+        ### Deploy via EWCCLI
+
+        >⚠️ By default, deploying via EWCCLI is only possible from within your EWC private network. You may override by passing the `--external-ip` flag upon deployment. Caution is advised as this weakens security on the deployed VM.
+
+        #### 1. Setup working environment
+
+        ```bash
+        pip install ewccli
+        ```
+
+        #### 2. Configure access credentials
+
+        ```bash
+        ewc login
+        ```
+
+        #### 3. Deploy
+        >💡 To lean about EWCCLI deployment customization, checkout the [EWC User Stories: I want to use the ewccli](https://confluence.ecmwf.int/x/NlYiK) documentation pages.
+
+
+        ```bash
+        ewc hub deploy haproxy-flavour
+        ```
+
+        ### Deploy via native tooling (Ansible)
+
+        #### 1. Setup working environment
+
+
+        * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
+        * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
+        * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
+        * If you plan to configure an existing VM, ensure it meets the minium requirements before proceeding:
           * VM Image: Ubuntu 24 or 22
           * VM Plan: 4 CPU cores, 8GB RAM, 40GB Disk
           * Network: Private
@@ -2171,29 +2325,26 @@ spec:
 
           Otherwise, provision a new VM with above specifications before continuing (see [EWC Getting Started: Provision a VM](https://confluence.ecmwf.int/x/2RvEJg) for details).
 
-
-        ## Usage
-
-        ### 1. Clone the repository
+        #### 2. Clone the repository
 
         ```bash
         git clone https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
         ```
 
-        #### 1.1. Change to the specific Item's subdirectory
+        #### 2.1. Change to the specific Item's subdirectory
 
         ```bash
         cd ewc-ansible-playbook-flavours-and-provisioning/playbooks/haproxy-flavour
         ```
 
-        #### 1.2. Checkout an specific Item's version
+        #### 2.2. Checkout an specific Item's version
         >⚠️ Make sure to replace `x.y.z` in the command below, with your version of preference.
 
         ```bash
         git checkout x.y.z
         ```
 
-        ### 2. Download Ansible dependencies
+        #### 3. Download Ansible dependencies
         >💡 By default, Ansible Roles are installed under the `~/.ansible/roles` directory within your working environment.
 
         Download the correct version of the Ansible dependencies, if you haven't done so already:
@@ -2202,13 +2353,13 @@ spec:
         ansible-galaxy role install --force -r requirements.yml
         ```
 
-        ### 3. Specify the target host and SSH credentials
+        #### 4. Specify the target host and SSH credentials
         Create an inventory file, to specify address/credentials that your local working environment should use
         to connect to the target VM.
 
         Copy into the file one of the two snippets below, and replace the placeholders (i.e. values enclosed in `<` `>` characters):
 
-        * **Connecting form within the EWC tenancy's network**
+        * **To connect within the EWC private network**
 
           ```yaml
           # inventory.yml
@@ -2216,8 +2367,8 @@ spec:
           ewcloud:
             hosts:
               haproxy:
-                ansible_python_interpreter: /usr/bin/python3
-                ansible_host: <add the IPV4 address of the target host>
+                ansible_python_interpreter: auto
+                ansible_host: <add the PRIVATE IP address of the target host>
                 ansible_ssh_private_key_file: <add the path to local SSH private key file>
                 ansible_user: ubuntu
                 ansible_ssh_common_args: -o StrictHostKeyChecking=no
@@ -2225,7 +2376,24 @@ spec:
 
         **OR**
 
-        *  **Connecting from outside the EWC tenancy's network**
+        * **To connect from the public internet to a EWC public IP address**
+
+          ```yaml
+          # inventory.yml
+          ---
+          ewcloud:
+            hosts:
+              target:
+                ansible_python_interpreter: auto
+                ansible_host: <add the PUBLIC IP address of the target host>
+                ansible_ssh_private_key_file: <add the path to local SSH private key file>
+                ansible_user: ubuntu
+                ansible_ssh_common_args: -o StrictHostKeyChecking=no
+          ```
+
+        **OR**
+
+        *  **To connect from the public the public internet to a EWC private IP address**
 
             > ⚠️ This requires an [SSH Bastion](https://europeanweather.cloud/community-hub/ssh-bastion-provisioning) to be already provisioned within your EWC tenancy.
 
@@ -2235,7 +2403,7 @@ spec:
             ewcloud:
               hosts:
                 target:
-                  ansible_host: <add the IP address of the target host>
+                  ansible_host: <add the PRIVATE IP address of the target host>
                   ansible_ssh_user: ubuntu
                   ansible_ssh_private_key_file: <add the path to local SSH private key file>
                   ansible_python_interpreter: auto
@@ -2251,11 +2419,11 @@ spec:
                                   -o BatchMode=yes
                                   -W %h:%p
                                   -i <add the path to local SSH private key file>
-                                  cloud-user@<add the IP address of the ssh bastion>"
+                                  cloud-user@<add the PUBLIC IP address of the SSH bastion>"
 
             ```
 
-        ### 4. Configure and apply the template
+        #### 5. Configure and apply the template
 
         By running the following command, you can trigger an interactive session that
         prompts you for the necessary user inputs, and then applies changes to your
@@ -2280,9 +2448,9 @@ spec:
         * [How to modify HAproxy config file](./docs/how-to/how-to-modify-haproxy-config-file.md)
 
       displayName: HAProxy
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/tree/1.10.1/playbooks/haproxy-flavour
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/tree/1.11.2/playbooks/haproxy-flavour
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/LICENSE
       maintainers:
         - name: EWC Team
           email: support@europeanweather.cloud
@@ -2302,11 +2470,11 @@ spec:
             default: ssh-http-https
         pathToMainFile: playbooks/haproxy-flavour/haproxy-flavour.yml
         pathToRequirementsFile: playbooks/haproxy-flavour/requirements.yml
-      version: "1.10.1"
+      version: "1.11.2"
 
     default-stack-provisioning:
       name: "default-stack-provisioning"
-      version: "1.10.1"
+      version: "1.11.2"
       description: |
         >✅ This template can be safely applied from any local work environment, even running outside an EWC tenancy's private network.
 
@@ -2505,7 +2673,7 @@ spec:
         Checkout the [troubleshooting documentation](../../docs/troubleshooting.md) for
         information on common problems and how to troubleshoot them.
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/playbooks/default-stack-provisioning
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/playbooks/default-stack-provisioning
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -2521,12 +2689,575 @@ spec:
         licenseType: "MIT License"
       displayName: Default Stack Provisioning
       summary: Automates the creation and state management of three VMs, plus their OS configuration. Each of them serves an specific role (IPA server, SSH bastion or remote desktop). Together, they enable secure access, centralized user management, and a fully graphical development environment within the EWC.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/LICENSE
+      published: true
+
+    htc-execute-flavour:
+      name: "htc-execute-flavour"
+      version: "1.11.2"
+      ewccli:
+        pathToRequirementsFile: playbooks/htc-execute-flavour/requirements.yml
+        pathToMainFile: playbooks/htc-execute-flavour/htc-execute-flavour.yml
+        inputs:
+          - name: headscale_login_server
+            description: URI of the VPN server.
+            type: str
+            default: http://headscale.batchprocessing.eumetsat.ewcloud.host:80
+          - name: headscale_preauthkey
+            description: Credentials of the VPN server.
+            type: str
+          - name: htcondor_cm_external_ip
+            description: IP Address of the HTCondor Manager node to which this submit node reports to.
+            type: str
+            default: 100.64.0.32
+          - name: htcondor_password
+            description: Password to authenticate against HTCondor Execute node pool
+            type: str
+          - name: harbor_auth_token
+            description: Token for authentication when pulling private container images from EWC Container registry
+            type: str
+      description: |
+        Many computational tasks in Earth Observation and environmental modelling apply the same processing algorithm independently across thousands or millions of input data items. These parallel tasks are best served by High Throughput Computing (HTC).
+
+        The [European Weather Cloud (EWC)](https://europeanweather.cloud/) provides a centrally-managed [EWC HTC Batch Processing](https://confluence.ecmwf.int/x/jRVkFQ) service based on [HTCondor](https://htcondor.readthedocs.io/en/latest/users-manual/quick-start-guide.html), a specialized workload-management system designed for compute-intensive jobs.
+
+        The principal advantage of this EWC service is access to a much larger, resource pool than any single tenant could provide alone. Capacity is drawn from:
+
+        1. Capacity made available by EWC itself
+        2. Spare VMs contributed by EWC tenants for shared usage
+
+        EWC users can submit jobs from their VMs (i.e. those configured by the [HTC Batch Processing Submit Flavour](../htc-submit-flavour/)). Jobs are placed in the queue, matched to available resources, executed, and results are returned to VM where the job was submitted from.
+
+        This template is EWC users wishing to contribute their compute resources to the pool of resources as HTCondor Execute Nodes:
+
+        ![High Throughput Batch Processing Overview](https://raw.githubusercontent.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/refs/heads/main/playbooks/htc-execute-flavour/docs/images/htcondor-execute-node.png)
+
+
+        ## Functionality
+        The template is designed to:
+
+        * Configure a pre-existing virtual machine running RockyLinux, with private IP
+        address, and a minimum recommended 32GB of RAM, as:
+          * an HTCondor execution node, enrolled into the EWC centrally-managed pool of shared compute resources
+          * a [Docker](https://docs.docker.com/get-started/docker-overview/) runtime able to pull both **public images** from [DockerHub](https://hub.docker.com/) and **private images** from the [EWC Container Registry](https://confluence.ecmwf.int/x/dRyXGw)
+          * a [Singularity](https://docs.sylabs.io/guides/latest/user-guide/) runtime, similar to Docker but with scientific computing and security in mind
+
+        ## Prerequisites
+
+        * Request authorization keys:
+          * Write to EWC Support ([support@europeanweather.cloud](mailto:support@europeanweather.cloud)), making sure to provide your EWC tenancy name alongside your request for VPN, HTCondor and Harbor access.
+        * Verify the `htcondor` OpenStack Security Group exists in your EWC tenancy
+          > 💡 You may create Security Groups via [this EWC Community Hub Item](https://europeanweather.cloud/community-hub/openstack-compute-instance) if pre-required ones are missing.
+
+        ## Usage
+
+        ### Deploy via EWCCLI
+
+        >⚠️ By default, deploying via EWCCLI is only possible from within your EWC private network. You may override by passing the `--external-ip` flag upon deployment. Caution is advised as this weakens security on the deployed VM.
+
+        #### 1. Setup working environment
+
+        ```bash
+        pip install ewccli
+        ```
+
+        #### 2. Configure access credentials
+
+        ```bash
+        ewc login
+        ```
+
+        #### 3. Deploy
+        >💡 To lean about EWCCLI deployment customization, checkout the [EWC User Stories: I want to use the ewccli](https://confluence.ecmwf.int/x/NlYiK) documentation pages.
+
+
+        ```bash
+        ewc hub deploy htc-execute-flavour
+        ```
+
+        ### Deploy via native tooling (Ansible)
+
+        #### 1. Setup working environment
+
+        * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
+        * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
+        * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
+        * If you plan to configure an existing VM, ensure it meets the minium requirements before proceeding:
+          * VM Image: RockyLinux 8 or 9
+          * VM Plan: 8 CPU cores, 64GB RAM, 30GB Disk
+          * Network: Private
+          * Security Groups: `htcondor`
+          * Floating IP: Optional (not recommended from a security standpoint)
+
+          Otherwise, provision a new VM with above specifications before continuing (see [EWC Getting Started: Provision a VM](https://confluence.ecmwf.int/x/2RvEJg) for details).
+
+        #### 2. Clone the repository
+
+        ```bash
+        git clone https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
+        ```
+
+        #### 2.1. Change to the specific Item's subdirectory
+
+        ```bash
+        cd playbooks/htc-execute-flavour
+        ```
+
+        #### 2.2. Checkout an specific Item's version
+        >⚠️ Make sure to replace `x.y.z` in the command below, with your version of preference.
+
+        ```bash
+        git checkout x.y.z
+        ```
+
+
+        #### 3. Download Ansible dependencies
+        >💡 By default, Ansible Roles are installed under the `~/.ansible/roles` directory within your working environment.
+
+        Download the correct version of the Ansible dependencies, if you haven't done so already:
+
+        ```
+        ansible-galaxy role install --force -r requirements.yml
+        ```
+
+        #### 4. Specify the target host and SSH credentials
+        Create an inventory file, to specify address/credentials that your local working environment should use
+        to connect to the target VM.
+
+        Copy into the file one of the two snippets below, and replace the placeholders (i.e. values enclosed in `<` `>` characters):
+
+        * **To connect within the EWC private network**
+
+          ```yaml
+          # inventory.yml
+          ---
+          ewcloud:
+            hosts:
+              target:
+                ansible_python_interpreter: auto
+                ansible_host: <add the PRIVATE IP address of the target host>
+                ansible_ssh_private_key_file: <add the path to local SSH private key file>
+                ansible_user: cloud-user
+                ansible_ssh_common_args: -o StrictHostKeyChecking=no
+          ```
+
+        **OR**
+
+        * **To connect from the public internet to a EWC public IP address**
+
+          ```yaml
+          # inventory.yml
+          ---
+          ewcloud:
+            hosts:
+              target:
+                ansible_python_interpreter: auto
+                ansible_host: <add the PUBLIC IP address of the target host>
+                ansible_ssh_private_key_file: <add the path to local SSH private key file>
+                ansible_user: cloud-user
+                ansible_ssh_common_args: -o StrictHostKeyChecking=no
+          ```
+
+        **OR**
+
+        *  **To connect from the public the public internet to a EWC private IP address**
+
+            > ⚠️ This requires an [SSH Bastion](https://europeanweather.cloud/community-hub/ssh-bastion-provisioning) to be already provisioned within your EWC tenancy.
+
+            ```yaml
+            # inventory.yml
+            ---
+            ewcloud:
+              hosts:
+                target:
+                  ansible_host: <add the PRIVATE IP address of the target host>
+                  ansible_ssh_user: cloud-user
+                  ansible_ssh_private_key_file: <add the path to local SSH private key file>
+                  ansible_python_interpreter: auto
+
+            all:
+              vars:
+                ansible_ssh_common_args: >-
+                  -o StrictHostKeyChecking=no
+                  -o UserKnownHostsFile=/dev/null
+                  -o ProxyCommand="ssh
+                                  -o StrictHostKeyChecking=no
+                                  -o UserKnownHostsFile=/dev/null
+                                  -o BatchMode=yes
+                                  -W %h:%p
+                                  -i <add the path to local SSH private key file>
+                                  cloud-user@<add the PUBLIC IP address of the SSH bastion>"
+
+            ```
+
+        #### 5. Configure and apply the template
+
+        * **Interactive Mode**
+
+          By running the following command, you can trigger an interactive session that
+          prompts you for the necessary user inputs, and then applies changes to your
+          target EWC environment:
+
+          ```bash
+          ansible-playbook -i inventory.yml htc-execute-flavour.yml
+          ```
+
+        **OR**
+
+
+        * **Non-Interactive Mode**
+
+          >💡 To learn more about defining variables at runtime, checkout the
+          [official Ansible documentation](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html).
+
+          You can also run in non-interactive mode by passing the
+          `--extra-vars` or `-e` flag, followed by a map of  key-value pairs; one for
+          each and every available input (see [inputs section](#inputs) below). For
+          example:
+
+          ```bash
+          ansible-playbook \
+            -i inventory.yml \
+              -e '{
+                "headscale_preauthkey":"<redacted>",
+                "headscale_login_server":"http://headscale.batchprocessing.eumetsat.ewcloud.host:80",
+                "htcondor_cm_external_ip":"100.64.0.32",
+                "htcondor_password":"<redacted>",
+                "harbor_auth_token":"<redacted>"
+              }' \
+            htc-execute-flavour.yml
+          ```
+
+        ## Inputs
+
+
+        | Name                        | Description                                                                                        | Type     | Default                                                           | Required |
+        | --------------------------- | ----------------------------------------------------------------------------------------------     | -------- | --------                                                          | :------: |
+        | headscale_login_server      | URI of the VPN server.                                                                             | `string` | `http://headscale.batchprocessing.eumetsat.ewcloud.host:80`       |    yes   |
+        | headscale_preauthkey        | Credentials of the VPN server.                                                                     | `string` | n/a                                                               |    yes   |
+        | htcondor_cm_external_ip     | IP Address of the HTCondor Manager node to which this submit node reports to.                      | `string` | `100.64.0.32`                                                     |    yes   |
+        | htcondor_password           | Password to authenticate against HTCondor Execute node pool                                        | `string` | n/a                                                               |    yes   |
+        | harbor_auth_token           | Token for authentication when pulling private container images from EWC Container registry         | `string` | n/a                                                               |    yes   |
+
+
+
+        ## Dependencies
+
+
+        > 💡 Upon execution, a SBOM (SPDX format) is auto-generated and stored in the VM's file system root directory (see /sbom.json).
+
+        | Name | Home URL |
+        |------|---------|
+        | ewc-ansible-role-htcondor-execute | https://github.com/ewcloud/ewc-ansible-role-htcondor-execute |
+
+
+        ## Operation
+
+        Checkout the following how-to guides to learn about usage of the Item after setup:
+        * [How to submit jobs](./docs/how-to/how-to-submit-jobs.md)
+
+
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/playbooks/htc-execute-flavour
+      sources:
+        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
+      maintainers:
+        - name: EWC Team
+          email: support@europeanweather.cloud
+          url: https://github.com/ewcloud/ewc-flavours/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/HTCondorLogo.png
+      annotations:
+        technology: "Ansible Playbook"
+        category: "Data Processing"
+        others: "Deployable,EWCCLI-compatible"
+        supportLevel: "EWC"
+        licenseType: "MIT License"
+      displayName: HTC Execute Flavour
+      summary: Enables users to contribute with VMs towards the shared resources pool of the EWC HTC Batch Processing service
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/LICENSE
+      published: true
+
+    htc-submit-flavour:
+      name: "htc-submit-flavour"
+      version: "1.11.2"
+      ewccli:
+        pathToRequirementsFile: playbooks/htc-submit-flavour/requirements.yml
+        pathToMainFile: playbooks/htc-submit-flavour/htc-submit-flavour.yml
+        inputs:
+          - name: headscale_login_server
+            description: URI of the VPN server.
+            type: str
+            default: http://headscale.batchprocessing.eumetsat.ewcloud.host:80
+          - name: headscale_preauthkey
+            description: Credentials of the VPN server.
+            type: str
+          - name: htcondor_cm_external_ip
+            description: IP Address of the HTCondor Manager node to which this submit node reports to.
+            type: str
+            default: 100.64.0.32
+          - name: htcondor_password
+            description: Password to authenticate against HTCondor Execute node pool
+            type: str
+      description: |
+        Many computational tasks in Earth Observation and environmental modelling apply the same processing algorithm independently across thousands or millions of input data items. These parallel tasks are best served by High Throughput Computing (HTC).
+
+        The [European Weather Cloud (EWC)](https://europeanweather.cloud/) provides a centrally-managed [EWC HTC Batch Processing](https://confluence.ecmwf.int/x/jRVkFQ) service based on [HTCondor](https://htcondor.readthedocs.io/en/latest/users-manual/quick-start-guide.html), a specialized workload-management system designed for compute-intensive jobs.
+
+        The principal advantage of this EWC service is access to a much larger, resource pool than any single tenant could provide alone. Capacity is drawn from:
+
+        1. Capacity made available by EWC itself
+        2. Spare VMs contributed by EWC tenants for shared usage (i.e. those configured by the [HTC Batch Processing Execute Flavour](../htc-execute-flavour/))
+
+        EWC users can submit jobs from their VMs. Jobs are placed in the queue, matched to available resources, executed, and results are returned to VM where the job was submitted from.
+
+        This template is EWC users wishing to configure their VMs as HTCondor Submit Nodes:
+
+        ![High Throughput Batch Processing Overview](https://raw.githubusercontent.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/refs/heads/main/playbooks/htc-submit-flavour/docs/images/htcondor-submit-node.png)
+
+
+        ## Functionality
+        The template is designed to:
+
+        * Configure a pre-existing virtual machine running RockyLinux, with private IP
+        address, and a minimum recommended 16GB of RAM, as:
+          * an HTCondor submit node, capable of dispatching jobs to any nodes enrolled into the EWC centrally-managed pool of shared compute resources
+
+        ## Prerequisites
+
+        * Request authorization keys:
+          * Write to EWC Support ([support@europeanweather.cloud](mailto:support@europeanweather.cloud)), making sure to provide your EWC tenancy name alongside your request for VPN and HTCondor access.
+        * Verify the `htcondor` OpenStack Security Group exists in your EWC tenancy
+          > 💡 You may create Security Groups via [this EWC Community Hub Item](https://europeanweather.cloud/community-hub/openstack-compute-instance) if pre-required ones are missing.
+
+        ## Usage
+
+        ### Deploy via EWCCLI
+
+        >⚠️ By default, deploying via EWCCLI is only possible from within your EWC private network. You may override by passing the `--external-ip` flag upon deployment. Caution is advised as this weakens security on the deployed VM.
+
+        #### 1. Setup working environment
+
+        ```bash
+        pip install ewccli
+        ```
+
+        #### 2. Configure access credentials
+
+        ```bash
+        ewc login
+        ```
+
+        #### 3. Deploy
+        >💡 To lean about EWCCLI deployment customization, checkout the [EWC User Stories: I want to use the ewccli](https://confluence.ecmwf.int/x/NlYiK) documentation pages.
+
+
+        ```bash
+        ewc hub deploy htc-submit-flavour
+        ```
+
+        ### Deploy via native tooling (Ansible)
+
+        #### 1. Setup working environment
+
+        * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
+        * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
+        * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
+        * If you plan to configure an existing VM, ensure it meets the minium requirements before proceeding:
+          * VM Image: RockyLinux 8 or 9
+          * VM Plan: 8 CPU cores, 32GB RAM, 30GB Disk
+          * Network: Private
+          * Security Groups: `htcondor`
+          * Floating IP: Optional (not recommended from a security standpoint)
+
+          Otherwise, provision a new VM with above specifications before continuing (see [EWC Getting Started: Provision a VM](https://confluence.ecmwf.int/x/2RvEJg) for details).
+
+
+        #### 2. Clone the repository
+
+        ```bash
+        git clone https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
+        ```
+
+        #### 2.1. Change to the specific Item's subdirectory
+
+        ```bash
+        cd playbooks/htc-submit-flavour
+        ```
+
+        #### 2.2. Checkout an specific Item's version
+        >⚠️ Make sure to replace `x.y.z` in the command below, with your version of preference.
+
+        ```bash
+        git checkout x.y.z
+        ```
+
+
+        #### 3. Download Ansible dependencies
+        >💡 By default, Ansible Roles are installed under the `~/.ansible/roles` directory within your working environment.
+
+        Download the correct version of the Ansible dependencies, if you haven't done so already:
+
+        ```
+        ansible-galaxy role install --force -r requirements.yml
+        ```
+
+        #### 4. Specify the target host and SSH credentials
+        Create an inventory file, to specify address/credentials that your local working environment should use
+        to connect to the target VM.
+
+        Copy into the file one of the two snippets below, and replace the placeholders (i.e. values enclosed in `<` `>` characters):
+
+        * **To connect within the EWC private network**
+
+          ```yaml
+          # inventory.yml
+          ---
+          ewcloud:
+            hosts:
+              target:
+                ansible_python_interpreter: auto
+                ansible_host: <add the PRIVATE IP address of the target host>
+                ansible_ssh_private_key_file: <add the path to local SSH private key file>
+                ansible_user: cloud-user
+                ansible_ssh_common_args: -o StrictHostKeyChecking=no
+          ```
+
+        **OR**
+
+        * **To connect from the public internet to a EWC public IP address**
+
+          ```yaml
+          # inventory.yml
+          ---
+          ewcloud:
+            hosts:
+              target:
+                ansible_python_interpreter: auto
+                ansible_host: <add the PUBLIC IP address of the target host>
+                ansible_ssh_private_key_file: <add the path to local SSH private key file>
+                ansible_user: cloud-user
+                ansible_ssh_common_args: -o StrictHostKeyChecking=no
+          ```
+
+        **OR**
+
+        *  **To connect from the public the public internet to a EWC private IP address**
+
+            > ⚠️ This requires an [SSH Bastion](https://europeanweather.cloud/community-hub/ssh-bastion-provisioning) to be already provisioned within your EWC tenancy.
+
+            ```yaml
+            # inventory.yml
+            ---
+            ewcloud:
+              hosts:
+                target:
+                  ansible_host: <add the PRIVATE IP address of the target host>
+                  ansible_ssh_user: cloud-user
+                  ansible_ssh_private_key_file: <add the path to local SSH private key file>
+                  ansible_python_interpreter: auto
+
+            all:
+              vars:
+                ansible_ssh_common_args: >-
+                  -o StrictHostKeyChecking=no
+                  -o UserKnownHostsFile=/dev/null
+                  -o ProxyCommand="ssh
+                                  -o StrictHostKeyChecking=no
+                                  -o UserKnownHostsFile=/dev/null
+                                  -o BatchMode=yes
+                                  -W %h:%p
+                                  -i <add the path to local SSH private key file>
+                                  cloud-user@<add the PUBLIC IP address of the SSH bastion>"
+
+            ```
+
+        #### 5. Configure and apply the template
+
+        * **Interactive Mode**
+
+          By running the following command, you can trigger an interactive session that
+          prompts you for the necessary user inputs, and then applies changes to your
+          target EWC environment:
+
+          ```bash
+          ansible-playbook -i inventory.yml htc-submit-flavour.yml
+          ```
+
+        **OR**
+
+
+        * **Non-Interactive Mode**
+
+          >💡 To learn more about defining variables at runtime, checkout the
+          [official Ansible documentation](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html).
+
+          You can also run in non-interactive mode by passing the
+          `--extra-vars` or `-e` flag, followed by a map of  key-value pairs; one for
+          each and every available input (see [inputs section](#inputs) below). For
+          example:
+
+          ```bash
+          ansible-playbook \
+            -i inventory.yml \
+              -e '{
+                "headscale_preauthkey":"<redacted>",
+                "headscale_login_server":"http://headscale.batchprocessing.eumetsat.ewcloud.host:80",
+                "htcondor_cm_external_ip":"100.64.0.32",
+                "htcondor_password":"<redacted>"
+              }' \
+            htc-submit-flavour.yml
+          ```
+
+        ## Inputs
+
+
+        | Name                        | Description                                                                                        | Type     | Default                                                           | Required |
+        | --------------------------- | ----------------------------------------------------------------------------------------------     | -------- | --------                                                          | :------: |
+        | headscale_login_server      | URI of the VPN server.                                                                             | `string` | `http://headscale.batchprocessing.eumetsat.ewcloud.host:80`       |    yes   |
+        | headscale_preauthkey        | Credentials of the VPN server.                                                                     | `string` | n/a                                                               |    yes   |
+        | htcondor_cm_external_ip     | IP Address of the HTCondor Manager node to which this submit node reports to.                      | `string` | `100.64.0.32`                                                     |    yes   |
+        | htcondor_password           | Password to authenticate against HTCondor Submit node pool                                        | `string` | n/a                                                               |    yes   |
+
+
+
+        ## Dependencies
+
+
+        > 💡 Upon execution, a SBOM (SPDX format) is auto-generated and stored in the VM's file system root directory (see /sbom.json).
+
+        | Name | Home URL |
+        |------|-------|
+        | ewc-ansible-role-htcondor-submit | https://github.com/ewcloud/ewc-ansible-role-htcondor-submit |
+
+
+        ## Operation
+
+        Checkout the following how-to guides to learn about usage of the Item after setup:
+        * [How to submit Bash jobs](./docs/how-to/how-to-submit-bash-jobs.md)
+        * [How to submit Docker jobs](./docs/how-to-submit-docker-jobs.md)
+        * [How to submit Singularity jobs](./docs/how-to-submit-singularity-jobs.md)
+
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/playbooks/htc-submit-flavour
+      sources:
+        - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
+      maintainers:
+        - name: EWC Team
+          email: support@europeanweather.cloud
+          url: https://github.com/ewcloud/ewc-flavours/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/HTCondorLogo.png
+      annotations:
+        technology: "Ansible Playbook"
+        category: "Data Processing"
+        others: "Deployable,EWCCLI-compatible"
+        supportLevel: "EWC"
+        licenseType: "MIT License"
+      displayName: HTC Execute Flavour
+      summary: Setups a workspace from where users can submit computation tasks onto the shared resource pool managed by EWC HTC Batch Processing service
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/LICENSE
       published: true
 
     ipa-client-enroll-flavour:
       name: "ipa-client-enroll-flavour"
-      version: "1.10.1"
+      version: "1.11.2"
       ewccli:
         pathToRequirementsFile: playbooks/ipa-client-enroll-flavour/requirements.yml
         pathToMainFile: playbooks/ipa-client-enroll-flavour/ipa-client-enroll-flavour.yml
@@ -2564,16 +3295,44 @@ spec:
         - Allow remote access to the VM using centrally managed LDAP users via password authentication.
 
         ## Prerequisites
-        > 💡 This Item is supported by the [EWCCLI](https://www.europeanweather.cloud/community-hub/ewc-cli)
-        and can be deployed, together with a compatible VM, via it. Checkout the [EWC User Stories: I want to use the ewccli](https://confluence.ecmwf.int/x/NlYiK) documentation pages to learn how.
+
+        * Verify the `ipa` OpenStack Security Group exists in your EWC tenancy
+          > 💡 You may create Security Groups via [this EWC Community Hub Item](https://europeanweather.cloud/community-hub/openstack-compute-instance) if pre-required ones are missing.
+
+        ## Usage
+
+        ### Deploy via EWCCLI
+
+        >⚠️ By default, deploying via EWCCLI is only possible from within your EWC private network. You may override by passing the `--external-ip` flag upon deployment. Caution is advised as this weakens security on the deployed VM.
+
+        #### 1. Setup working environment
+
+        ```bash
+        pip install ewccli
+        ```
+
+        #### 2. Configure access credentials
+
+        ```bash
+        ewc login
+        ```
+
+        #### 3. Deploy
+        >💡 To lean about EWCCLI deployment customization, checkout the [EWC User Stories: I want to use the ewccli](https://confluence.ecmwf.int/x/NlYiK) documentation pages.
+
+
+        ```bash
+        ewc hub deploy ipa-client-enroll-flavour
+        ```
+
+        ### Deploy via native tooling (Ansible)
+
+        #### 1. Setup working environment
 
         * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
         * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
         * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
-
-        * Verify the `ipa` OpenStack Security Group exists in your EWC tenancy
-          > 💡 You may create Security Groups via [this EWC Community Hub Item](https://europeanweather.cloud/community-hub/openstack-compute-instance) if pre-required ones are missing.
-        * If you plan to configure an existing VM, ensure it meets the minium requirements before moving on to the [Usage](#usage) section below:
+        * If you plan to configure an existing VM, ensure it meets the minium requirements before proceeding:
           * VM Image: Ubuntu or RockyLinux
           * VM Plan: 2 CPU cores, 4GB RAM, 40GB Disk
           * Network: Private
@@ -2582,29 +3341,26 @@ spec:
 
           Otherwise, provision a new VM with above specifications before continuing (see [EWC Getting Started: Provision a VM](https://confluence.ecmwf.int/x/2RvEJg) for details).
 
-
-        ## Usage
-
-        ### 1. Clone the repository
+        #### 2. Clone the repository
 
         ```bash
         git clone https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
         ```
 
-        #### 1.1. Change to the specific Item's subdirectory
+        #### 2.1. Change to the specific Item's subdirectory
 
         ```bash
         cd ewc-ansible-playbook-flavours-and-provisioning/playbooks/ipa-client-enroll-flavour
         ```
 
-        #### 1.2. Checkout an specific Item's version
+        #### 2.2. Checkout an specific Item's version
         >⚠️ Make sure to replace `x.y.z` in the command below, with your version of preference.
 
         ```bash
         git checkout x.y.z
         ```
 
-        ### 2. Download Ansible dependencies
+        #### 3. Download Ansible dependencies
         >💡 By default, Ansible Roles are installed under the `~/.ansible/roles` directory within your working environment.
 
         Download the correct version of the Ansible dependencies, if you haven't done so already:
@@ -2613,14 +3369,14 @@ spec:
         ansible-galaxy role install --force -r requirements.yml
         ```
 
-        ### 3. Specify the target host and SSH credentials
+        #### 4. Specify the target host and SSH credentials
 
         Create an inventory file, to specify address/credentials that your local working environment should use
         to connect to the target VM.
 
         Copy into the file one of the two snippets below, and replace the placeholders (i.e. values enclosed in `<` `>` characters):
 
-        * **Connecting form within the EWC tenancy's network**
+        * **To connect within the EWC private network**
 
           ```yaml
           # inventory.yml
@@ -2628,8 +3384,8 @@ spec:
           ewcloud:
             hosts:
               target:
-                ansible_python_interpreter: /usr/bin/python3
-                ansible_host: <add the IPV4 address of the target host>
+                ansible_python_interpreter: auto
+                ansible_host: <add the PRIVATE IP address of the target host>
                 ansible_ssh_private_key_file: <add the path to local SSH private key file>
                 ansible_user: <add the default user according to your chosen VM image>
                 ansible_ssh_common_args: -o StrictHostKeyChecking=no
@@ -2637,8 +3393,24 @@ spec:
 
         **OR**
 
+        * **To connect from the public internet to a EWC public IP address**
 
-        *  **Connecting from outside the EWC tenancy's network**
+          ```yaml
+          # inventory.yml
+          ---
+          ewcloud:
+            hosts:
+              target:
+                ansible_python_interpreter: auto
+                ansible_host: <add the PUBLIC IP address of the target host>
+                ansible_ssh_private_key_file: <add the path to local SSH private key file>
+                ansible_user: <add the default user according to your chosen VM image>
+                ansible_ssh_common_args: -o StrictHostKeyChecking=no
+          ```
+
+        **OR**
+
+        *  **To connect from the public the public internet to a EWC private IP address**
 
             > ⚠️ This requires an [SSH Bastion](https://europeanweather.cloud/community-hub/ssh-bastion-provisioning) to be already provisioned within your EWC tenancy.
 
@@ -2648,7 +3420,7 @@ spec:
             ewcloud:
               hosts:
                 target:
-                  ansible_host: <add the IP address of the target host>
+                  ansible_host: <add the PRIVATE IP address of the target host>
                   ansible_ssh_user: <add the default user according to your chosen VM image>
                   ansible_ssh_private_key_file: <add the path to local SSH private key file>
                   ansible_python_interpreter: auto
@@ -2664,10 +3436,10 @@ spec:
                                   -o BatchMode=yes
                                   -W %h:%p
                                   -i <add the path to local SSH private key file>
-                                  cloud-user@<add the IP address of the ssh bastion>"
+                                  cloud-user@<add the PUBLIC IP address of the SSH bastion>"
 
             ```
-        ### 4. Configure and apply the template
+        #### 5. Configure and apply the template
 
         * **Interactive Mode**
 
@@ -2720,7 +3492,7 @@ spec:
         |------|---------|
         | ewc-ansible-role-ipa-client-enroll | https://github.com/ewcloud/ewc-ansible-role-ipa-client-enroll |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/playbooks/ipa-client-enroll-flavour
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/playbooks/ipa-client-enroll-flavour
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -2736,12 +3508,12 @@ spec:
         licenseType: "MIT License"
       displayName: IPA Client Enroll Flavour
       summary: Seamlessly integrates a running VM into a FreeIPA-managed fleet of instances, enabling centralized user authentication, DNS resolution, and secure remote access for simplified and scalable identity management.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/LICENSE
       published: true
 
     ipa-client-disenroll-flavour:
       name: "ipa-client-disenroll-flavour"
-      version: "1.10.1"
+      version: "1.11.2"
       ewccli:
         pathToMainFile: playbooks/ipa-client-disenroll-flavour/ipa-client-disenroll-flavour.yml
         pathToRequirementsFile: playbooks/ipa-client-disenroll-flavour/requirements.yml
@@ -2789,34 +3561,39 @@ spec:
 
         ## Prerequisites
 
-        * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
-        * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
-        * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
         * Verify the IP address of the existing VM already enrolled into your IPA Server.
         * Verify your SSH access to the exiting VM (i.e. your public SSH key must be registered on the target machine)
 
         ## Usage
 
-        ### 1. Clone the repository
+        ### Deploy via native tooling (Ansible)
+
+        #### 1. Setup working environment
+
+        * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
+        * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
+        * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
+
+        #### 2. Clone the repository
 
         ```bash
         git clone https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
         ```
 
-        #### 1.1. Change to the specific Item's subdirectory
+        #### 2.1. Change to the specific Item's subdirectory
 
         ```bash
         cd ewc-ansible-playbook-flavours-and-provisioning/playbooks/ipa-client-disenroll-flavour
         ```
 
-        #### 1.2. Checkout an specific Item's version
+        #### 2.2. Checkout an specific Item's version
         >⚠️ Make sure to replace `x.y.z` in the command below, with your version of preference.
 
         ```bash
         git checkout x.y.z
         ```
 
-        ### 2. Download Ansible dependencies
+        #### 3. Download Ansible dependencies
         >💡 By default, Ansible Roles are installed under the `~/.ansible/roles` directory within your working environment.
 
         Download the correct version of the Ansible dependencies, if you haven't done so already:
@@ -2825,7 +3602,7 @@ spec:
         ansible-galaxy role install --force -r requirements.yml
         ```
 
-        ### 3. Specify the target host and SSH credentials
+        #### 4. Specify the target host and SSH credentials
         >💡 To find out which is the default user for your chosen VM image,
         checkout the [official EWC documentation](https://confluence.ecmwf.int/x/USRNH#EWCOpenStackAPIaccessVMimagesanddefaultusers-Defaultusers).
 
@@ -2834,7 +3611,7 @@ spec:
 
         Copy into the file one of the two snippets below, and replace the placeholders (i.e. values enclosed in `<` `>` characters):
 
-        * **Connecting form within the EWC tenancy's network**
+        * **To connect within the EWC private network**
 
           ```yaml
           # inventory.yml
@@ -2842,8 +3619,8 @@ spec:
           ewcloud:
             hosts:
               target:
-                ansible_python_interpreter: /usr/bin/python3
-                ansible_host: <add the IPV4 address of the target host>
+                ansible_python_interpreter: auto
+                ansible_host: <add the PRIVATE IP address of the target host>
                 ansible_ssh_private_key_file: <add the path to local SSH private key file>
                 ansible_user: <add the default user according to your chosen VM image>
                 ansible_ssh_common_args: -o StrictHostKeyChecking=no
@@ -2852,8 +3629,24 @@ spec:
 
         **OR**
 
+        * **To connect from the public internet to a EWC public IP address**
 
-        *  **Connecting from outside the EWC tenancy's network**
+          ```yaml
+          # inventory.yml
+          ---
+          ewcloud:
+            hosts:
+              target:
+                ansible_python_interpreter: auto
+                ansible_host: <add the PUBLIC IP address of the target host>
+                ansible_ssh_private_key_file: <add the path to local SSH private key file>
+                ansible_user: <add the default user according to your chosen VM image>
+                ansible_ssh_common_args: -o StrictHostKeyChecking=no
+          ```
+
+        **OR**
+
+        *  **To connect from the public the public internet to a EWC private IP address**
 
             > ⚠️ This requires an [SSH Bastion](https://europeanweather.cloud/community-hub/ssh-bastion-provisioning) to be already provisioned within your EWC tenancy.
 
@@ -2863,7 +3656,7 @@ spec:
             ewcloud:
               hosts:
                 target:
-                  ansible_host: <add the IP address of the target host>
+                  ansible_host: <add the PRIVATE IP address of the target host>
                   ansible_ssh_user: <add the default user according to your chosen VM image>
                   ansible_ssh_private_key_file: <add the path to local SSH private key file>
                   ansible_python_interpreter: auto
@@ -2879,12 +3672,12 @@ spec:
                                   -o BatchMode=yes
                                   -W %h:%p
                                   -i <add the path to local SSH private key file>
-                                  cloud-user@<add the IP address of the ssh bastion>"
+                                  cloud-user@<add the PUBLIC IP address of the SSH bastion>"
 
             ```
 
 
-        ### 4. Configure and apply the template
+        #### 5. Configure and apply the template
 
         * **Interactive Mode**
 
@@ -2939,7 +3732,7 @@ spec:
         |------|---------|
         | ewc-ansible-role-ipa-client-disenroll | https://github.com/ewcloud/ewc-ansible-role-ipa-client-disenroll |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/playbooks/ipa-client-disenroll-flavour
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/playbooks/ipa-client-disenroll-flavour
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -2955,12 +3748,12 @@ spec:
         licenseType: "MIT License"
       displayName: IPA Client Disenroll Flavour
       summary: Simplifies the secure removal of a running VM from a FreeIPA-managed fleet of instances, reducing administrative overhead and enhancing security by eliminating stale credentials and DNS records.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/LICENSE
       published: true
 
     ipa-client-provisioning:
       name: "ipa-client-provisioning"
-      version: "1.10.1"
+      version: "1.11.2"
       description: |
         >✅ This template can be applied from any local work environment, even running outside an EWC tenancy's private network.
 
@@ -3111,7 +3904,7 @@ spec:
         Checkout the [troubleshooting documentation](../docs/troubleshooting.md) for
         information on common problems and how to troubleshoot them.
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/playbooks/ipa-client-provisioning
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/playbooks/ipa-client-provisioning
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -3127,12 +3920,12 @@ spec:
         licenseType: "MIT License"
       displayName: IPA Client Provisioning
       summary: Automates the creation or state update of a VM, plus its configuration as an IPA client, effectively enabling integration with a fleet of instances with centralized authentication, secure remote access, and DNS-based resource discovery in the EWC.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/LICENSE
       published: true
 
     ipa-client-teardown:
       name: "ipa-client-teardown"
-      version: "1.10.1"
+      version: "1.11.2"
       description: |
         >✅ This template can be safely applied from any local work environment, even running outside an EWC tenancy's private network.
 
@@ -3258,7 +4051,7 @@ spec:
         Checkout the [troubleshooting documentation](../docs/troubleshooting.md) for
         information on common problems and how to troubleshoot them.
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/playbooks/ipa-client-teardown
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/playbooks/ipa-client-teardown
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -3274,12 +4067,12 @@ spec:
         licenseType: "MIT License"
       displayName: IPA Client Teardown
       summary: Simplifies the secure teardown of an IPA client VM in the EWC, disabling LDAP authentication, removing DNS records, and safely decommissioning the instance and its resources.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/LICENSE
       published: true
 
     ipa-server-flavour:
       name: "ipa-server-flavour"
-      version: "1.10.1"
+      version: "1.11.2"
       ewccli:
         defaultImageName: Rocky-9
         pathToRequirementsFile: playbooks/ipa-server-flavour/requirements.yml
@@ -3360,16 +4153,93 @@ spec:
 
         ## Prerequisites
 
-        > 💡 This Item is supported by the [EWCCLI](https://www.europeanweather.cloud/community-hub/ewc-cli),
-        and can be deployed, together with a compatible VM, via it. Checkout the [EWC User Stories: I want to use the ewccli](https://confluence.ecmwf.int/x/NlYiK) documentation pages to learn how.
+        * Verify the `ipa` OpenStack Security Group exists in your EWC tenancy
+          > 💡 You may create Security Groups via [this EWC Community Hub Item](https://europeanweather.cloud/community-hub/openstack-compute-instance) if pre-required ones are missing.
+
+        ## Post-deployment
+
+        ### Manually update DNS nameserver(s)
+
+        >⛔ Changes described in this section can potentially affect DNS resolution on existing VMs within your subnet. To prevent issues, enroll them to the new IPA server via the
+        [IPA Client Enroll Flavour](https://europeanweather.cloud/community-hub/ipa-client-enroll-flavour)
+        CommunityHub Item, OR manually [edit nameservers in their DNS configuration](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/6/html/identity_management_guide/domain-dns).
+
+        Manual changes to your OpenStack subnet are required for IPA to be fully enabled.
+
+        #### 1. Note down the private IP address of the VM newly configured as IPA server
+
+        The IP address may already be in your `inventory.yml` file, or in the logs of your VM deployment method of choice otherwise. You can also obtain it via OpenStack CLI or find it by exploring VMs via the UI.
+
+        For illustration purposes, supposes it IP is `10.0.0.53`.
+
+
+        #### 2. Ensure the IPA server's IP address is part of the list of subnet DSN nameservers
+
+          * **Via [EWC Cloud Management UI](https://confluence.ecmwf.int/x/KnAEJQ)**
+            1. Click on `Project > Network > Networks`.
+            2. A table will be displayed in on the middle of the view port, listing available networks. Click on network name.
+            3. Click on the `Subnets` tab.
+            4. A new table will be displayed in on the middle of the view port, this time listing the available subnets. Click on `Edit Subnet`, on the same row where the correct subnet is listed.
+            5. Within the pop-up edit form, click on `Subnet Details`
+            6. Replace the contents of the `DNS Name Servers` entry with the IP of your new IPA server, for example:
+
+                <img src="https://raw.githubusercontent.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/main/playbooks/ipa-server-flavour/docs/images/horinzon-ui-dns-name-servers.jpg" height=600px>
+
+            7. Click on `Save`
+
+          **OR**
+
+          * **Via [OpenStack CLI](pypi.org/project/python-openstackclient/)**
+
+            Following the example in the prior step and assuming the subnet name `private-subnet`, then we would execute:
+
+            ```bash
+            openstack subnet set --dns-nameserver 10.0.0.53 private-subnet
+            ```
+
+            Supposing the two additional IP address, `1.1.1.1` and `8.8.8.8`, are still part of the DNS nameservers list, you can remove then with:
+
+            ```bash
+            openstack subnet unset --dns-nameserver 1.1.1.1 private-subnet
+            ```
+            ```bash
+            openstack subnet unset --dns-nameserver 8.8.8.8 private-subnet
+            ```
+
+        ## Usage
+
+        ### Deploy via EWCCLI
+
+        >⚠️ By default, deploying via EWCCLI is only possible from within your EWC private network. You may override by passing the `--external-ip` flag upon deployment. Caution is advised as this weakens security on the deployed VM.
+
+        #### 1. Setup working environment
+
+        ```bash
+        pip install ewccli
+        ```
+
+        #### 2. Configure access credentials
+
+        ```bash
+        ewc login
+        ```
+
+        #### 3. Deploy
+        >💡 To lean about EWCCLI deployment customization, checkout the [EWC User Stories: I want to use the ewccli](https://confluence.ecmwf.int/x/NlYiK) documentation pages.
+
+
+        ```bash
+        ewc hub deploy ipa-server-flavour
+        ```
+
+        ### Deploy via native tooling (Ansible)
+
+        #### 1. Setup working environment
 
         * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
         * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
         * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
-
-        * Verify the `ipa` OpenStack Security Group exists in your EWC tenancy
-          > 💡 You may create Security Groups via [this EWC Community Hub Item](https://europeanweather.cloud/community-hub/openstack-compute-instance) if pre-required ones are missing.
-        * If you plan to configure an existing VM, ensure it meets the minium requirements before moving on to the [Usage](#usage) section below:
+        * If you plan to configure an existing VM, ensure it meets the minium requirements before proceeding:
           * VM Image: RockyLinux 9 or 8
           * VM Plan: 4 CPU cores, 4GB RAM, 30GB Disk
           * Network: Private
@@ -3378,28 +4248,26 @@ spec:
 
           Otherwise, provision a new VM with above specifications before continuing (see [EWC Getting Started: Provision a VM](https://confluence.ecmwf.int/x/2RvEJg) for details).
 
-        ## Usage
-
-        ### 1. Clone the repository
+        #### 2. Clone the repository
 
         ```bash
         git clone https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
         ```
 
-        #### 1.1. Change to the specific Item's subdirectory
+        #### 2.1. Change to the specific Item's subdirectory
 
         ```bash
         cd ewc-ansible-playbook-flavours-and-provisioning/playbooks/ipa-server-flavour
         ```
 
-        #### 1.2. Checkout an specific Item's version
+        #### 2.2. Checkout an specific Item's version
         >⚠️ Make sure to replace `x.y.z` in the command below, with your version of preference.
 
         ```bash
         git checkout x.y.z
         ```
 
-        ### 2. Download Ansible dependencies
+        #### 3. Download Ansible dependencies
         >💡 By default, Ansible Roles are installed under the `~/.ansible/roles` directory within your working environment.
 
         Download the correct version of the Ansible dependencies, if you haven't done so already:
@@ -3408,13 +4276,13 @@ spec:
         ansible-galaxy role install --force -r requirements.yml
         ```
 
-        ### 3. Specify the target host and SSH credentials
+        #### 4. Specify the target host and SSH credentials
         Create an inventory file, to specify address/credentials that your local working environment should use
         to connect to the target VM.
 
         Copy into the file one of the two snippets below, and replace the placeholders (i.e. values enclosed in `<` `>` characters):
 
-        * **Connecting form within the EWC tenancy's network**
+        * **To connect within the EWC private network**
 
           ```yaml
           # inventory.yml
@@ -3423,7 +4291,7 @@ spec:
             hosts:
               target:
                 ansible_python_interpreter: auto
-                ansible_host: <add the IP address of the target host>
+                ansible_host: <add the PRIVATE IP address of the target host>
                 ansible_ssh_private_key_file: <add the path to local SSH private key file>
                 ansible_user: cloud-user
                 ansible_ssh_common_args: -o StrictHostKeyChecking=no
@@ -3431,8 +4299,24 @@ spec:
 
         **OR**
 
+        * **To connect from the public internet to a EWC public IP address**
 
-        *  **Connecting from outside the EWC tenancy's network**
+        ```yaml
+          # inventory.yml
+          ---
+          ewcloud:
+            hosts:
+              target:
+                ansible_python_interpreter: auto
+                ansible_host: <add the PUBLIC IP address of the target host>
+                ansible_ssh_private_key_file: <add the path to local SSH private key file>
+                ansible_user: cloud-user
+                ansible_ssh_common_args: -o StrictHostKeyChecking=no
+          ```
+
+        **OR**
+
+        *  **To connect from the public the public internet to a EWC private IP address**
 
             > ⚠️ This requires an [SSH Bastion](https://europeanweather.cloud/community-hub/ssh-bastion-provisioning) to be already provisioned within your EWC tenancy.
 
@@ -3442,7 +4326,7 @@ spec:
             ewcloud:
               hosts:
                 target:
-                  ansible_host: <add the IP address of the target host>
+                  ansible_host: <add the PRIVATE IP address of the target host>
                   ansible_ssh_user: cloud-user
                   ansible_ssh_private_key_file: <add the path to local SSH private key file>
                   ansible_python_interpreter: auto
@@ -3458,11 +4342,11 @@ spec:
                                   -o BatchMode=yes
                                   -W %h:%p
                                   -i <add the path to local SSH private key file>
-                                  cloud-user@<add the IP address of the ssh bastion>"
+                                  cloud-user@<add the PUBLIC IP address of the SSH bastion>"
 
             ```
 
-        ### 4. Configure and apply the template
+        #### 5. Configure and apply the template
 
         * **Interactive Mode**
 
@@ -3503,53 +4387,7 @@ spec:
             ipa-server-flavour.yml
           ```
 
-        ### 5. Manually update DNS nameserver(s)
 
-        >⛔ Changes described in this section can potentially affect DNS resolution on existing VMs within your subnet. To prevent issues, enroll them to the new IPA server via the
-        [IPA Client Enroll Flavour](https://europeanweather.cloud/community-hub/ipa-client-enroll-flavour)
-        CommunityHub Item, OR manually [edit nameservers in their DNS configuration](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/6/html/identity_management_guide/domain-dns).
-
-        Manual changes to your OpenStack subnet are required for IPA to be fully enabled.
-
-        **Step 1: Note down the private IP address of the VM newly configured as IPA server**
-
-        The IP address may already be in your `inventory.yml` file, or in the logs of your VM deployment method of choice otherwise. You can also obtain it via OpenStack CLI or find it by exploring VMs via the UI.
-
-        For illustration purposes, supposes it IP is `10.0.0.53`.
-
-
-        **Step 2: Ensure the IPA server's IP address is part of the list of subnet DSN nameservers**
-
-          * **Via [EWC Cloud Management UI](https://confluence.ecmwf.int/x/KnAEJQ)**
-            1. Click on `Project > Network > Networks`.
-            2. A table will be displayed in on the middle of the view port, listing available networks. Click on network name.
-            3. Click on the `Subnets` tab.
-            4. A new table will be displayed in on the middle of the view port, this time listing the available subnets. Click on `Edit Subnet`, on the same row where the correct subnet is listed.
-            5. Within the pop-up edit form, click on `Subnet Details`
-            6. Replace the contents of the `DNS Name Servers` entry with the IP of your new IPA server, for example:
-
-                <img src="https://raw.githubusercontent.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/main/playbooks/ipa-server-flavour/docs/images/horinzon-ui-dns-name-servers.jpg" height=600px>
-
-            7. Click on `Save`
-
-          **OR**
-
-          * **Via [OpenStack CLI](pypi.org/project/python-openstackclient/)**
-
-            Following the example in the prior step and assuming the subnet name `private-subnet`, then we would execute:
-
-            ```bash
-            openstack subnet set --dns-nameserver 10.0.0.53 private-subnet
-            ```
-
-            Supposing the two additional IP address, `1.1.1.1` and `8.8.8.8`, are still part of the DNS nameservers list, you can remove then with:
-
-            ```bash
-            openstack subnet unset --dns-nameserver 1.1.1.1 private-subnet
-            ```
-            ```bash
-            openstack subnet unset --dns-nameserver 8.8.8.8 private-subnet
-            ```
 
 
 
@@ -3578,7 +4416,7 @@ spec:
         Checkout the following how-to guides to learn about management of the Item after initial setup:
         * [How to configure the IPA Server](./docs/how-to/how-to-configure-the-ipa-server.md)
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/playbooks/ipa-server-flavour
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/playbooks/ipa-server-flavour
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -3594,12 +4432,12 @@ spec:
         licenseType: "MIT License"
       displayName: IPA Server Flavour
       summary: Turns an existing VM into a FreeIPA server, a central place for user authentication, authorization, and DNS-based resource discovery for secure and efficient identity management.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/LICENSE
       published: true
 
     ipa-server-provisioning:
       name: "ipa-server-provisioning"
-      version: "1.10.1"
+      version: "1.11.2"
       description: |
         >✅ This template can be safely applied from any local work environment, even running outside an EWC tenancy's private network.
 
@@ -3771,7 +4609,7 @@ spec:
         Checkout the [troubleshooting documentation](../../docs/troubleshooting.md) for
         information on common problems and how to troubleshoot them.
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/playbooks/ipa-server-provisioning
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/playbooks/ipa-server-provisioning
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -3787,7 +4625,7 @@ spec:
         licenseType: "MIT License"
       displayName: IPA Server Provisioning
       summary: Automates the creation or state update of VM, plus its configuration as FreeIPA server, streamlining centralized user management, authentication, authorization, and DNS resolution for secure and efficient resource management.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/LICENSE
       published: true
 
     jupyterhub-flavour:
@@ -3989,16 +4827,45 @@ spec:
 
         ## Prerequisites
 
-        > 💡 This Item is supported by the [EWCCLI](https://www.europeanweather.cloud/community-hub/ewc-cli),
-        and can be deployed, together with a compatible VM, via it. Checkout the [EWC User Stories: I want to use the ewccli](https://confluence.ecmwf.int/x/NlYiK) documentation pages to learn how.
+        > ⛔ When deploying on ECMWF site, network traffic required by this Item may be blocked due to ECMWF Firewall. Please get in touch with us through the [EWC Support portal](https://support.europeanweather.cloud/).
+
+        * Verify the `nginx-proxy-manager` OpenStack Security Group exists in your EWC tenancy
+          > 💡 You may create Security Groups via [this EWC Community Hub Item](https://europeanweather.cloud/community-hub/openstack-compute-instance) if pre-required ones are missing.
+
+        ## Usage
+
+        ### Deploy via EWCCLI
+
+        >⚠️ By default, deploying via EWCCLI is only possible from within your EWC private network. You may override by passing the `--external-ip` flag upon deployment. Caution is advised as this weakens security on the deployed VM.
+
+        #### 1. Setup working environment
+
+        ```bash
+        pip install ewccli
+        ```
+
+        #### 2. Configure access credentials
+
+        ```bash
+        ewc login
+        ```
+
+        #### 3. Deploy
+        >💡 To lean about EWCCLI deployment customization, checkout the [EWC User Stories: I want to use the ewccli](https://confluence.ecmwf.int/x/NlYiK) documentation pages.
+
+
+        ```bash
+        ewc hub deploy nginx-proxy-manager-flavour
+        ```
+
+        ### Deploy via native tooling (Ansible)
+
+        #### 1. Setup working environment
 
         * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
         * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
         * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
-
-        * Verify the `nginx-proxy-manager` OpenStack Security Group exists in your EWC tenancy
-          > 💡 You may create Security Groups via [this EWC Community Hub Item](https://europeanweather.cloud/community-hub/openstack-compute-instance) if pre-required ones are missing.
-        * If you plan to configure an existing VM, ensure it meets the minium requirements before moving on to the [Usage](#usage) section below:
+        * If you plan to configure an existing VM, ensure it meets the minium requirements before proceeding:
           * VM Image: Ubuntu 24 or 22
           * VM Plan: 4 CPU cores, 8GB RAM, 40GB Disk
           * Network: Private
@@ -4007,29 +4874,26 @@ spec:
 
           Otherwise, provision a new VM with above specifications before continuing (see [EWC Getting Started: Provision a VM](https://confluence.ecmwf.int/x/2RvEJg) for details).
 
-
-        ## Usage
-
-        ### 1. Clone the repository
+        #### 2. Clone the repository
 
         ```bash
         git clone https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
         ```
 
-        #### 1.1. Change to the specific Item's subdirectory
+        #### 2.1. Change to the specific Item's subdirectory
 
         ```bash
         cd ewc-ansible-playbook-flavours-and-provisioning/playbooks/nginx-proxy-manager-flavour
         ```
 
-        #### 1.2. Checkout an specific Item's version
+        #### 2.2. Checkout an specific Item's version
         >⚠️ Make sure to replace `x.y.z` in the command below, with your version of preference.
 
         ```bash
         git checkout x.y.z
         ```
 
-        ### 2. Download Ansible dependencies
+        #### 3. Download Ansible dependencies
         >💡 By default, Ansible Roles are installed under the `~/.ansible/roles` directory within your working environment.
 
         Download the correct version of the Ansible dependencies, if you haven't done so already:
@@ -4038,13 +4902,13 @@ spec:
         ansible-galaxy role install --force -r requirements.yml
         ```
 
-        ### 3. Specify the target host and SSH credentials
+        #### 4. Specify the target host and SSH credentials
         Create an inventory file, to specify address/credentials that your local working environment should use
         to connect to the target VM.
 
         Copy into the file one of the two snippets below, and replace the placeholders (i.e. values enclosed in `<` `>` characters):
 
-        * **Connecting form within the EWC tenancy's network**
+        * **To connect within the EWC private network**
 
           ```yaml
           # inventory.yml
@@ -4052,8 +4916,8 @@ spec:
           ewcloud:
             hosts:
               target:
-                ansible_python_interpreter: /usr/bin/python3
-                ansible_host: <add the IPV4 address of the target host>
+                ansible_python_interpreter: auto
+                ansible_host: <add the PRIVATE IP address of the target host>
                 ansible_ssh_private_key_file: <add the path to local SSH private key file>
                 ansible_user: ubuntu
                 ansible_ssh_common_args: -o StrictHostKeyChecking=no
@@ -4061,8 +4925,24 @@ spec:
 
         **OR**
 
+        * **To connect from the public internet to a EWC public IP address**
 
-        *  **Connecting from outside the EWC tenancy's network**
+        ```yaml
+          # inventory.yml
+          ---
+          ewcloud:
+            hosts:
+              target:
+                ansible_python_interpreter: auto
+                ansible_host: <add the PUBLIC IP address of the target host>
+                ansible_ssh_private_key_file: <add the path to local SSH private key file>
+                ansible_user: ubuntu
+                ansible_ssh_common_args: -o StrictHostKeyChecking=no
+          ```
+
+        **OR**
+
+        *  **To connect from the public the public internet to a EWC private IP address**
 
             > ⚠️ This requires an [SSH Bastion](https://europeanweather.cloud/community-hub/ssh-bastion-provisioning) to be already provisioned within your EWC tenancy.
 
@@ -4072,7 +4952,7 @@ spec:
             ewcloud:
               hosts:
                 target:
-                  ansible_host: <add the IP address of the target host>
+                  ansible_host: <add the PRIVATE IP address of the target host>
                   ansible_ssh_user: ubuntu
                   ansible_ssh_private_key_file: <add the path to local SSH private key file>
                   ansible_python_interpreter: auto
@@ -4088,11 +4968,11 @@ spec:
                                   -o BatchMode=yes
                                   -W %h:%p
                                   -i <add the path to local SSH private key file>
-                                  cloud-user@<add the IP address of the ssh bastion>"
+                                  cloud-user@<add the PUBLIC IP address of the SSH bastion>"
 
             ```
 
-        ### 4. Configure and apply the template
+        #### 5. Configure and apply the template
 
         * **Interactive Mode**
 
@@ -4124,7 +5004,6 @@ spec:
           ```
 
         ## Inputs
-        > ⛔ If deploying to an instance on the ECMWF site, using a high port numbers such as in the example above will prevent you from accessing the Nginx Proxy Manager UI from the pubic internet, even when a valid security group is attached to the instance. This is due to the outer perimeter firewall of the ECMWF site. For details see [EWC Security guidelines - Restrictive firewall (allow-listing)](https://confluence.ecmwf.int/x/o4DlFg#EWCSecurityguidelines-Restrictivefirewall(allow-listing)).
 
         | Name | Description | Type | Default | Required |
         |------|-------------|------|---------|:--------:|
@@ -4147,9 +5026,9 @@ spec:
         * [How to create/modify an access list](./docs/how-to/how-to-create-modify-an-access-list.md)
 
       displayName: Nginx Proxy Manager
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/tree/1.10.1/playbooks/nginx-proxy-manager-flavour
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/tree/1.11.2/playbooks/nginx-proxy-manager-flavour
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/LICENSE
       maintainers:
         - name: EWC Team
           email: support@europeanweather.cloud
@@ -4173,7 +5052,7 @@ spec:
         ansibleUser: ubuntu
         pathToMainFile: playbooks/nginx-proxy-manager-flavour/nginx-proxy-manager-flavour.yml
         pathToRequirementsFile: playbooks/nginx-proxy-manager-flavour/requirements.yml
-      version: "1.10.1"
+      version: "1.11.2"
 
     nwcsaf-datacube-xarray:
       name: "nwcsaf-datacube-xarray"
@@ -4791,7 +5670,7 @@ spec:
 
     remote-desktop-flavour:
       name: "remote-desktop-flavour"
-      version: "1.10.1"
+      version: "1.11.2"
       ewccli:
         defaultImageName: Rocky-9
         pathToRequirementsFile: playbooks/remote-desktop-flavour/requirements.yml
@@ -4836,16 +5715,43 @@ spec:
 
         ## Prerequisites
 
-        > 💡 This Item is supported by the [EWCCLI](https://www.europeanweather.cloud/community-hub/ewc-cli),
-        and can be deployed, together with a compatible VM, via it. Checkout the [EWC User Stories: I want to use the ewccli](https://confluence.ecmwf.int/x/NlYiK) documentation pages to learn how.
+        * Verify the `ssh-https` OpenStack Security Group exists in your EWC tenancy
+          > 💡 You may create Security Groups via [this EWC Community Hub Item](https://europeanweather.cloud/community-hub/openstack-compute-instance) if pre-required ones are missing.
+
+        ## Usage
+
+        ### Deploy via EWCCLI
+
+        >⚠️ By default, deploying via EWCCLI is only possible from within your EWC private network. You may override by passing the `--external-ip` flag upon deployment. Caution is advised as this weakens security on the deployed VM.
+
+        #### 1. Setup working environment
+
+        ```bash
+        pip install ewccli
+        ```
+
+        #### 2. Configure access credentials
+
+        ```bash
+        ewc login
+        ```
+
+        #### 3. Deploy
+        >💡 To lean about EWCCLI deployment customization, checkout the [EWC User Stories: I want to use the ewccli](https://confluence.ecmwf.int/x/NlYiK) documentation pages.
+
+
+        ```bash
+        ewc hub deploy remote-desktop-flavour
+        ```
+
+        ### Deploy via native tooling (Ansible)
+
+        #### 1. Setup working environment
 
         * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
         * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
         * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
-
-        * Verify the `ssh-https` OpenStack Security Group exists in your EWC tenancy
-          > 💡 You may create Security Groups via [this EWC Community Hub Item](https://europeanweather.cloud/community-hub/openstack-compute-instance) if pre-required ones are missing.
-        * If you plan to configure an existing VM, ensure it meets the minium requirements before moving on to the [Usage](#usage) section below:
+        * If you plan to configure an existing VM, ensure it meets the minium requirements before proceeding:
           * VM Image: RockyLinux 8 or 9
           * VM Plan: 4 CPU cores, 4GB RAM, 30GB Disk
           * Network: Private
@@ -4854,22 +5760,19 @@ spec:
 
           Otherwise, provision a new VM with above specifications before continuing (see [EWC Getting Started: Provision a VM](https://confluence.ecmwf.int/x/2RvEJg) for details).
 
-
-        ## Usage
-
-        ### 1. Clone the repository
+        #### 2. Clone the repository
 
         ```bash
         git clone https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
         ```
 
-        #### 1.1. Change to the specific Item's subdirectory
+        #### 2.1. Change to the specific Item's subdirectory
 
         ```bash
         cd ewc-ansible-playbook-flavours-and-provisioning/playbooks/remote-desktop-flavour
         ```
 
-        #### 1.2. Checkout an specific Item's version
+        #### 2.2. Checkout an specific Item's version
         >⚠️ Make sure to replace `x.y.z` in the command below, with your version of preference.
 
         ```bash
@@ -4877,7 +5780,7 @@ spec:
         ```
 
 
-        ### 2. Download Ansible dependencies
+        #### 3. Download Ansible dependencies
         >💡 By default, Ansible Roles are installed under the `~/.ansible/roles` directory within your working environment.
 
         Download the correct version of the Ansible dependencies, if you haven't done so already:
@@ -4886,13 +5789,13 @@ spec:
         ansible-galaxy role install --force -r requirements.yml
         ```
 
-        ### 3. Specify the target host and SSH credentials
+        #### 4. Specify the target host and SSH credentials
         Create an inventory file, to specify address/credentials that your local working environment should use
         to connect to the target VM.
 
         Copy into the file one of the two snippets below, and replace the placeholders (i.e. values enclosed in `<` `>` characters):
 
-        * **Connecting form within the EWC tenancy's network**
+        * **To connect within the EWC private network**
 
           ```yaml
           # inventory.yml
@@ -4901,7 +5804,7 @@ spec:
             hosts:
               target:
                 ansible_python_interpreter: auto
-                ansible_host: <add the IP address of the target host>
+                ansible_host: <add the PRIVATE IP address of the target host>
                 ansible_ssh_private_key_file: <add the path to local SSH private key file>
                 ansible_user: cloud-user
                 ansible_ssh_common_args: -o StrictHostKeyChecking=no
@@ -4909,7 +5812,24 @@ spec:
 
         **OR**
 
-        *  **Connecting from outside the EWC tenancy's network**
+        * **To connect from the public internet to a EWC public IP address**
+
+        ```yaml
+          # inventory.yml
+          ---
+          ewcloud:
+            hosts:
+              target:
+                ansible_python_interpreter: auto
+                ansible_host: <add the PUBLIC IP address of the target host>
+                ansible_ssh_private_key_file: <add the path to local SSH private key file>
+                ansible_user: cloud-user
+                ansible_ssh_common_args: -o StrictHostKeyChecking=no
+          ```
+
+        **OR**
+
+        *  **To connect from the public the public internet to a EWC private IP address**
 
             > ⚠️ This requires an [SSH Bastion](https://europeanweather.cloud/community-hub/ssh-bastion-provisioning) to be already provisioned within your EWC tenancy.
 
@@ -4919,7 +5839,7 @@ spec:
             ewcloud:
               hosts:
                 target:
-                  ansible_host: <add the IP address of the target host>
+                  ansible_host: <add the PRIVATE IP address of the target host>
                   ansible_ssh_user: cloud-user
                   ansible_ssh_private_key_file: <add the path to local SSH private key file>
                   ansible_python_interpreter: auto
@@ -4935,12 +5855,12 @@ spec:
                                   -o BatchMode=yes
                                   -W %h:%p
                                   -i <add the path to local SSH private key file>
-                                  cloud-user@<add the IP address of the ssh bastion>"
+                                  cloud-user@<add the PUBLIC IP address of the SSH bastion>"
 
             ```
 
 
-        ### 4. Configure and apply the template
+        #### 5. Configure and apply the template
 
         * **Interactive Mode**
 
@@ -5001,7 +5921,7 @@ spec:
         |------|---------|
         | ewc-ansible-role-remote-desktop | https://github.com/ewcloud/ewc-ansible-role-remote-desktop |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/playbooks/remote-desktop-flavour
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/playbooks/remote-desktop-flavour
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -5017,12 +5937,12 @@ spec:
         licenseType: "MIT License"
       displayName: Remote Desktop Flavour
       summary: Transforms an existing VM into a secure, graphical desktop environment using X2Go and MATE, enabling simple remote access and intuitive cloud-based development for tenant users.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/LICENSE
       published: true
 
     remote-desktop-provisioning:
       name: "remote-desktop-provisioning"
-      version: "1.10.1"
+      version: "1.11.2"
       description: |
         >✅ This template can be safely applied from any local work environment, even running outside an EWC tenancy's private network.
 
@@ -5194,7 +6114,7 @@ spec:
         Checkout the [troubleshooting documentation](../../docs/troubleshooting.md) for
         information on common problems and how to troubleshoot them.
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/playbooks/remote-desktop-provisioning
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/playbooks/remote-desktop-provisioning
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -5210,12 +6130,12 @@ spec:
         licenseType: "MIT License"
       displayName: Remote Desktop Provisioning
       summary: Automates the creation or state update of a remote desktop VM, a basic yet secure cloud-based development environment with graphical interface. Uses X2Go and MATE to enable easy remote access for tenant users.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/LICENSE
       published: true
 
     ssh-bastion-flavour:
       name: "ssh-bastion-flavour"
-      version: "1.10.1"
+      version: "1.11.2"
       ewccli:
         defaultImageName: Rocky-9
         pathToRequirementsFile: playbooks/ssh-bastion-flavour/requirements.yml
@@ -5258,16 +6178,44 @@ spec:
 
         ## Prerequisites
 
-        > 💡 This Item is supported by the [EWCCLI](https://www.europeanweather.cloud/community-hub/ewc-cli),
-        and can be deployed, together with a compatible VM, via it. Checkout the [EWC User Stories: I want to use the ewccli](https://confluence.ecmwf.int/x/NlYiK) documentation pages to learn how.
+        * Verify the `ssh-https` OpenStack Security Group exists in your EWC tenancy
+          >💡 You may create Security Groups via [this EWC Community Hub Item](https://europeanweather.cloud/community-hub/openstack-compute-instance) if pre-required ones are missing.
+
+
+        ## Usage
+
+        ### Deploy via EWCCLI
+
+        >⚠️ By default, deploying via EWCCLI is only possible from within your EWC private network. You may override by passing the `--external-ip` flag upon deployment. Caution is advised as this weakens security on the deployed VM.
+
+        #### 1. Setup working environment
+
+        ```bash
+        pip install ewccli
+        ```
+
+        #### 2. Configure access credentials
+
+        ```bash
+        ewc login
+        ```
+
+        #### 3. Deploy
+        >💡 To lean about EWCCLI deployment customization, checkout the [EWC User Stories: I want to use the ewccli](https://confluence.ecmwf.int/x/NlYiK) documentation pages.
+
+
+        ```bash
+        ewc hub deploy ssh-bastion-flavour
+        ```
+
+        ### Deploy via native tooling (Ansible)
+
+        #### 1. Setup working environment
 
         * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
         * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
         * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
-
-        * Verify the `ssh-https` OpenStack Security Group exists in your EWC tenancy
-          > 💡 You may create Security Groups via [this EWC Community Hub Item](https://europeanweather.cloud/community-hub/openstack-compute-instance) if pre-required ones are missing.
-        * If you plan to configure an existing VM, ensure it meets the minium requirements before moving on to the [Usage](#usage) section below:
+        * If you plan to configure an existing VM, ensure it meets the minium requirements before proceeding:
           * VM Image: RockyLinux 8 or 9
           * VM Plan: 2 CPU cores, 4GB RAM, 30GB Disk
           * Network: Private
@@ -5276,21 +6224,20 @@ spec:
 
           Otherwise, provision a new VM with above specifications before continuing (see [EWC Getting Started: Provision a VM](https://confluence.ecmwf.int/x/2RvEJg) for details).
 
-        ## Usage
 
-        ### 1. Clone the repository
+        #### 2. Clone the repository
 
         ```bash
         git clone https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
         ```
 
-        #### 1.1. Change to the specific Item's subdirectory
+        #### 2.1. Change to the specific Item's subdirectory
 
         ```bash
         cd playbooks/ssh-bastion-flavour
         ```
 
-        #### 1.2. Checkout an specific Item's version
+        #### 2.2. Checkout an specific Item's version
         >⚠️ Make sure to replace `x.y.z` in the command below, with your version of preference.
 
         ```bash
@@ -5298,7 +6245,7 @@ spec:
         ```
 
 
-        ### 2. Download Ansible dependencies
+        #### 3. Download Ansible dependencies
         >💡 By default, Ansible Roles are installed under the `~/.ansible/roles` directory within your working environment.
 
         Download the correct version of the Ansible dependencies, if you haven't done so already:
@@ -5307,13 +6254,13 @@ spec:
         ansible-galaxy role install --force -r requirements.yml
         ```
 
-        ### 3. Specify the target host and SSH credentials
+        #### 4. Specify the target host and SSH credentials
         Create an inventory file, to specify address/credentials that your local working environment should use
         to connect to the target VM.
 
         Copy into the file one of the two snippets below, and replace the placeholders (i.e. values enclosed in `<` `>` characters):
 
-        * **Connecting form within the EWC tenancy's network**
+        * **To connect within the EWC private network**
 
           ```yaml
           # inventory.yml
@@ -5321,8 +6268,8 @@ spec:
           ewcloud:
             hosts:
               target:
-                ansible_python_interpreter: /usr/bin/python3
-                ansible_host: <add the IPV4 address of the target host>
+                ansible_python_interpreter: auto
+                ansible_host: <add the PRIVATE IP address of the target host>
                 ansible_ssh_private_key_file: <add the path to local SSH private key file>
                 ansible_user: cloud-user
                 ansible_ssh_common_args: -o StrictHostKeyChecking=no
@@ -5330,8 +6277,24 @@ spec:
 
         **OR**
 
+        * **To connect from the public internet to a EWC public IP address**
 
-        *  **Connecting from outside the EWC tenancy's network**
+          ```yaml
+          # inventory.yml
+          ---
+          ewcloud:
+            hosts:
+              target:
+                ansible_python_interpreter: auto
+                ansible_host: <add the PUBLIC IP address of the target host>
+                ansible_ssh_private_key_file: <add the path to local SSH private key file>
+                ansible_user: cloud-user
+                ansible_ssh_common_args: -o StrictHostKeyChecking=no
+          ```
+
+        **OR**
+
+        *  **To connect from the public the public internet to a EWC private IP address**
 
             > ⚠️ This requires an [SSH Bastion](https://europeanweather.cloud/community-hub/ssh-bastion-provisioning) to be already provisioned within your EWC tenancy.
 
@@ -5341,7 +6304,7 @@ spec:
             ewcloud:
               hosts:
                 target:
-                  ansible_host: <add the IP address of the target host>
+                  ansible_host: <add the PRIVATE IP address of the target host>
                   ansible_ssh_user: cloud-user
                   ansible_ssh_private_key_file: <add the path to local SSH private key file>
                   ansible_python_interpreter: auto
@@ -5357,11 +6320,11 @@ spec:
                                   -o BatchMode=yes
                                   -W %h:%p
                                   -i <add the path to local SSH private key file>
-                                  cloud-user@<add the IP address of the ssh bastion>"
+                                  cloud-user@<add the PUBLIC IP address of the SSH bastion>"
 
             ```
 
-        ### 4. Configure and apply the template
+        #### 5. Configure and apply the template
 
         * **Interactive Mode**
 
@@ -5413,7 +6376,7 @@ spec:
         Checkout the following how-to guides to learn about management of Item after initial setup:
         * [How to connect to a VM hidden behind the SSH Bastion](./docs/how-to/how-to-connect-to-a-vm-hidden-behind-the-ssh-bastion.md)
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/tree/1.10.1/playbooks/ssh-bastion-flavour
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/tree/1.11.2/playbooks/ssh-bastion-flavour
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -5429,12 +6392,12 @@ spec:
         licenseType: "MIT License"
       displayName: SSH Bastion Flavour
       summary: Tightens the configuration of a running VM, to operate as a secure SSH proxy with Fail2ban, providing tenant admins and users a fortified entry point to safely access private EWC networks from the public internet.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/LICENSE
       published: true
 
     ssh-bastion-provisioning:
       name: "ssh-bastion-provisioning"
-      version: "1.10.1"
+      version: "1.11.2"
       description: |
         >✅ This template can be safely applied from any local work environment, even running outside an EWC tenancy's private network.
 
@@ -5589,7 +6552,7 @@ spec:
         Checkout the [troubleshooting documentation](../../docs/troubleshooting.md) for
         information on common problems and how to troubleshoot them.
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/playbooks/ssh-bastion-provisioning
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/playbooks/ssh-bastion-provisioning
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
@@ -5605,12 +6568,12 @@ spec:
         licenseType: "MIT License"
       displayName: SSH Bastion Provisioning
       summary: Automates the creation or state update of a secure SSH bastion VM in the EWC, configured with Fail2ban to provide a fortified entry point for safely accessing private EWC networks from the public internet.
-      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/LICENSE
+      license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/LICENSE
       published: true
 
     xcube-viewer-flavour:
       name: "xcube-viewer-flavour"
-      version: "1.10.1"
+      version: "1.11.2"
       ewccli:
         defaultImageName: Ubuntu-24.04
         defaultSecurityGroups: [ssh-http-https]
@@ -5712,16 +6675,42 @@ spec:
 
         ## Prerequisites
 
-        > 💡 This Item is supported by the [EWCCLI](https://www.europeanweather.cloud/community-hub/ewc-cli),
-        and can be deployed, together with a compatible VM, via it. Checkout the [EWC User Stories: I want to use the ewccli](https://confluence.ecmwf.int/x/NlYiK) documentation pages to learn how.
+        * Verify the `ssh-https` OpenStack Security Group exists in your EWC tenancy
+          > 💡 You may create Security Groups via [this EWC Community Hub Item](https://europeanweather.cloud/community-hub/openstack-compute-instance) if pre-required ones are missing.
+
+        ## Usage
+
+        ### Deploy via EWCCLI
+
+        >⚠️ By default, deploying via EWCCLI is only possible from within your EWC private network. You may override by passing the `--external-ip` flag upon deployment. Caution is advised as this weakens security on the deployed VM.
+
+        #### 1. Setup working environment
+
+        ```bash
+        pip install ewccli
+        ```
+
+        #### 2. Configure access credentials
+
+        ```bash
+        ewc login
+        ```
+
+        #### 3. Deploy
+        >💡 To lean about EWCCLI deployment customization, checkout the [EWC User Stories: I want to use the ewccli](https://confluence.ecmwf.int/x/NlYiK) documentation pages.
+
+        ```bash
+        ewc hub deploy xcube-viewer-flavour
+        ```
+
+        ### Deploy via native tooling (Ansible)
+
+        #### 1. Setup working environment
 
         * Install [git](https://git-scm.com/downloads) (version 2.0 or higher )
         * Install [python](https://www.python.org/downloads) (version 3.9 or higher)
         * Install [ansible](https://pypi.org/project/ansible) (version 2.15 or higher)
-
-        * Verify the `ssh-https` OpenStack Security Group exists in your EWC tenancy
-          > 💡 You may create Security Groups via [this EWC Community Hub Item](https://europeanweather.cloud/community-hub/openstack-compute-instance) if pre-required ones are missing.
-        * If you plan to configure an existing VM, ensure it meets the minium requirements before moving on to the [Usage](#usage) section below:
+        * If you plan to configure an existing VM, ensure it meets the minium requirements before proceeding:
           * VM Image: Ubuntu 24
           * VM Plan: 4 CPU cores, 8GB RAM, 40GB Disk
           * Network: Private
@@ -5730,15 +6719,13 @@ spec:
 
           Otherwise, provision a new VM with above specifications before continuing (see [EWC Getting Started: Provision a VM](https://confluence.ecmwf.int/x/2RvEJg) for details).
 
-        ## Usage
-
-        ### 1. Clone the repository
+        #### 2. Clone the repository
 
         ```bash
         git clone https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
         ```
 
-        #### 1.1. Change to the specific Item's subdirectory
+        #### 2.1. Change to the specific Item's subdirectory
 
         ```bash
         cd playbooks/xcube-viewer-flavour
@@ -5752,7 +6739,7 @@ spec:
         ```
 
 
-        ### 2. Download Ansible dependencies
+        #### 3. Download Ansible dependencies
         >💡 By default, Ansible Roles are installed under the `~/.ansible/roles` directory within your working environment.
 
         Download the correct version of the Ansible dependencies, if you haven't done so already:
@@ -5761,13 +6748,13 @@ spec:
         ansible-galaxy role install --force -r requirements.yml
         ```
 
-        ### 3. Specify the target host and SSH credentials
+        #### 4. Specify the target host and SSH credentials
         Create an inventory file, to specify address/credentials that your local working environment should use
         to connect to the target VM.
 
         Copy into the file one of the two snippets below, and replace the placeholders (i.e. values enclosed in `<` `>` characters):
 
-        * **Connecting form within the EWC tenancy's network**
+        * **To connect within the EWC private network**
 
           ```yaml
           # inventory.yml
@@ -5775,8 +6762,8 @@ spec:
           ewcloud:
             hosts:
               target:
-                ansible_python_interpreter: /usr/bin/python3
-                ansible_host: <add the IPV4 address of the target host>
+                ansible_python_interpreter: auto
+                ansible_host: <add the PRIVATE IP address of the target host>
                 ansible_ssh_private_key_file: <add the path to local SSH private key file>
                 ansible_user: ubuntu
                 ansible_ssh_common_args: -o StrictHostKeyChecking=no
@@ -5785,7 +6772,24 @@ spec:
         **OR**
 
 
-        *  **Connecting from outside the EWC tenancy's network**
+        * **To connect from the public internet to a EWC public IP address**
+
+        ```yaml
+          # inventory.yml
+          ---
+          ewcloud:
+            hosts:
+              target:
+                ansible_python_interpreter: auto
+                ansible_host: <add the PUBLIC IP address of the target host>
+                ansible_ssh_private_key_file: <add the path to local SSH private key file>
+                ansible_user: ubuntu
+                ansible_ssh_common_args: -o StrictHostKeyChecking=no
+          ```
+
+        **OR**
+
+        *  **To connect from the public the public internet to a EWC private IP address**
 
             > ⚠️ This requires an [SSH Bastion](https://europeanweather.cloud/community-hub/ssh-bastion-provisioning) to be already provisioned within your EWC tenancy.
 
@@ -5795,7 +6799,7 @@ spec:
             ewcloud:
               hosts:
                 target:
-                  ansible_host: <add the IP address of the target host>
+                  ansible_host: <add the PRIVATE IP address of the target host>
                   ansible_ssh_user: ubuntu
                   ansible_ssh_private_key_file: <add the path to local SSH private key file>
                   ansible_python_interpreter: auto
@@ -5811,12 +6815,12 @@ spec:
                                   -o BatchMode=yes
                                   -W %h:%p
                                   -i <add the path to local SSH private key file>
-                                  cloud-user@<add the IP address of the ssh bastion>"
+                                  cloud-user@<add the PUBLIC IP address of the SSH bastion>"
 
             ```
 
 
-        ### 4. Configure and apply the template
+        #### 5. Configure and apply the template
 
         * **Interactive Mode**
 
@@ -5885,7 +6889,7 @@ spec:
         | numcodecs | https://anaconda.org/channels/conda-forge/packages/numcodecs/overview |
         | xcube | https://anaconda.org/channels/conda-forge/packages/xcube/files |
 
-      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.10.1/playbooks/xcube-viewer-flavour
+      home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.11.2/playbooks/xcube-viewer-flavour
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       maintainers:
