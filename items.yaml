@@ -7013,3 +7013,95 @@ spec:
         - name: Nina Burgdorfer (MeteoSwiss)
           email: nina.burgdorfer@meteoswiss.ch
           url: https://github.com/MeteoSwiss/flexpart-ifs-ewc-blueprint/issues
+
+    geoweb:
+      name: "geoweb"
+      version: "1.0.2"
+      description: |
+        This Terraform template deploys [GeoWeb](https://gitlab.com/opengeoweb/opengeoweb) on
+        an existing Kubernetes cluster in the
+        [European Weather Cloud (EWC)](https://europeanweather.cloud/). GeoWeb is a
+        browser-based application for visualizing meteorological data.
+
+        The reference deployment has been validated on the EUMETSAT side of the EWC.
+        Deployment on the ECMWF side has not yet been tested.
+
+        The Terraform configuration installs the following GeoWeb components from
+        the FMI Helm chart repository:
+
+        * GeoWeb frontend
+        * Location backend
+        * Presets backend with a PostgreSQL database
+
+        The deployment includes ingress resources and can integrate with EWC IAM
+        for user authentication. Its initial map configuration provides EUMETSAT
+        and ECMWF WMS services.
+
+        ## Prerequisites
+
+        * An existing Kubernetes cluster and a kubeconfig with sufficient permissions
+        * Terraform installed in the local working environment
+        * cert-manager configured with a `ClusterIssuer` named `letsencrypt-prod`
+        * external-dns configured when automatic DNS record management is required
+        * An EWC IAM client when IAM authentication is enabled
+
+        ## Usage
+
+        Clone the deployment repository and check out the catalogued release.
+
+        To use the most recent release, check the
+        [GitLab tags page](https://gitlab.com/opengeoweb/geoweb-ewc-community-hub/-/tags)
+        and replace the version in the checkout command below with the latest tag.
+
+        ```bash
+        git clone https://gitlab.com/opengeoweb/geoweb-ewc-community-hub.git
+        cd geoweb-ewc-community-hub
+        git checkout 1.0.2 # Replace with the latest tag
+        ```
+
+        Configure the Kubernetes provider in `datasources.tf`, then customize the
+        deployment variables and presets as needed. Initialize Terraform, review
+        the proposed changes, and apply them:
+
+        ```bash
+        terraform init
+        terraform plan
+        terraform apply
+        ```
+
+        ## Inputs
+
+        | Name | Description | Type | Default | Required |
+        |------|-------------|------|---------|---------:|
+        | `geoweb_frontend_hostname` | Public hostname used to expose GeoWeb | `string` | n/a | yes |
+        | `geoweb_namespace_name` | Kubernetes namespace in which GeoWeb is deployed | `string` | `geoweb` | no |
+        | `geoweb_app_title` | Application title displayed in the GeoWeb user interface | `string` | `Geoweb EWC` | no |
+        | `geoweb_frontend_hc_version` | GeoWeb frontend Helm chart version | `string` | `3.21.2` | no |
+        | `geoweb_location_backend_hc_version` | GeoWeb location backend Helm chart version | `string` | `1.1.8` | no |
+        | `geoweb_presets_backend_hc_version` | GeoWeb presets backend Helm chart version | `string` | `2.15.15` | no |
+        | `custom_annotations` | Custom annotations applied to the frontend ingress | `map(string)` | `{"cert-manager.io/cluster-issuer" = "letsencrypt-prod"}` | no |
+        | `ewc_tenancy` | Name of the EWC tenancy containing the GeoWeb IAM client. Set together with `geoweb_auth_client_id` to enable IAM integration | `string` | `null` | no |
+        | `geoweb_auth_client_id` | Client ID of the GeoWeb client registered in EWC IAM. Set together with `ewc_tenancy` to enable IAM integration | `string` | `null` | no |
+        | `geoweb_preset_ecmwf_token` | Token used by the default ECMWF WMS service | `string` | `public` | no |
+        | `services` | WMS services included in the initial GeoWeb preset. When empty, the built-in EUMETSAT and ECMWF services are used | `list` | `[]` | no |
+
+        Refer to the deployment repository for the complete prerequisites, EWC IAM
+        client configuration, customization options, and operational guidance.
+
+      home: https://gitlab.com/opengeoweb/geoweb-ewc-community-hub/-/tree/1.0.2
+      sources:
+        - https://gitlab.com/opengeoweb/geoweb-ewc-community-hub.git
+      maintainers:
+        - name: GeoWeb Team
+          url: https://gitlab.com/opengeoweb/geoweb-ewc-community-hub/-/issues
+      icon: https://gitlab.com/opengeoweb/opengeoweb/-/raw/master/apps/geoweb/src/assets/app_icon.png
+      annotations:
+        technology: "Terraform Module"
+        category: "Data Visualization"
+        others: "Deployable"
+        supportLevel: "Community"
+        licenseType: "Apache License 2.0"
+      displayName: GeoWeb
+      summary: Deploys GeoWeb on an existing EWC Kubernetes cluster for visualizing meteorological data.
+      license: https://gitlab.com/opengeoweb/geoweb-ewc-community-hub/-/blob/1.0.2/LICENSE
+      published: true
