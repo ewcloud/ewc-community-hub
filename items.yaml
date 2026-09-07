@@ -7066,7 +7066,7 @@ spec:
 
         | Name | Description | Type | Default | Required |
         |------|-------------|------|---------|---------:|
-        | `geoweb_frontend_hostname` | Public hostname used to expose GeoWeb. Do not include the URL scheme | `string` | n/a | yes |
+        | `geoweb_frontend_hostname` | Public hostname used to expose GeoWeb | `string` | n/a | yes |
         | `geoweb_namespace_name` | Kubernetes namespace in which GeoWeb is deployed | `string` | `geoweb` | no |
         | `geoweb_app_title` | Application title displayed in the GeoWeb user interface | `string` | `Geoweb EWC` | no |
         | `geoweb_frontend_hc_version` | GeoWeb frontend Helm chart version | `string` | `3.21.2` | no |
@@ -7076,7 +7076,7 @@ spec:
         | `ewc_tenancy` | Name of the EWC IAM tenancy | `string` | `internal-eumetsat-dataprocessing` | no |
         | `geoweb_auth_client_id` | Client ID registered for GeoWeb in the EWC IAM tenancy | `string` | `ewc-geoweb-datapro` | no |
         | `geoweb_preset_ecmwf_token` | Token used by the default ECMWF WMS service | `string` | `public` | no |
-        | `services` | WMS services included in the initial GeoWeb preset. When empty, the built-in EUMETSAT and ECMWF services are used | `list(object({name = string, url = string, id = string}))` | `[]` | no |
+        | `services` | WMS services included in the initial GeoWeb preset. When empty, the built-in EUMETSAT and ECMWF services are used | `list` | `[]` | no |
 
         Refer to the deployment repository for the complete prerequisites, EWC IAM
         client configuration, customization options, and operational guidance.
