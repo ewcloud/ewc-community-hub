@@ -7016,7 +7016,7 @@ spec:
 
     geoweb:
       name: "geoweb"
-      version: "1.0"
+      version: "1.0.1"
       description: |
         This Terraform template deploys [GeoWeb](https://gitlab.com/opengeoweb/opengeoweb) on
         an existing Kubernetes cluster in the
@@ -7049,7 +7049,7 @@ spec:
         ```bash
         git clone https://gitlab.com/opengeoweb/geoweb-ewc-community-hub.git
         cd geoweb-ewc-community-hub
-        git checkout v1.0
+        git checkout v1.0.1
         ```
 
         Configure the Kubernetes provider in `datasources.tf`, then customize the
@@ -7081,13 +7081,13 @@ spec:
         Refer to the deployment repository for the complete prerequisites, EWC IAM
         client configuration, customization options, and operational guidance.
 
-      home: https://gitlab.com/opengeoweb/geoweb-ewc-community-hub/-/tree/v1.0
+      home: https://gitlab.com/opengeoweb/geoweb-ewc-community-hub/-/tree/v1.0.1
       sources:
         - https://gitlab.com/opengeoweb/geoweb-ewc-community-hub.git
       maintainers:
         - name: GeoWeb Team
           url: https://gitlab.com/opengeoweb/geoweb-ewc-community-hub/-/issues
-      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
+      icon: https://gitlab.com/opengeoweb/opengeoweb/-/raw/master/apps/geoweb/src/assets/app_icon.png
       annotations:
         technology: "Terraform Module"
         category: "Data Visualization"
@@ -7096,5 +7096,5 @@ spec:
         licenseType: "Apache License 2.0"
       displayName: GeoWeb
       summary: Deploys GeoWeb on an existing EWC Kubernetes cluster for visualizing meteorological data.
-      license: https://gitlab.com/opengeoweb/geoweb-ewc-community-hub/-/blob/v1.0/LICENSE
+      license: https://gitlab.com/opengeoweb/geoweb-ewc-community-hub/-/blob/v1.0.1/LICENSE
       published: true
