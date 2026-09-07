@@ -7023,6 +7023,9 @@ spec:
         [European Weather Cloud (EWC)](https://europeanweather.cloud/). GeoWeb is a
         browser-based application for visualizing meteorological data.
 
+        The reference deployment has been validated on the EUMETSAT side of the EWC.
+        Deployment on the ECMWF side has not yet been tested.
+
         The Terraform configuration installs the following GeoWeb components from
         the FMI Helm chart repository:
 
@@ -7038,18 +7041,22 @@ spec:
 
         * An existing Kubernetes cluster and a kubeconfig with sufficient permissions
         * Terraform installed in the local working environment
-        * cert-manager configured with a `ClusterIssuer` named `letsencrypt-production`
+        * cert-manager configured with a `ClusterIssuer` named `letsencrypt-prod`
         * external-dns configured when automatic DNS record management is required
         * An EWC IAM client when IAM authentication is enabled
 
         ## Usage
 
-        Clone the deployment repository and check out the catalogued release:
+        Clone the deployment repository and check out the catalogued release.
+
+        To use the most recent release, check the
+        [GitLab tags page](https://gitlab.com/opengeoweb/geoweb-ewc-community-hub/-/tags)
+        and replace the version in the checkout command below with the latest tag.
 
         ```bash
         git clone https://gitlab.com/opengeoweb/geoweb-ewc-community-hub.git
         cd geoweb-ewc-community-hub
-        git checkout v1.0.1
+        git checkout v1.0.1 # Replace with the latest tag
         ```
 
         Configure the Kubernetes provider in `datasources.tf`, then customize the
@@ -7072,7 +7079,7 @@ spec:
         | `geoweb_frontend_hc_version` | GeoWeb frontend Helm chart version | `string` | `3.21.2` | no |
         | `geoweb_location_backend_hc_version` | GeoWeb location backend Helm chart version | `string` | `1.1.8` | no |
         | `geoweb_presets_backend_hc_version` | GeoWeb presets backend Helm chart version | `string` | `2.15.15` | no |
-        | `custom_annotations` | Custom annotations applied to the frontend ingress | `map(string)` | `{"cert-manager.io/cluster-issuer" = "letsencrypt-production"}` | no |
+        | `custom_annotations` | Custom annotations applied to the frontend ingress | `map(string)` | `{"cert-manager.io/cluster-issuer" = "letsencrypt-prod"}` | no |
         | `ewc_tenancy` | Name of the EWC tenancy containing the GeoWeb IAM client. Set together with `geoweb_auth_client_id` to enable IAM integration | `string` | `null` | no |
         | `geoweb_auth_client_id` | Client ID of the GeoWeb client registered in EWC IAM. Set together with `ewc_tenancy` to enable IAM integration | `string` | `null` | no |
         | `geoweb_preset_ecmwf_token` | Token used by the default ECMWF WMS service | `string` | `public` | no |
