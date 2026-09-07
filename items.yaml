@@ -7073,8 +7073,8 @@ spec:
         | `geoweb_location_backend_hc_version` | GeoWeb location backend Helm chart version | `string` | `1.1.8` | no |
         | `geoweb_presets_backend_hc_version` | GeoWeb presets backend Helm chart version | `string` | `2.15.15` | no |
         | `custom_annotations` | Custom annotations applied to the frontend ingress | `map(string)` | `{"cert-manager.io/cluster-issuer" = "letsencrypt-production"}` | no |
-        | `ewc_tenancy` | Name of the EWC IAM tenancy | `string` | `internal-eumetsat-dataprocessing` | no |
-        | `geoweb_auth_client_id` | Client ID registered for GeoWeb in the EWC IAM tenancy | `string` | `ewc-geoweb-datapro` | no |
+        | `ewc_tenancy` | Name of the EWC tenancy containing the GeoWeb IAM client | `string` | n/a | yes |
+        | `geoweb_auth_client_id` | Client ID of the GeoWeb client registered in EWC IAM | `string` | n/a | yes |
         | `geoweb_preset_ecmwf_token` | Token used by the default ECMWF WMS service | `string` | `public` | no |
         | `services` | WMS services included in the initial GeoWeb preset. When empty, the built-in EUMETSAT and ECMWF services are used | `list` | `[]` | no |
 
