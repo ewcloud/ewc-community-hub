@@ -369,7 +369,7 @@ def dispatch_and_register(thread_id: str) -> None:
             capacity.release()
 
 
-def check_status(thread_id: str) -> None:
+def track_status(thread_id: str) -> None:
 
     keys = in_progress.keys()
 
@@ -571,7 +571,7 @@ def tracker(thread_id: str) -> None:
     while not stop.is_set():
 
         try:
-            check_status(thread_id)
+            track_status(thread_id)
             sleep(POLLING_INTERVAL_SECONDS)
         except Exception as e:
             print(
