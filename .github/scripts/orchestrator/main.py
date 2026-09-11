@@ -633,18 +633,18 @@ def main() -> None:
         executor.submit(dispatcher, thread_id="dispatcher")
         executor.submit(tracker, thread_id="tracker")
 
-        sleep(30)
-        while not pending.empty() or len(in_progress.keys()) > 0:
-
+        while done.qsize() < pending.qsize() + len(in_progress.keys()):
             print(
                 f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {pending.qsize()} pending, {len(in_progress.keys())} in progress, {done.qsize()} done"
             )
-            sleep(5)
+
             if datetime.now(timezone.utc) >= total_deadline:
                 print(
                     f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Total timeout reached"
                 )
                 break
+
+            sleep(30)
 
         stop.set()
         print(f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Raised stop event...")
