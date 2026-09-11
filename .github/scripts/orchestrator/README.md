@@ -14,10 +14,23 @@ A python script containing the business logic executed by [GitHub Actions](../..
 * Python `3.12+`
 * Libs defined in [requirements.txt](requirements.txt)
 
-## Configuration
+## Input Environment Variables
 
->💡 The behaviour of the orchestration can be configured via environment variables. For a complete up-to-date of supported variables, checkout [main.py](main.py#L17-L26).
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|----------|
+GH_API_TOKEN | Short-lived token from a GitHub App or personal access token with "action edit" permissions | `string` | n/a | yes |
+GH_DOWNSTREAM_WORKFLOW_FILE | Filename in the downstream repository containing the workflow definition. Example: `test-ecmwf.yml` | `string` | n/a | yes |
+ITEM_NAMES | Name of items to be tested, concatenated with coma (,). Example: `ssh-bastion-flavour,remote-desktop-flavour` | `string` | n/a/ | yes |
+EXCLUDED_ITEM_NAMES | Names item names to be ignored, concatenated with coma (,). Example: `ipa-server-flavour,xcube-viewer-flavour` | `string` | n/a | no |
+ITEM_TECHNOLOGY_ANNOTATIONS | Item metadata "technology" annotations to be tested, concatenated with coma (,). Example: `Ansible Playbook,Python Script` | `string` | n/a | no |
+ITEM_OTHERS_ANNOTATIONS | Item metadata "other" annotations to be tested, concatenated with coma (,). Example: `Deployable,EWCCLI-Compatible` | `string` | n/a | no |
+POLLING_INTERVAL_SECONDS | Period of status polling of a workflow running downstream | `int` | n/a | yes |
+RUN_TIMEOUT_MINUTES | Maximum time a single downstream workflow is allowed to run before marking it as timed out | `int` | n/a | yes |
+TOTAL_TIMEOUT_MINUTES | Maximum time the orchestrator will run before draining all queues and marking all downstream workflows are timed out | `int` | n/a | yes |
+MAX_CONCURRENT_WORKFLOWS | Maximum number of concurrent downstream workflows allowed to run | `int` | n/a | yes |
 
+
+## Runtime Behaviour
 
 ### Test Inclusions
 Items to be tested are filtered by a combination of the following conditions (logical AND):
@@ -28,12 +41,12 @@ Items to be tested are filtered by a combination of the following conditions (lo
 
 ### Test Exclusions
 Items to NOT be tested can be specified by:
-1. the `items.<item key>.name` attribute values is in the list of names in the `EXCLUDED+ITEM_NAMES`env var (optional).
+1. the `items.<item key>.name` attribute values is in the list of names in the `EXCLUDED_ITEM_NAMES`env var (optional).
 If set, overrides all inclusion criteria for the specified items.
 
 ### Test Deployment Methods
 Tests are dispatched according to the metadata annotations `others`. The deployment options include Items' native (Ansible CLI,
-Terraform CLI, etc.) OR EWCCLI:
+Terraform CLI, etc.) OR EWCCLI when the Item is annotated with `others: EWCCLI-Compatible`:
 
 1. **Native:** If deploying Items via their native method, the orchestrator forwards as input any attributes/values of the
  `items.<item key>.values` metadata within `items.yaml` BUT adding a mutation: `inputSpec` attributed is serialized and
@@ -50,7 +63,7 @@ https://github.com/ewcloud/ewccli/blob/3405f8bf2aa458c5efaca8d646dff0a54d7191ee/
 
 ## Maintainers Quick Start Guide
 
-### Key Concepts
+### Design Overview
 
 This piece of orchestration calls the GitHub API under a strict concurrency limit. Coordination is achieved via multi-threading orchestration primitives.
 Filtered catalogue items are enqueued as work, then drove through three pipeline stages:
@@ -83,7 +96,7 @@ The `concurrency_counter` semaphore guarantees that the number of concurrent wor
     pip install -r dev-requirements.txt
     ```
 
-2. Setup the values for the input environmental variables listed in [main.py](main.py#L17-L26)
+2. Setup the values for the input environmental
 
 3. Make and test code changes locally
 
