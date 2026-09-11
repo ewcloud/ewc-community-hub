@@ -48,7 +48,7 @@ RED_LIGHT = "🔴"
 YELLOW_LIGHT = "🟡"
 GREEN_LIGHT = "🟢"
 GRAY_LIGHT = "⚫"
-TIME_FORMAT = "%Y-%m-%dT%H:%H:%SZ"
+TIME_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 
 #  --- Global Runtime State ---
 
