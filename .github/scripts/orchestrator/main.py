@@ -110,7 +110,14 @@ stop: Event = Event()
 # --- Subroutines ---
 
 
-def github_api(method: str, path: str, payload: dict | Any = None) -> Response:
+def github_api(method: str, path: str, payload: dict | Any = None, verbose: bool = True) -> Response:
+
+    if verbose:
+        print(
+            f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - Making HTTP {method} request to '{API_BASE}{path}' with payload: '{payload}'",
+            flush=True,
+        )
+
     response = request(
         method,
         f"{API_BASE}{path}",
