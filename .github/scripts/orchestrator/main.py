@@ -256,6 +256,7 @@ def dispatch_and_register(thread_id: str) -> None:
         return
 
     acquired = True
+    item.dispatch_time = datetime.now(timezone.utc)
     try:
 
         # dispatch
@@ -300,7 +301,6 @@ def dispatch_and_register(thread_id: str) -> None:
             )
             return  # returns through the `finally` statement at the bottom, which reduces the concurrency count
 
-        item.dispatch_time = datetime.now(timezone.utc)
         dispatch_delay_seconds = 5
         max_dispatch_time = item.dispatch_time + timedelta(seconds=dispatch_delay_seconds)
 
@@ -313,7 +313,6 @@ def dispatch_and_register(thread_id: str) -> None:
         register_max_attempts = 3
         register_retry_delay_seconds = 3
         for attempt in range(1, register_max_attempts + 1):
-            sleep(register_retry_delay_seconds)
 
             if EWCCLI_ANNOTATION in ITEM_OTHERS_ANNOTATIONS:
                 runs = github_api(
@@ -349,6 +348,7 @@ def dispatch_and_register(thread_id: str) -> None:
                     f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {register_error}",
                     flush=True,
                 )
+                sleep(register_retry_delay_seconds)
 
             if workflow_runs_count >= 1:
                 break  # got a response with HTTP 200 code, no need to loop anymore
