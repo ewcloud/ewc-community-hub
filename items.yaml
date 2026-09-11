@@ -7105,3 +7105,35 @@ spec:
       summary: Deploys GeoWeb on an existing EWC Kubernetes cluster for visualizing meteorological data.
       license: https://gitlab.com/opengeoweb/geoweb-ewc-community-hub/-/blob/1.0.2/LICENSE
       published: true
+    create-vm-users:
+      name: "create-vm-users"
+      version: "0.0.1"
+      description: |
+        Ansible playbook to create and configure the desired list of local users on the target hosts.
+
+      ewccli:
+        pathToRequirementsFile: requirements.yml
+        pathToMainFile: playbooks/create_vm_users.yml
+        publicIP: true
+        inputs:
+          - name: users_file
+            description: "List of users to be provided as --item-inputs users_file=path/to/users.yml"
+            type: str
+      home: https://github.com/ewcloud/ewc-ansible-role-create-vm-users/tree/0.0.1/playbooks
+      sources:
+        - https://github.com/ewcloud/ewc-ansible-role-create-vm-users.git
+      maintainers:
+        - name: EWC Community
+          url: https://github.com/ewcloud/ewc-ansible-role-create-vm-users/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
+      annotations:
+        technology: "Ansible Playbook"
+        category: "Automation"
+        supportLevel: "Community"
+        licenseType: "Apache License 2.0"
+        others: "Deployable,EWCCLI-compatible"
+      displayName: Item to create VM local users
+      summary: Item to create VM local users
+      license: https://github.com/ewcloud/ewc-ansible-role-create-vm-users/blob/main/LICENSE
+      published: false
+
