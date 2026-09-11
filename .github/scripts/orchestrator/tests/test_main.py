@@ -41,7 +41,7 @@ def reset_orchestrator_state(monkeypatch):
     monkeypatch.setattr(orchestrator, "in_progress", orchestrator.ThreadSafeDict())
     monkeypatch.setattr(orchestrator, "done", Queue())
     monkeypatch.setattr(orchestrator, "stop", Event())
-    monkeypatch.setattr(orchestrator, "capacity", Semaphore(1))
+    monkeypatch.setattr(orchestrator, "concurrency_counter", Semaphore(1))
     monkeypatch.setattr(orchestrator, "POLLING_INTERVAL_SECONDS", 0.02)
     monkeypatch.setattr(orchestrator, "RUN_TIMEOUT_MINUTES", 20)
 
@@ -145,23 +145,25 @@ class SemaphoreTracker:
 
 
 @pytest.mark.parametrize("max_concurrency", [1, 2, 5])
-def test_concurrency_stress_drains_and_respects_capacity(reset_orchestrator_state, monkeypatch, max_concurrency):
+def test_concurrency_stress_drains_and_respects_concurrency_counter(
+    reset_orchestrator_state, monkeypatch, max_concurrency
+):
     seed(1000 + max_concurrency)
 
     item_count = 3 * max_concurrency + 2  # always more items than the concurrency level
     for i in range(item_count):
         orchestrator.pending.put(make_item(key=f"item-{i}"))
 
-    monkeypatch.setattr(orchestrator, "capacity", Semaphore(max_concurrency))
-    permits = SemaphoreTracker(orchestrator.capacity)
+    monkeypatch.setattr(orchestrator, "concurrency_counter", Semaphore(max_concurrency))
+    permits = SemaphoreTracker(orchestrator.concurrency_counter)
 
     fake_api = make_fake_github_api()
 
     dispatcher_thread = Thread(target=orchestrator.dispatcher, args=("dispatcher",), daemon=True)
     tracker_thread = Thread(target=orchestrator.tracker, args=("tracker",), daemon=True)
 
-    with mock.patch.object(orchestrator.capacity, "acquire", side_effect=permits.acquire), mock.patch.object(
-        orchestrator.capacity, "release", side_effect=permits.release
+    with mock.patch.object(orchestrator.concurrency_counter, "acquire", side_effect=permits.acquire), mock.patch.object(
+        orchestrator.concurrency_counter, "release", side_effect=permits.release
     ), mock.patch.object(orchestrator, "github_api", side_effect=fake_api):
 
         try:
@@ -202,8 +204,8 @@ def test_concurrency_stress_drains_and_respects_capacity(reset_orchestrator_stat
 
     assert (
         permits.peak <= max_concurrency
-    ), f"observed {permits.peak} concurrently held capacity permits, exceeding MAX_CONCURRENT_WORKFLOWS={max_concurrency}"
-    assert permits.current == 0, "a capacity permit was leaked (acquired but never released)"
+    ), f"observed {permits.peak} concurrently held concurrency_counter permits, exceeding MAX_CONCURRENT_WORKFLOWS={max_concurrency}"
+    assert permits.current == 0, "a concurrency_counter permit was leaked (acquired but never released)"
 
     completed_items = list(orchestrator.done.queue)
     assert all(item.state in ("COMPLETED", "FAILED") for item in completed_items), (

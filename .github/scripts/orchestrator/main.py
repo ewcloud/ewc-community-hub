@@ -102,7 +102,7 @@ class ThreadSafeDict:
 
 
 pending: Queue = Queue()
-capacity: Semaphore = Semaphore(MAX_CONCURRENT_WORKFLOWS)
+concurrency_counter: Semaphore = Semaphore(MAX_CONCURRENT_WORKFLOWS)
 in_progress: ThreadSafeDict = ThreadSafeDict()
 done: Queue = Queue()
 stop: Event = Event()
@@ -239,7 +239,7 @@ def dispatch_and_register(thread_id: str) -> None:
     except Empty:
         return
 
-    if not capacity.acquire(blocking=False):
+    if not concurrency_counter.acquire(blocking=False):
         pending.put(item)
         print(
             f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Max concurrency reached. Will wait before dispatching new workflows...",
@@ -366,7 +366,7 @@ def dispatch_and_register(thread_id: str) -> None:
 
     finally:
         if acquired:
-            capacity.release()
+            concurrency_counter.release()
 
 
 def track_status(thread_id: str) -> None:
@@ -386,7 +386,7 @@ def track_status(thread_id: str) -> None:
                 continue
 
             move_to_done(item, "TIMED_OUT", "Total deadline reached")
-            capacity.release()
+            concurrency_counter.release()
             continue
 
         run_deadline = item.dispatch_time + timedelta(minutes=RUN_TIMEOUT_MINUTES)  # type: ignore
@@ -396,7 +396,7 @@ def track_status(thread_id: str) -> None:
                 continue
 
             move_to_done(item, "TIMED_OUT", "Per-run deadline reached")
-            capacity.release()
+            concurrency_counter.release()
             continue
 
         if EWCCLI_ANNOTATION in ITEM_OTHERS_ANNOTATIONS:
@@ -435,7 +435,7 @@ def track_status(thread_id: str) -> None:
 
             item.conclusion = conclusion
             move_to_done(item, "COMPLETED" if conclusion == "success" else "FAILED")
-            capacity.release()
+            concurrency_counter.release()
 
 
 def reduce_summarize(spec_items: dict, thread_id: str = "main") -> None:
@@ -453,7 +453,7 @@ def reduce_summarize(spec_items: dict, thread_id: str = "main") -> None:
             continue
 
         move_to_done(item, "TIMED_OUT", "Total deadline reached")
-        capacity.release()
+        concurrency_counter.release()
 
     items: list[Item] = []
     while not done.empty():
