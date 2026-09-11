@@ -136,7 +136,7 @@ def read_spec_items(thread_id: str = "main") -> dict:
     if ITEM_NAMES:
         filtered_item_names = set(item_name.strip() for item_name in ITEM_NAMES.split(","))
         print(
-            f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Reading Items with names: {filtered_item_names}",
+            f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Reading Items with names: {filtered_item_names}",
             flush=True,
         )
 
@@ -144,7 +144,7 @@ def read_spec_items(thread_id: str = "main") -> dict:
     if EXCLUDED_ITEM_NAMES:
         excluded_item_names = set(item_name.strip() for item_name in EXCLUDED_ITEM_NAMES.split(","))
         print(
-            f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Excluding Items with names: {excluded_item_names}",
+            f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Excluding Items with names: {excluded_item_names}",
             flush=True,
         )
 
@@ -152,7 +152,7 @@ def read_spec_items(thread_id: str = "main") -> dict:
         technology_annotation.strip() for technology_annotation in ITEM_TECHNOLOGY_ANNOTATIONS.split(",")
     )
     print(
-        f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Reading Items with technology annotations: {filtered_item_technology_annotations}",
+        f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Reading Items with technology annotations: {filtered_item_technology_annotations}",
         flush=True,
     )
 
@@ -160,7 +160,7 @@ def read_spec_items(thread_id: str = "main") -> dict:
         others_annotation.strip() for others_annotation in ITEM_OTHERS_ANNOTATIONS.split(",")
     )
     print(
-        f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Reading Items with others annotations: {filtered_item_others_annotations}",
+        f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Reading Items with others annotations: {filtered_item_others_annotations}",
         flush=True,
     )
 
@@ -193,7 +193,7 @@ def read_spec_items(thread_id: str = "main") -> dict:
 
     if len(spec_items) < 1:
         print(
-            f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Item name and annotation filtering returned no matches!",
+            f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Item name and annotation filtering returned no matches!",
             flush=True,
         )
 
@@ -242,7 +242,7 @@ def dispatch_and_register(thread_id: str) -> None:
     if not concurrency_counter.acquire(blocking=False):
         pending.put(item)
         print(
-            f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Max concurrency reached. Will wait before dispatching new workflows...",
+            f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Max concurrency reached. Will wait before dispatching new workflows...",
             flush=True,
         )
         sleep(10)
@@ -269,7 +269,7 @@ def dispatch_and_register(thread_id: str) -> None:
             )
 
         print(
-            f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Sent dispatch request for '{item}'",
+            f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Sent dispatch request for '{item}'",
             flush=True,
         )
 
@@ -281,7 +281,7 @@ def dispatch_and_register(thread_id: str) -> None:
             dispatch_failed = True
             dispatch_error = f"Failed to dispatch workload run with HTTP error code {dispatch.status_code}"
             print(
-                f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - {dispatch_error}",
+                f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {dispatch_error}",
                 flush=True,
             )
 
@@ -320,7 +320,7 @@ def dispatch_and_register(thread_id: str) -> None:
                 )
 
             print(
-                f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Sent register request for '{item}' (attempt {attempt}/{register_max_attempts})",
+                f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Sent register request for '{item}' (attempt {attempt}/{register_max_attempts})",
                 flush=True,
             )
 
@@ -331,7 +331,7 @@ def dispatch_and_register(thread_id: str) -> None:
                 workflow_runs_count = len(workflow_runs)
 
                 print(
-                    f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Registering {workflow_runs_count} run(s): '{json_dumps(workflow_runs, indent=4)[:1000]}...'",
+                    f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Registering {workflow_runs_count} run(s): '{json_dumps(workflow_runs, indent=4)[:1000]}...'",
                     flush=True,
                 )
 
@@ -339,7 +339,7 @@ def dispatch_and_register(thread_id: str) -> None:
                 register_failed = True
                 register_error = f"Failed to register workload run with HTTP error code {runs.status_code}"
                 print(
-                    f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - {register_error}",
+                    f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {register_error}",
                     flush=True,
                 )
 
@@ -348,7 +348,7 @@ def dispatch_and_register(thread_id: str) -> None:
 
             if attempt < register_max_attempts:
                 print(
-                    f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - "
+                    f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - "
                     f"No runs visible yet for '{item}', retrying in {register_retry_delay_seconds}s "
                     f"({attempt}/{register_max_attempts})...",
                     flush=True,
@@ -360,7 +360,7 @@ def dispatch_and_register(thread_id: str) -> None:
                 register_failed = True
                 register_error = f"No runs match registration criteria for {item.name}"
                 print(
-                    f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - {register_error}",
+                    f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {register_error}",
                     flush=True,
                 )
 
@@ -368,7 +368,7 @@ def dispatch_and_register(thread_id: str) -> None:
                 register_failed = True
                 register_error = f"Multiple possible runs for {item.name}"
                 print(
-                    f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - {register_error}",
+                    f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {register_error}",
                     flush=True,
                 )
 
@@ -422,7 +422,7 @@ def track_status(thread_id: str) -> None:
             run = github_api("GET", f"/repos/{item.owner}/{item.repo}/actions/runs/{item.run_id}")
 
         print(
-            f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Sent check request for '{item}'",
+            f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Sent check request for '{item}'",
             flush=True,
         )
 
@@ -430,7 +430,7 @@ def track_status(thread_id: str) -> None:
             run.raise_for_status()
         except Exception as e:
             print(
-                f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Failed to check status for {item.name} (run ID: '{item.run_id}') with exception: '{e}'",
+                f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Failed to check status for {item.name} (run ID: '{item.run_id}') with exception: '{e}'",
                 flush=True,
             )
             continue
@@ -438,7 +438,7 @@ def track_status(thread_id: str) -> None:
         run = run.json()
 
         print(
-            f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Checking run: '{json_dumps(run, indent=4)[:1000]}...'",
+            f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Checking run: '{json_dumps(run, indent=4)[:1000]}...'",
             flush=True,
         )
 
@@ -457,7 +457,7 @@ def track_status(thread_id: str) -> None:
 
 def reduce_summarize(spec_items: dict, thread_id: str = "main") -> None:
     print(
-        f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - {pending.qsize()} pending, {len(in_progress.keys())} in progress, {done.qsize()} done"
+        f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {pending.qsize()} pending, {len(in_progress.keys())} in progress, {done.qsize()} done"
     )
 
     while not pending.empty():
@@ -484,7 +484,7 @@ def reduce_summarize(spec_items: dict, thread_id: str = "main") -> None:
     else:
         site = "UNKNOWN"
         print(
-            f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Unable to parse site from GH_DOWNSTREAM_WORKFLOW_FILE. By convention, the workflow filename should include any of: ['ecmwf', 'eumetsat']. Got: '{GH_DOWNSTREAM_WORKFLOW_FILE}'"
+            f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Unable to parse site from GH_DOWNSTREAM_WORKFLOW_FILE. By convention, the workflow filename should include any of: ['ecmwf', 'eumetsat']. Got: '{GH_DOWNSTREAM_WORKFLOW_FILE}'"
         )
 
     status_rows = []
@@ -522,7 +522,7 @@ def reduce_summarize(spec_items: dict, thread_id: str = "main") -> None:
     template_path = Path(SUMMARY_TEMPLATE_FILE)
     if not template_path.is_file():
         print(
-            f"::error::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Cannot find summary template at {template_path}",
+            f"::error::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Cannot find summary template at {template_path}",
             flush=True,
         )
         return
@@ -531,7 +531,7 @@ def reduce_summarize(spec_items: dict, thread_id: str = "main") -> None:
         template_content = template_path.read_text(encoding="utf-8")
     except Exception as e:
         print(
-            f"::error::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Failed to read template: {e}",
+            f"::error::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Failed to read template: {e}",
             flush=True,
         )
         return
@@ -549,13 +549,13 @@ def reduce_summarize(spec_items: dict, thread_id: str = "main") -> None:
         summary_path.write_text(summary_contents, encoding="utf-8")
     except Exception as e:
         print(
-            f"::error::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Failed to write summary: {e}",
+            f"::error::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Failed to write summary: {e}",
             flush=True,
         )
 
     if is_any_failed_or_timeout:
         raise SystemExit(
-            f"::error::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Deployment test(s) FAILING! Check the Summary for details"
+            f"::error::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Deployment test(s) FAILING! Check the Summary for details"
         )
 
 
@@ -564,26 +564,26 @@ def reduce_summarize(spec_items: dict, thread_id: str = "main") -> None:
 
 def dispatcher(thread_id: str) -> None:
 
-    print(f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Starting thread", flush=True)
+    print(f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Starting thread", flush=True)
 
     while not stop.is_set():
         try:
             dispatch_and_register(thread_id)
         except Exception as e:
             print(
-                f"::error::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Failed to dispatch workflow due to an unexpected error: {e}",
+                f"::error::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Failed to dispatch workflow due to an unexpected error: {e}",
                 flush=True,
             )
             raise e
 
     print(
-        f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Caught stop event. Exiting... ",
+        f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Caught stop event. Exiting... ",
         flush=True,
     )
 
 
 def tracker(thread_id: str) -> None:
-    print(f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Starting thread", flush=True)
+    print(f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Starting thread", flush=True)
 
     while not stop.is_set():
 
@@ -592,13 +592,13 @@ def tracker(thread_id: str) -> None:
             sleep(POLLING_INTERVAL_SECONDS)
         except Exception as e:
             print(
-                f"::error::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Failed to check for workflow status due to an unexpected error: {e}",
+                f"::error::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Failed to check for workflow status due to an unexpected error: {e}",
                 flush=True,
             )
             raise e
 
     print(
-        f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Caught stop event. Exiting... ",
+        f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Caught stop event. Exiting... ",
         flush=True,
     )
 
@@ -629,18 +629,18 @@ def main() -> None:
         while not pending.empty() or len(in_progress.keys()) > 0:
 
             print(
-                f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - {pending.qsize()} pending, {len(in_progress.keys())} in progress, {done.qsize()} done"
+                f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {pending.qsize()} pending, {len(in_progress.keys())} in progress, {done.qsize()} done"
             )
             sleep(5)
             if datetime.now(timezone.utc) >= total_deadline:
                 print(
-                    f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Total timeout reached"
+                    f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Total timeout reached"
                 )
                 break
 
         stop.set()
-        print(f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Raised stop event...")
- 
+        print(f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Raised stop event...")
+
     reduce_summarize(spec_items)
 
 
