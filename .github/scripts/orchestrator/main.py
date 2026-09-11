@@ -110,7 +110,7 @@ stop: Event = Event()
 # --- Subroutines ---
 
 
-def github_api(method: str, path: str, payload: dict | Any = None, verbose: bool = True) -> Response:
+def github_api(method: str, path: str, payload: dict | Any = None, verbose: bool = False) -> Response:
 
     if verbose:
         print(
