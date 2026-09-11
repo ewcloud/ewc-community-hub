@@ -7112,21 +7112,21 @@ spec:
         Ansible playbook to create and configure the desired list of local users on the target hosts.
 
         ## Usage
-        
+
         ```bash
         # Use the default users file (users.yml in the main repo folder)
         ansible-playbook playbooks/create_vm_users.yml
-        
+
         # Use a custom users file
         ansible-playbook playbooks/create_vm_users.yml -e users_file=path/to/users.yml
-        
+
         ```
-        
+
         ## Passing the users file
-        
+
         The playbook reads the account list from a YAML file with a top-level `users:` key.
         Point to it with `-e users_file=<path>`; if omitted, `users.yml` beside the playbook is used.
-        
+
         ```yaml
         # users.yml
         users:
@@ -7136,16 +7136,16 @@ spec:
             sudo: true
             ssh_keys:
               - "ssh-ed25519 AAAA... alice@laptop"
-        
+
           - username: carol
             state: absent
         ```
-        
-        
+
+
         ## Variables
-        
+
         ### Per-user fields (`users` list)
-        
+
         | Field         | Required | Description                                                                 |
         | ------------- | -------- | --------------------------------------------------------------------------- |
         | `username`    | yes      | Login name of the account.                                                  |
@@ -7157,19 +7157,19 @@ spec:
         | `password`    | no       | Pre-computed password **hash** (crypt `$6$...`, never plaintext; Vault it). Set only on account creation. |
         | `remove_home` | no       | When `state: absent`, also delete the home directory.                       |
         | `state`       | no       | `present` (default) creates/updates the user; `absent` removes the account. |
-        
+
         ### Group GIDs (`group_gids` map)
-        
+
         Optional top-level `name: gid` map to assign fixed GIDs to created groups. Fails if a GID is
         already used by a different group.
-        
+
         ```yaml
         group_gids:
           developers: 3000
           deploy: 3001
         ```
-        
-        
+
+
         | Variable                     | Default     | Description                                              |
         | ---------------------------- | ----------- | -------------------------------------------------------- |
         | `user_default_shell`         | `/bin/bash` | Login shell for created accounts.                        |
@@ -7177,7 +7177,7 @@ spec:
         | `user_remove_home_on_delete` | `false`     | Also remove the home directory when `state: absent`.     |
         | `sudo_nopasswd`              | `true`      | `true` = passwordless sudo (NOPASSWD); `false` = prompt. |
         | `user_force_password_change` | `true`      | Expire an initial `password` on creation, forcing a change at first login. |
-        
+
 
       ewccli:
         pathToRequirementsFile: requirements.yml
