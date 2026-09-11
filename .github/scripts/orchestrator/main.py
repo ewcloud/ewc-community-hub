@@ -301,8 +301,8 @@ def dispatch_and_register(thread_id: str) -> None:
             )
             return  # returns through the `finally` statement at the bottom, which reduces the concurrency count
 
-        dispatch_delay_seconds = 5
-        max_dispatch_time = item.dispatch_time + timedelta(seconds=dispatch_delay_seconds)
+        dispatch_lag_seconds = 5
+        lagged_dispatch_time = item.dispatch_time + timedelta(seconds=dispatch_lag_seconds)
 
         runs = None
         register_failed = False
@@ -310,19 +310,21 @@ def dispatch_and_register(thread_id: str) -> None:
         workflow_runs = []
         workflow_runs_count = 0
 
-        register_max_attempts = 3
+        register_max_attempts = 5
         register_retry_delay_seconds = 3
         for attempt in range(1, register_max_attempts + 1):
+
+            sleep(register_retry_delay_seconds)
 
             if EWCCLI_ANNOTATION in ITEM_OTHERS_ANNOTATIONS:
                 runs = github_api(
                     "GET",
-                    f"/repos/{EWCCLI_GH_API_REPO_ENDPOINT}/actions/workflows/{GH_DOWNSTREAM_WORKFLOW_FILE}/runs?event=workflow_dispatch&created={item.dispatch_time.isoformat().replace("+00:00", "Z")}..{max_dispatch_time.isoformat().replace("+00:00", "Z")}",
+                    f"/repos/{EWCCLI_GH_API_REPO_ENDPOINT}/actions/workflows/{GH_DOWNSTREAM_WORKFLOW_FILE}/runs?event=workflow_dispatch&created={item.dispatch_time.isoformat().replace("+00:00", "Z")}..{lagged_dispatch_time.isoformat().replace("+00:00", "Z")}",
                 )
             else:
                 runs = github_api(
                     "GET",
-                    f"/repos/{item.owner}/{item.repo}/actions/workflows/{GH_DOWNSTREAM_WORKFLOW_FILE}/runs?event=workflow_dispatch&created={item.dispatch_time.isoformat().replace("+00:00", "Z")}..{max_dispatch_time.isoformat().replace("+00:00", "Z")}",
+                    f"/repos/{item.owner}/{item.repo}/actions/workflows/{GH_DOWNSTREAM_WORKFLOW_FILE}/runs?event=workflow_dispatch&created={item.dispatch_time.isoformat().replace("+00:00", "Z")}..{lagged_dispatch_time.isoformat().replace("+00:00", "Z")}",
                 )
 
             print(
@@ -357,8 +359,9 @@ def dispatch_and_register(thread_id: str) -> None:
                     f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - No runs visible yet for '{item}', retrying in {register_retry_delay_seconds}s ({attempt}/{register_max_attempts})...",
                     flush=True,
                 )
-                max_dispatch_time = max_dispatch_time + timedelta(seconds=1) # increase search time window by 1 second in case GitHub API lags more than usual
-                sleep(register_retry_delay_seconds)
+                lagged_dispatch_time = lagged_dispatch_time + timedelta(
+                    seconds=1
+                )  # increase search time window by 1 second in case GitHub API lags more than usual
 
         if not register_failed:
             if workflow_runs_count == 0:
