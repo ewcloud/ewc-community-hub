@@ -235,7 +235,7 @@ def parse_items(spec_items: dict) -> list[Item]:
 
 def dispatch_and_register(thread_id: str) -> None:
     try:
-        item = pending.get(timeout=1)
+        item = pending.get_nowait()
     except Empty:
         return
 
@@ -291,46 +291,71 @@ def dispatch_and_register(thread_id: str) -> None:
                 "DISPATCH_FAILED",
                 dispatch_error,
             )
-            return  # returns through the `finally` statement at the bottom
+            return  # returns through the `finally` statement at the bottom, which reduces the concurrency count
 
-        buffer_seconds = 1
-        dispatch_delay_seconds = 5
         item.dispatch_time = datetime.now(timezone.utc)
+        dispatch_delay_seconds = 5
         max_dispatch_time = item.dispatch_time + timedelta(seconds=dispatch_delay_seconds)
-        sleep(dispatch_delay_seconds + buffer_seconds)
 
-        # register
-        if EWCCLI_ANNOTATION in ITEM_OTHERS_ANNOTATIONS:
-            runs = github_api(
-                "GET",
-                f"/repos/{EWCCLI_GH_API_REPO_ENDPOINT}/actions/workflows/{GH_DOWNSTREAM_WORKFLOW_FILE}/runs?event=workflow_dispatch&created={item.dispatch_time.isoformat().replace("+00:00", "Z")}..{max_dispatch_time.isoformat().replace("+00:00", "Z")}",
-            )
-        else:
-            runs = github_api(
-                "GET",
-                f"/repos/{item.owner}/{item.repo}/actions/workflows/{GH_DOWNSTREAM_WORKFLOW_FILE}/runs?event=workflow_dispatch&created={item.dispatch_time.isoformat().replace("+00:00", "Z")}..{max_dispatch_time.isoformat().replace("+00:00", "Z")}",
-            )
+        register_max_attempts = 4
+        register_retry_delay_seconds = 2
 
-        print(
-            f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Sent register request for '{item}'",
-            flush=True,
-        )
-
+        runs = None
         register_failed = False
         register_error = ""
         workflow_runs = []
         workflow_runs_count = 0
-        try:
-            runs.raise_for_status()
-            runs_json = runs.json()
-            workflow_runs = runs_json.get("workflow_runs", [])
-            workflow_runs_count = len(workflow_runs)
+
+        for attempt in range(1, register_max_attempts + 1):
+
+            if EWCCLI_ANNOTATION in ITEM_OTHERS_ANNOTATIONS:
+                runs = github_api(
+                    "GET",
+                    f"/repos/{EWCCLI_GH_API_REPO_ENDPOINT}/actions/workflows/{GH_DOWNSTREAM_WORKFLOW_FILE}/runs?event=workflow_dispatch&created={item.dispatch_time.isoformat().replace("+00:00", "Z")}..{max_dispatch_time.isoformat().replace("+00:00", "Z")}",
+                )
+            else:
+                runs = github_api(
+                    "GET",
+                    f"/repos/{item.owner}/{item.repo}/actions/workflows/{GH_DOWNSTREAM_WORKFLOW_FILE}/runs?event=workflow_dispatch&created={item.dispatch_time.isoformat().replace("+00:00", "Z")}..{max_dispatch_time.isoformat().replace("+00:00", "Z")}",
+                )
 
             print(
-                f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Registering {workflow_runs_count} run(s): '{json_dumps(workflow_runs, indent=4)[:1000]}...'",
+                f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Sent register request for '{item}' (attempt {attempt}/{register_max_attempts})",
                 flush=True,
             )
 
+            try:
+                runs.raise_for_status()
+                runs_json = runs.json()
+                workflow_runs = runs_json.get("workflow_runs", [])
+                workflow_runs_count = len(workflow_runs)
+
+                print(
+                    f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Registering {workflow_runs_count} run(s): '{json_dumps(workflow_runs, indent=4)[:1000]}...'",
+                    flush=True,
+                )
+
+            except Exception:
+                register_failed = True
+                register_error = f"Failed to register workload run with HTTP error code {runs.status_code}"
+                print(
+                    f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - {register_error}",
+                    flush=True,
+                )
+
+            if workflow_runs_count >= 1:
+                break  # got a response with HTTP 200 code, no need to loop anymore
+
+            if attempt < register_max_attempts:
+                print(
+                    f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - "
+                    f"No runs visible yet for '{item}', retrying in {register_retry_delay_seconds}s "
+                    f"({attempt}/{register_max_attempts})...",
+                    flush=True,
+                )
+                sleep(register_retry_delay_seconds)
+
+        if not register_failed:
             if workflow_runs_count == 0:
                 register_failed = True
                 register_error = f"No runs match registration criteria for {item.name}"
@@ -347,17 +372,9 @@ def dispatch_and_register(thread_id: str) -> None:
                     flush=True,
                 )
 
-        except Exception:
-            register_failed = True
-            register_error = f"Failed to register workload run with HTTP error code {runs.status_code}"
-            print(
-                f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - {register_error}",
-                flush=True,
-            )
-
         if register_failed:
             move_to_done(item, "REGISTER_FAILED", register_error)
-            return  # returns through the `finally` statement at the bottom
+            return  # returns through the `finally` statement at the bottom, which reduces the concurrency count
 
         item.run_id = workflow_runs[0]["id"]
         item.state = "REGISTERED"
@@ -623,8 +640,7 @@ def main() -> None:
 
         stop.set()
         print(f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<13} - Raised stop event...")
-        sleep(30)
-
+ 
     reduce_summarize(spec_items)
 
 
