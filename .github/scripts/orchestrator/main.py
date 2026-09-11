@@ -348,7 +348,6 @@ def dispatch_and_register(thread_id: str) -> None:
                     f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {register_error}",
                     flush=True,
                 )
-                sleep(register_retry_delay_seconds)
 
             if workflow_runs_count >= 1:
                 break  # got a response with HTTP 200 code, no need to loop anymore
@@ -358,6 +357,8 @@ def dispatch_and_register(thread_id: str) -> None:
                     f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - No runs visible yet for '{item}', retrying in {register_retry_delay_seconds}s ({attempt}/{register_max_attempts})...",
                     flush=True,
                 )
+                max_dispatch_time = max_dispatch_time + timedelta(seconds=1) # increase search time window by 1 second in case GitHub API lags more than usual
+                sleep(register_retry_delay_seconds)
 
         if not register_failed:
             if workflow_runs_count == 0:
@@ -369,8 +370,8 @@ def dispatch_and_register(thread_id: str) -> None:
                 )
 
             if workflow_runs_count > 1:
-                register_failed = True
-                register_error = f"Multiple possible runs for {item.name}"
+                register_failed = False
+                register_error = f"Multiple possible runs for {item.name}. Cherry-picking the 1st one..."
                 print(
                     f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {register_error}",
                     flush=True,
