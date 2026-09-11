@@ -16,6 +16,9 @@ A python script containing the business logic executed by [GitHub Actions](../..
 
 ## Configuration
 
+>💡 The behaviour of the orchestration can be configured via environment variables. For a complete up-to-date of supported variables, checkout [main.py](main.py#L17-L26).
+
+
 ### Test Inclusions
 Items to be tested are filtered by a combination of the following conditions (logical AND):
 1. the value of the `ITEM_TECHNOLOGY_ANNOTATIONS`env var is equivalent to the `annotations[].technology` attribute values
@@ -45,8 +48,31 @@ workflow.
     >💡 Checkout an example of a compatible downstream workflow file at
 https://github.com/ewcloud/ewccli/blob/3405f8bf2aa458c5efaca8d646dff0a54d7191ee/.github/workflows/test-deployment-ansible-ecmwf.yml#L1-L63
 
-## Development
+## Maintainers Quick Start Guide
 
+### Key Concepts
+
+This piece of orchestration calls the GitHub API under a strict concurrency limit. Coordination is achieved via multi-threading orchestration primitives.
+Filtered catalogue items are enqueued as work, then drove through three pipeline stages:
+>  dispatch -> registration -> status polling -> summarization
+
+The pipeline is drained when every item reaches a terminal state or a global timeout fires.
+
+#### Shared state
+- `pending`: unbounded queue of items still waiting to be launched.
+- `in_progress`: thread-safe dictionary holding the currently running workflows, guarded by a `concurrency_counter` semaphore whose initial value equals `MAX_CONCURRENT_WORKFLOWS`.
+- `done`: queue that accumulates finished (or failed/timed-out) items.
+- `stop`: threading Event used to signal shutdown.
+
+#### Thread roles
+- **Main thread**: loads and filters the catalogue, populates `pending`, starts the worker threads, enforces the total wall-clock deadline, raises the stop event, and then produces the final summary.
+- **Dispatcher thread**: repeatedly increases the `concurrency_counter` semaphore , pulls an item from `pending`, dispatches the corresponding workflow via the GitHub API, register the resulting run ID, and insert the item into the `in_progress` dictionary. On any failure the item is moved straight to `done` making sure to carry over the error code if possible.
+- **Tracker thread**: periodically scans the `in_progress` dictionary. For each item, it queries the GitHub run status; when a run reaches a terminal state the item is moved to `done` and the `concurrency_counter` semaphore is reduced. 
+
+The `concurrency_counter` semaphore guarantees that the number of concurrent workflows never exceeds the configured limit; the `in_progress` thread-safe dictionary lets the tracker thread inspect status without pulling out of a queue/re-enqueuing, hence minimizing the risk of race conditions.
+
+
+### Developing & Unittesting
 1. Setup a `python` virtual environment. Then install the all requirements:
 
     ```bash
