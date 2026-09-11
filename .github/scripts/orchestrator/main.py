@@ -304,16 +304,16 @@ def dispatch_and_register(thread_id: str) -> None:
         dispatch_delay_seconds = 5
         max_dispatch_time = item.dispatch_time + timedelta(seconds=dispatch_delay_seconds)
 
-        register_max_attempts = 4
-        register_retry_delay_seconds = 2
-
         runs = None
         register_failed = False
         register_error = ""
         workflow_runs = []
         workflow_runs_count = 0
 
+        register_max_attempts = 3
+        register_retry_delay_seconds = 3
         for attempt in range(1, register_max_attempts + 1):
+            sleep(register_retry_delay_seconds)
 
             if EWCCLI_ANNOTATION in ITEM_OTHERS_ANNOTATIONS:
                 runs = github_api(
@@ -355,12 +355,9 @@ def dispatch_and_register(thread_id: str) -> None:
 
             if attempt < register_max_attempts:
                 print(
-                    f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - "
-                    f"No runs visible yet for '{item}', retrying in {register_retry_delay_seconds}s "
-                    f"({attempt}/{register_max_attempts})...",
+                    f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - No runs visible yet for '{item}', retrying in {register_retry_delay_seconds}s ({attempt}/{register_max_attempts})...",
                     flush=True,
                 )
-                sleep(register_retry_delay_seconds)
 
         if not register_failed:
             if workflow_runs_count == 0:
