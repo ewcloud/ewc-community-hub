@@ -692,11 +692,17 @@ def main() -> None:
         pending.put(items.pop())
 
     with ThreadPoolExecutor(max_workers=2) as executor:
+        print(
+            f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {pending.qsize()} pending, 0 in progress, 0 done",
+            flush=True,
+        )
 
         executor.submit(dispatcher, thread_id="dispatcher")
         executor.submit(tracker, thread_id="tracker")
 
         while done.qsize() < pending.qsize() + len(in_progress.keys()):
+            sleep(30)
+
             print(
                 f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {pending.qsize()} pending, {len(in_progress.keys())} in progress, {done.qsize()} done",
                 flush=True,
@@ -708,8 +714,6 @@ def main() -> None:
                     flush=True,
                 )
                 break
-
-            sleep(30)
 
         stop.set()
         print(
