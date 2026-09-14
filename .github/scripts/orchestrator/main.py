@@ -39,8 +39,6 @@ GH_WORKSPACE = getenv("GITHUB_WORKSPACE", REPO_ROOT_DIR)
 CATALOG_FILE = f"{GH_WORKSPACE}/items.yaml"
 SUMMARY_TEMPLATE_FILE = f"{GH_WORKSPACE}/.github/scripts/orchestrator/summary.template.md"
 
-print(f"GH_WORKSPACE: {GH_WORKSPACE}")
-
 EWCCLI_ANNOTATION = "EWCCLI-compatible"
 EWCCLI_GH_API_REPO_ENDPOINT = "ewcloud/ewccli"
 
@@ -475,7 +473,8 @@ def track_status(thread_id: str) -> None:
 
 def reduce_summarize(spec_items: dict, thread_id: str = "main") -> None:
     print(
-        f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {pending.qsize()} pending, {len(in_progress.keys())} in progress, {done.qsize()} done"
+        f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {pending.qsize()} pending, {len(in_progress.keys())} in progress, {done.qsize()} done",
+        flush=True,
     )
 
     while not pending.empty():
@@ -502,7 +501,8 @@ def reduce_summarize(spec_items: dict, thread_id: str = "main") -> None:
     else:
         site = "UNKNOWN"
         print(
-            f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Unable to parse site from GH_DOWNSTREAM_WORKFLOW_FILE. By convention, the workflow filename should include any of: ['ecmwf', 'eumetsat']. Got: '{GH_DOWNSTREAM_WORKFLOW_FILE}'"
+            f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Unable to parse site from GH_DOWNSTREAM_WORKFLOW_FILE. By convention, the workflow filename should include any of: ['ecmwf', 'eumetsat']. Got: '{GH_DOWNSTREAM_WORKFLOW_FILE}'",
+            flush=True,
         )
 
     status_rows = []
@@ -645,19 +645,24 @@ def main() -> None:
 
         while done.qsize() < pending.qsize() + len(in_progress.keys()):
             print(
-                f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {pending.qsize()} pending, {len(in_progress.keys())} in progress, {done.qsize()} done"
+                f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {pending.qsize()} pending, {len(in_progress.keys())} in progress, {done.qsize()} done",
+                flush=True,
             )
 
             if datetime.now(timezone.utc) >= total_deadline:
                 print(
-                    f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Total timeout reached"
+                    f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Total timeout reached",
+                    flush=True,
                 )
                 break
 
             sleep(30)
 
         stop.set()
-        print(f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Raised stop event...")
+        print(
+            f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Raised stop event...",
+            flush=True,
+        )
 
     reduce_summarize(spec_items)
 
