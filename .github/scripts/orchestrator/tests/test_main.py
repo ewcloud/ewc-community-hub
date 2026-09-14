@@ -30,7 +30,7 @@ path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import main as orchestrator  # noqa: E402
 
-_REAL_SLEEP = sleep  # captured before any module monkey patching
+_MOCK_SLEEP = sleep  # captured before any module monkey patching
 
 # --- Fixtures & Mocks ---
 
@@ -46,7 +46,7 @@ def reset_orchestrator_state(monkeypatch):
     monkeypatch.setattr(orchestrator, "RUN_TIMEOUT_MINUTES", 20)
 
     def clamped_sleep(seconds=0, *_args, **_kwargs):
-        _REAL_SLEEP(min(seconds, 0.01) if seconds else 0)
+        _MOCK_SLEEP(min(seconds, 0.01) if seconds else 0)
 
     monkeypatch.setattr(orchestrator, "sleep", clamped_sleep)
     yield
@@ -77,7 +77,7 @@ def make_fake_github_api(jitter_seconds=0.005, min_polls=0, max_polls=2):
             return next(next_run_id)
 
     def fake_github_api(method, path_, payload=None):
-        _REAL_SLEEP(uniform(0, jitter_seconds))
+        _MOCK_SLEEP(uniform(0, jitter_seconds))
 
         if method == "POST" and "/dispatches" in path_:
             res = Mock(status_code=204)
@@ -180,7 +180,7 @@ def test_concurrency_stress_drains_and_respects_concurrency_counter(
                 ):
                     drained = True
                     break
-                _REAL_SLEEP(0.02)
+                _MOCK_SLEEP(0.02)
 
             if not drained:
                 pytest.fail(
