@@ -410,6 +410,11 @@ def track_status(thread_id: str) -> None:
             if item is None:
                 continue
 
+            timeout_error = f"Forcing timeout on all items, including '{item}', due to total deadline reached"
+            print(
+                f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {timeout_error}",
+                flush=True,
+            )
             move_to_done(item, "TIMED_OUT", "Total deadline reached")
             concurrency_counter.release()
             continue
@@ -420,6 +425,11 @@ def track_status(thread_id: str) -> None:
             if item is None:
                 continue
 
+            timeout_error = f"Forcing timeout on '{item}' due to per-run deadline reached"
+            print(
+                f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {timeout_error}",
+                flush=True,
+            )
             move_to_done(item, "TIMED_OUT", "Per-run deadline reached")
             concurrency_counter.release()
             continue
