@@ -687,26 +687,30 @@ def main() -> None:
 
     spec_items = read_spec_items()
     items = parse_items(spec_items)
+    item_count = len(items)
+    print(
+        f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Status: {item_count} pending, 0 in progress, 0 done",
+        flush=True,
+    )
 
     while len(items) > 0:
         pending.put(items.pop())
 
     with ThreadPoolExecutor(max_workers=2) as executor:
-        print(
-            f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {pending.qsize()} pending, 0 in progress, 0 done",
-            flush=True,
-        )
-
         executor.submit(dispatcher, thread_id="dispatcher")
         executor.submit(tracker, thread_id="tracker")
 
-        while done.qsize() < pending.qsize() + len(in_progress.keys()):
+        while True:
             sleep(POLLING_INTERVAL_SECONDS)
 
             print(
-                f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {pending.qsize()} pending, {len(in_progress.keys())} in progress, {done.qsize()} done",
+                f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Status: {pending.qsize()} pending, {len(in_progress.keys())} in progress, {done.qsize()} done",
                 flush=True,
             )
+
+            completion = (pending.qsize() == 0) & (len(in_progress.keys()) == 0) & (done.qsize() == item_count)
+            if completion:
+                break
 
             if datetime.now(timezone.utc) >= total_deadline:
                 print(
