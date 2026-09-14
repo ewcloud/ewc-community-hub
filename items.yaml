@@ -4,7 +4,7 @@ spec:
   items:
     ai-models:
       name: "ai-models"
-      version: "1.0.1"
+      version: "1.1.0"
       description: |
         Create a conda environment with the ai-models package and associated plugins to run a set of data-driven weather forecasting models such as panguweather or graphcast.
 
@@ -633,7 +633,7 @@ spec:
 
     ecmwf-aifs-ens-crps:
       name: "ecmwf-aifs-ens-crps"
-      version: "1.0.2"
+      version: "1.1.0"
       description: |
         Create a conda environment with AIFS ENS CRPS data-driven model and associated software stack.
         Featuring the ECMWF AIFS ENS CRPS data-driven model. Find more information in <https://huggingface.co/ecmwf/aifs-ens-1.0>
@@ -700,11 +700,11 @@ spec:
 
     ecmwf-anemoi:
       name: "ecmwf-anemoi"
-      version: "1.0.1"
+      version: "1.1.0"
       ewccli:
-        pathToMainFile: anemoi.yml
+        pathToMainFile: playbooks/anemoi/anemoi.yml
       values:
-        pathToMainFile: anemoi.yml
+        pathToMainFile: playbooks/anemoi/anemoi.yml
       description: |
         Create a conda environment with the Anemoi framework for weather forecasting based on machine learning and associated software stack.
 
@@ -4736,11 +4736,11 @@ spec:
 
     ml-basic:
       name: "ml-basic"
-      version: "1.0.1"
+      version: "1.1.0"
       ewccli:
-        pathToMainFile: ml-basic.yml
+        pathToMainFile: playbooks/ml-basic/ml-basic.yml
       values:
-        pathToMainFile: ml-basic.yml
+        pathToMainFile: playbooks/ml-basic/ml-basic.yml
       description: |
         Create a conda environment with the basic Machine Learning packages such as torch, xgboost, and scikit-learn. Check `files/env.yml` for all the details on the software included.
 
