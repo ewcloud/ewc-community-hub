@@ -53,18 +53,12 @@ jobs:
       - name: Install additional dependencies
         run: pip install -r .github/scripts/orchestrator/requirements.txt
 
-      - name: Generate installation token for EWC Community Hub CI Orchestrator GitHub App
-        id: app-token
-        uses: actions/create-github-app-token@v3
-        with:
-          client-id: ${{ vars.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_CLIENT_ID }}
-          private-key: ${{ secrets.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_PRIVATE_KEY }}
-          owner: ${{ github.repository_owner }}
-
       - name: Orchestrate deployments testing
         run: python .github/scripts/orchestrator/main.py
         env:
-          GH_API_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_CLIENT_ID: ${{ vars.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_CLIENT_ID }}
+          GH_APP_PRIVATE_KEY: ${{ secrets.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_PRIVATE_KEY }}
+          GH_APP_OWNER: ${{ github.repository_owner }}
           ITEM_NAMES: ${{ inputs.item-names }}
           EXCLUDED_ITEM_NAMES: ${{ inputs.excluded-item-names }}
           ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"

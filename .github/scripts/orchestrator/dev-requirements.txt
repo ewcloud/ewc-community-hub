@@ -4,3 +4,4 @@ mypy~=1.19.1
 types-PyYAML~=6.0
 types-requests~=2.33
 pytest~=9.1
+types-jwt~=0.1

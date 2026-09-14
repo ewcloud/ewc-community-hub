@@ -7,14 +7,17 @@ from os import environ, getenv, path
 from queue import Queue, Empty
 from pathlib import Path
 from requests import request, Response
-from time import sleep
+from time import sleep, time, mktime, strptime
 from threading import Event, Semaphore, Lock
 from typing import Any
 from yaml import safe_load as yaml_safe_load
+from jwt import encode as jwt_encode
 
 # --- Input Environmental Variables ---
 
-GH_API_TOKEN = environ["GH_API_TOKEN"]
+GH_CLIENT_ID = environ["GH_CLIENT_ID"]
+GH_APP_PRIVATE_KEY = environ["GH_APP_PRIVATE_KEY"]
+GH_APP_OWNER = environ["GH_APP_OWNER"]
 GH_DOWNSTREAM_WORKFLOW_FILE = environ["GH_DOWNSTREAM_WORKFLOW_FILE"]
 ITEM_NAMES = getenv("ITEM_NAMES", "")
 EXCLUDED_ITEM_NAMES = getenv("EXCLUDED_ITEM_NAMES", "")
@@ -28,11 +31,6 @@ MAX_CONCURRENT_WORKFLOWS = int(environ["MAX_CONCURRENT_WORKFLOWS"])
 #  --- Global Static/Variable Defaults ---
 
 API_BASE = "https://api.github.com"
-HEADERS = {
-    "Authorization": f"Bearer {GH_API_TOKEN}",
-    "Accept": "application/vnd.github+json",
-    "X-GitHub-Api-Version": "2022-11-28",
-}
 
 REPO_ROOT_DIR = path.dirname(path.dirname(path.dirname(Path(__file__).parent.resolve())))
 GH_WORKSPACE = getenv("GITHUB_WORKSPACE", REPO_ROOT_DIR)
@@ -49,6 +47,56 @@ GRAY_LIGHT = "⚫"
 TIME_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 
 #  --- Global Runtime State ---
+
+
+class GitHubAppTokenCreator:
+    def __init__(self, client_id: str, private_key: str, owner: str, refresh_buffer_seconds: int = 300) -> None:
+        self.client_id = client_id
+        self.private_key = private_key
+        self.owner = owner
+        self.refresh_buffer_seconds = refresh_buffer_seconds
+        self._installation_id = None
+        self._token = None
+        self._expires_at = 0.0
+
+    def _generate_jwt(self) -> str:
+        now = int(time())
+        payload = {"iat": now - 60, "exp": now + 9 * 60, "iss": self.client_id}
+        return jwt_encode(payload, self.private_key, algorithm="RS256")  # type: ignore
+
+    def _get_installation_id(self) -> int:
+        if self._installation_id:
+            return self._installation_id
+        headers = {
+            "Authorization": f"Bearer {self._generate_jwt()}",
+            "Accept": "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28",
+        }
+        response = request("GET", f"https://api.github.com/orgs/{self.owner}/installation", headers=headers, timeout=30)
+        response.raise_for_status()
+        self._installation_id = response.json()["id"]
+        return self._installation_id  # type: ignore
+
+    def get_token(self) -> str:
+        if self._token and time() < self._expires_at - self.refresh_buffer_seconds:
+            return self._token
+
+        headers = {
+            "Authorization": f"Bearer {self._generate_jwt()}",
+            "Accept": "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28",
+        }
+        response = request(
+            "POST",
+            f"https://api.github.com/app/installations/{self._get_installation_id()}/access_tokens",
+            headers=headers,
+            timeout=30,
+        )
+        response.raise_for_status()
+        data = response.json()
+        self._token = data["token"]
+        self._expires_at = mktime(strptime(data["expires_at"], "%Y-%m-%dT%H:%M:%SZ"))
+        return self._token  # type: ignore
 
 
 class Item:
@@ -104,6 +152,7 @@ concurrency_counter: Semaphore = Semaphore(MAX_CONCURRENT_WORKFLOWS)
 in_progress: ThreadSafeDict = ThreadSafeDict()
 done: Queue = Queue()
 stop: Event = Event()
+auth = GitHubAppTokenCreator(GH_CLIENT_ID, GH_APP_PRIVATE_KEY, GH_APP_OWNER)
 
 # --- Subroutines ---
 
@@ -119,7 +168,11 @@ def github_api(method: str, path: str, payload: dict | Any = None, verbose: bool
     response = request(
         method,
         f"{API_BASE}{path}",
-        headers=HEADERS,
+        headers={
+            "Authorization": f"Bearer {auth.get_token()}",
+            "Accept": "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28",
+        },
         json=payload,
         timeout=15,
     )
