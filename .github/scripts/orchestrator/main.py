@@ -303,7 +303,7 @@ def dispatch_and_register(thread_id: str) -> None:
             f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Max concurrency reached. Will wait before dispatching new workflows...",
             flush=True,
         )
-        sleep(10)
+        sleep(POLLING_INTERVAL_SECONDS)
         return
 
     acquired = True
@@ -701,7 +701,7 @@ def main() -> None:
         executor.submit(tracker, thread_id="tracker")
 
         while done.qsize() < pending.qsize() + len(in_progress.keys()):
-            sleep(30)
+            sleep(POLLING_INTERVAL_SECONDS)
 
             print(
                 f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {pending.qsize()} pending, {len(in_progress.keys())} in progress, {done.qsize()} done",
