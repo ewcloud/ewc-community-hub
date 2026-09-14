@@ -61,6 +61,15 @@ workflow.
     >💡 Checkout an example of a compatible downstream workflow file at
 https://github.com/ewcloud/ewccli/blob/3405f8bf2aa458c5efaca8d646dff0a54d7191ee/.github/workflows/test-deployment-ansible-ecmwf.yml#L1-L63
 
+### Test with Input Default Values as Environment Variables
+Item input default values are read from two source:
+1. **Metadata**: The `values.inputSpec` catalog metadata.
+2. **Environment Variables**: As a fallback method if no default is included in the metadata. Assumes the key corresponds to an uppercase-snake-case version of the key in the metadata.
+For example, if the metadata contains `letsencrypt-email` as an input key, then will search for `LETSENCRYPT_EMAIL` within the available environment variables.
+
+This feature is convenient when a reasonable default can not be set for all inputs, say, when there values are considered secret or user-specific.
+
+
 ## Maintainers Quick Start Guide
 
 ### Design Overview
