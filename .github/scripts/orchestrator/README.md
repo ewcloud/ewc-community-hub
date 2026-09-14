@@ -18,7 +18,9 @@ A python script containing the business logic executed by [GitHub Actions](../..
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|----------|
-GH_API_TOKEN | Short-lived token from a GitHub App or personal access token with "action edit" permissions | `string` | n/a | yes |
+GH_CLIENT_ID | ID of the GitHub App used to generate short-lived tokens with "action edit" permission  | `string` | n/a | yes | 
+GH_APP_PRIVATE_KEY | Private SSH key pair of the GitHub App, used to request tokens  |  `string` | n/a | yes |
+GH_APP_OWNER | GitHub organization which owns the GitHub App for which short-lived tokens are generated | `string`  | n/a | yes |
 GH_DOWNSTREAM_WORKFLOW_FILE | Filename in the downstream repository containing the workflow definition. Example: `test-ecmwf.yml` | `string` | n/a | yes |
 ITEM_NAMES | Name of items to be tested, concatenated with coma (,). Example: `ssh-bastion-flavour,remote-desktop-flavour` | `string` | n/a/ | yes |
 EXCLUDED_ITEM_NAMES | Names item names to be ignored, concatenated with coma (,). Example: `ipa-server-flavour,xcube-viewer-flavour` | `string` | n/a | no |
