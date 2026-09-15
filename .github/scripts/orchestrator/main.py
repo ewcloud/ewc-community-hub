@@ -7,14 +7,17 @@ from os import environ, getenv, path
 from queue import Queue, Empty
 from pathlib import Path
 from requests import request, Response
-from time import sleep
-from threading import Event
+from time import sleep, time, mktime, strptime
+from threading import Event, Semaphore, Lock
 from typing import Any
 from yaml import safe_load as yaml_safe_load
+from jwt import encode as jwt_encode
 
 # --- Input Environmental Variables ---
 
-GH_API_TOKEN = environ["GH_API_TOKEN"]
+GH_CLIENT_ID = environ["GH_CLIENT_ID"]
+GH_APP_PRIVATE_KEY = environ["GH_APP_PRIVATE_KEY"]
+GH_APP_OWNER = environ["GH_APP_OWNER"]
 GH_DOWNSTREAM_WORKFLOW_FILE = environ["GH_DOWNSTREAM_WORKFLOW_FILE"]
 ITEM_NAMES = getenv("ITEM_NAMES", "")
 EXCLUDED_ITEM_NAMES = getenv("EXCLUDED_ITEM_NAMES", "")
@@ -28,18 +31,11 @@ MAX_CONCURRENT_WORKFLOWS = int(environ["MAX_CONCURRENT_WORKFLOWS"])
 #  --- Global Static/Variable Defaults ---
 
 API_BASE = "https://api.github.com"
-HEADERS = {
-    "Authorization": f"Bearer {GH_API_TOKEN}",
-    "Accept": "application/vnd.github+json",
-    "X-GitHub-Api-Version": "2022-11-28",
-}
 
 REPO_ROOT_DIR = path.dirname(path.dirname(path.dirname(Path(__file__).parent.resolve())))
 GH_WORKSPACE = getenv("GITHUB_WORKSPACE", REPO_ROOT_DIR)
 CATALOG_FILE = f"{GH_WORKSPACE}/items.yaml"
 SUMMARY_TEMPLATE_FILE = f"{GH_WORKSPACE}/.github/scripts/orchestrator/summary.template.md"
-
-print(f"GH_WORKSPACE: {GH_WORKSPACE}")
 
 EWCCLI_ANNOTATION = "EWCCLI-compatible"
 EWCCLI_GH_API_REPO_ENDPOINT = "ewcloud/ewccli"
@@ -48,15 +44,59 @@ RED_LIGHT = "🔴"
 YELLOW_LIGHT = "🟡"
 GREEN_LIGHT = "🟢"
 GRAY_LIGHT = "⚫"
+TIME_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 
 #  --- Global Runtime State ---
 
-pending: Queue = Queue()
-in_progress: Queue = Queue(maxsize=MAX_CONCURRENT_WORKFLOWS)
-done: Queue = Queue()
-stop: Event = Event()
 
-# --- Classes ---
+class GitHubAppTokenCreator:
+    def __init__(self, client_id: str, private_key: str, owner: str, refresh_buffer_seconds: int = 300) -> None:
+        self.client_id = client_id
+        self.private_key = private_key
+        self.owner = owner
+        self.refresh_buffer_seconds = refresh_buffer_seconds
+        self._installation_id = None
+        self._token = None
+        self._expires_at = 0.0
+
+    def _generate_jwt(self) -> str:
+        now = int(time())
+        payload = {"iat": now - 60, "exp": now + 9 * 60, "iss": self.client_id}
+        return jwt_encode(payload, self.private_key, algorithm="RS256")  # type: ignore
+
+    def _get_installation_id(self) -> int:
+        if self._installation_id:
+            return self._installation_id
+        headers = {
+            "Authorization": f"Bearer {self._generate_jwt()}",
+            "Accept": "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28",
+        }
+        response = request("GET", f"https://api.github.com/orgs/{self.owner}/installation", headers=headers, timeout=30)
+        response.raise_for_status()
+        self._installation_id = response.json()["id"]
+        return self._installation_id  # type: ignore
+
+    def get_token(self) -> str:
+        if self._token and time() < self._expires_at - self.refresh_buffer_seconds:
+            return self._token
+
+        headers = {
+            "Authorization": f"Bearer {self._generate_jwt()}",
+            "Accept": "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28",
+        }
+        response = request(
+            "POST",
+            f"https://api.github.com/app/installations/{self._get_installation_id()}/access_tokens",
+            headers=headers,
+            timeout=30,
+        )
+        response.raise_for_status()
+        data = response.json()
+        self._token = data["token"]
+        self._expires_at = mktime(strptime(data["expires_at"], "%Y-%m-%dT%H:%M:%SZ"))
+        return self._token  # type: ignore
 
 
 class Item:
@@ -78,14 +118,61 @@ class Item:
         return f"<Item {self.key} state={self.state}>"
 
 
+class ThreadSafeDict:
+    def __init__(self) -> None:
+        self._dict: dict[str, Item] = dict({})
+        self._lock: Lock = Lock()
+
+    def add(self, item: Item) -> None:
+        self._lock.acquire()
+        self._dict.update({item.key: item})
+        self._lock.release()
+
+    def get(self, key: str) -> Item | None:
+        self._lock.acquire()
+        item = self._dict.get(key, None)
+        self._lock.release()
+        return item
+
+    def pop(self, key: str) -> Item | None:
+        self._lock.acquire()
+        item = self._dict.pop(key, None)
+        self._lock.release()
+        return item
+
+    def keys(self) -> list[str]:
+        self._lock.acquire()
+        keys = [key for key in self._dict.keys()]
+        self._lock.release()
+        return keys
+
+
+pending: Queue = Queue()
+concurrency_counter: Semaphore = Semaphore(MAX_CONCURRENT_WORKFLOWS)
+in_progress: ThreadSafeDict = ThreadSafeDict()
+done: Queue = Queue()
+stop: Event = Event()
+auth = GitHubAppTokenCreator(GH_CLIENT_ID, GH_APP_PRIVATE_KEY, GH_APP_OWNER)
+
 # --- Subroutines ---
 
 
-def github_api(method: str, path: str, payload: dict | Any = None) -> Response:
+def github_api(method: str, path: str, payload: dict | Any = None, verbose: bool = False) -> Response:
+
+    if verbose:
+        print(
+            f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - Making HTTP {method} request to '{API_BASE}{path}' with payload: '{payload}'",
+            flush=True,
+        )
+
     response = request(
         method,
         f"{API_BASE}{path}",
-        headers=HEADERS,
+        headers={
+            "Authorization": f"Bearer {auth.get_token()}",
+            "Accept": "application/vnd.github+json",
+            "X-GitHub-Api-Version": "2022-11-28",
+        },
         json=payload,
         timeout=15,
     )
@@ -99,29 +186,41 @@ def move_to_done(item: Item, state: str, error: str | None = None) -> None:
     done.put(item)
 
 
-def read_spec_items() -> dict:
+def read_spec_items(thread_id: str = "main") -> dict:
     with open(CATALOG_FILE) as f:
         catalog = yaml_safe_load(f)
 
+    filtered_item_names = set()
     if ITEM_NAMES:
         filtered_item_names = set(item_name.strip() for item_name in ITEM_NAMES.split(","))
-        print(f"main thread - Reading Items with names: {filtered_item_names}", flush=True)
+        print(
+            f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Reading Items with names: {filtered_item_names}",
+            flush=True,
+        )
 
+    excluded_item_names = set()
     if EXCLUDED_ITEM_NAMES:
         excluded_item_names = set(item_name.strip() for item_name in EXCLUDED_ITEM_NAMES.split(","))
-        print(f"main thread - Excluding Items with names: {excluded_item_names}", flush=True)
+        print(
+            f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Excluding Items with names: {excluded_item_names}",
+            flush=True,
+        )
 
     filtered_item_technology_annotations = set(
         technology_annotation.strip() for technology_annotation in ITEM_TECHNOLOGY_ANNOTATIONS.split(",")
     )
     print(
-        f"main thread - Reading Items with technology annotations: {filtered_item_technology_annotations}", flush=True
+        f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Reading Items with technology annotations: {filtered_item_technology_annotations}",
+        flush=True,
     )
 
     filtered_item_others_annotations = set(
         others_annotation.strip() for others_annotation in ITEM_OTHERS_ANNOTATIONS.split(",")
     )
-    print(f"main thread - Reading Items with others annotations: {filtered_item_others_annotations}", flush=True)
+    print(
+        f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Reading Items with others annotations: {filtered_item_others_annotations}",
+        flush=True,
+    )
 
     spec_items = {}
 
@@ -151,7 +250,10 @@ def read_spec_items() -> dict:
         spec_items.update({key: spec_item})
 
     if len(spec_items) < 1:
-        print("::warning::main thread - Item name and annotation filtering returned no matches!", flush=True)
+        print(
+            f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Item name and annotation filtering returned no matches!",
+            flush=True,
+        )
 
     return spec_items
 
@@ -164,7 +266,10 @@ def parse_items(spec_items: dict) -> list[Item]:
 
         values = item.get("values", {})
         if "inputSpec" in values:
-            input_spec = {i["name"]: i.get("default") for i in values["inputSpec"]}
+            input_spec = {
+                i["name"]: i.get("default", environ.get(i["name"].upper().replace("-", "_")))
+                for i in values["inputSpec"]
+            }
             values["inputSpecJson"] = json_dumps(input_spec)
             del values["inputSpec"]
 
@@ -191,166 +296,254 @@ def parse_items(spec_items: dict) -> list[Item]:
 
 def dispatch_and_register(thread_id: str) -> None:
     try:
-        item = pending.get(timeout=1)
+        item = pending.get_nowait()
     except Empty:
         return
 
-    dispatch_delay_seconds = 5
-    item.dispatch_time = datetime.now(timezone.utc)
-    max_dispatch_time = item.dispatch_time + timedelta(seconds=dispatch_delay_seconds)
-
-    if EWCCLI_ANNOTATION in ITEM_OTHERS_ANNOTATIONS:
-        dispatch = github_api(
-            "POST",
-            f"/repos/{EWCCLI_GH_API_REPO_ENDPOINT}/actions/workflows/{GH_DOWNSTREAM_WORKFLOW_FILE}/dispatches",
-            {"ref": "main", "inputs": {"itemName": item.name, "catalogRef": f"{environ['GITHUB_HEAD_REF']}"}},
-        )
-    else:
-        dispatch = github_api(
-            "POST",
-            f"/repos/{item.owner}/{item.repo}/actions/workflows/{GH_DOWNSTREAM_WORKFLOW_FILE}/dispatches",
-            {
-                "ref": item.git_ref,
-                "inputs": item.values,
-            },
-        )
-
-    print(
-        f"{thread_id} thread - Sent dispatch request for '{item}'",
-        flush=True,
-    )
-
-    try:
-        dispatch.raise_for_status()
-    except Exception as e:
+    if not concurrency_counter.acquire(blocking=False):
+        pending.put(item)
         print(
-            f"::warning::{thread_id} thread - Failed to dispatch workflow for '{item}' with exception '{e}'", flush=True
-        )
-        move_to_done(
-            item,
-            "DISPATCH_FAILED",
-            f"HTTP request failed with code {dispatch.status_code}",
-        )
-        return
-
-    buffer_seconds = 1
-    sleep(dispatch_delay_seconds + buffer_seconds)
-
-    if EWCCLI_ANNOTATION in ITEM_OTHERS_ANNOTATIONS:
-        runs = github_api(
-            "GET",
-            f"/repos/{EWCCLI_GH_API_REPO_ENDPOINT}/actions/workflows/{GH_DOWNSTREAM_WORKFLOW_FILE}/runs?event=workflow_dispatch&created={item.dispatch_time.isoformat().replace("+00:00", "Z")}..{max_dispatch_time.isoformat().replace("+00:00", "Z")}",
-        )
-    else:
-        runs = github_api(
-            "GET",
-            f"/repos/{item.owner}/{item.repo}/actions/workflows/{GH_DOWNSTREAM_WORKFLOW_FILE}/runs?event=workflow_dispatch&created={item.dispatch_time.isoformat().replace("+00:00", "Z")}..{max_dispatch_time.isoformat().replace("+00:00", "Z")}",
-        )
-
-    print(
-        f"{thread_id} thread - Sent register request for '{item}'",
-        flush=True,
-    )
-
-    try:
-        runs.raise_for_status()
-    except Exception as e:
-        print(
-            f"::warning::{thread_id} thread - Failed to register workflow run for '{item}' with exception: '{e}'",
+            f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Max concurrency reached. Will wait before dispatching new workflows...",
             flush=True,
         )
-        move_to_done(item, "REGISTER_FAILED", f"HTTP request failed with code {runs.status_code}")
+        sleep(POLLING_INTERVAL_SECONDS)
         return
 
-    runs = runs.json()
-    runs = runs.get("workflow_runs", [])
-    runs_count = len(runs)
+    acquired = True
+    item.dispatch_time = datetime.now(timezone.utc)
+    try:
 
-    print(
-        f"{thread_id} thread - Registering {runs_count} run(s): '{json_dumps(runs, indent=4)[:1000]}...'",
-        flush=True,
-    )
+        # dispatch
+        if EWCCLI_ANNOTATION in ITEM_OTHERS_ANNOTATIONS:
+            dispatch = github_api(
+                "POST",
+                f"/repos/{EWCCLI_GH_API_REPO_ENDPOINT}/actions/workflows/{GH_DOWNSTREAM_WORKFLOW_FILE}/dispatches",
+                {"ref": "main", "inputs": {"itemName": item.name, "catalogRef": f"{environ['GITHUB_REF_NAME']}"}},
+            )
+        else:
+            dispatch = github_api(
+                "POST",
+                f"/repos/{item.owner}/{item.repo}/actions/workflows/{GH_DOWNSTREAM_WORKFLOW_FILE}/dispatches",
+                {
+                    "ref": item.git_ref,
+                    "inputs": item.values,
+                },
+            )
 
-    match runs_count:
+        print(
+            f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Sent dispatch request for '{item}'",
+            flush=True,
+        )
 
-        case 0:
-            print(f"::warning::{thread_id} thread - Failed to register workflow for item '{item}'", flush=True)
-            move_to_done(item, "REGISTER_FAILED", f"No runs match registration criteria for {item.name}")
-
-        case 1:
-            item.run_id = runs[0]["id"]
-            item.state = "REGISTERED"
-            in_progress.put(item)
-
-        case _:
+        dispatch_failed = False
+        dispatch_error = ""
+        try:
+            dispatch.raise_for_status()
+        except Exception:
+            dispatch_failed = True
+            dispatch_error = f"Failed to dispatch workload run with HTTP error code {dispatch.status_code}"
             print(
-                f"::warning::{thread_id} thread - Multiple runs match registration criteria for '{item}'",
+                f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {dispatch_error}",
                 flush=True,
             )
-            move_to_done(item, "REGISTER_FAILED", f"Multiple possible runs for {item.name}")
+
+        if dispatch_failed:
+            move_to_done(
+                item,
+                "DISPATCH_FAILED",
+                dispatch_error,
+            )
+            return  # returns through the `finally` statement at the bottom, which reduces the concurrency count
+
+        dispatch_lag_seconds = 5
+        lagged_dispatch_time = item.dispatch_time + timedelta(seconds=dispatch_lag_seconds)
+
+        runs = None
+        register_failed = False
+        register_error = ""
+        workflow_runs = []
+        workflow_runs_count = 0
+
+        register_max_attempts = 5
+        register_retry_delay_seconds = 3
+        for attempt in range(1, register_max_attempts + 1):
+
+            sleep(register_retry_delay_seconds)
+
+            if EWCCLI_ANNOTATION in ITEM_OTHERS_ANNOTATIONS:
+                runs = github_api(
+                    "GET",
+                    f"/repos/{EWCCLI_GH_API_REPO_ENDPOINT}/actions/workflows/{GH_DOWNSTREAM_WORKFLOW_FILE}/runs?event=workflow_dispatch&created={item.dispatch_time.isoformat().replace("+00:00", "Z")}..{lagged_dispatch_time.isoformat().replace("+00:00", "Z")}",
+                )
+            else:
+                runs = github_api(
+                    "GET",
+                    f"/repos/{item.owner}/{item.repo}/actions/workflows/{GH_DOWNSTREAM_WORKFLOW_FILE}/runs?event=workflow_dispatch&created={item.dispatch_time.isoformat().replace("+00:00", "Z")}..{lagged_dispatch_time.isoformat().replace("+00:00", "Z")}",
+                )
+
+            print(
+                f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Sent register request for '{item}' (attempt {attempt}/{register_max_attempts})",
+                flush=True,
+            )
+
+            try:
+                runs.raise_for_status()
+                runs_json = runs.json()
+                workflow_runs = runs_json.get("workflow_runs", [])
+                workflow_runs_count = len(workflow_runs)
+
+                print(
+                    f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Registering {workflow_runs_count} run(s): '{json_dumps(workflow_runs, indent=4)[:1000]}...'",
+                    flush=True,
+                )
+
+            except Exception:
+                register_failed = True
+                register_error = f"Failed to register workload run with HTTP error code {runs.status_code}"
+                print(
+                    f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {register_error}",
+                    flush=True,
+                )
+
+            if workflow_runs_count >= 1:
+                break  # got a response with HTTP 200 code, no need to loop anymore
+
+            if attempt < register_max_attempts:
+                print(
+                    f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - No runs visible yet for '{item}', retrying in {register_retry_delay_seconds}s ({attempt}/{register_max_attempts})...",
+                    flush=True,
+                )
+                lagged_dispatch_time = lagged_dispatch_time + timedelta(
+                    seconds=1
+                )  # increase search time window by 1 second in case GitHub API lags more than usual
+
+        if not register_failed:
+            if workflow_runs_count == 0:
+                register_failed = True
+                register_error = f"No runs match registration criteria for {item.name}"
+                print(
+                    f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {register_error}",
+                    flush=True,
+                )
+
+            if workflow_runs_count > 1:
+                register_failed = False
+                register_error = f"Multiple possible runs for {item.name}. Cherry-picking the 1st one..."
+                print(
+                    f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {register_error}",
+                    flush=True,
+                )
+
+        if register_failed:
+            move_to_done(item, "REGISTER_FAILED", register_error)
+            return  # returns through the `finally` statement at the bottom, which reduces the concurrency count
+
+        item.run_id = workflow_runs[0]["id"]
+        item.state = "REGISTERED"
+        in_progress.add(item)
+        acquired = False
+
+    finally:
+        if acquired:
+            concurrency_counter.release()
 
 
-def check_status(thread_id: str) -> None:
-    try:
-        item = in_progress.get(timeout=1)
-    except Empty:
-        return
+def track_status(thread_id: str) -> None:
 
-    item.state = "RUNNING"
+    keys = in_progress.keys()
 
-    if stop.is_set():
-        move_to_done(item, "TIMED_OUT", "Total deadline reached")
-        return
+    for key in keys:
+        item = in_progress.get(key)
+        if item is None:
+            continue
 
-    run_deadline = item.dispatch_time + timedelta(minutes=RUN_TIMEOUT_MINUTES)
-    if datetime.now(timezone.utc) >= run_deadline:
-        move_to_done(item, "TIMED_OUT", "Per-run deadline reached")
-        return
+        item.state = "RUNNING"
 
-    if EWCCLI_ANNOTATION in ITEM_OTHERS_ANNOTATIONS:
-        run = github_api("GET", f"/repos/{EWCCLI_GH_API_REPO_ENDPOINT}/actions/runs/{item.run_id}")
-    else:
-        run = github_api("GET", f"/repos/{item.owner}/{item.repo}/actions/runs/{item.run_id}")
+        if stop.is_set():
+            item = in_progress.pop(key)
+            if item is None:
+                continue
 
-    print(
-        f"{thread_id} thread - Sent check request for '{item}'",
-        flush=True,
-    )
+            timeout_error = f"Forcing timeout on all items, including '{item}', due to total deadline reached"
+            print(
+                f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {timeout_error}",
+                flush=True,
+            )
+            move_to_done(item, "TIMED_OUT", "Total deadline reached")
+            concurrency_counter.release()
+            continue
 
-    try:
-        run.raise_for_status()
-    except Exception as e:
+        run_deadline = item.dispatch_time + timedelta(minutes=RUN_TIMEOUT_MINUTES)  # type: ignore
+        if datetime.now(timezone.utc) >= run_deadline:  # type: ignore
+            item = in_progress.pop(key)
+            if item is None:
+                continue
+
+            timeout_error = f"Forcing timeout on '{item}' due to per-run deadline reached"
+            print(
+                f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {timeout_error}",
+                flush=True,
+            )
+            move_to_done(item, "TIMED_OUT", "Per-run deadline reached")
+            concurrency_counter.release()
+            continue
+
+        if EWCCLI_ANNOTATION in ITEM_OTHERS_ANNOTATIONS:
+            run = github_api("GET", f"/repos/{EWCCLI_GH_API_REPO_ENDPOINT}/actions/runs/{item.run_id}")
+        else:
+            run = github_api("GET", f"/repos/{item.owner}/{item.repo}/actions/runs/{item.run_id}")
+
         print(
-            f"::warning::{thread_id} thread - Failed to check status for {item.name} (run ID: '{item.run_id}') with exception: '{e}'",
+            f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Sent check request for '{item}'",
             flush=True,
         )
-        in_progress.put(item)
-        return
 
-    run = run.json()
+        try:
+            run.raise_for_status()
+        except Exception as e:
+            print(
+                f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Failed to check status for {item.name} (run ID: '{item.run_id}') with exception: '{e}'",
+                flush=True,
+            )
+            continue
 
+        run = run.json()
+
+        print(
+            f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Checking run: '{json_dumps(run, indent=4)[:1000]}...'",
+            flush=True,
+        )
+
+        status = run["status"]
+        conclusion = run["conclusion"]
+
+        if status == "completed":
+            item = in_progress.pop(key)
+            if item is None:
+                continue
+
+            item.conclusion = conclusion
+            move_to_done(item, "COMPLETED" if conclusion == "success" else "FAILED")
+            concurrency_counter.release()
+
+
+def reduce_summarize(spec_items: dict, thread_id: str = "main") -> None:
     print(
-        f"{thread_id} thread - Checking run: '{json_dumps(run, indent=4)[:1000]}...'",
+        f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {pending.qsize()} pending, {len(in_progress.keys())} in progress, {done.qsize()} done",
         flush=True,
     )
 
-    status = run["status"]
-    conclusion = run["conclusion"]
+    while not pending.empty():
+        item = pending.get_nowait()
+        move_to_done(item, "TIMED_OUT", "Total deadline reached")
 
-    if status == "completed":
-        item.conclusion = conclusion
-        move_to_done(item, "COMPLETED" if conclusion == "success" else "FAILED")
-    else:
-        in_progress.put(item)
+    for key in in_progress.keys():
+        item = in_progress.pop(key)
+        if item is None:
+            continue
 
-
-def reduce_summarize(spec_items: dict) -> None:
-    print(f"main thread - {pending.qsize()} pending, {in_progress.qsize()} in progress, {done.qsize()} done")
-
-    for q in (pending, in_progress):
-        while not q.empty():
-            item = q.get_nowait()
-            move_to_done(item, "TIMED_OUT", "Total deadline reached")
+        move_to_done(item, "TIMED_OUT", "Total deadline reached")
+        concurrency_counter.release()
 
     items: list[Item] = []
     while not done.empty():
@@ -364,10 +557,12 @@ def reduce_summarize(spec_items: dict) -> None:
     else:
         site = "UNKNOWN"
         print(
-            f"::warning::main thread - Unable to parse site from GH_DOWNSTREAM_WORKFLOW_FILE. By convention, the workflow filename should include any of: ['ecmwf', 'eumetsat']. Got: '{GH_DOWNSTREAM_WORKFLOW_FILE}'"
+            f"::warning::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Unable to parse site from GH_DOWNSTREAM_WORKFLOW_FILE. By convention, the workflow filename should include any of: ['ecmwf', 'eumetsat']. Got: '{GH_DOWNSTREAM_WORKFLOW_FILE}'",
+            flush=True,
         )
 
     status_rows = []
+    is_any_failed_or_timeout = False
     for item in items:
         state_viz = {
             "PLANNED": f"`planning` {GRAY_LIGHT}",
@@ -377,6 +572,8 @@ def reduce_summarize(spec_items: dict) -> None:
             "FAILED": f" `failing` {RED_LIGHT}",
             "TIMED_OUT": f"`timing out` {YELLOW_LIGHT}",
         }.get(item.state, f"`unknown` {GRAY_LIGHT}")
+
+        is_any_failed_or_timeout = is_any_failed_or_timeout | ("COMPLETED" not in item.state)
 
         if not item.run_id:
             run_link = "—"
@@ -398,18 +595,24 @@ def reduce_summarize(spec_items: dict) -> None:
 
     template_path = Path(SUMMARY_TEMPLATE_FILE)
     if not template_path.is_file():
-        print(f"::error::main thread - Cannot find summary template at {template_path}", flush=True)
+        print(
+            f"::error::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Cannot find summary template at {template_path}",
+            flush=True,
+        )
         return
 
     try:
         template_content = template_path.read_text(encoding="utf-8")
     except Exception as e:
-        print(f"::error::main thread - Failed to read template: {e}", flush=True)
+        print(
+            f"::error::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Failed to read template: {e}",
+            flush=True,
+        )
         return
 
     summary_contents = template_content.format(
         github_run_id=environ["GITHUB_RUN_ID"],
-        github_ref_name=environ["GITHUB_HEAD_REF"],
+        github_ref_name=environ["GITHUB_REF_NAME"],
         site=site,
         status_row=status_table_content,
         execution_plan=json_dumps(spec_items, indent=2),
@@ -419,7 +622,15 @@ def reduce_summarize(spec_items: dict) -> None:
     try:
         summary_path.write_text(summary_contents, encoding="utf-8")
     except Exception as e:
-        print(f"::error::main thread - Failed to write summary: {e}", flush=True)
+        print(
+            f"::error::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Failed to write summary: {e}",
+            flush=True,
+        )
+
+    if is_any_failed_or_timeout:
+        raise SystemExit(
+            f"::error::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Deployment test(s) FAILING! Check the Summary for details"
+        )
 
 
 # --- Worker Thread ---
@@ -427,51 +638,50 @@ def reduce_summarize(spec_items: dict) -> None:
 
 def dispatcher(thread_id: str) -> None:
 
-    print(f"{thread_id} thread - Starting thread", flush=True)
+    print(f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Starting thread", flush=True)
 
     while not stop.is_set():
-
-        if in_progress.full():
-            print(
-                f"{thread_id} thread - Max concurrency reached. Will wait before dispatching new workflows...",
-                flush=True,
-            )
-            sleep(10)
-            continue
-
         try:
             dispatch_and_register(thread_id)
         except Exception as e:
             print(
-                f"::error::{thread_id} thread - Failed to dispatch workflow due to an unexpected error: {e}", flush=True
-            )
-            raise e
-
-    print(f"{thread_id} thread - Caught stop event. Exiting... ", flush=True)
-
-
-def checker(thread_id: str) -> None:
-    print(f"{thread_id} thread - Starting thread", flush=True)
-
-    while not stop.is_set():
-
-        try:
-            check_status(thread_id)
-            sleep(POLLING_INTERVAL_SECONDS)
-        except Exception as e:
-            print(
-                f"::error::{thread_id} thread - Failed to check for workflow status due to an unexpected error: {e}",
+                f"::error::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Failed to dispatch workflow due to an unexpected error: {e}",
                 flush=True,
             )
             raise e
 
-    print(f"{thread_id} thread - Caught stop event. Exiting... ", flush=True)
+    print(
+        f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Caught stop event. Exiting... ",
+        flush=True,
+    )
+
+
+def tracker(thread_id: str) -> None:
+    print(f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Starting thread", flush=True)
+
+    while not stop.is_set():
+
+        try:
+            track_status(thread_id)
+            sleep(POLLING_INTERVAL_SECONDS)
+        except Exception as e:
+            print(
+                f"::error::{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Failed to check for workflow status due to an unexpected error: {e}",
+                flush=True,
+            )
+            raise e
+
+    print(
+        f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Caught stop event. Exiting... ",
+        flush=True,
+    )
 
 
 # --- Main Thread ---
 
 
 def main() -> None:
+    thread_id = "main"
     start_time = datetime.now(timezone.utc)
     buffer_minutes = 2
     total_deadline = (
@@ -480,33 +690,43 @@ def main() -> None:
 
     spec_items = read_spec_items()
     items = parse_items(spec_items)
-    items_count = len(items)
+    item_count = len(items)
+    print(
+        f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Status: {item_count} pending, 0 in progress, 0 done",
+        flush=True,
+    )
 
     while len(items) > 0:
         pending.put(items.pop())
 
-    max_workers = (
-        min(MAX_CONCURRENT_WORKFLOWS, items_count) + 1
-    )  # include 1 additional worker to take owner ship of workflow dispatching and run id retrieving
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        executor.submit(dispatcher, thread_id="dispatcher")
+        executor.submit(tracker, thread_id="tracker")
 
-        executor.submit(dispatcher, thread_id="dispatcher-0")
+        while True:
+            sleep(POLLING_INTERVAL_SECONDS)
 
-        for i in range(max_workers - 1):
-            executor.submit(checker, thread_id=f"checker-{i}")
+            print(
+                f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Status: {pending.qsize()} pending, {len(in_progress.keys())} in progress, {done.qsize()} done",
+                flush=True,
+            )
 
-        sleep(30)
-        while not pending.empty() or not in_progress.empty():
+            completion = (pending.qsize() == 0) & (len(in_progress.keys()) == 0) & (done.qsize() == item_count)
+            if completion:
+                break
 
-            print(f"main thread - {pending.qsize()} pending, {in_progress.qsize()} in progress, {done.qsize()} done")
-            sleep(5)
             if datetime.now(timezone.utc) >= total_deadline:
-                print("main thread - Total timeout reached")
+                print(
+                    f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Total timeout reached",
+                    flush=True,
+                )
                 break
 
         stop.set()
-        print("main thread - Raised stop event...")
-        sleep(30)
+        print(
+            f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - Raised stop event...",
+            flush=True,
+        )
 
     reduce_summarize(spec_items)
 

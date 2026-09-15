@@ -22,13 +22,13 @@ on:
       run-timeout-minutes:
         description: Max per-workflow runtime. If the corresponding downstream run is in progress, it will be marked as timed out
         required: true
-        default: 10
+        default: 25
         type: number
 
       max-concurrent-workflows:
         description: Max number of concurrent downstream workflows
         required: true
-        default: 5
+        default: 1
         type: number
 
 permissions:
@@ -39,7 +39,7 @@ jobs:
   orchestrate:
     name: Deployment test via EWCCLI
     runs-on: ubuntu-latest
-    timeout-minutes: 200
+    timeout-minutes: 400
 
     steps:
       - name: Checkout catalog repository
@@ -53,18 +53,12 @@ jobs:
       - name: Install additional dependencies
         run: pip install -r .github/scripts/orchestrator/requirements.txt
 
-      - name: Generate installation token for EWC Community Hub CI Orchestrator GitHub App
-        id: app-token
-        uses: actions/create-github-app-token@v3
-        with:
-          client-id: ${{ vars.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_CLIENT_ID }}
-          private-key: ${{ secrets.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_PRIVATE_KEY }}
-          owner: ${{ github.repository_owner }}
-
       - name: Orchestrate deployments testing
         run: python .github/scripts/orchestrator/main.py
         env:
-          GH_API_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_CLIENT_ID: ${{ vars.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_CLIENT_ID }}
+          GH_APP_PRIVATE_KEY: ${{ secrets.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_PRIVATE_KEY }}
+          GH_APP_OWNER: ${{ github.repository_owner }}
           ITEM_NAMES: ${{ inputs.item-names }}
           EXCLUDED_ITEM_NAMES: ${{ inputs.excluded-item-names }}
           ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
@@ -73,4 +67,4 @@ jobs:
           RUN_TIMEOUT_MINUTES: ${{ inputs.run-timeout-minutes }}
           MAX_CONCURRENT_WORKFLOWS: ${{ inputs.max-concurrent-workflows }}
           GH_DOWNSTREAM_WORKFLOW_FILE: "test-deployment-ansible-ecmwf.yml"
-          TOTAL_TIMEOUT_MINUTES: 190 # Must be smaller than jobs.orchestrate.timeout-minutes
+          TOTAL_TIMEOUT_MINUTES: 390 # Must be smaller than jobs.orchestrate.timeout-minutes
