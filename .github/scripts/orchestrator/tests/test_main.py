@@ -12,9 +12,11 @@ from unittest import mock
 from unittest.mock import Mock
 
 
-# The orchestrator reads several env vars at import time via environ[...], so they must exist before the module is imported
+# The orchestrator reads several env vars at import time via environ[...], so set them before importing it
 _REQUIRED_ENV_DEFAULTS = {
-    "GH_API_TOKEN": "test-token",
+    "GH_CLIENT_ID": "test-id",
+    "GH_APP_PRIVATE_KEY": "test-key",
+    "GH_APP_OWNER": "test-owner",
     "GH_DOWNSTREAM_WORKFLOW_FILE": "downstream.yml",
     "POLLING_INTERVAL_SECONDS": "1",
     "RUN_TIMEOUT_MINUTES": "20",
@@ -42,6 +44,7 @@ def reset_orchestrator_state(monkeypatch):
     monkeypatch.setattr(orchestrator, "done", Queue())
     monkeypatch.setattr(orchestrator, "stop", Event())
     monkeypatch.setattr(orchestrator, "concurrency_counter", Semaphore(1))
+    monkeypatch.setattr(orchestrator, "auth", orchestrator.GitHubAppTokenCreator("test-id", "test-key", "test-owner"))
     monkeypatch.setattr(orchestrator, "POLLING_INTERVAL_SECONDS", 0.02)
     monkeypatch.setattr(orchestrator, "RUN_TIMEOUT_MINUTES", 20)
 

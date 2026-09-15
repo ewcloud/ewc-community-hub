@@ -5,10 +5,6 @@ on:
     branches:
       - "main"
 
-env:
-  POLLING_INTERVAL_SECONDS: 60
-  RUN_TIMEOUT_MINUTES: 20 # Max runtime per each downstream workflow run
-  MAX_CONCURRENT_WORKFLOWS: 1
 jobs:
   lint:
     name: Metadata Linting
