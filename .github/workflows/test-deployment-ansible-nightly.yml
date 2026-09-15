@@ -1,7 +1,9 @@
 name: Nightly Ansible Deployments Testing
 
 on:
-  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * 1-5'
+      timezone: "Etc/UTC"
 
 env:
   POLLING_INTERVAL_SECONDS: 60
