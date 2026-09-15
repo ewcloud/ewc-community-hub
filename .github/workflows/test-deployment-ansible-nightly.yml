@@ -7,6 +7,11 @@ env:
   POLLING_INTERVAL_SECONDS: 60
   RUN_TIMEOUT_MINUTES: 25
   MAX_CONCURRENT_WORKFLOWS: 1
+
+  # Fallback Item Inputs Defaults
+  TELLICAST_LICENSE_USER_NAME: ${{ vars.TELLICAST_LICENSE_USER_NAME }}
+  TELLICAST_LICENSE_USER_KEY: ${{ secrets.TELLICAST_LICENSE_USER_KEY }}
+
 jobs:
   test-deploy-ansible-ecmwf:
     name: Deployment test on ECMWF
@@ -94,7 +99,7 @@ jobs:
           ITEM_OTHERS_ANNOTATIONS: "Deployable,EWCCLI-compatible"
           GH_DOWNSTREAM_WORKFLOW_FILE: "test-deployment-ansible-ecmwf.yml"
           TOTAL_TIMEOUT_MINUTES: 390 # Must be smaller than jobs.orchestrate.timeout-minutes
-          EXCLUDED_ITEM_NAMES: "xcube-viewer-flavour,eumetcast-terrestrial-amt-flavour,ipa-server-flavour,htc-execute-flavour,htc-submit-flavour"
+          EXCLUDED_ITEM_NAMES: "xcube-viewer-flavour,ipa-server-flavour,htc-execute-flavour,htc-submit-flavour"
 
   test-deploy-ansible-eumetsat-via-ewccli:
     name: Deployment test via EWCCLI on EUMETSAT
@@ -124,4 +129,4 @@ jobs:
           ITEM_OTHERS_ANNOTATIONS: "Deployable,EWCCLI-compatible"
           GH_DOWNSTREAM_WORKFLOW_FILE: "test-deployment-ansible-eumetsat.yml"
           TOTAL_TIMEOUT_MINUTES: 390 # Must be smaller than jobs.orchestrate.timeout-minutes
-          EXCLUDED_ITEM_NAMES: "xcube-viewer-flavour,eumetcast-terrestrial-amt-flavour,ipa-server-flavour,htc-execute-flavour,htc-submit-flavour"
+          EXCLUDED_ITEM_NAMES: "xcube-viewer-flavour,ipa-server-flavour,htc-execute-flavour,htc-submit-flavour"
