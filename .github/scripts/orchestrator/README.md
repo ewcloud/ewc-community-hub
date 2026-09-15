@@ -61,13 +61,31 @@ workflow.
     >💡 Checkout an example of a compatible downstream workflow file at
 https://github.com/ewcloud/ewccli/blob/3405f8bf2aa458c5efaca8d646dff0a54d7191ee/.github/workflows/test-deployment-ansible-ecmwf.yml#L1-L63
 
-### Test with Input Default Values as Environment Variables
+### Test Input Default Values From Environment Variables
+>💡 This feature is convenient when a reasonable default can not be set for an input in the Item's metadata. For example, when its value is considered secret or user-specific.
+
 Item input default values are read from two source:
 1. **Metadata**: The `values.inputSpec` catalog metadata.
-2. **Environment Variables**: As a fallback method if no default is included in the metadata. Assumes the key corresponds to an uppercase-snake-case version of the key in the metadata.
-For example, if the metadata contains `letsencrypt-email` as an input key, then will search for `LETSENCRYPT_EMAIL` within the available environment variables.
+2. **Environment Variables**: As a fallback, if no default is included in the metadata. Assumes the matching environment variable is named as an uppercase-snake-case version of the input key in the metadata.
+For example, if the metadata contains two inputs without default value:
+```yaml
+eumetcast-terrestrial-amt-flavour:
+    # ...
+    values:
+        # ...
+        inputSpec:
+            - name: tellicast_license_user_name
+                description: Tellicast license user identifier, equivalent to your EUMETSAT User Portal username.
+                type: str
+            - name: tellicast_license_user_key
+                description: Tellicast license activation key (i.e. the user key you obtained via from EUMETSAT Helpdesk).
+                type: str
+```
+The lack of a `default` attribute on the metadata above will then trigger a search within the available environment variables for:
+* `TELLICAST_LICENSE_USER_NAME`
+* `TELLICAST_LICENSE_USER_KEY`
 
-This feature is convenient when a reasonable default can not be set for all inputs, say, when there values are considered secret or user-specific.
+
 
 
 ## Maintainers Quick Start Guide
