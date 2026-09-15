@@ -528,11 +528,6 @@ def track_status(thread_id: str) -> None:
 
 
 def reduce_summarize(spec_items: dict, thread_id: str = "main") -> None:
-    print(
-        f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {pending.qsize()} pending, {len(in_progress.keys())} in progress, {done.qsize()} done",
-        flush=True,
-    )
-
     while not pending.empty():
         item = pending.get_nowait()
         move_to_done(item, "TIMED_OUT", "Total deadline reached")
