@@ -266,7 +266,10 @@ def parse_items(spec_items: dict) -> list[Item]:
 
         values = item.get("values", {})
         if "inputSpec" in values:
-            input_spec = {i["name"]: i.get("default") for i in values["inputSpec"]}
+            input_spec = {
+                i["name"]: i.get("default", environ.get(i["name"].upper().replace("-", "_")))
+                for i in values["inputSpec"]
+            }
             values["inputSpecJson"] = json_dumps(input_spec)
             del values["inputSpec"]
 
