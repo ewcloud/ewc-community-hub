@@ -318,7 +318,7 @@ def dispatch_and_register(thread_id: str) -> None:
             dispatch = github_api(
                 "POST",
                 f"/repos/{EWCCLI_GH_API_REPO_ENDPOINT}/actions/workflows/{GH_DOWNSTREAM_WORKFLOW_FILE}/dispatches",
-                {"ref": "main", "inputs": {"itemName": item.name, "catalogRef": f"{environ['GITHUB_REF_NAME']}"}},
+                {"ref": "main", "inputs": {"itemName": item.name, "catalogRef": f"{environ['GITHUB_REF_NAME']}", "inputSpecJson": f"{item.values['inputSpecJson']}"}},
             )
         else:
             dispatch = github_api(
