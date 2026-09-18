@@ -1,2 +1,4 @@
 requests~=2.32
 PyYAML~=6.0
+cryptography~=50.0
+pyjwt[crypto]~=2.14
