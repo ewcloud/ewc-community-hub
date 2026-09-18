@@ -7186,6 +7186,15 @@ spec:
           - name: users_file
             description: "List of users to be provided as --item-inputs users_file=path/to/users.yml"
             type: str
+      values:
+        osImageName: Ubuntu-24.04
+        ansibleUser: ubuntu
+        pathToRequirementsFile: requirements.yml
+        pathToMainFile: playbooks/create_vm_users.yml
+        inputSpec:
+          - name: users_file
+            description: "List of users to be provided as --item-inputs users_file=path/to/users.yml"
+            type: str
       home: https://github.com/ewcloud/ewc-ansible-role-create-vm-users/tree/0.0.1/playbooks
       sources:
         - https://github.com/ewcloud/ewc-ansible-role-create-vm-users.git
