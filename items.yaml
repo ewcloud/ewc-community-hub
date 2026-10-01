@@ -958,9 +958,11 @@ spec:
         >💡 To lean about EWCCLI deployment customization, checkout the [EWC User Stories: I want to use the ewccli](https://confluence.ecmwf.int/x/NlYiK) documentation pages.
 
 
+        for example on EUMETSAT side:
         ```bash
-        ewc hub deploy eumetcast-terrestrial-amt-flavour
+        ewc hub deploy eumetcast-terrestrial-amt-flavour --item-inputs tellicast_license_user_name=MYUSER --item-inputs tellicast_license_user_key=MYTOKEN --extra-volume 1200 --flavour-name 8cpu-64gbmem --security-group eumetcast
         ```
+        Remember to adjust flavour, security group if needed.
 
         ### Deploy via native tooling (Ansible)
 
