@@ -13,6 +13,7 @@ env:
   # Fallback Item Inputs Defaults
   TELLICAST_LICENSE_USER_NAME: ${{ vars.TELLICAST_LICENSE_USER_NAME }}
   TELLICAST_LICENSE_USER_KEY: ${{ secrets.TELLICAST_LICENSE_USER_KEY }}
+  USERS_FILE: ${{ vars.USERS_FILE }} # -> create-vm-users.values.inputSpec[0].default
 
 jobs:
   test-deploy-ansible-ecmwf:
