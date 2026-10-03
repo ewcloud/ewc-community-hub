@@ -960,7 +960,7 @@ spec:
 
         for example on EUMETSAT side:
         ```bash
-        ewc hub deploy eumetcast-terrestrial-amt-flavour --item-inputs tellicast_license_user_name=MYUSER --item-inputs tellicast_license_user_key=MYTOKEN --extra-volume 1200 --flavour-name 8cpu-64gbmem --security-group eumetcast --security-group ssh --floating-ip
+        ewc hub deploy eumetcast-terrestrial-amt-flavour --item-inputs tellicast_license_user_name=MYUSER --item-inputs tellicast_license_user_key=MYTOKEN --extra-volume 1200 --flavour-name 8cpu-64gbmem --security-groups eumetcast --security-groups ssh --external-ip
         ```
         Remember to adjust flavour, security group if needed.
 
