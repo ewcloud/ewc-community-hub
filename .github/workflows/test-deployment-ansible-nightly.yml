@@ -94,7 +94,7 @@ jobs:
           ITEM_OTHERS_ANNOTATIONS: "Deployable,EWCCLI-compatible"
           GH_DOWNSTREAM_WORKFLOW_FILE: "test-deployment-ansible-ecmwf.yml"
           TOTAL_TIMEOUT_MINUTES: 390 # Must be smaller than jobs.orchestrate.timeout-minutes
-          EXCLUDED_ITEM_NAMES: "xcube-viewer-flavour,eumetcast-terrestrial-amt-flavour,ipa-server-flavour,htc-execute-flavour,htc-submit-flavour"
+          EXCLUDED_ITEM_NAMES: "xcube-viewer-flavour,eumetcast-terrestrial-amt-flavour,ipa-server-flavour,htc-execute-flavour,htc-submit-flavour,ai-models,ml-basic,ecmwf-data-flavour,jupyterhub-flavour"
 
   test-deploy-ansible-eumetsat-via-ewccli:
     name: Deployment test via EWCCLI on EUMETSAT
@@ -124,4 +124,4 @@ jobs:
           ITEM_OTHERS_ANNOTATIONS: "Deployable,EWCCLI-compatible"
           GH_DOWNSTREAM_WORKFLOW_FILE: "test-deployment-ansible-eumetsat.yml"
           TOTAL_TIMEOUT_MINUTES: 390 # Must be smaller than jobs.orchestrate.timeout-minutes
-          EXCLUDED_ITEM_NAMES: "xcube-viewer-flavour,eumetcast-terrestrial-amt-flavour,ipa-server-flavour,htc-execute-flavour,htc-submit-flavour"
+          EXCLUDED_ITEM_NAMES: "xcube-viewer-flavour,eumetcast-terrestrial-amt-flavour,ipa-server-flavour,htc-execute-flavour,htc-submit-flavour,ai-models,ml-basic,ecmwf-data-flavour,jupyterhub-flavour"
