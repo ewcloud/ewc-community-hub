@@ -3220,7 +3220,7 @@ spec:
         others: "Deployable,EWCCLI-compatible"
         supportLevel: "EWC"
         licenseType: "MIT License"
-      displayName: HTC Execute Flavour
+      displayName: HTC Submit Flavour
       summary: Setups a workspace from where users can submit computation tasks onto the shared resource pool managed by EWC HTC Batch Processing service
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.12.1/LICENSE
       published: true
