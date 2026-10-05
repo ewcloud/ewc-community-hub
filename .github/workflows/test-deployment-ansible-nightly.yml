@@ -1,12 +1,19 @@
 name: Nightly Ansible Deployments Testing
 
 on:
-  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * 1-5'
+      timezone: "Etc/UTC"
 
 env:
   POLLING_INTERVAL_SECONDS: 60
   RUN_TIMEOUT_MINUTES: 25
   MAX_CONCURRENT_WORKFLOWS: 1
+
+  # Fallback Item Inputs Defaults
+  TELLICAST_LICENSE_USER_NAME: ${{ vars.TELLICAST_LICENSE_USER_NAME }}
+  TELLICAST_LICENSE_USER_KEY: ${{ secrets.TELLICAST_LICENSE_USER_KEY }}
+
 jobs:
   test-deploy-ansible-ecmwf:
     name: Deployment test on ECMWF

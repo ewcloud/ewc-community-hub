@@ -318,7 +318,7 @@ def dispatch_and_register(thread_id: str) -> None:
             dispatch = github_api(
                 "POST",
                 f"/repos/{EWCCLI_GH_API_REPO_ENDPOINT}/actions/workflows/{GH_DOWNSTREAM_WORKFLOW_FILE}/dispatches",
-                {"ref": "main", "inputs": {"itemName": item.name, "catalogRef": f"{environ['GITHUB_REF_NAME']}"}},
+                {"ref": "main", "inputs": {"itemName": item.name, "catalogRef": f"{environ['GITHUB_REF_NAME']}", "inputSpecJson": f"{item.values['inputSpecJson']}"}},
             )
         else:
             dispatch = github_api(
@@ -528,11 +528,6 @@ def track_status(thread_id: str) -> None:
 
 
 def reduce_summarize(spec_items: dict, thread_id: str = "main") -> None:
-    print(
-        f"{datetime.now(timezone.utc).strftime(TIME_FORMAT)} - thread {thread_id:<12} - {pending.qsize()} pending, {len(in_progress.keys())} in progress, {done.qsize()} done",
-        flush=True,
-    )
-
     while not pending.empty():
         item = pending.get_nowait()
         move_to_done(item, "TIMED_OUT", "Total deadline reached")
