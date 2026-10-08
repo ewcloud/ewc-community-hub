@@ -138,6 +138,12 @@
             "osImageName": {
               "type": "string"
             },
+            "osSecurityGroups": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
             "pythonVersion": {
               "type": "string"
             },
@@ -148,6 +154,9 @@
               "type": "string"
             }
           },
+          "required": [
+            "osSecurityGroups"
+          ],
           "additionalProperties": false
         },
         "ewccli": {
