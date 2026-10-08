@@ -154,9 +154,6 @@
               "type": "string"
             }
           },
-          "required": [
-            "osSecurityGroups"
-          ],
           "additionalProperties": false
         },
         "ewccli": {
@@ -213,10 +210,6 @@
               }
             }
           },
-          "required": [
-            "defaultSecurityGroups",
-            "externalIP"
-          ],
           "additionalProperties": false
         },
         "home": {
