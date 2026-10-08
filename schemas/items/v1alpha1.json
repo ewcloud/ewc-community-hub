@@ -92,14 +92,15 @@
                   },
                   "type": {
                     "type": "string"
-                  }
+                  },
+                  "default": {}
                 },
                 "required": [
                   "name",
                   "description",
                   "type"
                 ],
-                "additionalProperties": true
+                "additionalProperties": false
               }
             },
             "outputSpec": {
@@ -142,27 +143,72 @@
             },
             "ansibleVersion": {
               "type": "string"
+            },
+            "ansibleUser": {
+              "type": "string"
             }
           },
-          "additionalProperties": true
+          "additionalProperties": false
         },
         "ewccli": {
           "type": "object",
           "properties": {
-            "defaultSecurityGroups": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
             "externalIP": {
               "type": "boolean"
             },
             "checkDNS": {
               "type": "boolean"
+            },
+            "pathToMainFile": {
+              "type": "string",
+              "description": "Deprecated in favor of values.pathToMainFile"
+            },
+            "pathToRequirementsFile": {
+              "type": "string",
+              "description": "Deprecated in favor of values.pathToRequirementsFile"
+            },
+            "defaultImageName": {
+              "type": "string",
+              "description": "Deprecated in favor of values.osImageName"
+            },
+            "defaultSecurityGroups": {
+              "type": "array",
+              "description": "Deprecated in favour of values.osSecurityGroups",
+              "items": {
+                "type": "string"
+              }
+            },
+            "inputs": {
+              "type": "array",
+              "description": "Deprecated in favor of values.inputSpec",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "default": {}
+                },
+                "required": [
+                  "name",
+                  "description",
+                  "type"
+                ],
+                "additionalProperties": false
+              }
             }
           },
-          "additionalProperties": true
+          "required": [
+            "defaultSecurityGroups",
+            "externalIP"
+          ],
+          "additionalProperties": false
         },
         "home": {
           "type": "string",
