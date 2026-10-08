@@ -4753,7 +4753,7 @@ spec:
         category: "Networking"
         supportLevel: "EWC"
         licenseType: "MIT License"
-        others: "Deployable"
+        others: "Deployable,EWCCLI-compatible"
       description: |
         >💡 Not to be confused with Nginx, the web server and reverse proxy.
 
@@ -4964,10 +4964,10 @@ spec:
 
         ## Operation
         Checkout the following how-to guides to learn about management of the Item after initial setup:
-        * [How to configure the NGINX Proxy manager initial setup](./docs/how-to/how-to-configure-the-nginx-proxy-manager-initial-setup.md)
-        * [How to add a new proxy host for specific domain](./docs/how-to/how-to-add-a-new-proxy-host-for-specific-domain.md)
-        * [How to add a new SSL Certificate for domain/s](./docs/how-to/how-to-add-a-new-ssl-certificate-for-domains.md)
-        * [How to create/modify an access list](./docs/how-to/how-to-create-modify-an-access-list.md)
+        * [How to configure the NGINX Proxy manager initial setup](https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.12.1/playbooks/nginx-proxy-manager-flavour/docs/how-to/how-to-configure-the-nginx-proxy-manager-initial-setup.md)
+        * [How to add a new proxy host for specific domain](https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.12.1/playbooks/nginx-proxy-manager-flavour/docs/docs/how-to/how-to-add-a-new-proxy-host-for-specific-domain.md)
+        * [How to add a new SSL Certificate for domain/s](https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.12.1/playbooks/nginx-proxy-manager-flavour/docs/docs/how-to/how-to-add-a-new-ssl-certificate-for-domains.md)
+        * [How to create/modify an access list](https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.12.1/playbooks/nginx-proxy-manager-flavour/docs/docs/how-to/how-to-create-modify-an-access-list.md)
 
       displayName: Nginx Proxy Manager
       home: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/tree/1.12.1/playbooks/nginx-proxy-manager-flavour
@@ -4982,12 +4982,26 @@ spec:
       sources:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       summary: Configures an existing VM as a user-friendly Nginx Proxy Manager server, simplifying virtual host management, SSL/HTTP/2 support, and security features like exploit blocking for efficient and secure proxy operations.
+      ewccli:
+        pathToRequirementsFile: playbooks/nginx-proxy-manager-flavour/requirements.yml
+        pathToMainFile: playbooks/nginx-proxy-manager-flavour/nginx-proxy-manager-flavour.yml
+        defaultImageName: Ubuntu-24.04
+        externalIP: true
+        inputs:
+          - name: npm_admin_ui_port
+            description: "port number at which the Nginx Proxy Manager admin UI is served"
+            type: str
+            default: "8080"
+          - name: os_security_group_name
+            description: "OpenStack security group containing all firewall rules required for Nginx Proxy Manager operation"
+            type: str
+            default: nginx-proxy-manager
       values:
         inputSpec:
           - name: npm_admin_ui_port
             description: "port number at which the Nginx Proxy Manager admin UI is served"
             type: str
-            default: 8080
+            default: "8080"
           - name: os_security_group_name
             description: "OpenStack security group containing all firewall rules required for Nginx Proxy Manager operation"
             type: str
