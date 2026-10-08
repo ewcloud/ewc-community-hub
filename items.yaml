@@ -43,6 +43,9 @@ spec:
         ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
 
       ewccli:
+        externalIP: false
+        defaultSecurityGroups:
+          - ssh
         pathToMainFile: playbooks/ai-models/ai-models.yml
       values:
         pathToMainFile: playbooks/ai-models/ai-models.yml
@@ -609,6 +612,9 @@ spec:
         ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
 
       ewccli:
+        externalIP: false
+        defaultSecurityGroups:
+          - ssh
         pathToMainFile: playbooks/aifs-single-mse/aifs-single-mse.yml
       values:
         pathToMainFile: playbooks/aifs-single-mse/aifs-single-mse.yml
@@ -676,6 +682,9 @@ spec:
         ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
 
       ewccli:
+        externalIP: false
+        defaultSecurityGroups:
+          - ssh
         pathToMainFile: playbooks/aifs-ens-crps/aifs-ens-crps.yml
       values:
         pathToMainFile: playbooks/aifs-ens-crps/aifs-ens-crps.yml
@@ -702,6 +711,9 @@ spec:
       name: "ecmwf-anemoi"
       version: "1.1.0"
       ewccli:
+        externalIP: false
+        defaultSecurityGroups:
+          - ssh
         pathToMainFile: playbooks/anemoi/anemoi.yml
       values:
         pathToMainFile: playbooks/anemoi/anemoi.yml
@@ -792,6 +804,9 @@ spec:
 
       displayName: ECMWF Data Flavour
       ewccli:
+        externalIP: false
+        defaultSecurityGroups:
+          - ssh
         defaultImageName: Ubuntu-24.04
         inputs:
           - name: reboot_if_required
@@ -868,6 +883,10 @@ spec:
       name: "eumetcast-terrestrial-amt-flavour"
       version: "1.12.1"
       ewccli:
+        externalIP: true
+        defaultSecurityGroups:
+          - ssh
+          - eumetcast
         pathToRequirementsFile: playbooks/eumetcast-terrestrial-amt-flavour/requirements.yml
         pathToMainFile: playbooks/eumetcast-terrestrial-amt-flavour/eumetcast-terrestrial-amt-flavour.yml
         defaultImageName: Ubuntu-22.04
@@ -1149,6 +1168,9 @@ spec:
       name: "eumetsat-s3-mount-flavour"
       version: "1.12.1"
       ewccli:
+        externalIP: false
+        defaultSecurityGroups:
+          - ssh
         pathToRequirementsFile: playbooks/eumetsat-s3-mount-flavour/requirements.yml
         pathToMainFile: playbooks/eumetsat-s3-mount-flavour/eumetsat-s3-mount-flavour.yml
         defaultImageName: Ubuntu-22.04
@@ -1403,6 +1425,9 @@ spec:
       name: "eumetsat-data-tailor-flavour"
       version: "1.12.1"
       ewccli:
+        externalIP: false
+        defaultSecurityGroups:
+          - ssh
         pathToRequirementsFile: playbooks/eumetsat-data-tailor-flavour/requirements.yml
         pathToMainFile: playbooks/eumetsat-data-tailor-flavour/eumetsat-data-tailor-flavour.yml
         defaultImageName: Ubuntu-24.04
@@ -2676,6 +2701,10 @@ spec:
       name: "htc-execute-flavour"
       version: "1.12.1"
       ewccli:
+        externalIP: false
+        defaultSecurityGroups:
+          - ssh
+          - htcondor
         pathToRequirementsFile: playbooks/htc-execute-flavour/requirements.yml
         pathToMainFile: playbooks/htc-execute-flavour/htc-execute-flavour.yml
         inputs:
@@ -2954,6 +2983,10 @@ spec:
       name: "htc-submit-flavour"
       version: "1.12.1"
       ewccli:
+        externalIP: false
+        defaultSecurityGroups:
+          - ssh
+          - htcondor
         pathToRequirementsFile: playbooks/htc-submit-flavour/requirements.yml
         pathToMainFile: playbooks/htc-submit-flavour/htc-submit-flavour.yml
         inputs:
@@ -3227,6 +3260,9 @@ spec:
       name: "ipa-client-enroll-flavour"
       version: "1.12.1"
       ewccli:
+        externalIP: false
+        defaultSecurityGroups:
+          - ssh
         pathToRequirementsFile: playbooks/ipa-client-enroll-flavour/requirements.yml
         pathToMainFile: playbooks/ipa-client-enroll-flavour/ipa-client-enroll-flavour.yml
         inputs:
@@ -3477,6 +3513,9 @@ spec:
       name: "ipa-client-disenroll-flavour"
       version: "1.12.1"
       ewccli:
+        externalIP: false
+        defaultSecurityGroups:
+          - ssh
         pathToMainFile: playbooks/ipa-client-disenroll-flavour/ipa-client-disenroll-flavour.yml
         pathToRequirementsFile: playbooks/ipa-client-disenroll-flavour/requirements.yml
         inputs:
@@ -4030,6 +4069,7 @@ spec:
       name: "ipa-server-flavour"
       version: "1.12.1"
       ewccli:
+        externalIP: false
         defaultImageName: Rocky-9
         pathToRequirementsFile: playbooks/ipa-server-flavour/requirements.yml
         pathToMainFile: playbooks/ipa-server-flavour/ipa-server-flavour.yml
@@ -4688,6 +4728,9 @@ spec:
       name: "ml-basic"
       version: "1.1.0"
       ewccli:
+        externalIP: false
+        defaultSecurityGroups:
+          - ssh
         pathToMainFile: playbooks/ml-basic/ml-basic.yml
       values:
         pathToMainFile: playbooks/ml-basic/ml-basic.yml
@@ -4983,6 +5026,8 @@ spec:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       summary: Configures an existing VM as a user-friendly Nginx Proxy Manager server, simplifying virtual host management, SSL/HTTP/2 support, and security features like exploit blocking for efficient and secure proxy operations.
       ewccli:
+        defaultSecurityGroups:
+          - ssh
         pathToRequirementsFile: playbooks/nginx-proxy-manager-flavour/requirements.yml
         pathToMainFile: playbooks/nginx-proxy-manager-flavour/nginx-proxy-manager-flavour.yml
         defaultImageName: Ubuntu-24.04
@@ -5500,6 +5545,9 @@ spec:
       name: "pytroll-processing"
       version: "0.1.2"
       ewccli:
+        externalIP: false
+        defaultSecurityGroups:
+          - ssh
         pathToMainFile: satellite-data-processing-main.yaml
       values:
         pathToMainFile: satellite-data-processing-main.yaml
@@ -5630,6 +5678,9 @@ spec:
       name: "remote-desktop-flavour"
       version: "1.12.1"
       ewccli:
+        externalIP: false
+        defaultSecurityGroups:
+          - ssh
         defaultImageName: Rocky-9
         pathToRequirementsFile: playbooks/remote-desktop-flavour/requirements.yml
         pathToMainFile: playbooks/remote-desktop-flavour/remote-desktop-flavour.yml
@@ -6089,6 +6140,8 @@ spec:
       name: "ssh-bastion-flavour"
       version: "1.12.1"
       ewccli:
+        defaultSecurityGroups:
+          - ssh
         defaultImageName: Rocky-9
         pathToRequirementsFile: playbooks/ssh-bastion-flavour/requirements.yml
         pathToMainFile: playbooks/ssh-bastion-flavour/ssh-bastion-flavour.yml
@@ -6522,7 +6575,8 @@ spec:
       version: "1.12.1"
       ewccli:
         defaultImageName: Ubuntu-24.04
-        defaultSecurityGroups: [ssh-http-https]
+        defaultSecurityGroups:
+          - ssh-http-https
         pathToRequirementsFile: playbooks/xcube-viewer-flavour/requirements.yml
         pathToMainFile: playbooks/xcube-viewer-flavour/xcube-viewer-flavour.yml
         inputs:
@@ -6943,6 +6997,8 @@ spec:
       sources:
         - https://github.com/MeteoSwiss/flexpart-ifs-ewc-blueprint.git
       ewccli:
+        defaultSecurityGroups:
+          - ssh
         pathToRequirementsFile: requirements.yml
         pathToMainFile: deploy.yml
         defaultImageName: Ubuntu-24.04
