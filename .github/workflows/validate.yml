@@ -16,10 +16,11 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: 24
+          node-version-file: .nvmrc
+          cache: npm
 
       - name: Install Node dependencies
-        run: npm install -g ajv-cli
+        run: npm ci --ignore-scripts
 
       - name: Validate items metadata styling
         run: |
@@ -31,7 +32,7 @@ jobs:
           char_count_diff=$(( $char_count_before_trim - $char_count_after_trim ))
 
           if [[ "$char_count_diff" -gt "0" ]]; then
-              echo "items.yaml contains ${char_count_diff} trailing space(s) that Must be trimmed"
+              echo "items.yaml contains ${char_count_diff} trailing space(s) that must be trimmed"
               exit 1
           fi
 
@@ -41,4 +42,9 @@ jobs:
 
       - name: Validate items metadata contents
         run: |
-          ajv validate -s schemas/items/v1alpha1.json -d items.json --spec=draft2020
+          npx --no-install ajv validate \
+            -s schemas/items/v1alpha1.json \
+            -c ajv-formats \
+            -d items.json \
+            --spec draft2020 \
+            --errors text

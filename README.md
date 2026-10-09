@@ -60,7 +60,7 @@ spec:
 
 >⚠️ At least one of the `maintainers[*].email` or the `maintainers[*].url` attributes should be set to ensure end-users can submit inquiries or receive support, in accordance with the support level offered by Item owners.
 
-## Schema Validation
+## Metadata Validation
 > 💡 To learn more about how you can onboard your item into the catalog, please check the [official EWC documentation](https://confluence.ecmwf.int/x/wyLOIQ).
 
 This repository relies on [GitHub](./.github/workflows/validate.yml) actions to automate the process of catalog/item metadata validation.
@@ -73,19 +73,25 @@ Make sure your working environment has [Docker](https://docs.docker.com/engine/i
 setup the validation tool locally (one time operation):
 
 ```bash
-docker build --tag ewc/ajv-cli:5.0.0 .
+docker build --tag ewc-community-hub/metadata-validator .
 ```
 Then, to validate any changes in the metadata against the expected schema, run:
 ```bash
 docker run --rm --volume .:/tmp:ro \
-  ewc/ajv-cli:5.0.0 \
+  ewc-community-hub/metadata-validator \
   -s tmp/schemas/items/v1alpha1.json \
   -d /tmp/items.yaml \
   -c ajv-formats \
-  --spec draft2020
+  --spec draft2020 \
+  --errors text
 ```
 
 If changes comply, you should see a successful run message like:
 ```
 /tmp/items.yaml valid
 ```
+
+### Running on Pull Request
+
+Every pull request will attempt to run a [metadata validation GitHub Action](./.github/workflows/validate.yml).
+Note that pull requests opened by contributors outside the `ewcloud` GitHub Organization require manual approval of an org member for said GitHub Action to start.
