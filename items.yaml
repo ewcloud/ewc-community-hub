@@ -4997,6 +4997,7 @@ spec:
             type: str
             default: nginx-proxy-manager
       values:
+        ansibleUser: ubuntu
         inputSpec:
           - name: npm_admin_ui_port
             description: "port number at which the Nginx Proxy Manager admin UI is served"
