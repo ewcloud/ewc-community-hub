@@ -1,12 +1,13 @@
-FROM docker.io/node:20-alpine3.19
+FROM docker.io/node:24-alpine 
 
-ENV AJV_CLI_VERSION=5.0.0
-ENV AJV_FORMATS_VERSION=2.1.0
+ENV NODE_ENV=production
+WORKDIR /opt/validator
 
-RUN apk add --no-cache make gcc g++ python3 && \
-    npm install -g "ajv-cli@${AJV_CLI_VERSION}" "ajv-formats@${AJV_FORMATS_VERSION}" && \
-    npm cache clean --force && \
-    apk del make gcc g++ python3
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev --ignore-scripts && npm cache clean --force
 
+ENV PATH="/opt/validator/node_modules/.bin:${PATH}"
+
+WORKDIR /
 ENTRYPOINT ["ajv"]
 CMD ["help"]
