@@ -43,8 +43,13 @@ spec:
         ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
 
       ewccli:
-        pathToMainFile: playbooks/ai-models/ai-models.yml
+        externalIP: false
+        defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
+          - ssh
+        pathToMainFile: playbooks/ai-models/ai-models.yml # Deprecated in favor of values.pathToMainFile
       values:
+        osSecurityGroups:
+          - ssh
         pathToMainFile: playbooks/ai-models/ai-models.yml
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
@@ -609,8 +614,13 @@ spec:
         ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
 
       ewccli:
-        pathToMainFile: playbooks/aifs-single-mse/aifs-single-mse.yml
+        externalIP: false
+        defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
+          - ssh
+        pathToMainFile: playbooks/aifs-single-mse/aifs-single-mse.yml # Deprecated in favor of values.pathToMainFile
       values:
+        osSecurityGroups:
+          - ssh
         pathToMainFile: playbooks/aifs-single-mse/aifs-single-mse.yml
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
@@ -676,8 +686,13 @@ spec:
         ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
 
       ewccli:
-        pathToMainFile: playbooks/aifs-ens-crps/aifs-ens-crps.yml
+        externalIP: false
+        defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
+          - ssh
+        pathToMainFile: playbooks/aifs-ens-crps/aifs-ens-crps.yml # Deprecated in favor of values.pathToMainFile
       values:
+        osSecurityGroups:
+          - ssh
         pathToMainFile: playbooks/aifs-ens-crps/aifs-ens-crps.yml
       home: https://github.com/ewcloud/ewc-ecmwf-ai-stacks
       sources:
@@ -702,8 +717,13 @@ spec:
       name: "ecmwf-anemoi"
       version: "1.1.0"
       ewccli:
-        pathToMainFile: playbooks/anemoi/anemoi.yml
+        externalIP: false
+        defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
+          - ssh
+        pathToMainFile: playbooks/anemoi/anemoi.yml # Deprecated in favor of values.pathToMainFile
       values:
+        osSecurityGroups:
+          - ssh
         pathToMainFile: playbooks/anemoi/anemoi.yml
       description: |
         Create a conda environment with the Anemoi framework for weather forecasting based on machine learning and associated software stack.
@@ -792,8 +812,11 @@ spec:
 
       displayName: ECMWF Data Flavour
       ewccli:
-        defaultImageName: Ubuntu-24.04
-        inputs:
+        externalIP: false
+        defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
+          - ssh
+        defaultImageName: Ubuntu-24.04 # Deprecated in favour of values.osImageName
+        inputs: # Deprecated in favor of values.inputSpec
           - name: reboot_if_required
             default: true
             description: Boolean to reboot the instance if required after an update.
@@ -818,9 +841,11 @@ spec:
             default: "root"
             description: User owning the conda installation.
             type: str
-        pathToMainFile: playbooks/ecmwf-data-flavour/ecmwf-data-flavour.yml
-        pathToRequirementsFile: requirements.yml
+        pathToMainFile: playbooks/ecmwf-data-flavour/ecmwf-data-flavour.yml # Deprecated in favor of values.pathToMainFile
+        pathToRequirementsFile: requirements.yml # Deprecated in favor of values.pathToRequirementsFile
       values:
+        osSecurityGroups:
+          - ssh
         osImageName: Ubuntu-24.04
         ansibleUser: ubuntu
         inputSpec:
@@ -868,10 +893,14 @@ spec:
       name: "eumetcast-terrestrial-amt-flavour"
       version: "1.12.1"
       ewccli:
-        pathToRequirementsFile: playbooks/eumetcast-terrestrial-amt-flavour/requirements.yml
-        pathToMainFile: playbooks/eumetcast-terrestrial-amt-flavour/eumetcast-terrestrial-amt-flavour.yml
-        defaultImageName: Ubuntu-22.04
-        inputs:
+        externalIP: true
+        defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
+          - ssh
+          - eumetcast
+        pathToRequirementsFile: playbooks/eumetcast-terrestrial-amt-flavour/requirements.yml # Deprecated in favor of values.pathToRequirementsFile
+        pathToMainFile: playbooks/eumetcast-terrestrial-amt-flavour/eumetcast-terrestrial-amt-flavour.yml # Deprecated in favor of values.pathToMainFile
+        defaultImageName: Ubuntu-22.04 # Deprecated in favor of values.osImageName
+        inputs: # Deprecated in favor of values.inputSpec
           - name: tellicast_license_user_name
             description: Tellicast license user identifier, equivalent to your EUMETSAT User Portal username.
             type: str
@@ -879,6 +908,9 @@ spec:
             description: Tellicast license activation key (i.e. the user key you obtained via from EUMETSAT Helpdesk).
             type: str
       values:
+        osSecurityGroups:
+          - ssh
+          - eumetcast
         osImageName: Ubuntu-22.04
         ansibleUser: ubuntu
         pathToRequirementsFile: playbooks/eumetcast-terrestrial-amt-flavour/requirements.yml
@@ -1149,10 +1181,13 @@ spec:
       name: "eumetsat-s3-mount-flavour"
       version: "1.12.1"
       ewccli:
-        pathToRequirementsFile: playbooks/eumetsat-s3-mount-flavour/requirements.yml
-        pathToMainFile: playbooks/eumetsat-s3-mount-flavour/eumetsat-s3-mount-flavour.yml
-        defaultImageName: Ubuntu-22.04
-        inputs:
+        externalIP: false
+        defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
+          - ssh
+        pathToRequirementsFile: playbooks/eumetsat-s3-mount-flavour/requirements.yml # Deprecated in favor of values.pathToRequirementsFile
+        pathToMainFile: playbooks/eumetsat-s3-mount-flavour/eumetsat-s3-mount-flavour.yml # Deprecated in favor of values.pathToMainFile
+        defaultImageName: Ubuntu-22.04 # Deprecated in favor of values.osImageName
+        inputs: # Deprecated in favor of values.inputSpec
           - name: vfs_cache_mode
             description: Cache mode
             type: str
@@ -1162,6 +1197,8 @@ spec:
             type: str
             default: 512Mi
       values:
+        osSecurityGroups:
+          - ssh
         osImageName: Ubuntu-22.04
         ansibleUser: ubuntu
         pathToRequirementsFile: playbooks/eumetsat-s3-mount-flavour/requirements.yml
@@ -1403,10 +1440,13 @@ spec:
       name: "eumetsat-data-tailor-flavour"
       version: "1.12.1"
       ewccli:
-        pathToRequirementsFile: playbooks/eumetsat-data-tailor-flavour/requirements.yml
-        pathToMainFile: playbooks/eumetsat-data-tailor-flavour/eumetsat-data-tailor-flavour.yml
-        defaultImageName: Ubuntu-24.04
-        inputs:
+        externalIP: false
+        defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
+          - ssh
+        pathToRequirementsFile: playbooks/eumetsat-data-tailor-flavour/requirements.yml # Deprecated in favor of values.pathToRequirementsFile
+        pathToMainFile: playbooks/eumetsat-data-tailor-flavour/eumetsat-data-tailor-flavour.yml # Deprecated in favor of values.pathToMainFile
+        defaultImageName: Ubuntu-24.04 # Deprecated in favor of values.osImageName
+        inputs: # Deprecated in favor of values.inputSpec
           - name: data_tailor_env_wipe
             description: flag to delete existing conda environment where data tailor was previously installed. Only yes will be accepted to approve
             type: str
@@ -1432,6 +1472,8 @@ spec:
             type: str
             default: "root"
       values:
+        osSecurityGroups:
+          - ssh
         osImageName: Ubuntu-24.04
         ansibleUser: ubuntu
         pathToRequirementsFile: playbooks/eumetsat-data-tailor-flavour/requirements.yml
@@ -2442,6 +2484,8 @@ spec:
       summary: Configures an existing VM as a high-performance load balancer, enhancing application speed, security, and scalability with easy management for TCP and HTTP workloads.
       values:
         osImageName: Ubuntu-24.04-20260519071420
+        osSecurityGroups:
+          - ssh-https
         ansibleUser: ubuntu
         inputSpec:
           - name: os_security_group_name
@@ -2676,9 +2720,37 @@ spec:
       name: "htc-execute-flavour"
       version: "1.12.1"
       ewccli:
+        externalIP: false
+        defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
+          - ssh
+          - htcondor
+        pathToRequirementsFile: playbooks/htc-execute-flavour/requirements.yml # Deprecated in favor of values.pathToRequirementsFile
+        pathToMainFile: playbooks/htc-execute-flavour/htc-execute-flavour.yml # Deprecated in favor of values.pathToMainFile
+        inputs: # Deprecated in favor of values.inputSpec
+          - name: headscale_login_server
+            description: URI of the VPN server.
+            type: str
+            default: http://headscale.batchprocessing.eumetsat.ewcloud.host:80
+          - name: headscale_preauthkey
+            description: Credentials of the VPN server.
+            type: str
+          - name: htcondor_cm_external_ip
+            description: IP Address of the HTCondor Manager node to which this submit node reports to.
+            type: str
+            default: 100.64.0.32
+          - name: htcondor_password
+            description: Password to authenticate against HTCondor Execute node pool
+            type: str
+          - name: harbor_auth_token
+            description: Token for authentication when pulling private container images from EWC Container registry
+            type: str
+      values:
+        osSecurityGroups:
+          - ssh
+          - htcondor
         pathToRequirementsFile: playbooks/htc-execute-flavour/requirements.yml
         pathToMainFile: playbooks/htc-execute-flavour/htc-execute-flavour.yml
-        inputs:
+        inputSpec:
           - name: headscale_login_server
             description: URI of the VPN server.
             type: str
@@ -2954,9 +3026,34 @@ spec:
       name: "htc-submit-flavour"
       version: "1.12.1"
       ewccli:
+        externalIP: false
+        defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
+          - ssh
+          - htcondor
+        pathToRequirementsFile: playbooks/htc-submit-flavour/requirements.yml # Deprecated in favor of values.pathToRequirementsFile
+        pathToMainFile: playbooks/htc-submit-flavour/htc-submit-flavour.yml # Deprecated in favor of values.pathToMainFile
+        inputs: # Deprecated in favor of values.inputSpec
+          - name: headscale_login_server
+            description: URI of the VPN server.
+            type: str
+            default: http://headscale.batchprocessing.eumetsat.ewcloud.host:80
+          - name: headscale_preauthkey
+            description: Credentials of the VPN server.
+            type: str
+          - name: htcondor_cm_external_ip
+            description: IP Address of the HTCondor Manager node to which this submit node reports to.
+            type: str
+            default: 100.64.0.32
+          - name: htcondor_password
+            description: Password to authenticate against HTCondor Execute node pool
+            type: str
+      values:
+        osSecurityGroups:
+          - ssh
+          - htcondor
         pathToRequirementsFile: playbooks/htc-submit-flavour/requirements.yml
         pathToMainFile: playbooks/htc-submit-flavour/htc-submit-flavour.yml
-        inputs:
+        inputSpec:
           - name: headscale_login_server
             description: URI of the VPN server.
             type: str
@@ -3227,9 +3324,30 @@ spec:
       name: "ipa-client-enroll-flavour"
       version: "1.12.1"
       ewccli:
+        externalIP: false
+        defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
+          - ipa
+        pathToRequirementsFile: playbooks/ipa-client-enroll-flavour/requirements.yml # Deprecated in favor of values.pathToRequirementsFile
+        pathToMainFile: playbooks/ipa-client-enroll-flavour/ipa-client-enroll-flavour.yml # Deprecated in favor of values.pathToMainFile
+        inputs: # Deprecated in favor of values.inputSpec
+          - name: ipa_domain
+            description: "domain name managed by the IPA server. Example: eumetsat.sandbox.ewc"
+            type: str
+          - name: ipa_server_hostname
+            description: "hostname of the IPA server. Example: ipa-server-1"
+            type: str
+          - name: ipa_admin_username
+            description: "password of the administrator account from the IPA server. Example: my-secret-password"
+            type: str
+          - name: ipa_admin_password
+            description: "username of the administrator account from the IPA server. Example: ipaadmin"
+            type: str
+      values:
+        osSecurityGroups:
+          - ipa
         pathToRequirementsFile: playbooks/ipa-client-enroll-flavour/requirements.yml
         pathToMainFile: playbooks/ipa-client-enroll-flavour/ipa-client-enroll-flavour.yml
-        inputs:
+        inputSpec:
           - name: ipa_domain
             description: "domain name managed by the IPA server. Example: eumetsat.sandbox.ewc"
             type: str
@@ -3477,9 +3595,33 @@ spec:
       name: "ipa-client-disenroll-flavour"
       version: "1.12.1"
       ewccli:
+        externalIP: false
+        defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
+          - ipa
+        pathToMainFile: playbooks/ipa-client-disenroll-flavour/ipa-client-disenroll-flavour.yml # Deprecated in favor of values.pathToMainFile
+        pathToRequirementsFile: playbooks/ipa-client-disenroll-flavour/requirements.yml # Deprecated in favor of values.pathToRequirementsFile
+        inputs: # Deprecated in favor of values.inputSpec
+          - name: ipa_domain
+            description: "domain name managed by the IPA server. Example: eumetsat.sandbox.ewc"
+            type: str
+          - name: ipa_client_hostname
+            description: "hostname of the target vm to be disenrolled from the IPA server. Example: ipa-client-1"
+            type: str
+          - name: ipa_server_hostname
+            description: "hostname of the IPA server. Example: ipa-server-1"
+            type: str
+          - name: ipa_admin_username
+            description: "username of the administrator account from the IPA server. Example: ipaadmin"
+            type: str
+          - name: ipa_admin_password
+            description: "password of the administrator account from the IPA server. Example: my-secret-password"
+            type: str
+      values:
+        osSecurityGroups:
+          - ipa
         pathToMainFile: playbooks/ipa-client-disenroll-flavour/ipa-client-disenroll-flavour.yml
         pathToRequirementsFile: playbooks/ipa-client-disenroll-flavour/requirements.yml
-        inputs:
+        inputSpec:
           - name: ipa_domain
             description: "domain name managed by the IPA server. Example: eumetsat.sandbox.ewc"
             type: str
@@ -4030,10 +4172,11 @@ spec:
       name: "ipa-server-flavour"
       version: "1.12.1"
       ewccli:
-        defaultImageName: Rocky-9
-        pathToRequirementsFile: playbooks/ipa-server-flavour/requirements.yml
-        pathToMainFile: playbooks/ipa-server-flavour/ipa-server-flavour.yml
-        inputs:
+        externalIP: false
+        defaultImageName: Rocky-9 # Deprecated in favor of values.osImageName
+        pathToRequirementsFile: playbooks/ipa-server-flavour/requirements.yml # Deprecated in favor of values.pathToRequirementsFile
+        pathToMainFile: playbooks/ipa-server-flavour/ipa-server-flavour.yml # Deprecated in favor of values.pathToMainFile
+        inputs: # Deprecated in favor of values.inputSpec
           - name: ipa_domain
             description: "domain name to be managed by the IPA server. Example: eumetsat.sandbox.ewc"
             type: str
@@ -4052,7 +4195,7 @@ spec:
           - name: ipa_admin_surname
             description: "surname of the administrator to replace the default IPA admin (not necessarily a real person's name). Example: IPAADMIN"
             type: str
-        defaultSecurityGroups:
+        defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
           - ipa
       values:
         osImageName: Rocky-9
@@ -4084,6 +4227,8 @@ spec:
             description: "surname of the administrator to replace the default IPA admin (not necessarily a real person's name). Example: IPAADMIN"
             type: str
             default: IPAADMIN
+        osSecurityGroups:
+          - ipa
       description: |
         This Ansible Playbook configures an existing virtual machine running
         within the [European Weather Cloud (EWC)](https://europeanweather.cloud/)
@@ -4582,9 +4727,9 @@ spec:
       name: "jupyterhub-flavour"
       version: "2.0.2"
       ewccli:
-        pathToMainFile: playbooks/jupyterhub-flavour/jupyterhub-flavour.yml
-        pathToRequirementsFile: requirements.yml
-        inputs:
+        pathToMainFile: playbooks/jupyterhub-flavour/jupyterhub-flavour.yml # Deprecated in favor of values.pathToMainFile
+        pathToRequirementsFile: requirements.yml # Deprecated in favor of values.pathToRequirementsFile
+        inputs: # Deprecated in favor of values.inputSpec
           - name: jupyterhub_local_cert_email
             description: "Email used for the certificate."
             type: str
@@ -4616,11 +4761,13 @@ spec:
             default: "root"
             description: "User owning the conda installation. "
             type: str
-        defaultSecurityGroups:
+        defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
           - ssh-http-https
         externalIP: true
         checkDNS: true
       values:
+        osSecurityGroups:
+          - ssh-http-https
         osImageName: Ubuntu-24.04
         ansibleUser: ubuntu
         pathToMainFile: playbooks/jupyterhub-flavour/jupyterhub-flavour.yml
@@ -4688,9 +4835,14 @@ spec:
       name: "ml-basic"
       version: "1.1.0"
       ewccli:
-        pathToMainFile: playbooks/ml-basic/ml-basic.yml
+        externalIP: false
+        defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
+          - ssh
+        pathToMainFile: playbooks/ml-basic/ml-basic.yml # Deprecated in favor of values.pathToMainFile
       values:
         pathToMainFile: playbooks/ml-basic/ml-basic.yml
+        osSecurityGroups:
+          - ssh
       description: |
         Create a conda environment with the basic Machine Learning packages such as torch, xgboost, and scikit-learn. Check `files/env.yml` for all the details on the software included.
 
@@ -4983,11 +5135,13 @@ spec:
         - https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning.git
       summary: Configures an existing VM as a user-friendly Nginx Proxy Manager server, simplifying virtual host management, SSL/HTTP/2 support, and security features like exploit blocking for efficient and secure proxy operations.
       ewccli:
-        pathToRequirementsFile: playbooks/nginx-proxy-manager-flavour/requirements.yml
-        pathToMainFile: playbooks/nginx-proxy-manager-flavour/nginx-proxy-manager-flavour.yml
-        defaultImageName: Ubuntu-24.04
+        defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
+          - ssh
+        pathToRequirementsFile: playbooks/nginx-proxy-manager-flavour/requirements.yml # Deprecated in favor of values.pathToRequirementsFile
+        pathToMainFile: playbooks/nginx-proxy-manager-flavour/nginx-proxy-manager-flavour.yml # Deprecated in favor of values.pathToMainFile
+        defaultImageName: Ubuntu-24.04 # Deprecated in favor of values.osImageName
         externalIP: true
-        inputs:
+        inputs: # Deprecated in favor of values.inputSpec
           - name: npm_admin_ui_port
             description: "port number at which the Nginx Proxy Manager admin UI is served"
             type: str
@@ -5007,6 +5161,8 @@ spec:
             type: str
             default: nginx-proxy-manager
         osImageName: Ubuntu-24.04-20260519071420
+        osSecurityGroups:
+          - ssh
         ansibleUser: ubuntu
         pathToMainFile: playbooks/nginx-proxy-manager-flavour/nginx-proxy-manager-flavour.yml
         pathToRequirementsFile: playbooks/nginx-proxy-manager-flavour/requirements.yml
@@ -5500,8 +5656,13 @@ spec:
       name: "pytroll-processing"
       version: "0.1.2"
       ewccli:
-        pathToMainFile: satellite-data-processing-main.yaml
+        externalIP: false
+        defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
+          - ssh
+        pathToMainFile: satellite-data-processing-main.yaml # Deprecated in favor of values.pathToMainFile
       values:
+        osSecurityGroups:
+          - ssh
         pathToMainFile: satellite-data-processing-main.yaml
       description: |
         Playbooks to install and configure Pytroll-based satellite data processing pipelines and optionally a WMS server. These playbooks are used in the European Weather Cloud (EWC) environment.
@@ -5630,15 +5791,20 @@ spec:
       name: "remote-desktop-flavour"
       version: "1.12.1"
       ewccli:
-        defaultImageName: Rocky-9
-        pathToRequirementsFile: playbooks/remote-desktop-flavour/requirements.yml
-        pathToMainFile: playbooks/remote-desktop-flavour/remote-desktop-flavour.yml
-        inputs:
+        externalIP: false
+        defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
+          - ssh
+        defaultImageName: Rocky-9 # Deprecated in favor of values.osImageName
+        pathToRequirementsFile: playbooks/remote-desktop-flavour/requirements.yml # Deprecated in favor of values.pathToRequirementsFile
+        pathToMainFile: playbooks/remote-desktop-flavour/remote-desktop-flavour.yml # Deprecated in favor of values.pathToMainFile
+        inputs: # Deprecated in favor of values.inputSpec
           - name: fail2ban_whitelisted_ip_ranges
             description: "IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: ['10.0.0.0/24','192.168.1.0/24']"
             type: Optional[List[str]]
             default: null
       values:
+        osSecurityGroups:
+          - ssh
         osImageName: Rocky-9
         ansibleUser: cloud-user
         pathToRequirementsFile: playbooks/remote-desktop-flavour/requirements.yml
@@ -6089,16 +6255,20 @@ spec:
       name: "ssh-bastion-flavour"
       version: "1.12.1"
       ewccli:
-        defaultImageName: Rocky-9
-        pathToRequirementsFile: playbooks/ssh-bastion-flavour/requirements.yml
-        pathToMainFile: playbooks/ssh-bastion-flavour/ssh-bastion-flavour.yml
-        inputs:
+        defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
+          - ssh
+        defaultImageName: Rocky-9 # Deprecated in favor of values.osImageName
+        pathToRequirementsFile: playbooks/ssh-bastion-flavour/requirements.yml # Deprecated in favor of values.pathToRequirementsFile
+        pathToMainFile: playbooks/ssh-bastion-flavour/ssh-bastion-flavour.yml # Deprecated in favor of values.pathToMainFile
+        inputs: # Deprecated in favor of values.inputSpec
           - name: fail2ban_whitelisted_ip_ranges
             description: "IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: ['10.0.0.0/24','192.168.1.0/24']"
             type: Optional[List[str]]
             default: null
         externalIP: true
       values:
+        osSecurityGroups:
+          - ssh
         osImageName: Rocky-9
         ansibleUser: cloud-user
         pathToRequirementsFile: playbooks/ssh-bastion-flavour/requirements.yml
@@ -6521,11 +6691,12 @@ spec:
       name: "xcube-viewer-flavour"
       version: "1.12.1"
       ewccli:
-        defaultImageName: Ubuntu-24.04
-        defaultSecurityGroups: [ssh-http-https]
-        pathToRequirementsFile: playbooks/xcube-viewer-flavour/requirements.yml
-        pathToMainFile: playbooks/xcube-viewer-flavour/xcube-viewer-flavour.yml
-        inputs:
+        defaultImageName: Ubuntu-24.04 # Deprecated in favor of values.osImageName
+        defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
+          - ssh-http-https
+        pathToRequirementsFile: playbooks/xcube-viewer-flavour/requirements.yml # Deprecated in favor of values.pathToRequirementsFile
+        pathToMainFile: playbooks/xcube-viewer-flavour/xcube-viewer-flavour.yml # Deprecated in favor of values.pathToMainFile
+        inputs: # Deprecated in favor of values.inputSpec
           - name: tenancy_name
             description: "Tenancy name in the following format location-org-project"
             type: str
@@ -6563,6 +6734,8 @@ spec:
         externalIP: true
         checkDNS: true
       values:
+        osSecurityGroups:
+          - ssh-http-https
         osImageName: Ubuntu-24.04
         ansibleUser: ubuntu
         pathToRequirementsFile: playbooks/xcube-viewer-flavour/requirements.yml
@@ -6943,10 +7116,18 @@ spec:
       sources:
         - https://github.com/MeteoSwiss/flexpart-ifs-ewc-blueprint.git
       ewccli:
+        defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
+          - ssh
+        pathToRequirementsFile: requirements.yml # Deprecated in favor of values.pathToRequirementsFile
+        pathToMainFile: deploy.yml # Deprecated in favor of values.pathToMainFile
+        defaultImageName: Ubuntu-24.04 # Deprecated in favor of values.osImageName
+        externalIP: true
+      values:
+        osSecurityGroups:
+          - ssh
         pathToRequirementsFile: requirements.yml
         pathToMainFile: deploy.yml
-        defaultImageName: Ubuntu-24.04
-        externalIP: true
+        osImageName: Ubuntu-24.04
       license: https://github.com/MeteoSwiss/flexpart-ifs-ewc-blueprint/blob/0.1.2/LICENSE
       icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/MeteoSwissLogo.png
       maintainers:
