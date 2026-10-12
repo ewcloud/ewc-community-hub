@@ -2,12 +2,8 @@
 This repository hosts the official catalog of items offered in the [EWC Community Hub](https://europeanweather.cloud/community-hub).
 
 ## Item's Metadata
-Below we show an excerpt from [items.yaml](items.yaml), to exemplify the metadata of an onboarded item.
-For more details on required attributes, as well as optional ones (such as inputs specification for deployment and `EWCCLI` compatibility),
-please refer to the items' metadata [schema definition](./schemas/items/v1alpha1.json).
-
->⛔ The attribute `name` within each item entry must always match the key under which the item's metadata is defined, to 
-enforce entry uniqueness.
+Below is a minimal example of metadata for an Item to be onboarded, including optional EWCCLI compatibility.
+For more details on available attributes, please refer to the [schema documentation](./docs/schema-reference/items/v1alpha1.md).
 
 ```yaml
 apiVersion: communityhub.europeanweather.cloud/v1alpha1
@@ -58,9 +54,11 @@ spec:
       version: "0.0.1"
 ```
 
+>⛔ The attribute `name` within each item entry must always match the key under which the item's metadata is defined, to enforce entry uniqueness.
+
 >⚠️ At least one of the `maintainers[*].email` or the `maintainers[*].url` attributes should be set to ensure end-users can submit inquiries or receive support, in accordance with the support level offered by Item owners.
 
-## Metadata Validation
+## Schema Validation
 > 💡 To learn more about how you can onboard your item into the catalog, please check the [official EWC documentation](https://confluence.ecmwf.int/x/wyLOIQ).
 
 This repository relies on [GitHub](./.github/workflows/validate.yml) actions to automate the process of catalog/item metadata validation.
