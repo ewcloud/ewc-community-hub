@@ -1,20 +1,28 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/ewcloud/ewc-community-hub/blob/main/schemas/items/v1alpha1.json",
+  "$id": "https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/schemas/items/v1alpha1.json",
+  "title": "EWC Community Hub Catalog",
+  "description": "Schema for `items.yaml`, the catalog of items offered in the EWC Community Hub.",
   "type": "object",
   "properties": {
     "apiVersion": {
-      "type": "string"
+      "type": "string",
+      "const": "communityhub.europeanweather.cloud/v1alpha1",
+      "description": "Version of the catalog API this document conforms to. Must match this schema version.",
+      "examples": ["communityhub.europeanweather.cloud/v1alpha1"]
     },
     "kind": {
       "type": "string",
-      "const": "CommunityHubCatalog"
+      "const": "CommunityHubCatalog",
+      "description": "Type of the document. Always `CommunityHubCatalog`."
     },
     "spec": {
       "type": "object",
+      "description": "Catalog specification, holding all the items offered in the EWC Community Hub.",
       "properties": {
         "items": {
           "type": "object",
+          "description": "Map of catalog items. Each key is the item identifier and must equal the item's `name`. Each value follows the [item definition](#communityhubcatalogitem).",
           "patternProperties": {
             "^[a-zA-Z0-9_-]+(\\d+\\.\\d+\\.\\d+)?$": {
               "$ref": "#/$defs/communityHubCatalogItem"
@@ -38,28 +46,40 @@
   "$defs": {
     "communityHubCatalogItem": {
       "type": "object",
+      "description": "Metadata describing a single item of the catalog: how it is presented in the Hub, who maintains and supports it, where its sources live and, optionally, how it is deployed.",
       "properties": {
         "annotations": {
           "type": "object",
+          "description": "Classification metadata used by the Hub to list, filter and label the item, and to set support and licensing expectations.",
           "properties": {
             "licenseType": {
-              "type": "string"
+              "description": "SPDX full name of the license the item is distributed under.",
+              "type": "string",
+              "examples": ["Apache License 2.0", "MIT License"]
             },
             "category": {
+              "description": "Catalog category the item is listed under in the Hub, used for browsing and filtering.",
               "type": "string",
-              "pattern": ".+"
+              "pattern": ".+",
+              "examples": ["Compute", "Dataset"]
             },
             "others": {
+              "description": "Comma-separated free-form tags, for example whether the item is deployable or EWCCLI-compatible.",
               "type": "string",
-              "pattern": ".+"
+              "pattern": ".+",
+              "examples": ["Deployable,EWCCLI-compatible"]
             },
             "supportLevel": {
+              "description": "Support commitment offered by the item owner. EWC means supported by the EWC team; Community means best-effort by the maintainers.",
               "type": "string",
-              "enum": ["EWC", "Community"]
+              "enum": ["EWC", "Community"],
+              "examples": ["Community"]
             },
             "technology": {
+              "description": "Technology the item is implemented with, which determines how it is deployed.",
               "type": "string",
-              "pattern": ".+"
+              "pattern": ".+",
+              "examples": ["Ansible Playbook", "Terraform Module"]
             }
           },
           "required": [
@@ -71,29 +91,59 @@
           "additionalProperties": false
         },
         "displayName": {
-          "type": "string"
+          "description": "Human-friendly name of the item shown in the Hub. Unlike `name`, it may contain spaces and capital letters.",
+          "type": "string",
+          "examples": ["My Item"]
         },
         "description": {
-          "type": "string"
+          "description": "Full description of the item shown on its detail page. Multi-line text is allowed, and may include usage notes and a list of customizable variables.",
+          "type": "string",
+          "examples": ["My first ever Item contributed to the EWC Community Hub."]
         },
         "values": {
+          "description": "Deployment configuration consumed by deployment tools like Ansible, Terraform, EWCCLI, etc., and by CI test automation. Supersedes deprecated `ewccli` sub-attributes.",
           "type": "object",
           "properties": {
             "inputSpec": {
+              "description": "Inputs a user can set when deploying the item. Each entry declares one input, its type and, optionally, a default value.",
               "type": "array",
               "items": {
+                "description": "Specification of a single deployment input.",
                 "type": "object",
                 "properties": {
                   "name": {
-                    "type": "string"
+                    "description": "Name of the input. For Items compatible with the EWCCLI, users can set it at deployment time by passing the `--item-inputs name=value` argument.",
+                    "type": "string",
+                    "examples": ["users_file"]
                   },
                   "description": {
-                    "type": "string"
+                    "description": "Explanation of the input shown to users, including the expected format.",
+                    "type": "string",
+                    "examples": ["Path to a YAML file listing the users to create."]
                   },
                   "type": {
-                    "type": "string"
+                    "description": "Data type of the input, as a short type name.",
+                    "type": "string",
+                    "examples": ["str"]
                   },
-                  "default": {}
+                  "default": {
+                    "description": "Value used when the user does not provide one. If present, the input is optional; if omitted, the input is mandatory.",
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "examples": ["my default value"]
+                  }
                 },
                 "required": [
                   "name",
@@ -104,18 +154,26 @@
               }
             },
             "outputSpec": {
+              "description": "Outputs the item produces once deployed, to be reported to the user. Each entry declares one output and its type.",
               "type": "array",
               "items": {
+                "description": "Specification of a single deployment output.",
                 "type": "object",
                 "properties": {
                   "name": {
-                    "type": "string"
+                    "description": "Name of the output.",
+                    "type": "string",
+                    "examples": ["server_url"]
                   },
                   "description": {
-                    "type": "string"
+                    "description": "Explanation of the output shown to users, such as how to use the value.",
+                    "type": "string",
+                    "examples": ["URL where the deployed service is reachable."]
                   },
                   "type": {
-                    "type": "string"
+                    "description": "Data type of the output, as a short type name.",
+                    "type": "string",
+                    "examples": ["str"]
                   }
                 },
                 "required": [
@@ -127,79 +185,131 @@
               }
             },
             "pathToRequirementsFile": {
-              "type": "string"
+              "description": "Path, relative to the root of the item's sources, of the file listing dependencies to install before deployment, such as an Ansible Galaxy requirements file.",
+              "type": "string",
+              "examples": ["requirements.yml"]
             },
             "pathToMainFile": {
-              "type": "string"
+              "description": "Path, relative to the root of the item's sources, of the main file to run to deploy the item, such as the Ansible playbook. If unset, EWCCLI asks the user to provide it.",
+              "type": "string",
+              "examples": ["playbooks/my_item.yml"]
             },
             "osFlavorName": {
-              "type": "string"
+              "description": "Name of the OpenStack flavor (virtual machine size) used to create the server. To learn about available options, checkout the [official EWC VM plans documentation](https://confluence.ecmwf.int/x/evWHEw).",
+              "type": "string",
+              "examples": ["eo1.medium"]
             },
             "osImageName": {
-              "type": "string"
+              "description": "Name of the OpenStack image used to create the server. For complete information on available options, see the [official EWC Images documentation](https://confluence.ecmwf.int/x/pU2xG).",
+              "type": "string",
+              "examples": ["Ubuntu-24.04-20260519071420", "Ubuntu-24.04"]
             },
             "osSecurityGroups": {
+              "description": "Names of the OpenStack security groups attached to the server, which control the network traffic allowed to reach it.",
               "type": "array",
               "items": {
-                "type": "string"
+                "description": "Name of an OpenStack security group.",
+                "type": "string",
+                "examples": ["ssh"]
               }
             },
             "pythonVersion": {
-              "type": "string"
+              "description": "Python version required to run the item's deployment tooling.",
+              "type": "string",
+              "examples": ["3.12"]
             },
             "ansibleVersion": {
-              "type": "string"
+              "description": "Ansible version required to run the item's playbook.",
+              "type": "string",
+              "examples": ["11.0.0"]
             },
             "ansibleUser": {
-              "type": "string"
+              "description": "Operating system default user which Ansible impersonates when connecting over SSH to configure the target host. Please check [EWC Virtual Images Available](https://confluence.ecmwf.int/x/pU2xG) for details.",
+              "type": "string",
+              "examples": ["ubuntu"]
             }
           },
           "additionalProperties": false
         },
         "ewccli": {
+          "description": "EWCCLI-specific settings. Only `externalIP` and `checkDNS` are current; every other attribute is deprecated in favor of `values`.",
           "type": "object",
           "properties": {
             "externalIP": {
-              "type": "boolean"
+              "description": "If true, the server is assigned an external IP address so that it is reachable from outside the tenant network.",
+              "type": "boolean",
+              "examples": [false]
             },
             "checkDNS": {
-              "type": "boolean"
+              "description": "If true, EWCCLI checks the DNS record of the server before or after deployment.",
+              "type": "boolean",
+              "examples": [false]
             },
             "pathToMainFile": {
               "type": "string",
-              "description": "Deprecated in favor of values.pathToMainFile"
+              "deprecated": true,
+              "description": "Deprecated: use `values.pathToMainFile` instead."
             },
             "pathToRequirementsFile": {
               "type": "string",
-              "description": "Deprecated in favor of values.pathToRequirementsFile"
+              "deprecated": true,
+              "description": "Deprecated: use `values.pathToRequirementsFile` instead."
             },
             "defaultImageName": {
               "type": "string",
-              "description": "Deprecated in favor of values.osImageName"
+              "deprecated": true,
+              "description": "Deprecated: use `values.osImageName` instead."
             },
             "defaultSecurityGroups": {
               "type": "array",
-              "description": "Deprecated in favour of values.osSecurityGroups",
+              "deprecated": true,
+              "description": "Deprecated: use `values.osSecurityGroups` instead.",
               "items": {
+                "description": "Name of an OpenStack security group.",
                 "type": "string"
               }
             },
             "inputs": {
               "type": "array",
-              "description": "Deprecated in favor of values.inputSpec",
+              "deprecated": true,
+              "description": "Deprecated: use `values.inputSpec` instead.",
               "items": {
                 "type": "object",
+                "description": "Specification of a single deployment input.",
                 "properties": {
                   "name": {
+                    "deprecated": true,
+                    "description": "Name of the input.",
                     "type": "string"
                   },
                   "description": {
+                    "deprecated": true,
+                    "description": "Explanation of the input shown to users, including the expected format.",
                     "type": "string"
                   },
                   "type": {
+                    "deprecated": true,
+                    "description": "Data type of the input, as a short type name.",
                     "type": "string"
                   },
-                  "default": {}
+                  "default": {
+                    "deprecated": true,
+                    "description": "Value used when the user does not provide one. If present, the input is optional.",
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
                 },
                 "required": [
                   "name",
@@ -213,35 +323,49 @@
           "additionalProperties": false
         },
         "home": {
+          "description": "HTTPS URL of the item's home page, usually its location in the source repository.",
           "type": "string",
-          "pattern": "^https://[\\w\\-\\./:#?=&%]+$"
+          "pattern": "^https://[\\w\\-\\./:#?=&%]+$",
+          "examples": ["https://my-public-git-server.com/my-repo"]
         },
         "license": {
-          "type": "string"
+          "description": "HTTPS URL of the license file in the source repository.",
+          "type": "string",
+          "format": "uri",
+          "examples": ["https://my-public-git-server.com/my-repo/blob/main/LICENSE"]
         },
         "icon": {
+          "description": "HTTPS URL of the image used as the item's icon in the Hub.",
           "type": "string",
-          "pattern": "^https://[\\w\\-\\./:#?=&%]+$"
+          "pattern": "^https://[\\w\\-\\./:#?=&%]+$",
+          "examples": ["https://raw.my-public-git-server.com/my-repo/refs/heads/main/icon.png"]
         },
         "maintainers": {
+          "description": "People or organizations responsible for the item and its support.",
           "type": "array",
+          "minItems": 1,
           "items": {
+            "description": "A maintainer of the item. At least one of `email` or `url` must be set.",
             "type": "object",
             "properties": {
               "name": {
-                "type": "string"
+                "description": "Name of the person or organization.",
+                "type": "string",
+                "examples": ["EWC Team"]
               },
               "email": {
                 "anyOf": [
                   {
                     "type": "string",
-                    "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+                    "format": "email"
                   },
                   {
                     "type": "null"
                   }
                 ],
-                "default": "null"
+                "description": "Support contact email. At least one of `email` or `url` must be set.",
+                "default": null,
+                "examples": ["support@example.org"]
               },
               "url": {
                 "anyOf": [
@@ -253,7 +377,9 @@
                     "type": "null"
                   }
                 ],
-                "default": "null"
+                "description": "HTTPS URL where users can get support, such as the issue tracker. At least one of `email` or `url` must be set.",
+                "default": null,
+                "examples": ["https://my-public-git-server.com/my-repo/issues"]
               }
             },
             "required": [
@@ -263,23 +389,35 @@
           }
         },
         "name": {
-          "type": "string"
+          "description": "Unique identifier of the item. Must equal the key under which the item is defined in `spec.items`.",
+          "type": "string",
+          "examples": ["my-item"]
         },
         "published": {
-          "type": "boolean"
+          "description": "If true, the item is visible in the Hub catalog.",
+          "type": "boolean",
+          "examples": [true]
         },
         "sources": {
+          "description": "Remote location where the item is hosted. If is a source code Item, this should Git repository URLs. Mirrors can be listed as additional entries.",
           "type": "array",
+          "minItems": 1,
           "items": {
-            "type": "string"
+            "type": "string",
+            "description": "URL of a source repository.",
+            "examples": ["https://my-public-git-server.com/my-repo.git"]
           }
         },
         "summary": {
-          "type": "string"
+          "description": "One-line summary shown on the catalog card.",
+          "type": "string",
+          "examples": ["My 1st EWC Community Hub Item"]
         },
         "version": {
+          "description": "Version of the item, as `MAJOR.MINOR` or `MAJOR.MINOR.PATCH`.",
           "type": "string",
-          "pattern": "^\\d+\\.\\d+(\\.\\d+)?$"
+          "pattern": "^\\d+\\.\\d+(\\.\\d+)?$",
+          "examples": ["0.0.1", "2.0"]
         }
       },
       "required": [
