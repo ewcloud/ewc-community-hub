@@ -1,0 +1,78 @@
+name: Schema docs drift check
+
+on:
+  pull_request:
+    branches:
+      - "main"
+    paths:
+      - schemas/items/v1alpha1.json
+      - docs/schema-reference/items/v1alpha1.md
+      - .github/workflows/schema-docs-drift.yml
+
+permissions:
+  contents: read
+
+env:
+  JSONSCHEMA_MARKDOWN_VERSION: "2026.8.0"
+  SCHEMA_FILE: schemas/items/v1alpha1.json
+  DOC_FILE: docs/schema-reference/items/v1alpha1.md
+
+jobs:
+  docs-drift:
+    name: Check schema reference is up to date
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install jsonschema-markdown
+        run: pip install "jsonschema-markdown==${JSONSCHEMA_MARKDOWN_VERSION}"
+
+      - name: Generate MD docs from JSON schema
+        run: |
+          set -euo pipefail
+          jsonschema-markdown "${SCHEMA_FILE}" > "${RUNNER_TEMP}/generated.md"
+
+      - name: Compare with committed docs
+        run: |
+          set -euo pipefail
+          fix_cmd="pip install jsonschema-markdown==${JSONSCHEMA_MARKDOWN_VERSION} && jsonschema-markdown ${SCHEMA_FILE} > ${DOC_FILE}"
+
+          if [ ! -f "${DOC_FILE}" ]; then
+            echo "::error file=${SCHEMA_FILE}::${DOC_FILE} does not exist. Generate it with: ${fix_cmd}"
+            exit 1
+          fi
+
+          if diff -u "${DOC_FILE}" "${RUNNER_TEMP}/generated.md" > "${RUNNER_TEMP}/drift.diff"; then
+            echo "${DOC_FILE} is up to date with ${SCHEMA_FILE}."
+            exit 0
+          fi
+
+          echo "::error file=${DOC_FILE}::${DOC_FILE} is out of sync with ${SCHEMA_FILE}. Regenerate it with: ${fix_cmd}"
+          {
+            echo "### Schema Docs Drift"
+            echo
+            echo "\`${DOC_FILE}\` does not match what \`jsonschema-markdown\` generates from \`${SCHEMA_FILE}\`."
+            echo
+            echo "Regenerate and commit it:"
+            echo
+            echo '```bash'
+            echo "${fix_cmd}"
+            echo '```'
+            echo
+            echo "<details><summary>Diff (committed vs generated, first 300 lines)</summary>"
+            echo
+            echo '```diff'
+            head -n 300 "${RUNNER_TEMP}/drift.diff"
+            echo '```'
+            echo
+            echo "</details>"
+          } >> "${GITHUB_STEP_SUMMARY}"
+          head -n 300 "${RUNNER_TEMP}/drift.diff"
+          exit 1
