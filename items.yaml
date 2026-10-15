@@ -7512,3 +7512,92 @@ spec:
       license: https://github.com/ewcloud/ewc-ansible-role-create-vm-users/blob/main/LICENSE
       published: false
 
+    firecube:
+      name: "firecube"
+      version: "0.1.7"
+      description: |
+        Firecube is a plugin-driven command line interface (CLI) for turning Earth Observation products into analysis-ready datacubes (Zarr or Parquet), on local or S3-compatible object storage.
+
+        Firecube provides the ingestion engine. A plugin provides the dataset-specific code that discovers, reads, and converts source files. Failed runs resume where they left off, multiple workers can write to the same product in parallel, and runs report Prometheus metrics, structured logs, and OpenTelemetry traces.
+
+        ## Requirements
+
+        - Python **3.12** or higher
+        - [`uv`](https://docs.astral.sh/uv/) and `git`
+
+        ## Quickstart
+
+        Install the released package from [PyPI](https://pypi.org/project/firecube/) in an isolated environment:
+
+        ```bash
+        mkdir firecube-quickstart
+        cd firecube-quickstart
+        uv venv --python 3.12
+        source .venv/bin/activate
+        uv pip install firecube
+        firecube --version
+        ```
+
+        Install a plugin, using the package name or local checkout documented by that plugin, and inspect it:
+
+        ```bash
+        firecube plugins install <plugin-package>
+        firecube plugins list
+        firecube plugins describe <plugin>
+        ```
+
+        Then ingest source data into a datacube:
+
+        ```bash
+        firecube ingest <plugin> \
+          --input-data ./source-data \
+          --target "file://${PWD}/my_product.zarr" \
+          --product-name my_product \
+          --storage-type local \
+          --storage-driver fsspec \
+          --output-format zarr \
+          --write-mode direct
+        ```
+
+        For the full first-run path with the example `firecube-quickstart-plugin`, follow the [Quickstart](https://eumetsat.github.io/firecube/latest/quickstart/).
+
+        ## Documentation
+
+        The full documentation is available at [eumetsat.github.io/firecube](https://eumetsat.github.io/firecube/latest/):
+
+        - [Installation](https://eumetsat.github.io/firecube/latest/quickstart/installation/)
+        - [Install the example plugin](https://eumetsat.github.io/firecube/latest/quickstart/plugins/)
+        - [Prepare source data](https://eumetsat.github.io/firecube/latest/quickstart/source-data/)
+        - [Run ingestion](https://eumetsat.github.io/firecube/latest/quickstart/ingestion/)
+        - [Plugin development](https://eumetsat.github.io/firecube/latest/guides/plugins/)
+        - [Concepts](https://eumetsat.github.io/firecube/latest/concepts/)
+        - [Configure S3 access](https://eumetsat.github.io/firecube/latest/operations/s3-access/)
+        - [Create an Intake catalog](https://eumetsat.github.io/firecube/latest/operations/intake-catalog/)
+        - [CLI reference](https://eumetsat.github.io/firecube/latest/reference/cli/)
+
+        ## Copyright and License
+        Copyright © EUMETSAT 2025-2026
+
+        The provided code and instructions are licensed under [Apache License, Version 2.0](https://github.com/eumetsat/firecube/blob/main/LICENSE).
+
+      home: https://github.com/eumetsat/firecube
+      sources:
+        - https://github.com/eumetsat/firecube.git
+      maintainers:
+        - name: Armagan Karatosun
+          email: armagan.karatosun@eumetsat.int
+          url: https://github.com/eumetsat/firecube/issues
+        - name: Anna-Lena Erdmann
+          email: anna-lena.erdmann@eumetsat.int
+          url: https://github.com/eumetsat/firecube/issues
+      icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/FirecubeLogo.png
+      annotations:
+        technology: "Python Package"
+        category: "Data Processing"
+        supportLevel: "Community"
+        licenseType: "Apache License 2.0"
+      displayName: Firecube
+      summary: Plugin-driven CLI for turning Earth Observation products into analysis-ready datacubes.
+      license: https://github.com/eumetsat/firecube/blob/main/LICENSE
+      published: true
+
