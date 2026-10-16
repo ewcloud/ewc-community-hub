@@ -7404,6 +7404,7 @@ spec:
       summary: Deploys GeoWeb on an existing EWC Kubernetes cluster for visualizing meteorological data.
       license: https://gitlab.com/opengeoweb/geoweb-ewc-community-hub/-/blob/1.0.2/LICENSE
       published: true
+
     create-vm-users:
       name: "create-vm-users"
       version: "0.0.1"
@@ -7510,7 +7511,7 @@ spec:
       displayName: Create VM local users
       summary: Create local users in a VM
       license: https://github.com/ewcloud/ewc-ansible-role-create-vm-users/blob/main/LICENSE
-      published: false
+      published: true
 
     firecube:
       name: "firecube"
