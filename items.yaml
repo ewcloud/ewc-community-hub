@@ -2718,7 +2718,7 @@ spec:
 
     iam-user-bulk-edition:
       name: "iam-user-bulk-edition"
-      version: "1.2.1"
+      version: "1.4.0"
       description: |
         Subroutines to simplify bulk edition of [EWC IAM](https://confluence.ecmwf.int/x/Z4kzGg) users.
 
@@ -2743,24 +2743,9 @@ spec:
 
         ### Run step-by-step via Jupyter Notebook
 
-        #### 1. Configure inputs
-        > ✅ The only required column is `email`.
+        Open the [iam-user-bulk-edition-via-jupyter.ipynb](https://github.com/ewcloud/ewc-user-tools/tree/1.4.0/items/iam-users-bulk-edition/notebooks/iam-users-bulk-edition-via-jupyter.ipynb) notebook, start the runtime, and execute cells top to bottom to apply access/permission changes.
 
-        > 💡 Default values for all optional columns are configurable as Jupyter Notebook global parameters. Defaults can also be overwritten on each row.
-
-        To get started, adapt the typical input example include in [users.csv](https://raw.githubusercontent.com/ewcloud/ewc-user-tools/refs/tags/1.2.1/items/iam-users-bulk-edition/notebooks/users.csv):
-
-
-        email | state | enabled |username | first_name | last_name | roles | comment |
-        ------|-------|---------|---------|------------|-----------|-------|---------|
-        "john.smith@example.com" | "present" | `true` | | | | | "Adds/updates user with most global defaults (email reused as username)." |
-        "philipp.mayer@example.com" | "present" | `true` | "pmayer" | "Philipp"  | "Mayer" | "ewc-jhub-atmosphere:ewc-jhub-marine" | "Adds/updates user with overrides for optional username, optional first name, optional last name and optional roles to access EWC Jupyter Hub marine and atmosphere clusters (two roles separated by colon)"  |
-        "ada.wong@example.com" | "present" | `false` | | | | | "Adds/updates user with most global defaults but disables login (email reused as username)."  |
-        "carlos.perez@example.com" | "absent" | | | | | | "Removes user, if exists." |
-
-        #### 2. Run in an interactive session
-
-        Open the [iam-user-bulk-edition-via-jupyter.ipynb](https://github.com/ewcloud/ewc-user-tools/tree/1.2.1/items/iam-users-bulk-edition/notebooks) notebook, start the runtime, and execute cells top to bottom to apply access/permission changes.
+        **OR**
 
         ### Run natively via Ansible Playbook
 
@@ -2797,8 +2782,8 @@ spec:
               first_name: Philipp               #    optional first name,
               last_name: Mayer                  #    optional last name
               roles:                            #    optional roles to
-                - name: ewc-jhub-marine         #    access EWC Jupyter Hub marine cluster
-                - name: ewc-jhub-atmosphere     #    access EWC Jupyter Hub atmosphere cluster
+                - name: ewc-iam-tenant-admin    #    create/delete/modify other users, assign roles to users
+                - name: ewc-app-admin           #    administer, deploy and create/modify resources to any integrated Apps
 
             - email: ada.wong@example.com       # <- Adds/updates user with all defaults (email reused as username)
               enabled: false                    #    and disables login
@@ -2816,8 +2801,8 @@ spec:
             initial_login_actions:
               - UPDATE_PASSWORD
             roles:                               #    default roles to
-              - name: ewc-iam-user               #    edit EWC IAM profile info (first and last name)
-              - name: ewc-jhub-marine            #    access EWC Jupyter Hub marine cluster
+              - name: ewc-iam-user               #    login to the IAM self-service and change their basic profile
+              - name: ewc-app-user               #    login to any integrated App
             roles_reconciliation_mode: replace
             first_name: Unknown
             last_name: Unknown
@@ -2869,7 +2854,7 @@ spec:
 
         * [EWC Identity and Access Management (IAM) Service](https://confluence.ecmwf.int/x/Z4kzGg)
 
-      home: https://github.com/ewcloud/ewc-user-tools/tree/1.2.1/items/iam-user-bulk-edition
+      home: https://github.com/ewcloud/ewc-user-tools/tree/1.4.0/items/iam-user-bulk-edition
       sources:
         - https://github.com/ewcloud/ewc-user-tools.git
       maintainers:
@@ -2880,12 +2865,11 @@ spec:
       annotations:
         technology: "Ansible Playbook,Jupyter Notebook"
         category: "Security,Identity & Access Management,Automation"
-        others: "Deployable"
         supportLevel: "EWC"
         licenseType: "MIT License"
       displayName: EWC IAM Users Edition in Bulk
       summary: Simplifies creation, edition and removal of an arbitrary number of EWC IAM users through step-by-step interactive sessions or one-line command executions.
-      license: https://github.com/ewcloud/ewc-user-tools/blob/1.2.1/LICENSE
+      license: https://github.com/ewcloud/ewc-user-tools/blob/1.4.0/LICENSE
       published: true
 
     htc-execute-flavour:
@@ -5419,7 +5403,7 @@ spec:
 
     openstack-backups:
       name: "openstack-backups"
-      version: "1.2.1"
+      version: "1.4.0"
       description: |
         The OpenStack Horizon UI allows the manual creation of backups and snapshots from individual instances and volumes, but does not provide automation features for backing up or restoring multiple resources nor it offers options for the scheduling of backups. The OpenStack Command Line Interface (CLI) provides the same capabilities, without any automation features. The scheduling of backups using the OpenStack CLI must be done using `cron` jobs. Documentation on how to use the OpenStack CLI to create and schedule backups can be found [here](https://confluence.ecmwf.int/x/OISnHg) and to restore backups [here](https://confluence.ecmwf.int/x/2ijPJQ). With this script, users can create, schedule or restore multiple backups automatically.
 
@@ -5579,7 +5563,7 @@ spec:
         * Configuration file. YAML file with the instructions to create, schedule or restore backups.
 
 
-      home: https://github.com/ewcloud/ewc-user-tools/tree/1.2.1/items/openstack-backups
+      home: https://github.com/ewcloud/ewc-user-tools/tree/1.4.0/items/openstack-backups
       sources:
         - https://github.com/ewcloud/ewc-user-tools.git
       maintainers:
@@ -5590,17 +5574,16 @@ spec:
       annotations:
         technology: "Python Script"
         category: "Automation"
-        others: "Deployable"
         supportLevel: "EWC"
         licenseType: "MIT License"
       displayName: Automation of OpenStack Backups
       summary: Automates the creation, restoration and scheduling of OpenStack VM disk backups.
-      license: https://github.com/ewcloud/ewc-user-tools/blob/1.2.1/LICENSE
+      license: https://github.com/ewcloud/ewc-user-tools/blob/1.4.0/LICENSE
       published: true
 
     openstack-parallel-migration:
       name: "openstack-parallel-migration"
-      version: "1.2.1"
+      version: "1.4.0"
       description: |
         A script automating the process of copying resources (instances, volumes, and configurations) from one OpenStack cloud to another. It is designed specifically for users of the [European Weather Cloud (EWC)](https://europeanweather.cloud/), supporting migrations with resume capabilities, parallel transfers (e.i. multiple simultaneous operations), and preservation of networking and security settings.
 
@@ -5811,7 +5794,7 @@ spec:
             * Attached data volumes in both cases
 
 
-      home: https://github.com/ewcloud/ewc-user-tools/tree/1.2.1/items/openstack-parallel-migration
+      home: https://github.com/ewcloud/ewc-user-tools/tree/1.4.0/items/openstack-parallel-migration
       sources:
         - https://github.com/ewcloud/ewc-user-tools.git
       maintainers:
@@ -5822,12 +5805,11 @@ spec:
       annotations:
         technology: "Python Script"
         category: "Automation"
-        others: "Deployable"
         supportLevel: "EWC"
         licenseType: "MIT License"
       displayName: OpenStack Parallel Migrate
       summary: Automate the process of copying compute resource from one OpenStack cloud to another.
-      license: https://github.com/ewcloud/ewc-user-tools/blob/1.2.1/LICENSE
+      license: https://github.com/ewcloud/ewc-user-tools/blob/1.4.0/LICENSE
       published: true
 
     pytroll-processing:
