@@ -2865,7 +2865,6 @@ spec:
       annotations:
         technology: "Ansible Playbook,Jupyter Notebook"
         category: "Security,Identity & Access Management,Automation"
-        others: "Deployable"
         supportLevel: "EWC"
         licenseType: "MIT License"
       displayName: EWC IAM Users Edition in Bulk
@@ -5575,7 +5574,6 @@ spec:
       annotations:
         technology: "Python Script"
         category: "Automation"
-        others: "Deployable"
         supportLevel: "EWC"
         licenseType: "MIT License"
       displayName: Automation of OpenStack Backups
@@ -5807,7 +5805,6 @@ spec:
       annotations:
         technology: "Python Script"
         category: "Automation"
-        others: "Deployable"
         supportLevel: "EWC"
         licenseType: "MIT License"
       displayName: OpenStack Parallel Migrate
