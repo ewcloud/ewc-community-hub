@@ -67,7 +67,7 @@
               "description": "Comma-separated free-form tags, for example whether the item is deployable or EWCCLI-compatible.",
               "type": "string",
               "pattern": ".+",
-              "examples": ["Deployable,EWCCLI-compatible"]
+              "examples": ["Deployable,EWCCLI-compatible,VM-flavour"]
             },
             "supportLevel": {
               "description": "Support commitment offered by the item owner. EWC means supported by the EWC team; Community means best-effort by the maintainers.",
