@@ -1744,9 +1744,8 @@ spec:
 
     ewccli:
       name: "ewccli"
-      version: "0.7.1"
+      version: "0.10.0"
       description: |
-
         The `ewccli` is the European Weather Cloud (EWC) Command Line Interface (CLI). This tool is developed to support EWC users on the use of the EWC services.
 
 
@@ -1766,11 +1765,22 @@ spec:
 
         ### Installing with PIP from PyPI
 
-        The EWC CLI Python package is available through [PyPI](https://pypi.org/):
+        The EWC CLI Python package is available through [PyPI](https://pypi.org/project/ewccli/):
 
         ```bash
         pip install ewccli
         ```
+
+        ### Installing with conda from conda-forge
+
+        > Available since version 0.9.1
+
+        The EWC CLI Python package is available through [conda-forge](https://anaconda.org/channels/conda-forge/packages/ewccli/overview):
+
+        ```bash
+        conda install conda-forge::ewccli
+        ```
+
 
         ### Installing from source
 
@@ -1910,62 +1920,25 @@ spec:
         you can take advantage of the `--path-to-catalog` to point the EWCCLI to the correct source location, and deploy the Item to your target tenant of choice.
 
         ### Preparing a test
-        Create a local catalogue file, named `./custom_catalog.yaml`, with the complete metadata for your Item:
+        Create a local catalogue file, named `./custom_catalog.yaml`, with the complete metadata for your Item.
 
-        >⚠️ Always verify the latest Items metadata schema directly from the [EWC Hub Catalogue documentation](https://github.com/ewcloud/ewc-community-hub?tab=readme-ov-file#items-metadata).
+         For reference see the example excerpt of Item metadata, with optional EWCCLI compatibility, enclosed in red below. You can find more concrete examples by browsing over [metadata of Items already indexed in the catalog](https://github.com/ewcloud/ewc-community-hub/blob/main/items.yaml). Additionally, all details about required or optional attributes can be found on the [schema documentation](https://github.com/ewcloud/ewc-community-hub/blob/main/docs/schema-reference/items/v1alpha1.md).
 
-        ```yaml
-        apiVersion: communityhub.europeanweather.cloud/v1alpha1
-        kind: CommunityHubCatalog
-        spec:
-          items:
-            my-test-item:
-              name: "my-test-item"
-              version: "0.0.1"
-              description: |
-                My first Item in EWC Community Hub
+        ![Item Metadata Excerpt, published on GitHub](https://raw.githubusercontent.com/ewcloud/ewccli/main/images/item-metadata-excerpt.png)
 
-              ewccli:
-                pathToRequirementsFile: path_to_your_requirements_file
-                pathToMainFile: path_to_your_main_ansible_playbook_file
-                publicIP: true
-                inputs:
-                  - name: myoptionalinput
-                    description: "myoptionalinput"
-                    type: str
-                    default: Add default key if you want this input to be optional. If this key is not set, the ewccli will expect this value to be provided by the user (mandatory input)
-                  - name: mymandatoryinput
-                    description: "mymandatoryinput: cli will complain if this is not provided as --item-inputs"
-                    type: str
-              home: https://github.com/your-repo
-              sources:
-                - https://github.com/your-repo.git OR /home/murdaca/custom-items/new-item
-              maintainers:
-                - name: your name or your org
-                  email: youremail
-                  url: https://github.com/your-repo/issues
-              icon: https://raw.githubusercontent.com/ewcloud/ewc-community-hub/refs/heads/main/logos/EWCLogo.png
-              annotations:
-                technology: "Ansible Playbook"
-                category: "Test Item"
-                supportLevel: "Community"
-                licenseType: "Apache License 2.0"
-                others: "Deployable,EWCCLI-compatible"
-              displayName: My First EWC Community hub Item
-              summary: My test Item
-              license: https://github.com/your-repo/blob/main/LICENSE
-              published: true
-        ```
+        Attributes of particular interest during Item development and testing include:
+        - `ewccli.externalIP` is a flag used to assign a public floating IP address to the target VM
+        - `sources`, which can be:
+            - Public GIT repository URI
+            - Absolute path to a local directory with the Item. The path needs to point to an existing non-empty directory
+        - `values.inputSpec` is the list of inputs you want the user to be able to provide. Any input without default values is treated as required; users can set them when prompted during deployment, or by passing the `--item-inputs` arg as part of the deploy command.
+        - `values.osImageName`, which can be:
+            - The full name of one of the OpenStack image listed on the [EWC Knowledge Base](https://confluence.ecmwf.int/x/pU2xG)
+            - The short name of the the OpenStack image; the EWCCLI will auto-resolve to the latest available minor version for the specified operative system
+        - `values.osSecurityGroups` is a list of OpenStack Security Groups assigned to the target VM such that network traffic can reach it on certain ports.
+        - `values.pathToMainFile` is the relative path to your directory or repository
+        - `values.pathToRequirementsFile` is the relative path to your directory or repository
 
-        where
-
-        - `sources` can be (only the first element in the list is considered):
-            - Public repo URL (e.g. https://github.com/your-repo.git) if your repository is public already
-            - Absolute path to a directory with the Item (e.g. `/home/murdaca/custom-items/new-item`). The path needs to point to a directory that needs to exists an not be empty. (WARNING: No local path are accepted!)
-        - `pathToMainFile` is the relattive path to your directory or repository
-        - `pathToRequirementsFile` is the relattive path to your directory or repository
-        - `publicIP` is a flag used to enable deployment of
-        - `ewccli.inputs` is the list of inputs you want the user to be able to provide, they can be mandatory or optional, respecively with default key not set or set.
 
         ### Running a test
         Once metadata is correct and complete, execute `list`, `show` or `deploy` commands as needed:
@@ -2014,8 +1987,8 @@ spec:
         | prompt_toolkit | 3.0.51 | BSD-3-Clause License | https://python-prompt-toolkit.readthedocs.io/en/stable |
         | pyyaml | 6.0.2 | MIT License | https://pyyaml.org |
         | cryptography | 45.0.6 | Apache-2.0 OR BSD-3-Clause | https://github.com/pyca/cryptography |
-        | python-openstackclient | 8.2.0 | Apache Software License (Apache-2.0) | https://docs.openstack.org/python-openstackclient/latest |
-        | ansible | 10.7.0 | GNU General Public License v3 or later (GPLv3+) (GPL-3.0-or-later) | https://www.redhat.com/en/ansible-collaborative |
+        | openstacksdk | >=4.6.0,<5 | Apache Software License (Apache-2.0) | https://docs.openstack.org/openstacksdk/latest/ |
+        | ansible | 10.5.0 | GNU General Public License v3 or later (GPLv3+) (GPL-3.0-or-later) | https://www.redhat.com/en/ansible-collaborative |
         | ansible-runner | 2.4.1 | Apache Software License (Apache Software License, Version 2.0) | https://ansible.readthedocs.io/projects/runner/en/latest |
         | kubernetes | 33.1.0 | Apache Software License (Apache License Version 2.0) | https://github.com/kubernetes-client/python |
         | pydantic | 2.12.5 | MIT License | https://github.com/pydantic/pydantic |
@@ -2058,14 +2031,20 @@ spec:
         git clone https://github.com/ewcloud/ewccli.git && cd ewccli
         ```
 
-        2. Install the package for testing
+        2. Activate the virtual environment
+
         ```bash
-        pip install --user -e .[test]
+        source ./ewcclienv/bin/activate
         ```
 
-        3. Modify the local code and test changes.
+        3. Install the package for testing
+        ```bash
+        pip install -e .[test]
+        ```
 
-        4. Push code to your fork and open a pull request.
+        5. Modify the local code and test changes.
+
+        6. Push code to your fork and open a pull request.
 
         ## Code Styling
         Execute all linting tests by running:
@@ -2090,10 +2069,25 @@ spec:
 
         ## Code Unittesting
 
-        Execute all tests by running:
+        Execute all tests in all test files by running:
 
         ```bash
         pytest
+        ```
+
+        Execute all tests in a test file
+        ```bash
+        pytest ewccli/tests/ewccli_commands_hub_deploy_server_test.py
+        ```
+
+        Execute a specific test in a file
+        ```bash
+        pytest ewccli/tests/ewccli_commands_hub_deploy_server_test.py::test_no_matching_images
+        ```
+
+        Execute a specific test in a file with verbose
+        ```bash
+        pytest -vv ewccli/tests/ewccli_commands_hub_deploy_server_test.py::test_no_matching_images
         ```
 
         ### Coverage Reporting
@@ -2133,7 +2127,7 @@ spec:
         ## Authors
         * [**Francesco Murdaca**](mailto:francesco.murdaca@eumetsat.int) - *Initial work and maintainer* - [EUMETSAT](http://www.eumetsat.int)
 
-      home: https://github.com/ewcloud/ewccli/tree/0.7.1
+      home: https://github.com/ewcloud/ewccli/tree/0.10.0
       sources:
         - https://github.com/ewcloud/ewccli.git
       maintainers:
@@ -2147,7 +2141,7 @@ spec:
         licenseType: "GNU General Public License v3.0"
       displayName: EWC CLI
       summary: European Weather Cloud (EWC) Command Line Interface (CLI) to interact with EWC services.
-      license: https://github.com/ewcloud/ewccli/blob/0.7.1/LICENSE
+      license: https://github.com/ewcloud/ewccli/blob/0.10.0/LICENSE
       published: true
 
     ewc-gh-action-test-deploy-ansible-playbook:
