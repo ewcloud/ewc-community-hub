@@ -2886,19 +2886,30 @@ spec:
           - name: headscale_login_server
             description: URI of the VPN server.
             type: str
-            default: http://headscale.batchprocessing.eumetsat.ewcloud.host:80
+            default: https://vpn.batchprocessing.eumetsat.ewcloud.host
           - name: headscale_preauthkey
             description: Credentials of the VPN server.
             type: str
           - name: htcondor_cm_external_ip
             description: IP Address of the HTCondor Manager node to which this submit node reports to.
             type: str
-            default: 100.64.0.32
+            default: 100.64.0.1
           - name: htcondor_password
             description: Password to authenticate against HTCondor Execute node pool
             type: str
+          - name: htcondor_reinstall
+            description: Force HTCondor re-install. Only yes will be accepted to approve
+            type: str
+            default: "no"
           - name: harbor_auth_token
             description: Token for authentication when pulling private container images from EWC Container registry
+            type: str
+          - name: harbor_server
+            description: harbor_server
+            type: str
+            default: "https://registry.europeanweather.cloud"
+          - name: tenancy_name
+            description: Tenancy name for target instance fully qualified domain name assignment
             type: str
       values:
         osSecurityGroups:
@@ -2910,19 +2921,30 @@ spec:
           - name: headscale_login_server
             description: URI of the VPN server.
             type: str
-            default: http://headscale.batchprocessing.eumetsat.ewcloud.host:80
+            default: https://vpn.batchprocessing.eumetsat.ewcloud.host
           - name: headscale_preauthkey
             description: Credentials of the VPN server.
             type: str
           - name: htcondor_cm_external_ip
             description: IP Address of the HTCondor Manager node to which this submit node reports to.
             type: str
-            default: 100.64.0.32
+            default: 100.64.0.1
           - name: htcondor_password
             description: Password to authenticate against HTCondor Execute node pool
             type: str
+          - name: htcondor_reinstall
+            description: Force HTCondor re-install. Only yes will be accepted to approve
+            type: str
+            default: "no"
           - name: harbor_auth_token
             description: Token for authentication when pulling private container images from EWC Container registry
+            type: str
+          - name: harbor_server
+            description: harbor_server
+            type: str
+            default: "https://registry.europeanweather.cloud"
+          - name: tenancy_name
+            description: Tenancy name for target instance fully qualified domain name assignment
             type: str
       description: |
         Many computational tasks in Earth Observation and environmental modelling apply the same processing algorithm independently across thousands or millions of input data items. These parallel tasks are best served by High Throughput Computing (HTC).
@@ -3195,16 +3217,23 @@ spec:
           - name: headscale_login_server
             description: URI of the VPN server.
             type: str
-            default: http://headscale.batchprocessing.eumetsat.ewcloud.host:80
+            default: https://vpn.batchprocessing.eumetsat.ewcloud.host
           - name: headscale_preauthkey
             description: Credentials of the VPN server.
             type: str
           - name: htcondor_cm_external_ip
             description: IP Address of the HTCondor Manager node to which this submit node reports to.
             type: str
-            default: 100.64.0.32
+            default: 100.64.0.1
           - name: htcondor_password
             description: Password to authenticate against HTCondor Execute node pool
+            type: str
+          - name: htcondor_reinstall
+            description: Force HTCondor re-install. Only yes will be accepted to approve
+            type: str
+            default: "no"
+          - name: tenancy_name
+            description: Tenancy name for target instance fully qualified domain name assignment
             type: str
       values:
         osSecurityGroups:
@@ -3216,16 +3245,23 @@ spec:
           - name: headscale_login_server
             description: URI of the VPN server.
             type: str
-            default: http://headscale.batchprocessing.eumetsat.ewcloud.host:80
+            default: https://vpn.batchprocessing.eumetsat.ewcloud.host
           - name: headscale_preauthkey
             description: Credentials of the VPN server.
             type: str
           - name: htcondor_cm_external_ip
             description: IP Address of the HTCondor Manager node to which this submit node reports to.
             type: str
-            default: 100.64.0.32
+            default: 100.64.0.1
           - name: htcondor_password
             description: Password to authenticate against HTCondor Execute node pool
+            type: str
+          - name: htcondor_reinstall
+            description: Force HTCondor re-install. Only yes will be accepted to approve
+            type: str
+            default: "no"
+          - name: tenancy_name
+            description: Tenancy name for target instance fully qualified domain name assignment
             type: str
       description: |
         Many computational tasks in Earth Observation and environmental modelling apply the same processing algorithm independently across thousands or millions of input data items. These parallel tasks are best served by High Throughput Computing (HTC).
