@@ -31,7 +31,7 @@ Metadata describing a single item of the catalog: how it is presented in the Hub
 | annotations | `object` | ✅ | object |  |  | Classification metadata used by the Hub to list, filter and label the item, and to set support and licensing expectations. |  |
 | annotations.licenseType | `string` | ✅ | string |  |  | SPDX full name of the license the item is distributed under. | ```Apache License 2.0```, ```MIT License``` |
 | annotations.category | `string` | ✅ | [`.+`](https://regex101.com/?regex=.%2B) |  |  | Catalog category the item is listed under in the Hub, used for browsing and filtering. | ```Compute```, ```Dataset``` |
-| annotations.others | `string` |  | [`.+`](https://regex101.com/?regex=.%2B) |  |  | Comma-separated free-form tags, for example whether the item is deployable or EWCCLI-compatible. | ```Deployable,EWCCLI-compatible``` |
+| annotations.others | `string` |  | [`.+`](https://regex101.com/?regex=.%2B) |  |  | Comma-separated free-form tags, for example whether the item is deployable or EWCCLI-compatible. | ```Deployable,EWCCLI-compatible,VM-flavour``` |
 | annotations.supportLevel | `string` | ✅ | `EWC` `Community` |  |  | Support commitment offered by the item owner. EWC means supported by the EWC team; Community means best-effort by the maintainers. | ```Community``` |
 | annotations.technology | `string` | ✅ | [`.+`](https://regex101.com/?regex=.%2B) |  |  | Technology the item is implemented with, which determines how it is deployed. | ```Ansible Playbook```, ```Terraform Module``` |
 | displayName | `string` | ✅ | string |  |  | Human-friendly name of the item shown in the Hub. Unlike `name`, it may contain spaces and capital letters. | ```My Item``` |

@@ -64,7 +64,7 @@ spec:
         category: "Machine Learning & AI, GPU-accelerated"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
-        others: "Deployable,EWCCLI-compatible"
+        others: "Deployable,EWCCLI-compatible,VM-flavour"
       displayName: AI Models
       summary: It features the most popular data driven forecast models such as Pangu Weather, Fourcastnet or graphcast.
       license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
@@ -635,7 +635,7 @@ spec:
         category: "Machine Learning & AI, GPU-accelerated"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
-        others: "Deployable,EWCCLI-compatible"
+        others: "Deployable,EWCCLI-compatible,VM-flavour"
       displayName: ECMWF AIFS Single MSE
       summary: It features the ECMWF AIFS Single data-driven model
       license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
@@ -707,7 +707,7 @@ spec:
         category: "Machine Learning & AI, GPU-accelerated"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
-        others: "Deployable,EWCCLI-compatible"
+        others: "Deployable,EWCCLI-compatible,VM-flavour"
       displayName: ECMWF AIFS ENS CRPS
       summary: It features the ECMWF AIFS ENS CRPS data-driven model
       license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
@@ -777,7 +777,7 @@ spec:
         category: "Machine Learning & AI, GPU-accelerated"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
-        others: "Deployable,EWCCLI-compatible"
+        others: "Deployable,EWCCLI-compatible,VM-flavour"
       displayName: ECMWF Anemoi
       summary: It leverages the Anemoi framework to develop and run your AI-models or manage datasets.
       license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
@@ -789,7 +789,7 @@ spec:
         category: "Compute,Data Access"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
-        others: "Deployable,EWCCLI-compatible"
+        others: "Deployable,EWCCLI-compatible,VM-flavour"
       description: |
         Includes the basic ECMWF software stack, with MARS client and an environment with [ecCodes](https://github.com/ecmwf/eccodes), [Metview](https://metview.readthedocs.io/en/latest/index.html), [Earthkit](https://github.com/ecmwf/earthkit) and [Aviso](https://pyaviso.readthedocs.io/en/latest/).
 
@@ -1171,7 +1171,7 @@ spec:
         category: "Data Processing"
         supportLevel: "EWC"
         licenseType: "MIT License"
-        others: "Deployable,EWCCLI-compatible"
+        others: "Deployable,EWCCLI-compatible,VM-flavour"
       displayName: EUMETCast Terrestrial on AMT Flavour
       summary: Turns a VM into a station that realiably captures and stores data from the EUMETCast Terrestrial service
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.13.0/LICENSE
@@ -1430,7 +1430,7 @@ spec:
         category: "Data Processing"
         supportLevel: "EWC"
         licenseType: "MIT License"
-        others: "Deployable,EWCCLI-compatible"
+        others: "Deployable,EWCCLI-compatible,VM-flavour"
       displayName: EUMETSAT S3 Mount Flavour
       summary: Enables a VM to access public EUMETSAT data stored in shared S3 buckets, just as if it was on the local filesystem
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.13.0/LICENSE
@@ -1736,7 +1736,7 @@ spec:
         category: "Data Processing"
         supportLevel: "EWC"
         licenseType: "MIT License"
-        others: "Deployable,EWCCLI-compatible"
+        others: "Deployable,EWCCLI-compatible,VM-flavour"
       displayName: EUMETSAT Data Tailor Flavour
       summary: Transforms an existing VM into a powerful satellite data customization hub, enabling users to efficiently subset, aggregate, reproject, and reformat data from METOP, MFG, MSG, MTG, and Sentinel-3 into GIS and image formats, offering faster processing and greater flexibility than web-based alternatives.
       license: https://github.com/ewcloud/ewc-ansible-playbook-flavours-and-provisioning/blob/1.13.0/LICENSE
@@ -2275,7 +2275,7 @@ spec:
         category: "Networking"
         supportLevel: "EWC"
         licenseType: "MIT License"
-        others: "Deployable"
+        others: "Deployable,VM-flavour"
       description: |
         This Ansible Playbook configures an existing virtual machine running
         within the [European Weather Cloud (EWC)](https://europeanweather.cloud/), to operate as a [HAProxy](https://www.haproxy.org/) server.
@@ -3189,7 +3189,7 @@ spec:
       annotations:
         technology: "Ansible Playbook"
         category: "Data Processing"
-        others: "Deployable,EWCCLI-compatible"
+        others: "Deployable,EWCCLI-compatible,VM-flavour"
         supportLevel: "EWC"
         licenseType: "MIT License"
       displayName: HTC Execute Flavour
@@ -3504,7 +3504,7 @@ spec:
       annotations:
         technology: "Ansible Playbook"
         category: "Data Processing"
-        others: "Deployable,EWCCLI-compatible"
+        others: "Deployable,EWCCLI-compatible,VM-flavour"
         supportLevel: "EWC"
         licenseType: "MIT License"
       displayName: HTC Submit Flavour
@@ -3775,7 +3775,7 @@ spec:
       annotations:
         technology: "Ansible Playbook"
         category: "Security,Identity & Access Management"
-        others: "Deployable,EWCCLI-compatible"
+        others: "Deployable,EWCCLI-compatible,VM-flavour"
         supportLevel: "EWC"
         licenseType: "MIT License"
       displayName: IPA Client Enroll Flavour
@@ -4033,7 +4033,7 @@ spec:
       annotations:
         technology: "Ansible Playbook"
         category: "Security,Identity & Access Management"
-        others: "Deployable,EWCCLI-compatible"
+        others: "Deployable,EWCCLI-compatible,VM-flavour"
         supportLevel: "EWC"
         licenseType: "MIT License"
       displayName: IPA Client Disenroll Flavour
@@ -4714,7 +4714,7 @@ spec:
       annotations:
         technology: "Ansible Playbook"
         category: "Security,Identity & Access Management"
-        others: "Deployable,EWCCLI-compatible"
+        others: "Deployable,EWCCLI-compatible,VM-flavour"
         supportLevel: "EWC"
         licenseType: "MIT License"
       displayName: IPA Server Flavour
@@ -5017,7 +5017,7 @@ spec:
         category: "Compute,Data Visualization,Data Processing"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
-        others: "Deployable,EWCCLI-compatible"
+        others: "Deployable,EWCCLI-compatible,VM-flavour"
       displayName: JupyterHub Flavour
       summary: It installs and run jupyterhub on your instance, offering a convenient way to access it through the web.
       license: https://github.com/ewcloud/ewc-flavours/blob/2.0.2/LICENSE
@@ -5085,7 +5085,7 @@ spec:
         category: "Machine Learning & AI, GPU-accelerated"
         supportLevel: "EWC"
         licenseType: "Apache License 2.0"
-        others: "Deployable,EWCCLI-compatible"
+        others: "Deployable,EWCCLI-compatible,VM-flavour"
       displayName: ML Basic
       summary: It features an environment with the main machine learning packages like scikit-learn or torch.
       license: https://github.com/ewcloud/ewc-ecmwf-ai-stacks/blob/main/LICENSE
@@ -5097,7 +5097,7 @@ spec:
         category: "Networking"
         supportLevel: "EWC"
         licenseType: "MIT License"
-        others: "Deployable,EWCCLI-compatible"
+        others: "Deployable,EWCCLI-compatible,VM-flavour"
       description: |
         >💡 Not to be confused with Nginx, the web server and reverse proxy.
 
@@ -5971,7 +5971,7 @@ spec:
         category: "Compute,Data Processing"
         supportLevel: "Community"
         licenseType: "GNU General Public License v3.0"
-        others: "Deployable,EWCCLI-compatible"
+        others: "Deployable,EWCCLI-compatible,VM-flavour"
       displayName: Pytroll Processing
       summary: Playbooks to install pytroll processing and wms in the EWC.
       license: https://github.com/nordsat/ewc-playbooks/blob/0.1.2/LICENSE
@@ -6240,7 +6240,7 @@ spec:
       annotations:
         technology: "Ansible Playbook"
         category: "Remote Access & Desktop"
-        others: "Deployable,EWCCLI-compatible"
+        others: "Deployable,EWCCLI-compatible,VM-flavour"
         supportLevel: "EWC"
         licenseType: "MIT License"
       displayName: Remote Desktop Flavour
@@ -6693,7 +6693,7 @@ spec:
       annotations:
         technology: "Ansible Playbook"
         category: "Remote Access & Desktop"
-        others: "Deployable,EWCCLI-compatible"
+        others: "Deployable,EWCCLI-compatible,VM-flavour"
         supportLevel: "EWC"
         licenseType: "MIT License"
       displayName: SSH Bastion Flavour
@@ -7203,7 +7203,7 @@ spec:
       annotations:
         technology: "Ansible Playbook"
         category: "Data Visualization"
-        others: "Deployable,EWCCLI-compatible"
+        others: "Deployable,EWCCLI-compatible,VM-flavour"
         supportLevel: "EWC"
         licenseType: "MIT License"
       displayName: xcube Viewer Flavour
@@ -7217,7 +7217,7 @@ spec:
         category: "Data Access,Data Processing,Data Visualization"
         supportLevel: "Community"
         licenseType: "Apache License 2.0"
-        others: "Deployable,EWCCLI-compatible"
+        others: "Deployable,EWCCLI-compatible,VM-flavour"
       displayName: "FLEXPART-IFS Atmospheric Dispersion Workflow"
       name: "flexpart-ifs"
       version: "0.1.2"
@@ -7519,7 +7519,7 @@ spec:
         category: "Automation"
         supportLevel: "Community"
         licenseType: "Apache License 2.0"
-        others: "Deployable,EWCCLI-compatible"
+        others: "Deployable,EWCCLI-compatible,VM-flavour"
       displayName: Create VM local users
       summary: Create local users in a VM
       license: https://github.com/ewcloud/ewc-ansible-role-create-vm-users/blob/main/LICENSE
