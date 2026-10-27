@@ -3,7 +3,7 @@ This repository hosts the official catalog of items offered in the [EWC Communit
 
 ## Item's Metadata
 Below is a minimal example of metadata for an Item to be onboarded, including optional EWCCLI compatibility.
-For more details on available attributes, please refer to the [schema documentation](./docs/schema-reference/items/v1alpha1.md).
+For more details on available attributes, please refer to the [schema documentation](./docs/schema-reference/items/v1alpha1.md#communityhubcatalogitem).
 
 ```yaml
 apiVersion: communityhub.europeanweather.cloud/v1alpha1
