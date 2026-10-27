@@ -126,8 +126,13 @@
                     "type": "string",
                     "examples": ["str"]
                   },
+                  "required": {
+                    "description": "If true, the corresponding input value should always be set.",
+                    "type": "boolean",
+                    "default": false
+                  },
                   "default": {
-                    "description": "Value used when the user does not provide one. If present, the input is optional; if omitted, the input is mandatory.",
+                    "description": "Value used when the user does not provide one.",
                     "anyOf": [
                       {
                         "type": "string"
@@ -141,14 +146,19 @@
                       {
                         "type": "null"
                       }
-                    ],
-                    "examples": ["my default value"]
+                    ]
+                  },
+                  "sensitive": {
+                    "description": "If true, the input is treated as a secret, masked during prompting or logging.",
+                    "type": "boolean",
+                    "default": false
                   }
                 },
                 "required": [
                   "name",
                   "description",
-                  "type"
+                  "type",
+                  "required"
                 ],
                 "additionalProperties": false
               }
