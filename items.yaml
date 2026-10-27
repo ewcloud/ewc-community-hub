@@ -852,26 +852,32 @@ spec:
           - name: reboot_if_required
             default: true
             description: Boolean to reboot the instance if required after an update.
+            required: true
             type: bool
           - name: ecmwf_toolbox_env_wipe
             default: false
             description: Boolean to decide whether to wipe the environment if exists prior to a reinstallation.
+            required: true
             type: bool
           - name: ecmwf_toolbox_env_name
             default: "ecmwf-toolbox"
             description: Name of the environment containing the ECMWF toolbox.
+            required: true
             type: str
           - name: ecmwf_toolbox_create_ipykernel
             default: true
             description: Boolean to create a system-wide kernel available.
+            required: true
             type: bool
           - name: conda_prefix
             default: "/opt/conda"
             description: Prefix where conda is installed.
+            required: true
             type: str
           - name: conda_user
             default: "root"
             description: User owning the conda installation.
+            required: true
             type: str
         pathToMainFile: playbooks/ecmwf-data-flavour/ecmwf-data-flavour.yml
         pathToRequirementsFile: requirements.yml
@@ -919,9 +925,13 @@ spec:
           - name: tellicast_license_user_name
             description: Tellicast license user identifier, equivalent to your EUMETSAT User Portal username.
             type: str
+            required: true
+            sensitive: true
           - name: tellicast_license_user_key
             description: Tellicast license activation key (i.e. the user key you obtained via from EUMETSAT Helpdesk).
             type: str
+            required: true
+            sensitive: true
       description: |
         >💡 If you are interested in historical records, as opposed to data streaming, you may find data snapshots on the [EUMETSAT User Portal's Data store](https://user.eumetsat.int/search-view?sort=startDate%20desc). Apply the `Data` and `Data Store` and `EUMETCast Terrestrial` filters, or an specific satellite filter to sort out relevant available snapshots.
 
@@ -1206,10 +1216,12 @@ spec:
         inputSpec:
           - name: vfs_cache_mode
             description: Cache mode
+            required: true
             type: str
             default: writes
           - name: vfs_cache_max_size
             description: Max total size of objects in the cache
+            required: true
             type: str
             default: 512Mi
       description: |
@@ -1481,26 +1493,32 @@ spec:
         inputSpec:
           - name: data_tailor_env_wipe
             description: flag to delete existing conda environment where data tailor was previously installed. Only yes will be accepted to approve
+            required: true
             type: str
             default: "no"
           - name: data_tailor_env_name
             description: name of conda environment where data tailor will be installed
+            required: true
             type: str
             default: "epct-desktop"
           - name: conda_installer
             description: URI of the installer to use
+            required: true
             type: str
             default: "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh"
           - name: conda_update_base
             description: boolean to decide wether base environment needs updating
+            required: true
             type: bool
             default: false
           - name: conda_prefix
             description: prefix where conda will be installed
+            required: true
             type: str
             default: "/opt/conda"
           - name: conda_user
             description: user that will own the conda installation
+            required: true
             type: str
             default: "root"
       description: |
@@ -2484,6 +2502,7 @@ spec:
         inputSpec:
           - name: os_security_group_name
             description: "OpenStack security group containing all firewall rules required for Nginx Proxy Manager operation"
+            required: true
             type: str
             default: ssh-http-https
         pathToMainFile: playbooks/haproxy-flavour/haproxy-flavour.yml
@@ -2914,31 +2933,39 @@ spec:
         inputSpec:
           - name: headscale_login_server
             description: URI of the VPN server.
+            required: true
             type: str
             default: https://vpn.batchprocessing.eumetsat.ewcloud.host
           - name: headscale_preauthkey
             description: Credentials of the VPN server.
+            required: true
             type: str
           - name: htcondor_cm_external_ip
             description: IP Address of the HTCondor Manager node to which this submit node reports to.
+            required: true
             type: str
             default: 100.64.0.1
           - name: htcondor_password
             description: Password to authenticate against HTCondor Execute node pool
+            required: true
             type: str
           - name: htcondor_reinstall
             description: Force HTCondor re-install. Only yes will be accepted to approve
+            required: true
             type: str
             default: "no"
           - name: harbor_auth_token
             description: Token for authentication when pulling private container images from EWC Container registry
+            required: true
             type: str
           - name: harbor_server
             description: harbor_server
+            required: true
             type: str
             default: "https://registry.europeanweather.cloud"
           - name: tenancy_name
             description: Tenancy name for target instance fully qualified domain name assignment
+            required: true
             type: str
       description: |
         Many computational tasks in Earth Observation and environmental modelling apply the same processing algorithm independently across thousands or millions of input data items. These parallel tasks are best served by High Throughput Computing (HTC).
@@ -3238,24 +3265,30 @@ spec:
         inputSpec:
           - name: headscale_login_server
             description: URI of the VPN server.
+            required: true
             type: str
             default: https://vpn.batchprocessing.eumetsat.ewcloud.host
           - name: headscale_preauthkey
             description: Credentials of the VPN server.
+            required: true
             type: str
           - name: htcondor_cm_external_ip
             description: IP Address of the HTCondor Manager node to which this submit node reports to.
+            required: true
             type: str
             default: 100.64.0.1
           - name: htcondor_password
             description: Password to authenticate against HTCondor Execute node pool
+            required: true
             type: str
           - name: htcondor_reinstall
             description: Force HTCondor re-install. Only yes will be accepted to approve
+            required: true
             type: str
             default: "no"
           - name: tenancy_name
             description: Tenancy name for target instance fully qualified domain name assignment
+            required: true
             type: str
       description: |
         Many computational tasks in Earth Observation and environmental modelling apply the same processing algorithm independently across thousands or millions of input data items. These parallel tasks are best served by High Throughput Computing (HTC).
@@ -3542,15 +3575,19 @@ spec:
         inputSpec:
           - name: ipa_domain
             description: "domain name managed by the IPA server. Example: eumetsat.sandbox.ewc"
+            required: true
             type: str
           - name: ipa_server_hostname
             description: "hostname of the IPA server. Example: ipa-server-1"
+            required: true
             type: str
           - name: ipa_admin_username
             description: "password of the administrator account from the IPA server. Example: my-secret-password"
+            required: true
             type: str
           - name: ipa_admin_password
             description: "username of the administrator account from the IPA server. Example: ipaadmin"
+            required: true
             type: str
       description: |
         This Ansible Playbook configures an existing virtual machine in the
@@ -3816,18 +3853,23 @@ spec:
         inputSpec:
           - name: ipa_domain
             description: "domain name managed by the IPA server. Example: eumetsat.sandbox.ewc"
+            required: true
             type: str
           - name: ipa_client_hostname
             description: "hostname of the target vm to be disenrolled from the IPA server. Example: ipa-client-1"
+            required: true
             type: str
           - name: ipa_server_hostname
             description: "hostname of the IPA server. Example: ipa-server-1"
+            required: true
             type: str
           - name: ipa_admin_username
             description: "username of the administrator account from the IPA server. Example: ipaadmin"
+            required: true
             type: str
           - name: ipa_admin_password
             description: "password of the administrator account from the IPA server. Example: my-secret-password"
+            required: true
             type: str
       description: |
         This Ansible Playbook configures an existing virtual machine in the
@@ -4397,26 +4439,32 @@ spec:
         inputSpec:
           - name: ipa_domain
             description: "domain name to be managed by the IPA server. Example: eumetsat.sandbox.ewc"
+            required: true
             type: str
             default: eumetsat.sandbox.ewc
           - name: ipa_server_hostname
             description: "hostname of the target vm where the IPA server will be installed. Example: ipa-server-1"
+            required: true
             type: str
             default: ipa-server-1
           - name: ipa_admin_username
             description: "username of administrator account to replace the default IPA admin. Example: ipaadmin"
+            required: true
             type: str
             default: ipaadmin
           - name: ipa_admin_password
             description: "password of administrator account to replace the default IPA admin. Example: my-secret-password"
+            required: true
             type: str
             default: my-secret-password
           - name: ipa_admin_givenname
             description: "given name of the administrator to replace the default IPA admin (not necessarily a real person's name). Example: EWC"
+            required: true
             type: str
             default: EWC
           - name: ipa_admin_surname
             description: "surname of the administrator to replace the default IPA admin (not necessarily a real person's name). Example: IPAADMIN"
+            required: true
             type: str
             default: IPAADMIN
         osSecurityGroups:
@@ -4967,34 +5015,42 @@ spec:
         inputSpec:
           - name: jupyterhub_local_cert_email
             description: "Email used for the certificate."
+            required: true
             type: str
             default: admin@example.com
           - name: dns_domain
             description: "DNS domain. If not present, it will try to guess from instance configured hostname in /etc/hostname."
+            required: true
             type: str
           - name: jupyterhub_local_env_wipe
             default: false
             description: "Boolean to decide whether to wipe the environment if exists prior to a reinstallation"
+            required: true
             type: bool
           - name: jupyterhub_local_env_name
             default: "jupyterhub-local"
             description: "Name of the environment containing the Jupyerhub."
+            required: true
             type: str
           - name: jupyterhub_local_test_cert
             default: false
             description: "Use Lets encrypt test certificate."
+            required: true
             type: bool
           - name: jupyterhub_local_with_otp
             default: false
             description: "Use OTP authentication for Jupyterhub. It requires manual run of google-authenticator by the user to configure your TOTP device after running this playbook"
+            required: true
             type: bool
           - name: conda_prefix
             default: "/opt/conda"
             description: "Prefix where conda is installed."
+            required: true
             type: str
           - name: conda_user
             default: "root"
             description: "User owning the conda installation. "
+            required: true
             type: str
       description: |
         Installs and run JupyterHub on your instance, offering a convenient way to access it through the web.
@@ -5346,10 +5402,12 @@ spec:
         inputSpec:
           - name: npm_admin_ui_port
             description: "port number at which the Nginx Proxy Manager admin UI is served"
+            required: true
             type: str
             default: "8080"
           - name: os_security_group_name
             description: "OpenStack security group containing all firewall rules required for Nginx Proxy Manager operation"
+            required: true
             type: str
             default: nginx-proxy-manager
         osImageName: Ubuntu-24.04-20260519071420
@@ -5491,6 +5549,7 @@ spec:
           mode: <backup_mode>
           attachments:
           - name: <attachment_name>
+            required: true
             type: <attachment_type>
             mode: <attachment_backup_mode>
           - ...
@@ -6002,6 +6061,7 @@ spec:
         inputSpec:
           - name: fail2ban_whitelisted_ip_ranges
             description: "IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: ['10.0.0.0/24','192.168.1.0/24']"
+            required: true
             type: Optional[List[str]]
             default: null
       description: |
@@ -6466,6 +6526,7 @@ spec:
         inputSpec:
           - name: fail2ban_whitelisted_ip_ranges
             description: "IPv4 ranges (in CIDR format) to be whitelisted in Fail2ban configuration. When in doubt, do not set. Example: ['10.0.0.0/24','192.168.1.0/24']"
+            required: true
             type: Optional[List[str]]
             default: null
       description: |
@@ -6933,36 +6994,45 @@ spec:
         inputSpec:
           - name: tenancy_name
             description: "Tenancy name in the following format location-org-project"
+            required: true
             type: str
           - name: federee
             description: "Cloud in which your tenant is in. Either 'EUMETSAT' or 'ECMWF'."
+            required: true
             type: str
           - name: xcube_env_wipe
             description: "Flag to delete existing conda environment where xcube was previously installed. Only yes will be accepted to approve"
+            required: true
             type: str
             default: "no"
           - name: xcube_env_name
             description: "Name of conda environment where xcube will be installed"
+            required: true
             type: str
             default: "xcube"
           - name: conda_installer
             description: "URI of the installer to use"
+            required: true
             type: str
             default: "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh"
           - name: conda_update_base
             description: "Boolean to decide whether base environment needs updating"
+            required: true
             type: str
             default: "no"
           - name: conda_prefix
             description: "Prefix where conda will be installed"
+            required: true
             type: str
             default: "/opt/conda"
           - name: conda_user
             description: "User that will own the conda installation"
+            required: true
             type: str
             default: "root"
           - name: xcube_config_location
             description: "Path of the config file for the xcube viewer"
+            required: true
             type: str
             default: "./templates/xcube-demo-config.yml"
       description: |
@@ -7506,6 +7576,7 @@ spec:
         inputSpec:
           - name: users_file
             description: "List of users to be provided as --item-inputs users_file=path/to/users.yml"
+            required: true
             type: str
       home: https://github.com/ewcloud/ewc-ansible-role-create-vm-users/tree/0.0.1/playbooks
       sources:
