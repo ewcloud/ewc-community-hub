@@ -53,7 +53,7 @@ Metadata describing a single item of the catalog: how it is presented in the Hub
 | values.inputSpec[].name | `string` | ✅ | string |  |  | Name of the input. For Items compatible with the EWCCLI, users can set it at deployment time by passing the `--item-inputs name=value` argument. | ```users_file``` |
 | values.inputSpec[].description | `string` | ✅ | string |  |  | Explanation of the input shown to users, including the expected format. | ```Path to a YAML file listing the users to create.``` |
 | values.inputSpec[].type | `string` | ✅ | string |  |  | Data type of the input, as a short type name. | ```str``` |
-| values.inputSpec[].default | `boolean` or `number` or `string` or `null` |  | boolean and/or number and/or string |  |  | Value used when the user does not provide one. If present, the input is optional; if omitted, the input is mandatory. | ```my default value``` |
+| values.inputSpec[].default | `array` or `boolean` or `number` or `object` or `string` or `null` |  | array and/or boolean and/or number and/or object and/or string |  |  | Value used when the user does not provide one. If present, the input is optional; if omitted, the input is mandatory. | ```my default value``` |
 | values.outputSpec | `array` |  | object |  |  | Outputs the item produces once deployed, to be reported to the user. Each entry declares one output and its type. |  |
 | values.outputSpec[].name | `string` | ✅ | string |  |  | Name of the output. | ```server_url``` |
 | values.outputSpec[].description | `string` | ✅ | string |  |  | Explanation of the output shown to users, such as how to use the value. | ```URL where the deployed service is reachable.``` |
