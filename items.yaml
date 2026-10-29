@@ -279,16 +279,17 @@ spec:
 
     ewc-tf-module-openstack-compute:
       name: "ewc-tf-module-openstack-compute"
-      version: "1.5.0"
+      version: "1.6.0"
       description: |
         This [Terraform module](https://developer.hashicorp.com/terraform/language/modules) creates and
         configures [OpenStack compute](https://docs.openstack.org/nova/latest/)
         instances with optional attached storage volumes and networking configurations.
 
+
         ## Features
 
         - Create OpenStack compute instances with customizable configurations
-        - Optionally boot from volume with configurable size
+        - Boot from volume with configurable size by default
         - Support for attaching additional volumes
         - Floating IP assignment for public access
         - Security group configuration
@@ -305,40 +306,70 @@ spec:
 
         ## Usage
 
-        ```hcl
-        module "web_server" {
-          source = "path/to/openstack-compute"
+        >💡 Checkout the [EWC Knowledge Base](https://confluence.ecmwf.int/x/HRUoFw) for up-to-date information on available  **VM images** and **VM plans** (i.e. flavors)
 
-          app_name       = "web"
-          instance_name  = "server"
+        ### EUMETSAT Compute Site
+
+        ```hcl
+        module "server" {
+          source = "github.com/ewcloud/ewc-tf-module-openstack-compute?ref=1.6.0"
+
+          app_name       = "<user-defined application name>"
+          instance_name  = "<user-defined instance name>"
           instance_index = 1
-          image_id       = "your-image-id"
-          flavor_id      = "your-flavor-id"
-          keypair_name   = "your-keypair-name"
+          image_id       = "Rocky-9.7-20260519081947"
+          flavor_id      = "8cpu-16gbmem"
+          keypair_name   = "<user-created keypair name>"
 
           networks = ["internal"]
 
+          external_network_name = "external"
+
           instance_has_fip = true
 
-          os_volume = {
-            enable = true
-            size   = 80
-          }
-
-          extra_volume      = true
-          extra_volume_size = 100
-
-          security_groups = ["default", "web"]
+          security_groups = ["ssh"]
 
           instance_metadata = {
-            environment = "production"
-            role        = "web"
+            owner           = "<owner name>"
+            deployment-tool = "terraform"
           }
 
           tags = {
-            environment = "production"
-            project     = "website"
-            owner       = "team-alpha"
+            owner           = "<owner name>"
+            deployment-tool = "terraform"
+          }
+        }
+        ```
+
+        ### ECMWF Compute Site
+
+        ```hcl
+        module "server" {
+          source = "github.com/ewcloud/ewc-tf-module-openstack-compute?ref=1.6.0"
+
+          app_name       = "<user-defined application name>"
+          instance_name  = "<user-defined instance name>"
+          instance_index = 1
+          image_id       = "Rocky-9.7-20260519081947"
+          flavor_id      = "8cpu-16gbmem-80gbdisk"
+          keypair_name   = "<user-created keypair name>"
+
+          networks = ["private-<region>-ewcloud-<tenancy name>"]
+
+          external_network_name = "external-internet"
+
+          instance_has_fip = true
+
+          security_groups = ["ssh"]
+
+          instance_metadata = {
+            owner           = "<owner name>"
+            deployment-tool = "terraform"
+          }
+
+          tags = {
+            owner           = "<owner name>"
+            deployment-tool = "terraform"
           }
         }
         ```
@@ -358,7 +389,7 @@ spec:
         | networks | List of network names to attach the instance to | `list(string)` | n/a | yes |
         | security_groups | List of security group names to apply to the instance | `list(string)` | `["default"]` | no |
         | instance_has_fip | Whether to assign a floating IP to the instance | `bool` | `false` | no |
-        | os_volume | Configuration for the primary OS volume | `object({enable = bool, size = number})` | `{enable = false, size = 50}` | no |
+        | os_volume | Configuration for the primary OS volume | `object({enable = bool, size = number})` | `{enable = true, size = 50}` | no |
         | extra_volume | Whether to attach an additional volume to the instance | `bool` | `false` | no |
         | extra_volume_size | Size in GB of the additional volume | `number` | `1` | no |
         | extra_volume2 | Whether to attach a second additional volume to the instance | `bool` | `false` | no |
@@ -369,7 +400,130 @@ spec:
         | external_network_name | Name of the external network for floating IPs | `string` | `"external"` | no |
         | tags | A map of tags to assign to all resources that support it | `map(string)` | `{}` | no |
 
-      home: https://github.com/ewcloud/ewc-tf-module-openstack-compute/tree/1.5.0
+
+        ## Outputs
+
+        | Name | Description |
+        |------|-------------|
+        | instance-data | Comprehensive information about the created instance |
+        | volumes | Information about the attached volumes |
+
+        ## Instance Output Structure
+
+        ```hcl
+        {
+          name           = "app-name-instance-name-01"
+          id             = "instance-id"
+          internal_ip    = "192.168.1.10"
+          floating_ip    = "203.0.113.10"
+          networks       = [/* Network details */]
+          flavor_id      = "flavor-id"
+          volumes        = ["volume-id-1", "volume-id-2"]
+          access_address = "203.0.113.10"  # or internal IP if no floating IP
+        }
+        ```
+
+        ## Volumes Output Structure
+
+        ```hcl
+        {
+          primary  = "volume-id-primary"  # if os_volume.enable = true
+          volume_1 = {
+            id   = "volume-id-1"
+            name = "app_name_instance_name_01_volume"
+            size = 100
+          }
+          volume_2 = {
+            id   = "volume-id-2"
+            name = "app_name_instance_name_01_volume2"
+            size = 50
+          }
+        }
+        ```
+
+        ## Best Practices
+
+        1. Prefer image ID rather than the image Name as input, to guarantee reproducibility/idempotence.
+          Consider these edge-cases:
+            * There are multiple images with the same Name available
+
+            * The image Name is passed onto a new image every few months
+
+            There is risk of downtime/data loss if re-applying WHEN ANY OF THE ABOVE becomes true since an initial instance provisioning; whenever the image Name input is set, this module will pick the newest image ID that corresponds to said Name.
+
+        2. Always specify appropriate security groups for your instances
+        3. Use unique and descriptive names for instances to aid in identification
+        5. Consider using OS volumes for production instances for improved performance and resilience
+        6. Implement proper key management for your keypair_name
+        7. Use cloud-init userdata for consistent instance initialization
+
+
+
+        ### Resource Tagging
+
+        This module supports tagging of OpenStack resources using the `tags` variable. Additionally, the module automatically adds the `app_name` as a tag to all resources that support tagging. This provides consistent identification across your OpenStack environment.
+
+        #### Tag Implementation Details
+
+        - **Compute Instance**: Tags are implemented as metadata key-value pairs
+        - **Volumes**: Tags are implemented as a list of string tags
+        - **Floating IPs**: Tags are implemented as a list of string tags
+
+        Example of how tags are applied:
+
+        ```hcl
+        tags = {
+          environment = "production"
+          project     = "web-app"
+        }
+        ```
+
+        The above will result in:
+        - Compute instance metadata containing: `app_name`, `environment`, and `project` keys
+        - Volumes and floating IPs tagged with: `app_name`, `environment`, and `project` tags
+
+        This tagging approach makes it easier to filter, identify, and manage resources in your OpenStack environment.
+
+        ## SW Bill of Materials (SBoM)
+
+        The following components will be included in the working environment:
+        | Component | Version | License | Home URL |
+        |------|---------|---------|--------------|
+        | terraform-provider-openstack | 1.53.0 |  MPL-2.0 |  https://github.com/terraform-provider-openstack/terraform-provider-openstack   |
+
+        ## Changelog
+        All notable changes (i.e. fixes, features and breaking changes) are documented
+        in the [CHANGELOG.md](./CHANGELOG.md).
+
+        ## Contributing
+
+        Thanks for taking the time to join our community and start contributing!
+        Please make sure to:
+        * Familiarize yourself with our [Code of Conduct](./CODE_OF_CONDUCT.md) before
+        contributing.
+        * See [CONTRIBUTING.md](./CONTRIBUTING.md) for instructions on how to request
+        or submit changes.
+
+        ## Copyright and License
+        Copyright © EUMETSAT 2026.
+
+        The provided code and instructions are licensed under the [MIT license](./LICENSE).
+        They are intended to automate the setup of an environment that includes
+        third-party software components.
+        The usage and distribution terms of the resulting environment are
+        subject to the individual licenses of those third-party libraries.
+
+        Users are responsible for reviewing and complying with the licenses of
+        all third-party components included in the environment.
+
+        Contact [EUMETSAT](http://www.eumetsat.int) for details on the usage and distribution terms.
+
+        ## Authors
+
+        [European Weather Cloud](http://support.europeanweather.cloud/)
+        <[support@europeanweather.cloud](mailto:support@europeanweather.cloud)>
+
+      home: https://github.com/ewcloud/ewc-tf-module-openstack-compute/tree/1.6.0
       sources:
         - https://github.com/ewcloud/ewc-tf-module-openstack-compute.git
       maintainers:
@@ -385,85 +539,189 @@ spec:
         licenseType: "MIT License"
       displayName: OpenStack Compute Instance
       summary: Simplifies the creation of EWC VMs, or state update and teardown of existing ones, via Terraform.
-      license: https://github.com/ewcloud/ewc-tf-module-openstack-compute/blob/1.5.0/LICENSE
+      license: https://github.com/ewcloud/ewc-tf-module-openstack-compute/blob/1.6.0/LICENSE
       published: true
+      values:
+        pathToMainFile: "."
+        inputSpec:
+          - name: app_name
+            description: Application name, used as prefix in the full instance name
+            required: true
+            type: str
+          - name: instance_name
+            description: Name of the instance, used in the full instance name
+            required: true
+            type: str
+          - name: instance_index
+            description: Index or identifier for the instance, used as suffix in the full instance name
+            required: true
+            type: int
+          - name: image_id
+            description: (Optional; Required if image_name is empty and not booting from a volume. Do not specify if booting from a volume.) The image ID to use for the instance
+            required: false
+            type: str
+          - name: flavor_id
+            description: (Optional; Required if flavor_name is empty) The flavor ID to use for the instance
+            required: false
+            type: str
+          - name: image_name
+            description: (Optional; Required if image_id is empty and not booting from a volume. Do not specify if booting from a volume.) The name of the image to use for the instance
+            required: false
+            type: str
+          - name: flavor_name
+            description: Optional; Required if flavor_id is empty) The name the flavor to use for the instance
+            required: false
+            type: str
+          - name: keypair_name
+            description: Name of the keypair to use for SSH access to the instance
+            required: true
+            type: str
+          - name: networks
+            description: List of network names to attach the instance to
+            required: true
+            type: List[str]
+          - name: security_groups
+            description: List of security group names to apply to the instance
+            required: false
+            type: List[str]
+            default:
+              - "default"
+          - name: instance_has_fip
+            description: Whether to assign a floating IP to the instance
+            required: false
+            type: bool
+          - name: os_volume
+            description: Configuration for the primary OS volume
+            required: false
+            type: Dict[str, Any]
+            default:
+              enable: false
+              size: 50
+          - name: extra_volume
+            description: Whether to attach an additional volume to the instance
+            required: false
+            type: bool
+          - name: extra_volume_size
+            description: Size in GB of the additional volume
+            required: false
+            type: int
+            default: 1
+          - name: extra_volume2
+            description: Whether to attach a second additional volume to the instance
+            required: false
+            type: bool
+            default: false
+          - name: extra_volume2_size
+            description: Size in GB of the second additional volume
+            required: false
+            type: int
+            default: 1
+          - name: cloudinit_userdata
+            description: User data for cloud-init to be passed to the instance
+            required: false
+            type: str
+            default: null
+          - name: instance_metadata
+            description: Metadata to associate with the instance (key-value pairs)
+            required: false
+            type: Dict[str, str]
+            default: null
+          - name: add_sfs_network
+            description: Shared File System network to add (if needed)
+            required: false
+            type: str
+            default: null
+          - name: external_network_name
+            description: Name of the external network for floating IPs
+            required: false
+            type: str
+            default: "external"
+          - name: tags
+            description: A map of tags to assign to all resources that support it
+            required: false
+            type: Dict[str, str]
+            default: {}
+        outputSpec:
+          - name: instance-data
+            description: Comprehensive information about the created instance
+            type: Dict[str, Any]
+          - name: volumes
+            description: Information about the attached volumes
+            type: Dict[str, Any]
 
     ewc-tf-module-openstack-security-group:
       name: "ewc-tf-module-openstack-security-group"
-      version: "1.0.1"
+      version: "1.1.0"
       description: |
-        > 💡 The module supports complex rule sets, such as those required to create a subnet security group for IPA services (i.e. Kerberos, LDAP and DNS).
+        This Terraform module creates and configures an OpenStack Security Group with either common predefined or custom-defined set of rules. It is designed to be reusable, flexible, and aligned with Terraform best practices for OpenStack deployments.
 
-        This Terraform module creates and configures an OpenStack Security Group with a user-defined set of rules. It is designed to be reusable, flexible, and aligned with Terraform best practices for OpenStack deployments.
+        ## Features
 
-        More specifically, the module:
         * Creates an OpenStack Security Group with customizable name and description.
-        * Attaches an arbitrary number of user-defined rules to the security group.
+        * Attaches an arbitrary number of
+        rules from:
+          * one of the [predefined security groups](#predefined-security-groups)
+
+            **OR**
+          * custom-defined rules, to said security group
+
+
+        ## Authentication
+
+        Before proceeding, if you lack OpenStack Application Credentials or do not know
+        how to make them available in your local environment, make sure
+        to check out the
+        [EWC documentation](https://confluence.ecmwf.int/x/TiRNH).
 
         ## Usage
 
+        >⚠️ Set exactly one of `security_group_rules` or `predefined_security_group`.
+
+        The module creates either one of the **predefined** EWC security groups, by name, or a **custom** security group, from your own list of
+        rules.
+
+
+
+        ### Choose a predefined security group
+
+        >💡 For a full list of available options, see the [Predefined Security Groups section](#predefined-security-groups) below.
+
+        >✅ The security group is named after the predefined group (`ipa` in the example below), unless you also set `security_group_name`.
+
         ```hcl
         module "ipa_security_group" {
-          source = "/path/to/terraform/module"
+          source = "github.com/ewcloud/ewc-tf-module-openstack-security-group?ref=1.1.0"
 
-          security_group_name = "ipa"
+          predefined_security_group = "ipa"
+          federee                   = "ECMWF" # Defaults to EUMETSAT if not set
+
+          tags = {
+            environment       = "production"
+            project           = "ewc"
+            provisioning-tool = "terraform"
+          }
+        }
+        ```
+
+        **OR**
+
+        ### Define a custom security group
+
+        ```hcl
+        module "postgres_security_group" {
+          source = "github.com/ewcloud/ewc-tf-module-openstack-security-group?ref=1.1.0"
+
+          security_group_name        = "postgres"
+          security_group_description = "PostgreSQL from the private subnet"
 
           security_group_rules = [
             {
               direction        = "ingress"
               ether_type       = "IPv4"
               protocol         = "tcp"
-              port_range_min   = 80
-              port_range_max   = 80
-              remote_ip_prefix = "10.0.0.0/0"
-            },
-            {
-              direction        = "ingress"
-              ether_type       = "IPv4"
-              protocol         = "udp"
-              port_range_min   = 123
-              port_range_max   = 123
-              remote_ip_prefix = "10.0.0.0/0"
-            },
-            {
-              direction        = "ingress"
-              ether_type       = "IPv4"
-              protocol         = "tcp"
-              port_range_min   = 88
-              port_range_max   = 88
-              remote_ip_prefix = "10.0.0.0/0"
-            },
-            {
-              direction        = "ingress"
-              ether_type       = "IPv4"
-              protocol         = "udp"
-              port_range_min   = 88
-              port_range_max   = 88
-              remote_ip_prefix = "10.0.0.0/0"
-            },
-            {
-              direction        = "ingress"
-              ether_type       = "IPv4"
-              protocol         = "tcp"
-              port_range_min   = 53
-              port_range_max   = 53
-              remote_ip_prefix = "10.0.0.0/0"
-            },
-            {
-              direction        = "ingress"
-              ether_type       = "IPv4"
-              protocol         = "udp"
-              port_range_min   = 53
-              port_range_max   = 53
-              remote_ip_prefix = "10.0.0.0/0"
-            },
-            {
-              direction        = "ingress"
-              ether_type       = "IPv4"
-              protocol         = "tcp"
-              port_range_min   = 389
-              port_range_max   = 389
-              remote_ip_prefix = "10.0.0.0/0"
+              port_range_min   = 5432
+              port_range_max   = 5432
+              remote_ip_prefix = "10.0.0.0/24"
             },
             {
               direction        = "ingress"
@@ -472,38 +730,6 @@ spec:
               port_range_min   = 22
               port_range_max   = 22
               remote_ip_prefix = "0.0.0.0/0"
-            },
-            {
-              direction        = "ingress"
-              ether_type       = "IPv4"
-              protocol         = "tcp"
-              port_range_min   = 636
-              port_range_max   = 636
-              remote_ip_prefix = "10.0.0.0/0"
-            },
-            {
-              direction        = "ingress"
-              ether_type       = "IPv4"
-              protocol         = "tcp"
-              port_range_min   = 464
-              port_range_max   = 464
-              remote_ip_prefix = "10.0.0.0/0"
-            },
-            {
-              direction        = "ingress"
-              ether_type       = "IPv4"
-              protocol         = "udp"
-              port_range_min   = 464
-              port_range_max   = 464
-              remote_ip_prefix = "10.0.0.0/0"
-            },
-            {
-              direction        = "ingress"
-              ether_type       = "IPv4"
-              protocol         = "tcp"
-              port_range_min   = 443
-              port_range_max   = 443
-              remote_ip_prefix = "10.0.0.0/0"
             }
           ]
 
@@ -519,12 +745,27 @@ spec:
 
         | Name | Description | Type | Default | Required |
         |------|-------------|------|---------|:--------:|
-        | `security_group_name` | Name of the security group. Example: `ipa` | `string` | n/a | yes |
-        | `security_group_description` | Description of the security group | `string` | n/a | no |
-        | `security_group_rules` | List of security group rules | `list(object({direction = string, ether_type = string, protocol = string, port_range_min = number, port_range_max = number, remote_ip_prefix = string}))` | n/a | yes |
+        | `security_group_name` | Name of the security group. Required with `security_group_rules`; defaults to the `predefined_security_group` name otherwise. Example: `ipa` | `string` | `null` | no |
+        | `security_group_description` | Description of the security group | `string` | `null` | no |
+        | `security_group_rules` | List of security group rules for a custom security group. Mutually exclusive with `predefined_security_group` | `list(object({direction = string, ether_type = string, protocol = string, port_range_min = number, port_range_max = number, remote_ip_prefix = string}))` | `null` | no |
+        | `predefined_security_group` | Name of a predefined security group to create, one of the available[predefined security groups](#predefined-security-groups). Mutually exclusive with `security_group_rules` | `string` | `null` | no |
+        | `federee` | EWC federee hosting the deployment, `EUMETSAT` or `ECMWF`. When applicable, defines the private subnet IP range for a predefined security groups | `string` | `"EUMETSAT"` | no |
         | `tags` | Map of tags to assign to the security group | `map(string)` | `{}` | no |
 
-        ### Security Group Rules Input Structure
+
+        ### Predefined Security Groups
+
+        | Name | Rules (protocol/port from source) |
+        |------|-----------------------------------|
+        | `ssh` | tcp/22 ingress from `0.0.0.0/0` |
+        | `ssh-https` | tcp/22, tcp/80, tcp/443 ingress from `0.0.0.0/0` (same as `ssh-http-https`, useful for EWC site harmonization) |
+        | `ssh-http-https` | tcp/22, tcp/80, tcp/443 ingress from `0.0.0.0/0` (same as `ssh-https`, useful for EWC site harmonization) |
+        | `nginx-proxy-manager` | tcp/443 (HTTPS), tcp/80 (HTTP), tcp/22 (SSH), tcp/8200 (NPM admin frontend) ingress from the `<private subnet>` IP range (automatically set according to `federee`) |
+        | `eumetcast` | udp/2268, tcp/8500 ingress from `0.0.0.0/0` |
+        | `ipa` | tcp/22 (SSH) from `0.0.0.0/0`; tcp/443 (HTTPS), tcp/80 (HTTP), tcp/389 (LDAP), tcp/636 (LDAPS), tcp+udp/88 (Kerberos auth), tcp+udp/464 (Kerberos password change), tcp+udp/53 (DNS), udp/123 (NTP) ingress from `<private subnet>` (automatically set according to `federee`) |
+        | `htcondor` | tcp/9618 ingress from `0.0.0.0/0` |
+
+        ### Custom Security Group Rules Input Structure
 
         Each rule in the `security_group_rules` list is an object with the following attributes:
 
@@ -533,15 +774,8 @@ spec:
         - `protocol`: The protocol (e.g., `tcp`, `udp`, `icmp`, or `null` for any).
         - `port_range_min`: The minimum port number (1-65535, or `null` for protocols like `icmp`).
         - `port_range_max`: The maximum port number (1-65535, or `null` for protocols like `icmp`).
-        - `remote_ip_prefix`: The remote IP prefix in CIDR notation (e.g., `10.0.0.0/0`).
+        - `remote_ip_prefix`: The remote IP prefix in CIDR notation (e.g., `10.0.0.0/24`).
 
-        ## SW Bill of Materials (SBoM)
-        Third-party components used in the working environment.
-
-        The following components will be included in the working environment:
-        | Component | Version | License | Home URL |
-        |------|---------|---------|--------------|
-        | terraform-provider-openstack | 1.53.0 |  MPL-2.0 |  https://github.com/terraform-provider-openstack/terraform-provider-openstack   |
 
         ## Outputs
 
@@ -551,7 +785,65 @@ spec:
         | `security_group_name` | Name of the created security group |
         | `security_group_rules` | List of created security group rule IDs |
 
-      home: https://github.com/ewcloud/ewc-tf-module-openstack-security-group/tree/1.0.1
+        ## Best Practices
+
+        ### Resource Tagging
+
+        This module supports tagging of the security group using the `tags` variable. Tags are applied as a list of strings to the `openstack_networking_secgroup_v2` resource.
+
+        Example:
+
+        ```hcl
+        tags = {
+          environment       = "production"
+          project           = "ewc"
+          provisioning-tool = "terraform"
+        }
+        ```
+
+        The above results in the security group being tagged with `environment=production`, `project=ewc` and `provisioning-tool=terraform`.
+
+        ## SW Bill of Materials (SBoM)
+        Third-party components used in the working environment.
+
+        The following components will be included in the working environment:
+        | Component | Version | License | Home URL |
+        |------|---------|---------|--------------|
+        | terraform-provider-openstack | 1.53.0 |  MPL-2.0 |  https://github.com/terraform-provider-openstack/terraform-provider-openstack   |
+
+        ## Changelog
+        All notable changes (i.e. fixes, features and breaking changes) are documented
+        in the [CHANGELOG.md](./CHANGELOG.md).
+
+        ## Contributing
+
+        Thanks for taking the time to join our community and start contributing!
+        Please make sure to:
+        * Familiarize yourself with our [Code of Conduct](./CODE_OF_CONDUCT.md) before
+        contributing.
+        * See [CONTRIBUTING.md](./CONTRIBUTING.md) for instructions on how to request
+        or submit changes.
+
+        ## Copyright and License
+        Copyright © EUMETSAT 2025.
+
+        The provided code and instructions are licensed under the [MIT license](./LICENSE).
+        They are intended to automate the setup of an environment that includes
+        third-party software components.
+        The usage and distribution terms of the resulting environment are
+        subject to the individual licenses of those third-party libraries.
+
+        Users are responsible for reviewing and complying with the licenses of
+        all third-party components included in the environment.
+
+        Contact [EUMETSAT](http://www.eumetsat.int) for details on the usage and distribution terms.
+
+        ## Authors
+
+        [European Weather Cloud](http://support.europeanweather.cloud/)
+        <[support@europeanweather.cloud](mailto:support@europeanweather.cloud)>
+
+      home: https://github.com/ewcloud/ewc-tf-module-openstack-security-group/tree/1.1.0
       sources:
         - https://github.com/ewcloud/ewc-tf-module-openstack-security-group.git
       maintainers:
@@ -567,8 +859,47 @@ spec:
         licenseType: "MIT License"
       displayName: OpenStack Security Group
       summary: Automates the creation of EWC security groups and their rules, or update and teardown of existing ones, via Terraform.
-      license: https://github.com/ewcloud/ewc-tf-module-openstack-security-group/blob/1.0.1/LICENSE
+      license: https://github.com/ewcloud/ewc-tf-module-openstack-security-group/blob/1.1.0/LICENSE
       published: true
+      values:
+        pathToMainFile: "."
+        inputSpec:
+          - name: security_group_name
+            description: "Name of the security group. Required with security_group_rules; defaults to the predefined_security_group name otherwise. Example: ipa"
+            required: true
+            type: str
+          - name: security_group_description
+            description: Description of the security group
+            required: false
+            type: str
+          - name: security_group_rules
+            description: List of security group rules for a custom security group. Mutually exclusive with predefined_security_group
+            required: false
+            type: List[Dict[str, Any]]
+          - name: predefined_security_group
+            description: Name of a predefined security group to create, one of the available predefined security groups. Mutually exclusive with security_group_rules
+            required: false
+            type: str
+          - name: federee
+            default: "EUMETSAT"
+            description: EWC federee hosting the deployment, EUMETSAT or ECMWF. When applicable, defines the private subnet IP range for a predefined security groups
+            required: false
+            type: str
+          - name: tags
+            default: {}
+            description: Map of tags to assign to the security group
+            required: false
+            type: Dict[str, str]
+        outputSpec:
+          - name: security_group_id
+            description: ID of the created security group
+            type: str
+          - name: security_group_name
+            description: Name of the created security group
+            type: str
+          - name: security_group_rules
+            description: List of created security group rule IDs
+            type: strList[str]
 
     ecmwf-aifs-single-mse:
       name: "ecmwf-aifs-single-mse"
