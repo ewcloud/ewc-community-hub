@@ -595,7 +595,7 @@ spec:
             required: false
             type: Dict[str, Any]
             default:
-              enabled: false
+              enable: false
               size: 50
           - name: extra_volume
             description: Whether to attach an additional volume to the instance
