@@ -2712,7 +2712,7 @@ spec:
 
     iam-user-bulk-edition:
       name: "iam-user-bulk-edition"
-      version: "1.4.0"
+      version: "1.5.0"
       description: |
         Subroutines to simplify bulk edition of [EWC IAM](https://confluence.ecmwf.int/x/Z4kzGg) users.
 
@@ -2723,7 +2723,7 @@ spec:
           * Emails new users with 1st-login action requirements (update password, etc.)
         * Updates existing users
           * Updates first and/or last names
-          * Attaches new or replaces existing EWC IAM roles
+          * Adds missing EWC IAM roles (`merge`), and optionally removes undeclared ones (`replace`)
         * Disables users
         * Deletes users
         * (Optional) Runs step-by-step via Jupyter Notebook, on an arbitrary amount of tabular user data in `CSV` format
@@ -2737,7 +2737,7 @@ spec:
 
         ### Run step-by-step via Jupyter Notebook
 
-        Open the [iam-user-bulk-edition-via-jupyter.ipynb](https://github.com/ewcloud/ewc-user-tools/tree/1.4.0/items/iam-users-bulk-edition/notebooks/iam-users-bulk-edition-via-jupyter.ipynb) notebook, start the runtime, and execute cells top to bottom to apply access/permission changes.
+        Open the [iam-user-bulk-edition-via-jupyter.ipynb](https://github.com/ewcloud/ewc-user-tools/tree/1.5.0/items/iam-users-bulk-edition/notebooks/iam-users-bulk-edition-via-jupyter.ipynb) notebook, start the runtime, and execute cells top to bottom to apply access/permission changes.
 
         **OR**
 
@@ -2848,7 +2848,7 @@ spec:
 
         * [EWC Identity and Access Management (IAM) Service](https://confluence.ecmwf.int/x/Z4kzGg)
 
-      home: https://github.com/ewcloud/ewc-user-tools/tree/1.4.0/items/iam-user-bulk-edition
+      home: https://github.com/ewcloud/ewc-user-tools/tree/1.5.0/items/iam-user-bulk-edition
       sources:
         - https://github.com/ewcloud/ewc-user-tools.git
       maintainers:
@@ -2863,7 +2863,7 @@ spec:
         licenseType: "MIT License"
       displayName: EWC IAM Users Edition in Bulk
       summary: Simplifies creation, edition and removal of an arbitrary number of EWC IAM users through step-by-step interactive sessions or one-line command executions.
-      license: https://github.com/ewcloud/ewc-user-tools/blob/1.4.0/LICENSE
+      license: https://github.com/ewcloud/ewc-user-tools/blob/1.5.0/LICENSE
       published: true
 
     htc-execute-flavour:
@@ -5433,7 +5433,7 @@ spec:
 
     openstack-backups:
       name: "openstack-backups"
-      version: "1.4.0"
+      version: "1.5.0"
       description: |
         The OpenStack Horizon UI allows the manual creation of backups and snapshots from individual instances and volumes, but does not provide automation features for backing up or restoring multiple resources nor it offers options for the scheduling of backups. The OpenStack Command Line Interface (CLI) provides the same capabilities, without any automation features. The scheduling of backups using the OpenStack CLI must be done using `cron` jobs. Documentation on how to use the OpenStack CLI to create and schedule backups can be found [here](https://confluence.ecmwf.int/x/OISnHg) and to restore backups [here](https://confluence.ecmwf.int/x/2ijPJQ). With this script, users can create, schedule or restore multiple backups automatically.
 
@@ -5593,7 +5593,7 @@ spec:
         * Configuration file. YAML file with the instructions to create, schedule or restore backups.
 
 
-      home: https://github.com/ewcloud/ewc-user-tools/tree/1.4.0/items/openstack-backups
+      home: https://github.com/ewcloud/ewc-user-tools/tree/1.5.0/items/openstack-backups
       sources:
         - https://github.com/ewcloud/ewc-user-tools.git
       maintainers:
@@ -5608,12 +5608,12 @@ spec:
         licenseType: "MIT License"
       displayName: Automation of OpenStack Backups
       summary: Automates the creation, restoration and scheduling of OpenStack VM disk backups.
-      license: https://github.com/ewcloud/ewc-user-tools/blob/1.4.0/LICENSE
+      license: https://github.com/ewcloud/ewc-user-tools/blob/1.5.0/LICENSE
       published: true
 
     openstack-parallel-migration:
       name: "openstack-parallel-migration"
-      version: "1.4.0"
+      version: "1.5.0"
       description: |
         A script automating the process of copying resources (instances, volumes, and configurations) from one OpenStack cloud to another. It is designed specifically for users of the [European Weather Cloud (EWC)](https://europeanweather.cloud/), supporting migrations with resume capabilities, parallel transfers (e.i. multiple simultaneous operations), and preservation of networking and security settings.
 
@@ -5824,7 +5824,7 @@ spec:
             * Attached data volumes in both cases
 
 
-      home: https://github.com/ewcloud/ewc-user-tools/tree/1.4.0/items/openstack-parallel-migration
+      home: https://github.com/ewcloud/ewc-user-tools/tree/1.5.0/items/openstack-parallel-migration
       sources:
         - https://github.com/ewcloud/ewc-user-tools.git
       maintainers:
@@ -5839,7 +5839,7 @@ spec:
         licenseType: "MIT License"
       displayName: OpenStack Parallel Migrate
       summary: Automate the process of copying compute resource from one OpenStack cloud to another.
-      license: https://github.com/ewcloud/ewc-user-tools/blob/1.4.0/LICENSE
+      license: https://github.com/ewcloud/ewc-user-tools/blob/1.5.0/LICENSE
       published: true
 
     pytroll-processing:
