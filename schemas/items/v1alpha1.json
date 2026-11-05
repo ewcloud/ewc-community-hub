@@ -132,7 +132,7 @@
                     "default": false
                   },
                   "default": {
-                    "description": "Value used when the user does not provide one.",
+                    "description": "Value used when the user does not provide one. If present, the input is optional; if omitted, the input is required.",
                     "anyOf": [
                       {
                         "type": "string"
@@ -144,9 +144,16 @@
                         "type": "number"
                       },
                       {
+                        "type":"array"
+                      },
+                      {
+                        "type":"object"
+                      },
+                      {
                         "type": "null"
                       }
-                    ]
+                    ],
+                    "examples": ["my default value"]
                   },
                   "sensitive": {
                     "description": "If true, the input should be treated as a secret, masked during prompting or logging.",

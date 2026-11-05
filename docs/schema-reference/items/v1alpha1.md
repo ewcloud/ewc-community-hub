@@ -54,7 +54,7 @@ Metadata describing a single item of the catalog: how it is presented in the Hub
 | values.inputSpec[].description | `string` | ✅ | string |  |  | Explanation of the input shown to users, including the expected format. | ```Path to a YAML file listing the users to create.``` |
 | values.inputSpec[].type | `string` | ✅ | string |  |  | Data type of the input, as a short type name. | ```str``` |
 | values.inputSpec[].nullable | `boolean` |  | boolean |  | `false` | If true, the corresponding input value can be set to `null`. |  |
-| values.inputSpec[].default | `boolean` or `number` or `string` or `null` |  | boolean and/or number and/or string |  |  | Value used when the user does not provide one. |  |
+| values.inputSpec[].default | `array` or `boolean` or `number` or `object` or `string` or `null` |  | array and/or boolean and/or number and/or object and/or string |  |  | Value used when the user does not provide one. If present, the input is optional; if omitted, the input is required. | ```my default value``` |
 | values.inputSpec[].sensitive | `boolean` |  | boolean |  | `false` | If true, the input should be treated as a secret, masked during prompting or logging. |  |
 | values.outputSpec | `array` |  | object |  |  | Outputs the item produces once deployed, to be reported to the user. Each entry declares one output and its type. |  |
 | values.outputSpec[].name | `string` | ✅ | string |  |  | Name of the output. | ```server_url``` |
