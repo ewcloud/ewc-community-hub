@@ -1,14 +1,11 @@
 name: Nightly Ansible Deployments Testing
 
 on:
-  schedule:
-    - cron: '0 3 * * 1-5'
-      timezone: "Etc/UTC"
+  workflow_dispatch:
 
 env:
   POLLING_INTERVAL_SECONDS: 60
   RUN_TIMEOUT_MINUTES: 25
-  MAX_CONCURRENT_WORKFLOWS: 1
 
   # Fallback Item Inputs Defaults
   TELLICAST_LICENSE_USER_NAME: ${{ vars.TELLICAST_LICENSE_USER_NAME }}
@@ -16,69 +13,16 @@ env:
   USERS_FILE: ${{ vars.USERS_FILE }} # -> create-vm-users.values.inputSpec[0].default
 
 jobs:
-  test-deploy-ansible-ecmwf:
-    name: Deployment test on ECMWF
-    runs-on: ubuntu-latest
-    timeout-minutes: 400
-    environment: ECMWF
 
-    steps:
-      - name: Checkout catalog repository
-        uses: actions/checkout@v6
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: 3.12
-
-      - name: Install additional dependencies
-        run: pip install -r .github/scripts/orchestrator/requirements.txt
-
-      - name: Orchestrate deployments testing
-        run: python .github/scripts/orchestrator/main.py
-        env:
-          GH_CLIENT_ID: ${{ vars.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_CLIENT_ID }}
-          GH_APP_PRIVATE_KEY: ${{ secrets.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_PRIVATE_KEY }}
-          GH_APP_OWNER: ${{ github.repository_owner }}
-          ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
-          ITEM_OTHERS_ANNOTATIONS: "Deployable"
-          GH_DOWNSTREAM_WORKFLOW_FILE: "test-ecmwf.yml"
-          TOTAL_TIMEOUT_MINUTES: 390 # Must be smaller than jobs.orchestrate.timeout-minutes
-  
-  test-deploy-ansible-eumetsat:
-    name: Deployment test on EUMETSAT
-    runs-on: ubuntu-latest
-    timeout-minutes: 400
-    environment: EUMETSAT
-
-    steps:
-      - name: Checkout catalog repository
-        uses: actions/checkout@v6
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: 3.12
-
-      - name: Install additional dependencies
-        run: pip install -r .github/scripts/orchestrator/requirements.txt
-
-      - name: Orchestrate deployments testing
-        run: python .github/scripts/orchestrator/main.py
-        env:
-          GH_CLIENT_ID: ${{ vars.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_CLIENT_ID }}
-          GH_APP_PRIVATE_KEY: ${{ secrets.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_PRIVATE_KEY }}
-          GH_APP_OWNER: ${{ github.repository_owner }}
-          ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
-          ITEM_OTHERS_ANNOTATIONS: "Deployable"
-          GH_DOWNSTREAM_WORKFLOW_FILE: "test-eumetsat.yml"
-          TOTAL_TIMEOUT_MINUTES: 390 # Must be smaller than jobs.orchestrate.timeout-minutes
+# --- Parallel testing for Items requiring CPU-only VMs ---
 
   test-deploy-ansible-ecmwf-via-ewccli:
     name: Deployment test via EWCCLI on ECMWF
     runs-on: ubuntu-latest
-    timeout-minutes: 400
+    timeout-minutes: 200
     environment: ECMWF
+    env:
+      MAX_CONCURRENT_WORKFLOWS: 2
 
     steps:
       - name: Checkout catalog repository
@@ -101,14 +45,16 @@ jobs:
           ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
           ITEM_OTHERS_ANNOTATIONS: "Deployable,EWCCLI-compatible"
           GH_DOWNSTREAM_WORKFLOW_FILE: "test-deployment-ansible-ecmwf.yml"
-          TOTAL_TIMEOUT_MINUTES: 390 # Must be smaller than jobs.orchestrate.timeout-minutes
+          TOTAL_TIMEOUT_MINUTES: 190 # Must be smaller than jobs.orchestrate.timeout-minutes
           EXCLUDED_ITEM_NAMES: "xcube-viewer-flavour,ipa-server-flavour,htc-execute-flavour,htc-submit-flavour"
 
   test-deploy-ansible-eumetsat-via-ewccli:
     name: Deployment test via EWCCLI on EUMETSAT
     runs-on: ubuntu-latest
-    timeout-minutes: 400
+    timeout-minutes: 200
     environment: EUMETSAT
+    env:
+      MAX_CONCURRENT_WORKFLOWS: 2
 
     steps:
       - name: Checkout catalog repository
@@ -131,5 +77,69 @@ jobs:
           ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
           ITEM_OTHERS_ANNOTATIONS: "Deployable,EWCCLI-compatible"
           GH_DOWNSTREAM_WORKFLOW_FILE: "test-deployment-ansible-eumetsat.yml"
-          TOTAL_TIMEOUT_MINUTES: 390 # Must be smaller than jobs.orchestrate.timeout-minutes
+          TOTAL_TIMEOUT_MINUTES: 190 # Must be smaller than jobs.orchestrate.timeout-minutes
           EXCLUDED_ITEM_NAMES: "xcube-viewer-flavour,ipa-server-flavour,htc-execute-flavour,htc-submit-flavour"
+
+# --- Peu à peu testing for Items requiring GPU-accelerated VMs ---
+
+  test-deploy-ansible-ecmwf-via-ewccli-gpu-accelerated:
+    name: Deployment test via EWCCLI on ECMWF (GPU-accelerated)
+    runs-on: ubuntu-latest
+    timeout-minutes: 200
+    environment: ECMWF
+    env:
+      MAX_CONCURRENT_WORKFLOWS: 1
+
+    steps:
+      - name: Checkout catalog repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: 3.12
+
+      - name: Install additional dependencies
+        run: pip install -r .github/scripts/orchestrator/requirements.txt
+
+      - name: Orchestrate deployments testing
+        run: python .github/scripts/orchestrator/main.py
+        env:
+          GH_CLIENT_ID: ${{ vars.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_CLIENT_ID }}
+          GH_APP_PRIVATE_KEY: ${{ secrets.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_PRIVATE_KEY }}
+          GH_APP_OWNER: ${{ github.repository_owner }}
+          ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
+          ITEM_OTHERS_ANNOTATIONS: "Deployable,EWCCLI-compatible,GPU-accelerated"
+          GH_DOWNSTREAM_WORKFLOW_FILE: "test-deployment-ansible-ecmwf.yml"
+          TOTAL_TIMEOUT_MINUTES: 190 # Must be smaller than jobs.orchestrate.timeout-minutes
+
+  test-deploy-ansible-eumetsat-via-ewccli-gpu-accelerated:
+    name: Deployment test via EWCCLI on EUMETSAT (GPU-accelerated)
+    runs-on: ubuntu-latest
+    timeout-minutes: 200
+    environment: EUMETSAT
+    env:
+      MAX_CONCURRENT_WORKFLOWS: 1
+
+    steps:
+      - name: Checkout catalog repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: 3.12
+
+      - name: Install additional dependencies
+        run: pip install -r .github/scripts/orchestrator/requirements.txt
+
+      - name: Orchestrate deployments testing
+        run: python .github/scripts/orchestrator/main.py
+        env:
+          GH_CLIENT_ID: ${{ vars.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_CLIENT_ID }}
+          GH_APP_PRIVATE_KEY: ${{ secrets.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_PRIVATE_KEY }}
+          GH_APP_OWNER: ${{ github.repository_owner }}
+          ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
+          ITEM_OTHERS_ANNOTATIONS: "Deployable,EWCCLI-compatible,GPU-accelerated"
+          GH_DOWNSTREAM_WORKFLOW_FILE: "test-deployment-ansible-eumetsat.yml"
+          TOTAL_TIMEOUT_MINUTES: 190 # Must be smaller than jobs.orchestrate.timeout-minutes
