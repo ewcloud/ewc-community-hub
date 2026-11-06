@@ -2453,7 +2453,7 @@ spec:
         category: "Networking"
         supportLevel: "EWC"
         licenseType: "MIT License"
-        others: "Deployable"
+        others: "Deployable,EWCCLI-compatible"
       description: |
         This Ansible Playbook configures an existing virtual machine running
         within the [European Weather Cloud (EWC)](https://europeanweather.cloud/), to operate as a [HAProxy](https://www.haproxy.org/) server.
