@@ -43,7 +43,6 @@ spec:
         ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
 
       ewccli:
-        externalIP: false
         defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
           - ssh
         pathToMainFile: playbooks/ai-models/ai-models.yml # Deprecated in favor of values.pathToMainFile
@@ -799,7 +798,6 @@ spec:
         ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
 
       ewccli:
-        externalIP: false
         defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
           - ssh
         pathToMainFile: playbooks/aifs-single-mse/aifs-single-mse.yml # Deprecated in favor of values.pathToMainFile
@@ -871,7 +869,6 @@ spec:
         ![ewc logo](https://europeanweather.cloud/sites/default/files/images/cloud-data-network-SW-v3.png){width=120px  height=120px}
 
       ewccli:
-        externalIP: false
         defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
           - ssh
         pathToMainFile: playbooks/aifs-ens-crps/aifs-ens-crps.yml # Deprecated in favor of values.pathToMainFile
@@ -902,7 +899,6 @@ spec:
       name: "ecmwf-anemoi"
       version: "1.1.0"
       ewccli:
-        externalIP: false
         defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
           - ssh
         pathToMainFile: playbooks/anemoi/anemoi.yml # Deprecated in favor of values.pathToMainFile
@@ -997,7 +993,6 @@ spec:
 
       displayName: ECMWF Data Flavour
       ewccli:
-        externalIP: false
         defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
           - ssh
         defaultImageName: Ubuntu-24.04 # Deprecated in favour of values.osImageName
@@ -1366,7 +1361,6 @@ spec:
       name: "eumetsat-s3-mount-flavour"
       version: "1.13.0"
       ewccli:
-        externalIP: false
         defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
           - ssh
         pathToRequirementsFile: playbooks/eumetsat-s3-mount-flavour/requirements.yml # Deprecated in favor of values.pathToRequirementsFile
@@ -1625,7 +1619,6 @@ spec:
       name: "eumetsat-data-tailor-flavour"
       version: "1.13.0"
       ewccli:
-        externalIP: false
         defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
           - ssh
         pathToRequirementsFile: playbooks/eumetsat-data-tailor-flavour/requirements.yml # Deprecated in favor of values.pathToRequirementsFile
@@ -3055,7 +3048,6 @@ spec:
       name: "htc-execute-flavour"
       version: "1.13.0"
       ewccli:
-        externalIP: false
         defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
           - ssh
           - htcondor
@@ -3386,7 +3378,6 @@ spec:
       name: "htc-submit-flavour"
       version: "1.13.0"
       ewccli:
-        externalIP: false
         defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
           - ssh
           - htcondor
@@ -3701,7 +3692,6 @@ spec:
       name: "ipa-client-enroll-flavour"
       version: "1.13.0"
       ewccli:
-        externalIP: false
         defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
           - ipa
         pathToRequirementsFile: playbooks/ipa-client-enroll-flavour/requirements.yml # Deprecated in favor of values.pathToRequirementsFile
@@ -3972,7 +3962,6 @@ spec:
       name: "ipa-client-disenroll-flavour"
       version: "1.13.0"
       ewccli:
-        externalIP: false
         defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
           - ipa
         pathToMainFile: playbooks/ipa-client-disenroll-flavour/ipa-client-disenroll-flavour.yml # Deprecated in favor of values.pathToMainFile
@@ -4549,7 +4538,6 @@ spec:
       name: "ipa-server-flavour"
       version: "1.13.0"
       ewccli:
-        externalIP: false
         defaultImageName: Rocky-9 # Deprecated in favor of values.osImageName
         pathToRequirementsFile: playbooks/ipa-server-flavour/requirements.yml # Deprecated in favor of values.pathToRequirementsFile
         pathToMainFile: playbooks/ipa-server-flavour/ipa-server-flavour.yml # Deprecated in favor of values.pathToMainFile
@@ -5212,7 +5200,6 @@ spec:
       name: "ml-basic"
       version: "1.1.0"
       ewccli:
-        externalIP: false
         defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
           - ssh
         pathToMainFile: playbooks/ml-basic/ml-basic.yml # Deprecated in favor of values.pathToMainFile
@@ -6031,7 +6018,6 @@ spec:
       name: "pytroll-processing"
       version: "0.1.2"
       ewccli:
-        externalIP: false
         defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
           - ssh
         pathToMainFile: satellite-data-processing-main.yaml # Deprecated in favor of values.pathToMainFile
@@ -6166,7 +6152,6 @@ spec:
       name: "remote-desktop-flavour"
       version: "1.13.0"
       ewccli:
-        externalIP: false
         defaultSecurityGroups: # Deprecated in favor of values.osSecurityGroups
           - ssh
         defaultImageName: Rocky-9 # Deprecated in favor of values.osImageName
