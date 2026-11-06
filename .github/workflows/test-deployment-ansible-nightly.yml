@@ -16,64 +16,6 @@ env:
   USERS_FILE: ${{ vars.USERS_FILE }} # -> create-vm-users.values.inputSpec[0].default
 
 jobs:
-  test-deploy-ansible-ecmwf:
-    name: Deployment test on ECMWF
-    runs-on: ubuntu-latest
-    timeout-minutes: 400
-    environment: ECMWF
-
-    steps:
-      - name: Checkout catalog repository
-        uses: actions/checkout@v6
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: 3.12
-
-      - name: Install additional dependencies
-        run: pip install -r .github/scripts/orchestrator/requirements.txt
-
-      - name: Orchestrate deployments testing
-        run: python .github/scripts/orchestrator/main.py
-        env:
-          GH_CLIENT_ID: ${{ vars.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_CLIENT_ID }}
-          GH_APP_PRIVATE_KEY: ${{ secrets.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_PRIVATE_KEY }}
-          GH_APP_OWNER: ${{ github.repository_owner }}
-          ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
-          ITEM_OTHERS_ANNOTATIONS: "Deployable"
-          GH_DOWNSTREAM_WORKFLOW_FILE: "test-ecmwf.yml"
-          TOTAL_TIMEOUT_MINUTES: 390 # Must be smaller than jobs.orchestrate.timeout-minutes
-  
-  test-deploy-ansible-eumetsat:
-    name: Deployment test on EUMETSAT
-    runs-on: ubuntu-latest
-    timeout-minutes: 400
-    environment: EUMETSAT
-
-    steps:
-      - name: Checkout catalog repository
-        uses: actions/checkout@v6
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: 3.12
-
-      - name: Install additional dependencies
-        run: pip install -r .github/scripts/orchestrator/requirements.txt
-
-      - name: Orchestrate deployments testing
-        run: python .github/scripts/orchestrator/main.py
-        env:
-          GH_CLIENT_ID: ${{ vars.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_CLIENT_ID }}
-          GH_APP_PRIVATE_KEY: ${{ secrets.EWC_COMMUNITY_HUB_CI_ORCHESTRATOR_PRIVATE_KEY }}
-          GH_APP_OWNER: ${{ github.repository_owner }}
-          ITEM_TECHNOLOGY_ANNOTATIONS: "Ansible Playbook"
-          ITEM_OTHERS_ANNOTATIONS: "Deployable"
-          GH_DOWNSTREAM_WORKFLOW_FILE: "test-eumetsat.yml"
-          TOTAL_TIMEOUT_MINUTES: 390 # Must be smaller than jobs.orchestrate.timeout-minutes
-
   test-deploy-ansible-ecmwf-via-ewccli:
     name: Deployment test via EWCCLI on ECMWF
     runs-on: ubuntu-latest
