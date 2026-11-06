@@ -67,7 +67,7 @@ Metadata describing a single item of the catalog: how it is presented in the Hub
 | values.ansibleVersion | `string` |  | string |  |  | Ansible version required to run the item's playbook. | ```11.0.0``` |
 | values.ansibleUser | `string` |  | string |  |  | Operating system default user which Ansible impersonates when connecting over SSH to configure the target host. Please check [EWC Virtual Images Available](https://confluence.ecmwf.int/x/pU2xG) for details. | ```ubuntu``` |
 | ewccli | `object` |  | object |  |  | EWCCLI-specific settings. Only `externalIP` and `checkDNS` are current; every other attribute is deprecated in favor of `values`. |  |
-| ewccli.externalIP | `boolean` |  | boolean |  |  | If true, the server is assigned an external IP address so that it is reachable from outside the tenant network. | ```False``` |
+| ewccli.externalIP | `boolean` |  | boolean |  | `false` | If true, the server is assigned an external IP address so that it is reachable from outside the tenant network. | ```False``` |
 | ewccli.checkDNS | `boolean` |  | boolean |  |  | If true, EWCCLI checks the DNS record of the server before or after deployment. | ```False``` |
 | ewccli.pathToMainFile | `string` |  | string | ⛔️ |  | Deprecated: use `values.pathToMainFile` instead. |  |
 | ewccli.pathToRequirementsFile | `string` |  | string | ⛔️ |  | Deprecated: use `values.pathToRequirementsFile` instead. |  |

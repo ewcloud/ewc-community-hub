@@ -238,6 +238,7 @@
             "externalIP": {
               "description": "If true, the server is assigned an external IP address so that it is reachable from outside the tenant network.",
               "type": "boolean",
+              "default": false,
               "examples": [false]
             },
             "checkDNS": {
