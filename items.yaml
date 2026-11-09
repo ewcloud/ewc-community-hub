@@ -7790,7 +7790,7 @@ spec:
         C-LAM – Cloud-computing based template for NWP Local Area Model.
 
         The work was an outcome of the ECMWF Code for Earth 2026 edition.
-        
+
         It is an automated installation workflow for building a reproducible WRF/WPS environment on Virtual Machines, with a primary focus on the European Weather Cloud.
 
 
@@ -7838,7 +7838,7 @@ spec:
         **Tags:** `packages`, `oneapi`, `libs`, `wrf`, `wps`, `wrf_wps`, `geog`, `eccodes`.
 
 
-        ### b. Pre-built container deployment 
+        ### b. Pre-built container deployment
         ```bash
         # From repo root — build the SIF once:
         ./container/build_sif.sh                      # produces clam-wrf.sif
@@ -7918,7 +7918,7 @@ spec:
           - name: arw_root
             description: "Install root (ARW_ROOT)"
             type: str
-            default: "$HOME/ARW"            
+            default: "$HOME/ARW"
           - name: clam_sif_src
             description: "Local path to the Apptainer SIF image"
             type: str
@@ -7942,7 +7942,7 @@ spec:
           - name: clam_install_oneapi
             description: "Install host Intel MPI"
             type: bool
-            default: false         
+            default: false
       home: https://github.com/ECMWFCode4Earth/clam-ewc
       sources:
         - https://github.com/ECMWFCode4Earth/clam-ewc.git
