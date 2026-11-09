@@ -7783,4 +7783,181 @@ spec:
       summary: Plugin-driven CLI for turning Earth Observation products into analysis-ready datacubes.
       license: https://github.com/eumetsat/firecube/blob/main/LICENSE
       published: true
+    clam-ewc:
+      name: "clam-ewc"
+      version: "0.0.1"
+      description: |
+        C-LAM – Cloud-computing based template for NWP Local Area Model.
+
+        The work was an outcome of the ECMWF Code for Earth 2026 edition.
+        
+        It is an automated installation workflow for building a reproducible WRF/WPS environment on Virtual Machines, with a primary focus on the European Weather Cloud.
+
+
+        ## Two modes (one playbook)
+
+        Selected by the boolean `clam_use_container` in `group_vars/all.yml` (default `false`). The two role/variable sets are disjoint.
+
+        | `clam_use_container` | Action | Roles |
+        |---|---|---|
+        | `true`  | **Deploy** a prebuilt Apptainer image + run scripts to run nodes. Compiles nothing. | `apptainer`, `intel_mpi`*, `sif_deploy`, `run_scripts_deploy` |
+        | `false` | **Build** WRF/WPS from source (Ansible version of `build_scripts/`). | `system_packages`, `intel_oneapi`, `arw_libs`, `wrf_wps`, `wps_geog`, `eccodes`* |
+
+        \* `intel_mpi` only runs with `clam_install_oneapi=true` (multi‑node hosts); `eccodes` only with `install_eccodes=true`.
+
+        ## Requirements
+
+        **Control node** (where you run Ansible):
+        - `ansible-core` only — the playbook uses `ansible.builtin` modules exclusively, so **no Galaxy collections are required**.
+          ```bash
+          sudo apt install -y ansible        # or: pipx install ansible-core
+          ```
+        - For container mode: a prebuilt SIF (`clam-wrf.sif`), produced once via `./container/build_sif.sh`.
+
+        **Target hosts:**
+        - Ubuntu 24.04 (enforced by a `pre_tasks` assertion).
+        - SSH access as a normal user with **passwordless `sudo`** (play runs as the ordinary user; tasks escalate per‑task — do **not** use `--become` for the whole play).
+        - The target may be the control node itself (`localhost ansible_connection=local`).
+        - Source build needs ~60 GB under `arw_root` and several hours (run under `tmux`/`screen`/`nohup`).
+
+
+        ## Quickstart
+
+        ### a. Source build deployment
+        ```bash
+        cd ansible
+        # Full stack (open-data variant + ecCodes by default):
+        ansible-playbook site.yml -e clam_use_container=false
+
+        # On EWC, stack on the data volume:
+        ansible-playbook site.yml -e clam_use_container=false -e arw_root=/data/ARW
+
+        # Run a single step via tags:
+        ansible-playbook site.yml -e clam_use_container=false --tags oneapi
+        ```
+        **Tags:** `packages`, `oneapi`, `libs`, `wrf`, `wps`, `wrf_wps`, `geog`, `eccodes`.
+
+
+        ### b. Pre-built container deployment 
+        ```bash
+        # From repo root — build the SIF once:
+        ./container/build_sif.sh                      # produces clam-wrf.sif
+
+        cd ansible
+        # Install Apptainer + deploy SIF and run scripts to all hosts:
+        ansible-playbook site.yml  -e clam_use_container=true
+
+        # Multi-node hosts: also install the host Intel MPI launcher:
+        ansible-playbook site.yml -e clam_use_container=true -e clam_install_oneapi=true
+
+        # Custom SIF path + deploy/data dirs:
+        ansible-playbook site.yml \
+          -e clam_sif_src=/mnt/data1/clam-wrf.sif \
+          -e clam_deploy_dir=/opt/clam -e clam_data_dir=/data/clam
+
+        # Build SIF on the target from a registry instead of copying:
+        ansible-playbook site.yml -e clam_sif_registry=docker://ghcr.io/org/clam-wrf:latest
+        ```
+        **Tags:** `apptainer`, `oneapi`, `deploy`, `geog` (e.g. `--skip-tags geog`).
+
+        **Launch a run after deploy:**
+        ```bash
+        # Single node:
+        IMG=~/clam-ewc/clam-wrf.sif DATA_DIR=~/clam-data ~/clam-ewc/container/run_apptainer.sh
+        # Multi node:
+        HOSTS=vm01,vm03 PPN=16 IMG=~/clam-ewc/clam-wrf.sif DATA_DIR=~/clam-data ~/clam-ewc/container/run_multinode.sh
+        ```
+
+
+        ## Key variables
+
+        **Source mode** (`group_vars/all.yml`):
+
+        | Variable | Default | Meaning |
+        |---|---|---|
+        | `arw_root` | `$HOME/ARW` | Install root (`ARW_ROOT`) |
+        | `arw_build_jobs` | `4` | `make -j` for third‑party libs |
+        | `wps_ecmwf_opendata` | `true` | Patch `ungrib` for ECMWF open‑data GRIB2 |
+        | `install_eccodes` | = `wps_ecmwf_opendata` | Install ecCodes |
+        | `wrf_force_rebuild` / `wps_force_rebuild` | `false` | Force clean rebuild |
+
+
+        **Container mode** (`group_vars/all.yml` + `run_scripts_deploy` defaults):
+
+        | Variable | Default | Meaning |
+        |---|---|---|
+        | `clam_sif_src` | `../clam-wrf.sif` | SIF path on control node (copy mode) |
+        | `clam_sif_registry` | `""` | Build SIF on target from this ref; empty = copy |
+        | `clam_deploy_dir` | `~/clam-ewc` | Launcher + run scripts location on target |
+        | `clam_data_dir` | `~/clam-data` | Host dir bound to `/data` (`GEOG/BC/RUNS`) |
+        | `clam_download_geog` | `true` | Download high‑res WPS static data |
+        | `clam_install_oneapi` | `false` | Install host Intel MPI (set `true` multi‑node) |
+
+
+        ---
+
+      ewccli:
+        defaultImageName: Ubuntu-24.04
+        pathToMainFile: ansible/site.yml
+      values:
+        osImageName: Ubuntu-24.04
+        pathToMainFile: ansible/site.yml
+        inputSpec:
+          - name: clam_use_container
+            description: "Deploy the pre-built container instead of building the model on the VM"
+            type: bool
+            default: false
+          - name: wps_ecmwf_opendata
+            description: "Enable opendata"
+            type: bool
+            default: true
+          - name: install_eccodes
+            description: "Install eccodes"
+            type: bool
+            default: true
+          - name: arw_root
+            description: "Install root (ARW_ROOT)"
+            type: str
+            default: "$HOME/ARW"            
+          - name: clam_sif_src
+            description: "Local path to the Apptainer SIF image"
+            type: str
+            default: "../clam-wrf.sif"
+          - name: clam_sif_registry
+            description: "Build the SIF on the target from this registry URI"
+            type: str
+            default: ""
+          - name: clam_deploy_dir
+            description: "Path where launcher scripts + run_scripts land on the target host"
+            type: str
+            default: "~/clam-ewc"
+          - name: clam_data_dir
+            description: "Path on the target host bound into the container at /data (GEOG/BC/RUNS)"
+            type: str
+            default: "~/clam-data"
+          - name: clam_download_geog
+            description: "Download the mandatory high-res UCAR WPS static GEOG data"
+            type: bool
+            default: true
+          - name: clam_install_oneapi
+            description: "Install host Intel MPI"
+            type: bool
+            default: false         
+      home: https://github.com/ECMWFCode4Earth/clam-ewc
+      sources:
+        - https://github.com/ECMWFCode4Earth/clam-ewc.git
+      maintainers:
+        - name: EWC Community
+          url: https://github.com/ECMWFCode4Earth/clam-ewc/issues
+      icon: https://raw.githubusercontent.com/ECMWFCode4Earth/clam-ewc/refs/heads/main/clam-logo.png
+      annotations:
+        technology: "Ansible Playbook"
+        category: "Automation"
+        supportLevel: "Community"
+        licenseType: "Apache License 2.0"
+        others: "Deployable,EWCCLI-compatible"
+      displayName: C-LAM
+      summary: C-LAM - Cloud-computing based template for NWP Local Area Model.
+      license: https://raw.githubusercontent.com/ECMWFCode4Earth/clam-ewc/refs/heads/main/LICENSE
+      published: false
 
