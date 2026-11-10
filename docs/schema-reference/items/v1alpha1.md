@@ -53,7 +53,9 @@ Metadata describing a single item of the catalog: how it is presented in the Hub
 | values.inputSpec[].name | `string` | ✅ | string |  |  | Name of the input. For Items compatible with the EWCCLI, users can set it at deployment time by passing the `--item-inputs name=value` argument. | ```users_file``` |
 | values.inputSpec[].description | `string` | ✅ | string |  |  | Explanation of the input shown to users, including the expected format. | ```Path to a YAML file listing the users to create.``` |
 | values.inputSpec[].type | `string` | ✅ | string |  |  | Data type of the input, as a short type name. | ```str``` |
-| values.inputSpec[].default | `boolean` or `number` or `string` or `null` |  | boolean and/or number and/or string |  |  | Value used when the user does not provide one. If present, the input is optional; if omitted, the input is mandatory. | ```my default value``` |
+| values.inputSpec[].nullable | `boolean` |  | boolean |  | `false` | If true, the corresponding input value can be set to `null`. |  |
+| values.inputSpec[].default | `array` or `boolean` or `number` or `object` or `string` or `null` |  | array and/or boolean and/or number and/or object and/or string |  |  | Value used when the user does not provide one. If present, the input is optional; if omitted, the input is required. | ```my default value``` |
+| values.inputSpec[].sensitive | `boolean` |  | boolean |  | `false` | If true, the input should be treated as a secret, masked during prompting or logging. |  |
 | values.outputSpec | `array` |  | object |  |  | Outputs the item produces once deployed, to be reported to the user. Each entry declares one output and its type. |  |
 | values.outputSpec[].name | `string` | ✅ | string |  |  | Name of the output. | ```server_url``` |
 | values.outputSpec[].description | `string` | ✅ | string |  |  | Explanation of the output shown to users, such as how to use the value. | ```URL where the deployed service is reachable.``` |
@@ -67,7 +69,7 @@ Metadata describing a single item of the catalog: how it is presented in the Hub
 | values.ansibleVersion | `string` |  | string |  |  | Ansible version required to run the item's playbook. | ```11.0.0``` |
 | values.ansibleUser | `string` |  | string |  |  | Operating system default user which Ansible impersonates when connecting over SSH to configure the target host. Please check [EWC Virtual Images Available](https://confluence.ecmwf.int/x/pU2xG) for details. | ```ubuntu``` |
 | ewccli | `object` |  | object |  |  | EWCCLI-specific settings. Only `externalIP` and `checkDNS` are current; every other attribute is deprecated in favor of `values`. |  |
-| ewccli.externalIP | `boolean` |  | boolean |  |  | If true, the server is assigned an external IP address so that it is reachable from outside the tenant network. | ```False``` |
+| ewccli.externalIP | `boolean` |  | boolean |  | `false` | If true, the server is assigned an external IP address so that it is reachable from outside the tenant network. | ```False``` |
 | ewccli.checkDNS | `boolean` |  | boolean |  |  | If true, EWCCLI checks the DNS record of the server before or after deployment. | ```False``` |
 | ewccli.pathToMainFile | `string` |  | string | ⛔️ |  | Deprecated: use `values.pathToMainFile` instead. |  |
 | ewccli.pathToRequirementsFile | `string` |  | string | ⛔️ |  | Deprecated: use `values.pathToRequirementsFile` instead. |  |
