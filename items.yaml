@@ -7783,6 +7783,7 @@ spec:
       summary: Plugin-driven CLI for turning Earth Observation products into analysis-ready datacubes.
       license: https://github.com/eumetsat/firecube/blob/main/LICENSE
       published: true
+
     clam-ewc:
       name: "clam-ewc"
       version: "0.0.1"
@@ -7901,6 +7902,7 @@ spec:
         pathToMainFile: ansible/site.yml
       values:
         osImageName: Ubuntu-24.04
+        osFlavorName: 32cpu-32gbmem-30gbdisk
         pathToMainFile: ansible/site.yml
         inputSpec:
           - name: clam_use_container
