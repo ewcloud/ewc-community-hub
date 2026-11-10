@@ -7965,5 +7965,5 @@ spec:
       displayName: C-LAM
       summary: C-LAM - Cloud-computing based template for NWP Local Area Model.
       license: https://raw.githubusercontent.com/ECMWFCode4Earth/clam-ewc/refs/heads/main/LICENSE
-      published: false
+      published: true
 
