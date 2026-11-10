@@ -278,7 +278,7 @@ spec:
 
     ewc-tf-module-openstack-compute:
       name: "ewc-tf-module-openstack-compute"
-      version: "1.6.0"
+      version: "2.0.0"
       description: |
         This [Terraform module](https://developer.hashicorp.com/terraform/language/modules) creates and
         configures [OpenStack compute](https://docs.openstack.org/nova/latest/)
@@ -522,7 +522,7 @@ spec:
         [European Weather Cloud](http://support.europeanweather.cloud/)
         <[support@europeanweather.cloud](mailto:support@europeanweather.cloud)>
 
-      home: https://github.com/ewcloud/ewc-tf-module-openstack-compute/tree/1.6.0
+      home: https://github.com/ewcloud/ewc-tf-module-openstack-compute/tree/2.0.0
       sources:
         - https://github.com/ewcloud/ewc-tf-module-openstack-compute.git
       maintainers:
@@ -538,8 +538,98 @@ spec:
         licenseType: "MIT License"
       displayName: OpenStack Compute Instance
       summary: Simplifies the creation of EWC VMs, or state update and teardown of existing ones, via Terraform.
-      license: https://github.com/ewcloud/ewc-tf-module-openstack-compute/blob/1.6.0/LICENSE
+      license: https://github.com/ewcloud/ewc-tf-module-openstack-compute/blob/2.0.0/LICENSE
       published: true
+      values:
+        pathToMainFile: "."
+        inputSpec:
+          - name: app_name
+            description: Application name, used as prefix in the full instance name
+            type: str
+          - name: instance_name
+            description: Name of the instance, used in the full instance name
+            type: str
+          - name: instance_index
+            description: Index or identifier for the instance, used as suffix in the full instance name
+            type: int
+          - name: image_id
+            description: (Optional; Required if image_name is empty and not booting from a volume. Do not specify if booting from a volume.) The image ID to use for the instance
+            type: str
+          - name: flavor_id
+            description: (Optional; Required if flavor_name is empty) The flavor ID to use for the instance
+            type: str
+          - name: image_name
+            description: (Optional; Required if image_id is empty and not booting from a volume. Do not specify if booting from a volume.) The name of the image to use for the instance
+            type: str
+          - name: flavor_name
+            description: Optional; Required if flavor_id is empty) The name the flavor to use for the instance
+            type: str
+          - name: keypair_name
+            description: Name of the keypair to use for SSH access to the instance
+            type: str
+          - name: networks
+            description: List of network names to attach the instance to
+            type: List[str]
+          - name: security_groups
+            description: List of security group names to apply to the instance
+            type: List[str]
+            default:
+              - "default"
+          - name: instance_has_fip
+            description: Whether to assign a floating IP to the instance
+            type: bool
+          - name: os_volume
+            description: Configuration for the primary OS volume
+            type: Dict[str, Any]
+            default:
+              enable: false
+              size: 50
+          - name: extra_volume
+            description: Whether to attach an additional volume to the instance
+            type: bool
+          - name: extra_volume_size
+            description: Size in GB of the additional volume
+            type: int
+            default: 1
+          - name: extra_volume2
+            description: Whether to attach a second additional volume to the instance
+            type: bool
+            default: false
+          - name: extra_volume2_size
+            description: Size in GB of the second additional volume
+            type: int
+            default: 1
+          - name: cloudinit_userdata
+            description: User data for cloud-init to be passed to the instance
+            type: str
+            default: null
+            nullable: true
+          - name: instance_metadata
+            description: Metadata to associate with the instance (key-value pairs)
+            type: Dict[str, str]
+            default: null
+            nullable: true
+          - name: add_sfs_network
+            description: Shared File System network to add (if needed)
+            type: str
+            default: null
+            nullable: true
+          - name: external_network_name
+            description: Name of the external network for floating IPs
+            type: str
+            default: "external"
+          - name: tags
+            description: A map of tags to assign to all resources that support it
+            type: Dict[str, str]
+            default: {}
+        outputSpec:
+          - name: instance-data
+            description: Comprehensive information about the created instance
+            type: Dict[str, Any]
+          - name: volumes
+            description: Information about the attached volumes
+            type: Dict[str, Any]
+
 
     ewc-tf-module-openstack-security-group:
       name: "ewc-tf-module-openstack-security-group"
